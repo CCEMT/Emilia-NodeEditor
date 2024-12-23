@@ -1,0 +1,22 @@
+﻿namespace Emilia.Node.Editor
+{
+    public static class OperateMenuUtility
+    {
+        public static void PathToNameAndCategory(string path, out string name, out string category)
+        {
+            if (path == null) path = string.Empty;
+
+            var index = path.LastIndexOf('/');
+            if (index >= 0)
+            {
+                name = index == path.Length - 1 ? string.Empty : path.Substring(index + 1);
+                category = path.Substring(0, index + 1);
+            }
+            else
+            {
+                name = path;
+                category = string.Empty;
+            }
+        }
+    }
+}

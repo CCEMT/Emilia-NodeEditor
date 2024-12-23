@@ -1,0 +1,20 @@
+{
+    "name": "Emilia.Node.Universal.Editor",
+    "rootNamespace": "Emilia.Node.Universal.Editor",
+    "references": [
+        "GUID:478a2357cc57436488a56e564b08d223",
+        "GUID:b161c419d3a677d499b5e6e5562d8105",
+        "GUID:75e104de4c9984d4885cb52da91afec5"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

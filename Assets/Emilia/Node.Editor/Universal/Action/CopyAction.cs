@@ -1,0 +1,18 @@
+﻿using Emilia.Node.Editor;
+
+namespace Emilia.Node.Universal.Editor
+{
+    [Action("Copy", 5100, OperateMenuTagDefine.BaseActionTag)]
+    public class CopyAction : OperateMenuAction
+    {
+        public override OperateMenuActionValidity GetValidity(OperateMenuContext context)
+        {
+            return context.graphView.selection.Count > 0 ? OperateMenuActionValidity.Valid : OperateMenuActionValidity.Invalid;
+        }
+
+        public override void Execute(OperateMenuActionContext context)
+        {
+            context.graphView.graphOperate.Copy();
+        }
+    }
+}
