@@ -6,6 +6,5 @@
   "unity": "2021.3",
   "license": "MIT",
   "dependencies": {
-    "com.emilia.kit": "https://github.com/CCEMT/Emilia-Kit.git?path=Assets/Emilia/Kit"
   }
 }
