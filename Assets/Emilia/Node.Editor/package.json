@@ -1,0 +1,11 @@
+{
+  "name": "com.emilia.node.editor",
+  "displayName": "Emilia.Node.Editor",
+  "description": "Emilia.NodeEditor",
+  "version": "1.0.0",
+  "unity": "2021.3",
+  "license": "MIT",
+  "dependencies": {
+    "com.emilia.kit": "https://github.com/CCEMT/Emilia-Kit.git?path=Assets/Emilia/Kit"
+  }
+}
