@@ -20,11 +20,13 @@ namespace Emilia.Node.Editor
 
             if (handle != null) EditorHandleUtility.ReleaseHandle(handle);
             handle = EditorHandleUtility.BuildHandle<IOperateMenuHandle>(this.graphView.graphAsset.GetType(), this.graphView);
-            handle.InitializeCache();
+            handle?.InitializeCache();
         }
 
         public void BuildMenu(OperateMenuContext menuContext)
         {
+            if (handle == null) return;
+            
             List<OperateMenuItem> graphMenuItems = new List<OperateMenuItem>();
             handle.CollectMenuItems(graphMenuItems, menuContext);
 
@@ -63,6 +65,8 @@ namespace Emilia.Node.Editor
 
         public void Dispose()
         {
+            if (this.graphView == null) return;
+            
             actionInfoCache.Clear();
 
             if (handle != null)

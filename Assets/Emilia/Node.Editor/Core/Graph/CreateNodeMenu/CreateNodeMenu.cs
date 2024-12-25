@@ -38,16 +38,17 @@ namespace Emilia.Node.Editor
 
             if (handle != null) EditorHandleUtility.ReleaseHandle(handle);
             handle = EditorHandleUtility.BuildHandle<ICreateNodeMenuHandle>(graphView.graphAsset.GetType(), graphView);
-            handle.InitializeCache();
+            handle?.InitializeCache();
         }
 
         public void ShowCreateNodeMenu(NodeCreationContext nodeCreationContext)
         {
-            handle.ShowCreateNodeMenu(nodeCreationContext);
+            handle?.ShowCreateNodeMenu(nodeCreationContext);
         }
 
         public void MenuCreateInitialize(CreateNodeContext context)
         {
+            if (this.handle == null) return;
             this.createNodeContext = context;
             this.createNodeContext.nodeMenu = this;
             handle.MenuCreateInitialize(this.createNodeContext);
@@ -250,6 +251,8 @@ namespace Emilia.Node.Editor
 
         public void Dispose()
         {
+            if (this.graphView == null) return;
+            
             createNodeHandleCacheList.Clear();
 
             if (this.nullIcon != null)

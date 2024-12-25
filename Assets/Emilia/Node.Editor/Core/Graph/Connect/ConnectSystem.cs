@@ -19,10 +19,14 @@ namespace Emilia.Node.Editor
             if (handle != null) EditorHandleUtility.ReleaseHandle(handle);
             handle = EditorHandleUtility.BuildHandle<IConnectSystemHandle>(graphView.graphAsset.GetType(), graphView);
 
-            if (connectorListener == null)
+            if (connectorListener == null && handle != null)
             {
-                connectorListener = ReflectUtility.CreateInstance(handle.connectorListenerType) as EditorEdgeConnectorListener;
-                connectorListener.Initialize(graphView);
+                Type type = handle.connectorListenerType;
+                if (type != null)
+                {
+                    connectorListener = ReflectUtility.CreateInstance(type) as EditorEdgeConnectorListener;
+                    connectorListener.Initialize(graphView);
+                }
             }
         }
 
