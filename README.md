@@ -21,7 +21,7 @@ Emilia-NodeEditor 是基于Unity的UIElements, GraphView实现的节点编辑器
 
 ## 开始
 
-[快速入门]() | [文档]()
+[快速入门](https://github.com/CCEMT/Emilia-NodeEditor/wiki/Introduction) | [wiki](https://github.com/CCEMT/Emilia-NodeEditor/wiki)
 
 ## 安装
 
