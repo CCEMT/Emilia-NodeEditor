@@ -80,7 +80,7 @@
 
     border-bottom-right-radius: 1px;
     border-top-right-radius: 1px;
-    
+
     -unity-text-align: middle-center;
 }
 

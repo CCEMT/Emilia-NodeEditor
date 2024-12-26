@@ -28,26 +28,26 @@ namespace Emilia.Node.Universal.Editor
         {
             add
             {
-                if (_clickable == null) { clickable = new Clickable(value); }
-                else { _clickable.clicked += value; }
+                if (_clickable == null) clickable = new Clickable(value);
+                else _clickable.clicked += value;
             }
             remove
             {
-                if (_clickable != null) { _clickable.clicked -= value; }
+                if (_clickable != null) _clickable.clicked -= value;
             }
         }
 
         public NodeMessageButtonElement(Action clickEvent)
         {
             name = "message-button";
-            
+
             clickable = new Clickable(clickEvent);
             focusable = true;
-            
+
             RegisterCallback<NavigationSubmitEvent>(OnNavigationSubmit);
             RegisterCallback<KeyDownEvent>(OnKeyDown);
         }
-        
+
         private void OnNavigationSubmit(NavigationSubmitEvent evt)
         {
             if (clickable != null) ReflectUtility.Invoke(clickable, "SimulateSingleClick", new object[] {evt});
@@ -56,8 +56,7 @@ namespace Emilia.Node.Universal.Editor
 
         private void OnKeyDown(KeyDownEvent evt)
         {
-            if (panel?.contextType != ContextType.Editor)
-                return;
+            if (panel?.contextType != ContextType.Editor) return;
 
             // KeyCodes are hardcoded in the Editor, but in runtime we should use the more versatile NavigationSubmit.
             if (evt.keyCode == KeyCode.KeypadEnter || evt.keyCode == KeyCode.Return || evt.keyCode == KeyCode.Space)

@@ -2,6 +2,9 @@
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 节点颜色
+    /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
     public class NodeColorAttribute : Attribute
     {

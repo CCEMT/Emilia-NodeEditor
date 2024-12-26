@@ -2,6 +2,9 @@
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 拷贝
+    /// </summary>
     [Action("Copy", 5100, OperateMenuTagDefine.BaseActionTag)]
     public class CopyAction : OperateMenuAction
     {

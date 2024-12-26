@@ -19,25 +19,38 @@ namespace Emilia.Node.Editor
             if (handle != null) EditorHandleUtility.ReleaseHandle(handle);
             handle = EditorHandleUtility.BuildHandle<IConnectSystemHandle>(graphView.graphAsset.GetType(), graphView);
 
-            if (connectorListener == null)
+            if (connectorListener == null && handle != null)
             {
-                connectorListener = ReflectUtility.CreateInstance(handle.connectorListenerType) as EditorEdgeConnectorListener;
-                connectorListener.Initialize(graphView);
+                Type type = handle.connectorListenerType;
+                if (type != null)
+                {
+                    connectorListener = ReflectUtility.CreateInstance(type) as EditorEdgeConnectorListener;
+                    connectorListener.Initialize(graphView);
+                }
             }
         }
 
+        /// <summary>
+        /// 通过端口获取Edge类型
+        /// </summary>
         public Type GetEdgeTypeByPort(IEditorPortView portView)
         {
             if (this.handle == null) return null;
             return this.handle.GetEdgeTypeByPort(portView);
         }
 
+        /// <summary>
+        /// 是否可以连接
+        /// </summary>
         public bool CanConnect(IEditorPortView inputPort, IEditorPortView outputPort)
         {
             if (this.handle == null) return false;
             return this.handle.CanConnect(inputPort, outputPort);
         }
 
+        /// <summary>
+        /// 连接两个端口
+        /// </summary>
         public IEditorEdgeView Connect(IEditorPortView input, IEditorPortView output)
         {
             if (handle.CanConnect(input, output) == false) return null;
@@ -61,6 +74,9 @@ namespace Emilia.Node.Editor
             return edgeView;
         }
 
+        /// <summary>
+        /// 断开连接
+        /// </summary>
         public void Disconnect(IEditorEdgeView edge)
         {
             edge.RemoveView();
@@ -83,6 +99,9 @@ namespace Emilia.Node.Editor
             }
         }
 
+        /// <summary>
+        /// 断开连接，不记录Undo
+        /// </summary>
         public void DisconnectNoUndo(IEditorEdgeView edge)
         {
             edge.RemoveView();

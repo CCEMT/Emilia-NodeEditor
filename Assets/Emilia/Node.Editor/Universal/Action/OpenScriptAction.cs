@@ -10,6 +10,10 @@ namespace Emilia.Node.Universal.Editor
         public object openScriptObject { get; }
     }
 
+    /// <summary>
+    /// 打开脚本
+    /// </summary>
+
     [Action("OpenScript", 8100, OperateMenuTagDefine.UniversalActionTag)]
     public class OpenScriptAction : OperateMenuAction
     {
@@ -26,7 +30,7 @@ namespace Emilia.Node.Universal.Editor
             object openScriptObject = selectable;
             ISpecifyOpenScriptObject specifyOpenScriptObject = selectable as ISpecifyOpenScriptObject;
             if (specifyOpenScriptObject != null) openScriptObject = specifyOpenScriptObject.openScriptObject;
-            
+
             OpenScriptUtility.OpenScript(openScriptObject);
         }
     }

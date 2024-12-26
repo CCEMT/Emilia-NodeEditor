@@ -44,11 +44,10 @@ namespace Emilia.Node.Editor
 
                 dropTarget = picked as IDropTarget;
 
-                if (dropTarget != null)
-                {
-                    if (exclusionList.Contains(picked)) { dropTarget = null; }
-                    else { break; }
-                }
+                if (dropTarget == null) continue;
+
+                if (exclusionList.Contains(picked)) dropTarget = null;
+                else break;
             }
 
             return dropTarget;
@@ -63,7 +62,10 @@ namespace Emilia.Node.Editor
             {
                 activators.Add(new ManipulatorActivationFilter {button = MouseButton.LeftMouse, modifiers = EventModifiers.Command});
             }
-            else { activators.Add(new ManipulatorActivationFilter {button = MouseButton.LeftMouse, modifiers = EventModifiers.Control}); }
+            else
+            {
+                activators.Add(new ManipulatorActivationFilter {button = MouseButton.LeftMouse, modifiers = EventModifiers.Control});
+            }
             panSpeed = new Vector2(1, 1);
             clampToParentEdges = false;
 
@@ -115,13 +117,13 @@ namespace Emilia.Node.Editor
             if (dropTarget == null) return;
 
             EventBase e = evt as EventBase;
-            if (e.eventTypeId == DragExitedEvent.TypeId()) { dropTarget.DragExited(); }
-            else if (e.eventTypeId == DragEnterEvent.TypeId()) { dropTarget.DragEnter(evt as DragEnterEvent, selection, dropTarget, dragSource); }
+            if (e.eventTypeId == DragExitedEvent.TypeId()) dropTarget.DragExited();
+            else if (e.eventTypeId == DragEnterEvent.TypeId()) dropTarget.DragEnter(evt as DragEnterEvent, selection, dropTarget, dragSource);
             else if (e.eventTypeId == DragLeaveEvent.TypeId()) dropTarget.DragLeave(evt as DragLeaveEvent, selection, dropTarget, dragSource);
 
             if (! dropTarget.CanAcceptDrop(selection)) return;
 
-            if (e.eventTypeId == DragPerformEvent.TypeId()) { dropTarget.DragPerform(evt as DragPerformEvent, selection, dropTarget, dragSource); }
+            if (e.eventTypeId == DragPerformEvent.TypeId()) dropTarget.DragPerform(evt as DragPerformEvent, selection, dropTarget, dragSource);
             else if (e.eventTypeId == DragUpdatedEvent.TypeId()) dropTarget.DragUpdated(evt as DragUpdatedEvent, selection, dropTarget, dragSource);
         }
 
@@ -220,8 +222,8 @@ namespace Emilia.Node.Editor
                 }
 
                 // Checking if the Graph Element we are moving has the snappable Capability
-                if ((selectedElement.capabilities & Capabilities.Snappable) == 0) { snapEnabled = false; }
-                else { snapEnabled = EditorPrefs.GetBool("GraphSnapping", true); }
+                if ((selectedElement.capabilities & Capabilities.Snappable) == 0) snapEnabled = false;
+                else snapEnabled = EditorPrefs.GetBool("GraphSnapping", true);
 
                 if (snapEnabled) this.m_Snapper.BeginSnap_Internals(this.m_GraphView);
 
@@ -249,13 +251,19 @@ namespace Emilia.Node.Editor
         {
             Vector2 effectiveSpeed = Vector2.zero;
 
-            if (mousePos.x <= k_PanAreaWidth) { effectiveSpeed.x = -((k_PanAreaWidth - mousePos.x) / k_PanAreaWidth + 0.5f) * k_PanSpeed; }
+            if (mousePos.x <= k_PanAreaWidth)
+            {
+                effectiveSpeed.x = -((k_PanAreaWidth - mousePos.x) / k_PanAreaWidth + 0.5f) * k_PanSpeed;
+            }
             else if (mousePos.x >= m_GraphView.contentContainer.layout.width - k_PanAreaWidth)
             {
                 effectiveSpeed.x = ((mousePos.x - (this.m_GraphView.contentContainer.layout.width - k_PanAreaWidth)) / k_PanAreaWidth + 0.5f) * k_PanSpeed;
             }
 
-            if (mousePos.y <= k_PanAreaWidth) { effectiveSpeed.y = -((k_PanAreaWidth - mousePos.y) / k_PanAreaWidth + 0.5f) * k_PanSpeed; }
+            if (mousePos.y <= k_PanAreaWidth)
+            {
+                effectiveSpeed.y = -((k_PanAreaWidth - mousePos.y) / k_PanAreaWidth + 0.5f) * k_PanSpeed;
+            }
             else if (mousePos.y >= m_GraphView.contentContainer.layout.height - k_PanAreaWidth)
             {
                 effectiveSpeed.y = ((mousePos.y - (this.m_GraphView.contentContainer.layout.height - k_PanAreaWidth)) / k_PanAreaWidth + 0.5f) * k_PanSpeed;
@@ -287,8 +295,8 @@ namespace Emilia.Node.Editor
             Vector2 gvMousePos = ve.ChangeCoordinatesTo(m_GraphView.contentContainer, e.localMousePosition);
             m_PanDiff = GetEffectivePanSpeed(gvMousePos);
 
-            if (m_PanDiff != Vector3.zero) { m_PanSchedule.Resume(); }
-            else { m_PanSchedule.Pause(); }
+            if (m_PanDiff != Vector3.zero) m_PanSchedule.Resume();
+            else m_PanSchedule.Pause();
 
             // We need to monitor the mouse diff "by hand" because we stop positioning the graph elements once the
             // mouse has gone out.
@@ -350,13 +358,22 @@ namespace Emilia.Node.Editor
             {
                 if (m_PrevDropTarget != null)
                 {
-                    using (DragLeaveEvent eexit = DragLeaveEvent.GetPooled(e)) { SendDragAndDropEvent(eexit, selection, m_PrevDropTarget, m_GraphView); }
+                    using (DragLeaveEvent eexit = DragLeaveEvent.GetPooled(e))
+                    {
+                        SendDragAndDropEvent(eexit, selection, m_PrevDropTarget, m_GraphView);
+                    }
                 }
 
-                using (DragEnterEvent eenter = DragEnterEvent.GetPooled(e)) { SendDragAndDropEvent(eenter, selection, dropTarget, m_GraphView); }
+                using (DragEnterEvent eenter = DragEnterEvent.GetPooled(e))
+                {
+                    SendDragAndDropEvent(eenter, selection, dropTarget, m_GraphView);
+                }
             }
 
-            using (DragUpdatedEvent eupdated = DragUpdatedEvent.GetPooled(e)) { SendDragAndDropEvent(eupdated, selection, dropTarget, m_GraphView); }
+            using (DragUpdatedEvent eupdated = DragUpdatedEvent.GetPooled(e))
+            {
+                SendDragAndDropEvent(eupdated, selection, dropTarget, m_GraphView);
+            }
 
             m_PrevDropTarget = dropTarget;
 
@@ -386,7 +403,10 @@ namespace Emilia.Node.Editor
                 Rect ceLayout = ce.GetPosition();
                 ce.SetPosition(new Rect(v.Value.pos.x + geomDiff.x, v.Value.pos.y + geomDiff.y, ceLayout.width, ceLayout.height));
             }
-            else { MoveElement(ce, v.Value.pos); }
+            else
+            {
+                MoveElement(ce, v.Value.pos);
+            }
         }
 
         Rect GetSelectedElementGeom()
@@ -471,11 +491,17 @@ namespace Emilia.Node.Editor
                     {
                         if (m_PrevDropTarget.CanAcceptDrop(selection))
                         {
-                            using (DragPerformEvent drop = DragPerformEvent.GetPooled(evt)) { SendDragAndDropEvent(drop, selection, m_PrevDropTarget, m_GraphView); }
+                            using (DragPerformEvent drop = DragPerformEvent.GetPooled(evt))
+                            {
+                                SendDragAndDropEvent(drop, selection, m_PrevDropTarget, m_GraphView);
+                            }
                         }
                         else
                         {
-                            using (DragExitedEvent dexit = DragExitedEvent.GetPooled(evt)) { SendDragAndDropEvent(dexit, selection, m_PrevDropTarget, m_GraphView); }
+                            using (DragExitedEvent dexit = DragExitedEvent.GetPooled(evt))
+                            {
+                                SendDragAndDropEvent(dexit, selection, m_PrevDropTarget, m_GraphView);
+                            }
                         }
                     }
 
@@ -502,7 +528,10 @@ namespace Emilia.Node.Editor
             foreach (KeyValuePair<GraphElement, OriginalPos> v in m_OriginalPos)
             {
                 OriginalPos originalPos = v.Value;
-                if (originalPos.stack != null) { originalPos.stack.InsertElement(originalPos.stackIndex, v.Key); }
+                if (originalPos.stack != null)
+                {
+                    originalPos.stack.InsertElement(originalPos.stackIndex, v.Key);
+                }
                 else
                 {
                     if (originalPos.scope != null)

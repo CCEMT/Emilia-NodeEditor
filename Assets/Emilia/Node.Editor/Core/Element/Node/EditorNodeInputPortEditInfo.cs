@@ -1,5 +1,8 @@
 ﻿namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 端口展开编辑InputPort
+    /// </summary>
     public struct EditorNodeInputPortEditInfo
     {
         public string portName;

@@ -19,12 +19,18 @@ namespace Emilia.Node.Editor
         [NonSerialized]
         private PropertyTree _propertyTree;
 
+        /// <summary>
+        /// Id
+        /// </summary>
         public string id
         {
             get => this._id;
             set => this._id = value;
         }
 
+        /// <summary>
+        /// 位置
+        /// </summary>
         public Rect position
         {
             get => this._position;

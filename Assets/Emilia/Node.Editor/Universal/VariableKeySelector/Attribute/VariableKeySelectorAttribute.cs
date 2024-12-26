@@ -3,6 +3,9 @@ using System.Reflection;
 
 namespace Emilia.Node.Attributes
 {
+    /// <summary>
+    /// 在编辑绘制下拉次阿迪娜
+    /// </summary>
     [AttributeUsage(AttributeTargets.Field)]
     public class VariableKeySelectorAttribute : Attribute
     {

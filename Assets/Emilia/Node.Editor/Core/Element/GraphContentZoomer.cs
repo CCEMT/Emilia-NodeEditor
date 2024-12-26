@@ -102,7 +102,7 @@ namespace Emilia.Node.Editor
 
             Vector3 position = graphView.logicPosition;
             Vector3 scale = graphView.logicScale;
-            
+
             Vector2 zoomCenter = target.ChangeCoordinatesTo(graphView.contentViewContainer, evt.localMousePosition);
             float x = zoomCenter.x + graphView.contentViewContainer.layout.x;
             float y = zoomCenter.y + graphView.contentViewContainer.layout.y;

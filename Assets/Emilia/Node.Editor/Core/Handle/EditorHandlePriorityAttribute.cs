@@ -2,6 +2,9 @@
 
 namespace Emilia.Node.Attributes
 {
+    /// <summary>
+    /// 设置EditorHandle的优先级
+    /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
     public class EditorHandlePriorityAttribute : Attribute
     {

@@ -24,6 +24,9 @@ namespace Emilia.Node.Editor
             ReadSetting();
         }
 
+        /// <summary>
+        /// 读取设置
+        /// </summary>
         public void ReadSetting()
         {
             if (OdinEditorPrefs.HasValue(GraphLocalSettingSaveKey)) _setting = OdinEditorPrefs.GetValue<IGraphLocalSetting>(GraphLocalSettingSaveKey);
@@ -37,6 +40,9 @@ namespace Emilia.Node.Editor
             if (_setting != null) this.handle?.OnReadSetting(_setting);
         }
 
+        /// <summary>
+        /// 保存设置
+        /// </summary>
         public void Save()
         {
             OdinEditorPrefs.SetValue(GraphLocalSettingSaveKey, this._setting);

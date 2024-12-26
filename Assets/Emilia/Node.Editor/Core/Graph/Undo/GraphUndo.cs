@@ -114,7 +114,7 @@
         {
             DeleteItem();
             CreateItem();
-            
+
             int amount = this.graphView.itemViews.Count;
             for (int i = 0; i < amount; i++)
             {

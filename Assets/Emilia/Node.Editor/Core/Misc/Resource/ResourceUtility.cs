@@ -8,6 +8,9 @@ namespace Emilia.Node.Editor
     {
         private static Dictionary<string, Object> loadCache = new Dictionary<string, Object>();
 
+        /// <summary>
+        /// 加载资源
+        /// </summary>
         public static T LoadResource<T>(string path) where T : Object
         {
             if (loadCache.TryGetValue(path, out Object value)) return value as T;

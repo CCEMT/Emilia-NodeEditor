@@ -14,12 +14,18 @@ namespace Emilia.Node.Universal.Editor
         [SerializeField, HideInInspector]
         private bool _isFold = true;
 
+        /// <summary>
+        /// 节点名称
+        /// </summary>
         public string displayName
         {
             get => _displayName;
             set => _displayName = value;
         }
 
+        /// <summary>
+        /// 是否折叠
+        /// </summary>
         public bool isFold
         {
             get => _isFold;

@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Emilia.Node
 {
+    /// <summary>
+    /// Window窗口设置
+    /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
     public class WindowSettingsAttribute : Attribute
     {
@@ -26,8 +29,14 @@ namespace Emilia.Node
         /// </summary>
         public bool canOpenAsset = true;
 
+        /// <summary>
+        /// 获取开始大小表达式
+        /// </summary>
         public string getStartSizeExpression;
 
+        /// <summary>
+        /// 标题表达式
+        /// </summary>
         public string titleExpression;
 
         public WindowSettingsAttribute() { }

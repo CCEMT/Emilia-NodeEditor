@@ -16,6 +16,9 @@ namespace Emilia.Node.Editor
 {
     public class EditorGraphView : GraphView_Hook
     {
+        /// <summary>
+        /// 聚焦的GraphView
+        /// </summary>
         public static EditorGraphView focusedGraphView { get; private set; }
 
         private IGraphHandle graphHandle;
@@ -27,38 +30,139 @@ namespace Emilia.Node.Editor
         private GraphContentZoomer graphZoomer;
         private EditorCoroutine loadElementCoroutine;
 
+        /// <summary>
+        /// 逻辑位置
+        /// </summary>
         public Vector3 logicPosition { get; set; }
+
+        /// <summary>
+        /// 逻辑缩放
+        /// </summary>
         public Vector3 logicScale { get; set; }
 
+        /// <summary>
+        /// 所有IEditorNodeView
+        /// </summary>
         public IReadOnlyList<IEditorNodeView> nodeViews => this._nodeViews;
+
+        /// <summary>
+        /// 所有IEditorEdgeView
+        /// </summary>
         public IReadOnlyList<IEditorEdgeView> edgeViews => this._edgeViews;
+
+        /// <summary>
+        /// 所有IEditorItemView
+        /// </summary>
         public IReadOnlyList<IEditorItemView> itemViews => this._itemViews;
 
+        /// <summary>
+        /// 加载的GraphAsset
+        /// </summary>
         public EditorGraphAsset graphAsset { get; private set; }
+
+        /// <summary>
+        /// Graph设置
+        /// </summary>
         public GraphSettingAttribute graphSetting { get; private set; }
+
+        /// <summary>
+        /// 本地设置
+        /// </summary>
         public GraphLocalSettingSystem graphLocalSettingSystem { get; private set; }
+
+        /// <summary>
+        /// Element缓存
+        /// </summary>
         public GraphElementCache graphElementCache { get; private set; }
+
+        /// <summary>
+        /// 操作
+        /// </summary>
         public GraphOperate graphOperate { get; private set; }
+
+        /// <summary>
+        /// 拷贝粘贴处理
+        /// </summary>
         public GraphCopyPaste graphCopyPaste { get; private set; }
+
+        /// <summary>
+        /// 撤销处理
+        /// </summary>
         public GraphUndo graphUndo { get; private set; }
+
+        /// <summary>
+        /// 选中处理
+        /// </summary>
         public GraphSelected graphSelected { get; private set; }
+
+        /// <summary>
+        /// 面板管理
+        /// </summary>
         public GraphPanelSystem graphPanelSystem { get; private set; }
+
+        /// <summary>
+        /// 快捷键管理
+        /// </summary>
         public GraphHotKeys hotKeys { get; private set; }
+
+        /// <summary>
+        /// 节点管理
+        /// </summary>
         public NodeSystem nodeSystem { get; private set; }
+
+        /// <summary>
+        /// 连接管理
+        /// </summary>
         public ConnectSystem connectSystem { get; private set; }
+
+        /// <summary>
+        /// Item管理
+        /// </summary>
         public ItemSystem itemSystem { get; private set; }
+
+        /// <summary>
+        /// 操作菜单
+        /// </summary>
         public OperateMenu operateMenu { get; private set; }
+
+        /// <summary>
+        /// 创建节点菜单
+        /// </summary>
         public CreateNodeMenu createNodeMenu { get; private set; }
+
+        /// <summary>
+        /// 创建Item菜单
+        /// </summary>
         public CreateItemMenu createItemMenu { get; private set; }
+
+        /// <summary>
+        /// 拖拽管理
+        /// </summary>
         public GraphDragAndDrop dragAndDrop { get; private set; }
 
+        /// <summary>
+        /// 每帧最大加载时间（毫秒）
+        /// </summary>
         public float maxLoadTimeMs { get; private set; } = 0.0416f;
+
+        /// <summary>
+        /// 最后更新时间
+        /// </summary>
         public double lastUpdateTime { get; private set; }
 
+        /// <summary>
+        /// 加载进度
+        /// </summary>
         public float loadProgress { get; private set; }
 
+        /// <summary>
+        /// 当前窗口
+        /// </summary>
         public EditorWindow window { get; set; }
 
+        /// <summary>
+        /// 逻辑Transform改变事件
+        /// </summary>
         public event Action<Vector3, Vector3> onLogicTransformChange;
 
         public void Initialize()
@@ -97,7 +201,7 @@ namespace Emilia.Node.Editor
 
         public void OnFocus()
         {
-            if (focusedGraphView != this) UpdateSelectedInspector();
+            if (focusedGraphView != this) UpdateSelected();
             focusedGraphView = this;
             this.graphHandle?.OnFocus();
         }
@@ -108,6 +212,9 @@ namespace Emilia.Node.Editor
             this.graphHandle?.OnUpdate();
         }
 
+        /// <summary>
+        /// 重新加载
+        /// </summary>
         public void Reload(EditorGraphAsset asset)
         {
             if (asset == null) return;
@@ -137,7 +244,7 @@ namespace Emilia.Node.Editor
             SetupZoom(graphSetting.zoomSize.x, graphSetting.zoomSize.y);
         }
 
-        public void AllReload()
+        private void AllReload()
         {
             this.graphHandle = EditorHandleUtility.BuildHandle<IGraphHandle>(graphAsset.GetType(), this);
 
@@ -149,7 +256,7 @@ namespace Emilia.Node.Editor
             loadElementCoroutine = EditorCoroutineUtility.StartCoroutineOwnerless(LoadElement());
         }
 
-        public void ElementReload()
+        private void ElementReload()
         {
             RemoveAllElement();
             loadElementCoroutine = EditorCoroutineUtility.StartCoroutineOwnerless(LoadElement());
@@ -240,13 +347,16 @@ namespace Emilia.Node.Editor
         {
             if (graphAsset == null) return;
 
-            UpdateSelectedInspector();
+            UpdateSelected();
             loadElementCoroutine = null;
             loadProgress = 1;
 
             this.graphHandle?.OnLoadAfter();
         }
 
+        /// <summary>
+        /// 添加IEditorNodeView并添加到Asset中
+        /// </summary>
         public IEditorNodeView AddNode(EditorNodeAsset nodeAsset)
         {
             graphAsset.AddNode(nodeAsset);
@@ -254,6 +364,9 @@ namespace Emilia.Node.Editor
             return nodeView;
         }
 
+        /// <summary>
+        /// 添加IEditorNodeView
+        /// </summary>
         public IEditorNodeView AddNodeView(EditorNodeAsset nodeAsset)
         {
             Type nodeViewType = GraphTypeCache.GetNodeViewType(nodeAsset.GetType());
@@ -268,6 +381,9 @@ namespace Emilia.Node.Editor
             return nodeView;
         }
 
+        /// <summary>
+        /// 移除IEditorNodeView
+        /// </summary>
         public void RemoveNodeView(IEditorNodeView nodeView)
         {
             if (nodeView == null) return;
@@ -278,6 +394,9 @@ namespace Emilia.Node.Editor
             this._nodeViews.Remove(nodeView);
         }
 
+        /// <summary>
+        /// 添加IEditorEdgeView并添加到Asset中
+        /// </summary>
         public IEditorEdgeView AddEdge(EditorEdgeAsset asset)
         {
             graphAsset.AddEdge(asset);
@@ -285,13 +404,16 @@ namespace Emilia.Node.Editor
             return edgeView;
         }
 
+        /// <summary>
+        /// 添加IEditorEdgeView
+        /// </summary>
         public IEditorEdgeView AddEdgeView(EditorEdgeAsset asset)
         {
             Type edgeViewType = GraphTypeCache.GetEdgeViewType(asset.GetType());
             if (edgeViewType == null) return default;
 
             IEditorEdgeView edgeView = ReflectUtility.CreateInstance(edgeViewType) as IEditorEdgeView;
-            edgeView.edgeElement.RegisterCallback<MouseDownEvent>((_) => UpdateSelectedInspector());
+            edgeView.edgeElement.RegisterCallback<MouseDownEvent>((_) => UpdateSelected());
             edgeView.Initialize(this, asset);
             AddElement(edgeView.edgeElement);
 
@@ -300,6 +422,9 @@ namespace Emilia.Node.Editor
             return edgeView;
         }
 
+        /// <summary>
+        /// 移除IEditorEdgeView
+        /// </summary>
         public void RemoveEdgeView(IEditorEdgeView edge)
         {
             if (edge == null) return;
@@ -313,6 +438,9 @@ namespace Emilia.Node.Editor
             this._edgeViews.Remove(edge);
         }
 
+        /// <summary>
+        /// 添加IEditorItemView并添加到Asset中
+        /// </summary>
         public IEditorItemView AddItem(EditorItemAsset asset)
         {
             graphAsset.AddItem(asset);
@@ -320,12 +448,15 @@ namespace Emilia.Node.Editor
             return itemView;
         }
 
+        /// <summary>
+        /// 添加IEditorItemView
+        /// </summary>
         public IEditorItemView AddItemView(EditorItemAsset asset)
         {
             Type itemViewType = GraphTypeCache.GetItemViewType(asset.GetType());
             if (itemViewType == null) return default;
             IEditorItemView itemView = ReflectUtility.CreateInstance(itemViewType) as IEditorItemView;
-            itemView.element.RegisterCallback<MouseDownEvent>((_) => UpdateSelectedInspector());
+            itemView.element.RegisterCallback<MouseDownEvent>((_) => UpdateSelected());
             itemView.Initialize(this, asset);
             AddElement(itemView.element);
 
@@ -334,6 +465,9 @@ namespace Emilia.Node.Editor
             return itemView;
         }
 
+        /// <summary>
+        /// 移除IEditorItemView
+        /// </summary>
         public void RemoveItemView(IEditorItemView item)
         {
             if (item == null) return;
@@ -396,7 +530,7 @@ namespace Emilia.Node.Editor
 
             Delete(graphViewChange.elementsToRemove);
             graphViewChange.elementsToRemove.Clear();
-            UpdateSelectedInspector();
+            UpdateSelected();
 
             Undo.CollapseUndoOperations(Undo.GetCurrentGroup());
             Undo.IncrementCurrentGroup();
@@ -415,6 +549,9 @@ namespace Emilia.Node.Editor
             }
         }
 
+        /// <summary>
+        /// 更新逻辑Transform
+        /// </summary>
         public void UpdateLogicTransform(Vector3 position, Vector3 scale)
         {
             logicPosition = position;
@@ -436,12 +573,12 @@ namespace Emilia.Node.Editor
 
         private void OnMouseDown(MouseDownEvent evt)
         {
-            UpdateSelectedInspector();
+            UpdateSelected();
         }
 
         private void OnMouseUp(MouseUpEvent evt)
         {
-            schedule.Execute(UpdateSelectedInspector).ExecuteLater(1);
+            schedule.Execute(UpdateSelected).ExecuteLater(1);
         }
 
         private void OnUndoRedoPerformed()
@@ -450,11 +587,17 @@ namespace Emilia.Node.Editor
             else graphUndo.OnUndoRedoPerformed();
         }
 
-        public void UpdateSelectedInspector()
+        /// <summary>
+        /// 更新选中
+        /// </summary>
+        public void UpdateSelected()
         {
             graphSelected.UpdateSelected(selection);
         }
 
+        /// <summary>
+        /// 注册Undo
+        /// </summary>
         public void RegisterCompleteObjectUndo(string name)
         {
             List<Object> objects = new List<Object>();
@@ -498,6 +641,9 @@ namespace Emilia.Node.Editor
 
         private EditorCoroutine updateViewTransformCoroutine;
 
+        /// <summary>
+        /// 设置视图Transform
+        /// </summary>
         public void SetViewTransform(Vector3 newPosition, Vector3 newScale, float time = 0.2f)
         {
             schedule.Execute(OnSetViewTransform).ExecuteLater(1);

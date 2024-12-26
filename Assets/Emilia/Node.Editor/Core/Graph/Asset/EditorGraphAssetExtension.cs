@@ -4,6 +4,9 @@ namespace Emilia.Node.Editor
 {
     public static class EditorGraphAssetExtension
     {
+        /// <summary>
+        /// 获取Output节点
+        /// </summary>
         public static List<EditorNodeAsset> GetOutputNodes(this EditorGraphAsset graphAsset, EditorNodeAsset nodeAsset)
         {
             List<EditorNodeAsset> outputNodes = new List<EditorNodeAsset>();
@@ -24,6 +27,9 @@ namespace Emilia.Node.Editor
             return outputNodes;
         }
 
+        /// <summary>
+        /// 获取Input节点
+        /// </summary>
         public static List<EditorNodeAsset> GetInputNodes(this EditorGraphAsset graphAsset, EditorNodeAsset nodeAsset)
         {
             List<EditorNodeAsset> inputNodes = new List<EditorNodeAsset>();
@@ -44,6 +50,9 @@ namespace Emilia.Node.Editor
             return inputNodes;
         }
 
+        /// <summary>
+        /// 获取所有Output节点
+        /// </summary>
         public static List<EditorNodeAsset> GetAllOutputNodes(this EditorGraphAsset graphAsset, EditorNodeAsset nodeAsset)
         {
             List<EditorNodeAsset> outputNodes = new List<EditorNodeAsset>();
@@ -65,6 +74,9 @@ namespace Emilia.Node.Editor
             return outputNodes;
         }
 
+        /// <summary>
+        /// 获取所有Input节点
+        /// </summary>
         public static List<EditorNodeAsset> GetAllInputNodes(this EditorGraphAsset graphAsset, EditorNodeAsset nodeAsset)
         {
             List<EditorNodeAsset> inputNodes = new List<EditorNodeAsset>();
@@ -86,6 +98,9 @@ namespace Emilia.Node.Editor
             return inputNodes;
         }
 
+        /// <summary>
+        /// 获取所有Output的Edge
+        /// </summary>
         public static List<EditorEdgeAsset> GetOutputEdges(this EditorGraphAsset graphAsset, EditorNodeAsset nodeAsset)
         {
             List<EditorEdgeAsset> outputEdges = new List<EditorEdgeAsset>();
@@ -101,6 +116,9 @@ namespace Emilia.Node.Editor
             return outputEdges;
         }
 
+        /// <summary>
+        /// 获取所有Input的Edge
+        /// </summary>
         public static List<EditorEdgeAsset> GetInputEdges(this EditorGraphAsset graphAsset, EditorNodeAsset nodeAsset)
         {
             List<EditorEdgeAsset> inputEdges = new List<EditorEdgeAsset>();

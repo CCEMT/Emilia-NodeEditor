@@ -2,6 +2,9 @@
 
 namespace Emilia.BehaviorTree.Attributes
 {
+    /// <summary>
+    /// 在编辑器Variable过滤类型
+    /// </summary>
     public class VariableTypeFilterAttribute : Attribute
     {
         public Type type { get; private set; }

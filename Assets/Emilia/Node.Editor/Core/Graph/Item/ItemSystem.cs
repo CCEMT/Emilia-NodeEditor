@@ -19,6 +19,9 @@ namespace Emilia.Node.Editor
             handle = EditorHandleUtility.BuildHandle<IItemSystemHandle>(graphView.graphAsset.GetType(), graphView);
         }
 
+        /// <summary>
+        /// 创建Item
+        /// </summary>
         public IEditorItemView CreateItem(Type type, Vector2 position)
         {
             if (typeof(EditorItemAsset).IsAssignableFrom(type) == false) return null;
@@ -40,6 +43,9 @@ namespace Emilia.Node.Editor
             return editorItemView;
         }
 
+        /// <summary>
+        /// 删除Item
+        /// </summary>
         public void DeleteItem(IEditorItemView itemView)
         {
             itemView.RemoveView();
@@ -60,6 +66,9 @@ namespace Emilia.Node.Editor
             }
         }
 
+        /// <summary>
+        /// 删除Item，不记录Undo
+        /// </summary>
         public void DeleteItemNoUndo(IEditorItemView itemView)
         {
             itemView.RemoveView();

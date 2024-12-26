@@ -24,12 +24,18 @@ namespace Emilia.Node.Editor
 
         public override string title => "Node";
 
+        /// <summary>
+        /// Id
+        /// </summary>
         public string id
         {
             get => _id;
             set => _id = value;
         }
 
+        /// <summary>
+        /// 位置
+        /// </summary>
         public Rect position
         {
             get => _position;

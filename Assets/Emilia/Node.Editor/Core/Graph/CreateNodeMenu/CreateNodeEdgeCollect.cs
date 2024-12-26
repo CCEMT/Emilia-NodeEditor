@@ -22,7 +22,7 @@ namespace Emilia.Node.Editor
             IEditorPortView portView = port as IEditorPortView;
             if (portView == null) return createNodeInfos;
 
-            List<PortInfo> portInfos = graphView.graphElementCache.GetUserDataTypeByPortType(portView);
+            List<PortInfo> portInfos = graphView.graphElementCache.GetPortInfoTypeByPort(portView);
 
             int portInfoAmount = portInfos.Count;
             for (int i = 0; i < portInfoAmount; i++)
@@ -34,9 +34,9 @@ namespace Emilia.Node.Editor
                 {
                     CreateNodeInfo nodeInfo = allNodeInfos[j];
 
-                    if (nodeInfo.userData == null)
+                    if (nodeInfo.nodeData == null)
                     {
-                        if (nodeInfo.nodeAssetType != portInfo.nodeAssetType) continue;
+                        if (nodeInfo.editorNodeAssetType != portInfo.nodeAssetType) continue;
                         nodeInfo.portId = portInfo.portId;
 
                         if (string.IsNullOrEmpty(portInfo.displayName) == false) nodeInfo.path += $"：{portInfo.displayName}";
@@ -44,7 +44,7 @@ namespace Emilia.Node.Editor
                     }
                     else
                     {
-                        if (nodeInfo.userData.GetType() != portInfo.userData.GetType()) continue;
+                        if (nodeInfo.nodeData.GetType() != portInfo.nodeData.GetType()) continue;
                         nodeInfo.portId = portInfo.portId;
                         if (string.IsNullOrEmpty(portInfo.displayName) == false) nodeInfo.path += $"：{portInfo.displayName}";
                         createNodeInfos.Add(nodeInfo);

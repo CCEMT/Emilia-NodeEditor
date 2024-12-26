@@ -2,6 +2,9 @@
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 粘贴
+    /// </summary>
     [Action("Paste", 5200, OperateMenuTagDefine.BaseActionTag)]
     public class PasteAction : OperateMenuAction
     {

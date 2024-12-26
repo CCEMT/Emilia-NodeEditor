@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 
 namespace Emilia.Node.Editor
@@ -37,6 +36,9 @@ namespace Emilia.Node.Editor
             }
         }
 
+        /// <summary>
+        /// 更新选中
+        /// </summary>
         public void UpdateSelected(List<ISelectable> selection)
         {
             handle?.BeforeUpdateSelected(selection);
@@ -48,6 +50,9 @@ namespace Emilia.Node.Editor
             handle?.AfterUpdateSelected(selection);
         }
 
+        /// <summary>
+        /// 更新选中的绘制
+        /// </summary>
         private void UpdateSelectedDrawer(List<ISelectable> selection)
         {
             int amount = this.selectedDrawers.Count;

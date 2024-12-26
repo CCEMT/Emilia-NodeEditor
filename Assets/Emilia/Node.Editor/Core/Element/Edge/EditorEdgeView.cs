@@ -83,6 +83,9 @@ namespace Emilia.Node.Editor
             schedule.Execute(OnValueChanged).ExecuteLater(1);
         }
 
+        /// <summary>
+        /// 根据比例获取点
+        /// </summary>
         public Vector2 GetPointByRate(float rate)
         {
             float length = 0;
@@ -128,6 +131,9 @@ namespace Emilia.Node.Editor
             return _editorEdgeControl;
         }
 
+        /// <summary>
+        /// 强制更新EdgeControl
+        /// </summary>
         public void ForceUpdateEdgeControl()
         {
             if (inputPortView != null) editorEdgeControl.to = this.WorldToLocal(inputPortView.portElement.GetGlobalCenter());

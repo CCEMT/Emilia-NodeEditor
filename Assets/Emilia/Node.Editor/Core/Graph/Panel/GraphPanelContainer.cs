@@ -9,7 +9,7 @@ namespace Emilia.Node.Editor
             this.pickingMode = PickingMode.Ignore;
             this.style.flexGrow = 1;
             style.position = Position.Absolute;
-            
+
             this.StretchToParentSize();
         }
     }

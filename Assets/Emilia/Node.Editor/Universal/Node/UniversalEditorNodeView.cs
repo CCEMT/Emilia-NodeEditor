@@ -182,6 +182,9 @@ namespace Emilia.Node.Universal.Editor
             UpdateTitle();
         }
 
+        /// <summary>
+        /// 更新标题
+        /// </summary>
         public void UpdateTitle()
         {
             if (string.IsNullOrEmpty(this._universalNodeAsset.displayName)) title = defaultDisplayName;
@@ -239,11 +242,20 @@ namespace Emilia.Node.Universal.Editor
             this.verticalContainer = outputVerticalContainer;
         }
 
+        /// <summary>
+        /// 添加自定义端口视图
+        /// </summary>
         protected virtual void AddCustomPortView(IEditorPortView portView, EditorPortInfo info) { }
 
+        /// <summary>
+        /// 更新折叠状态
+        /// </summary>
         public virtual void UpdateFoldState() { }
 
-        public NodeMessageElement SendMessage(string message, NodeMessageLevel level)
+        /// <summary>
+        /// 添加消息
+        /// </summary>
+        public NodeMessageElement AddMessage(string message, NodeMessageLevel level)
         {
             NodeMessageElement nodeMessageElement = new NodeMessageElement();
             nodeMessageElement.Init(message, level);
@@ -258,7 +270,10 @@ namespace Emilia.Node.Universal.Editor
             return nodeMessageElement;
         }
 
-        private void RemoveMessage(NodeMessageElement nodeMessageElement)
+        /// <summary>
+        /// 移除消息
+        /// </summary>
+        public void RemoveMessage(NodeMessageElement nodeMessageElement)
         {
             if (this.messageElements.Remove(nodeMessageElement) == false) return;
             nodeMessageElement.RemoveFromHierarchy();
@@ -290,6 +305,9 @@ namespace Emilia.Node.Universal.Editor
             return maxLevel;
         }
 
+        /// <summary>
+        /// 弹出Tips
+        /// </summary>
         public void Tips(string text, long timeMs = 1500, float speed = 10)
         {
             if (tipsElements.ContainsKey(text)) return;
@@ -310,18 +328,28 @@ namespace Emilia.Node.Universal.Editor
             schedule.Execute(() => RemoveTips(text)).ExecuteLater(timeMs);
         }
 
+        /// <summary>
+        /// 移除Tips
+        /// </summary>
+        /// <param name="text"></param>
         public void RemoveTips(string text)
         {
             if (this.tipsElements.Remove(text, out NodeTipsElement nodeTipsElement) == false) return;
             nodeTipsElement.RemoveFromHierarchy();
         }
 
+        /// <summary>
+        /// 清空Tips
+        /// </summary>
         public void ClearTips()
         {
             foreach (NodeTipsElement tipsElement in tipsElements.Values) tipsElement.RemoveFromHierarchy();
             tipsElements.Clear();
         }
 
+        /// <summary>
+        /// 设置聚焦
+        /// </summary>
         public void SetFocus(Color borderColor, long timeMs = -1)
         {
             schedule.Execute(OnSetFocus).ExecuteLater(1);
@@ -379,6 +407,9 @@ namespace Emilia.Node.Universal.Editor
             ClearFocus();
         }
 
+        /// <summary>
+        /// 清理聚焦
+        /// </summary>
         public void ClearFocus()
         {
             schedule.Execute(OnClearFocus).ExecuteLater(1);

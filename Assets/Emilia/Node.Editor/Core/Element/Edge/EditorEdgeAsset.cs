@@ -33,30 +33,45 @@ namespace Emilia.Node.Editor
 
         public override string title => "Edge";
 
+        /// <summary>
+        /// Id 唯一标识
+        /// </summary>
         public string id
         {
             get => _id;
             set => _id = value;
         }
 
+        /// <summary>
+        /// 输出节点ID
+        /// </summary>
         public string outputNodeId
         {
             get => _outputNodeId;
             set => _outputNodeId = value;
         }
 
+        /// <summary>
+        /// 输入节点ID
+        /// </summary>
         public string inputNodeId
         {
             get => _inputNodeId;
             set => _inputNodeId = value;
         }
 
+        /// <summary>
+        /// 输出端口ID
+        /// </summary>
         public string outputPortId
         {
             get => _outputPortId;
             set => _outputPortId = value;
         }
 
+        /// <summary>
+        /// 输入端口ID
+        /// </summary>
         public string inputPortId
         {
             get => _inputPortId;
@@ -69,6 +84,9 @@ namespace Emilia.Node.Editor
             set => _userData = value;
         }
 
+        /// <summary>
+        /// Odin属性树
+        /// </summary>
         public PropertyTree propertyTree => _propertyTree;
 
         protected virtual void OnEnable()

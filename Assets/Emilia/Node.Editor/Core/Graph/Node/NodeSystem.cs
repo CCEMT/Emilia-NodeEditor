@@ -19,6 +19,9 @@ namespace Emilia.Node.Editor
             handle = EditorHandleUtility.BuildHandle<INodeSystemHandle>(graphView.graphAsset.GetType(), graphView);
         }
 
+        /// <summary>
+        /// 创建节点
+        /// </summary>
         public IEditorNodeView CreateNode(Type nodeType, Vector2 position, object userData)
         {
             EditorNodeAsset nodeAsset = CreateNode(nodeType, position);
@@ -34,6 +37,9 @@ namespace Emilia.Node.Editor
             return nodeView;
         }
 
+        /// <summary>
+        /// 创建节点
+        /// </summary>
         public EditorNodeAsset CreateNode(Type nodeType, Vector2 position)
         {
             if (typeof(EditorNodeAsset).IsAssignableFrom(nodeType) == false) return null;
@@ -45,6 +51,9 @@ namespace Emilia.Node.Editor
             return node;
         }
 
+        /// <summary>
+        /// 删除节点
+        /// </summary>
         public void DeleteNode(IEditorNodeView nodeView)
         {
             nodeView.RemoveView();
@@ -65,6 +74,9 @@ namespace Emilia.Node.Editor
             }
         }
 
+        /// <summary>
+        /// 删除节点，不记录Undo
+        /// </summary>
         public void DeleteNodeNoUndo(IEditorNodeView nodeView)
         {
             nodeView.RemoveView();

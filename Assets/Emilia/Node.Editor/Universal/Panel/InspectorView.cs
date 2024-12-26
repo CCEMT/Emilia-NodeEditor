@@ -27,6 +27,9 @@ namespace Emilia.Node.Universal.Editor
             graphView.RegisterCallback<GeometryChangedEvent>(OnGeometryChangedEvent);
         }
 
+        /// <summary>
+        /// 设置显示的对象
+        /// </summary>
         public void SetObjects(List<Object> selected)
         {
             selectedObjects = selected;

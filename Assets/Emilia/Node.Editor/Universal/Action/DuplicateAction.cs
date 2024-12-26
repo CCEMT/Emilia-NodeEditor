@@ -2,6 +2,9 @@
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 复制
+    /// </summary>
     [Action("Duplicate", 5300, OperateMenuTagDefine.BaseActionTag)]
     public class DuplicateAction : OperateMenuAction
     {

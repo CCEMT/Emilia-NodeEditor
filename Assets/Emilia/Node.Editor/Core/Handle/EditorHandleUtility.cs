@@ -60,7 +60,7 @@ namespace Emilia.Node.Editor
                     if (typeCache.TryGetValue(openGeneric, out List<EditorHandlePriorityPair> list) == false) list = typeCache[openGeneric] = new List<EditorHandlePriorityPair>();
                     EditorHandlePriorityPair pair = new EditorHandlePriorityPair();
                     pair.type = type;
-                    
+
                     pair.priority = GetHandlePriority(type);
                     Insert(list, pair);
                 }
@@ -84,6 +84,9 @@ namespace Emilia.Node.Editor
             list.Insert(left, item);
         }
 
+        /// <summary>
+        /// 获取Handle优先级
+        /// </summary>
         public static EditorHandlePriority GetHandlePriority(Type handleType)
         {
             EditorHandlePriorityAttribute priorityAttribute = handleType.GetCustomAttribute<EditorHandlePriorityAttribute>();
@@ -118,6 +121,9 @@ namespace Emilia.Node.Editor
             return result;
         }
 
+        /// <summary>
+        /// 构建Handle
+        /// </summary>
         public static T BuildHandle<T>(Type type, object value)
         {
             Type filterType = typeof(T);
@@ -153,6 +159,9 @@ namespace Emilia.Node.Editor
             return default;
         }
 
+        /// <summary>
+        /// 获取Handle
+        /// </summary>
         private static IEditorHandle GetHandle(Type type)
         {
             if (handlePool.TryGetValue(type, out Queue<IEditorHandle> queue) == false) queue = handlePool[type] = new Queue<IEditorHandle>();
@@ -162,6 +171,9 @@ namespace Emilia.Node.Editor
             return (IEditorHandle) ReflectUtility.CreateInstance(type);
         }
 
+        /// <summary>
+        /// 释放Handle
+        /// </summary>
         public static void ReleaseHandle(IEditorHandle handle)
         {
             Type type = handle.GetType();

@@ -18,6 +18,9 @@ namespace Emilia.Node.Universal.Editor
         [NonSerialized, OdinSerialize, HideInInspector]
         public EditorParametersManage editorParametersManage;
 
+        /// <summary>
+        /// 操作菜单标签
+        /// </summary>
         public virtual string[] operateMenuTags => new[] {OperateMenuTagDefine.BaseActionTag, OperateMenuTagDefine.UniversalActionTag};
 
         public override void SetChildren(List<Object> childAssets)

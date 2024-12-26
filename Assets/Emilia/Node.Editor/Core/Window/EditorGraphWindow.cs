@@ -1,7 +1,5 @@
 ﻿using System;
 using Emilia.Kit.Editor;
-using Emilia.Node.Attributes;
-using Sirenix.OdinInspector.Editor;
 using Sirenix.OdinInspector.Editor.ValueResolvers;
 using Sirenix.Serialization;
 using Sirenix.Utilities;
@@ -56,6 +54,9 @@ namespace Emilia.Node.Editor
             titleContent = new GUIContent(getTitle);
         }
 
+        /// <summary>
+        /// 设置资源
+        /// </summary>
         public void SetGraphAsset(EditorGraphAsset graphAsset)
         {
             if (this._graphRoot == null)

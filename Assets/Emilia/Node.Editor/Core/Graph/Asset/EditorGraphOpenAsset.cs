@@ -1,5 +1,4 @@
 ﻿using System;
-using Emilia.Node.Attributes;
 using Sirenix.Utilities;
 using UnityEditor;
 using UnityEditor.Callbacks;
