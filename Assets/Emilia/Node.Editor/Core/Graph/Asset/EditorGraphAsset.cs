@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Emilia.Kit;
-using Emilia.Kit.Editor;
 using Sirenix.OdinInspector;
 using Sirenix.OdinInspector.Editor;
 using Sirenix.Serialization;
@@ -40,24 +39,52 @@ namespace Emilia.Node.Editor
         [NonSerialized]
         private PropertyTree _propertyTree;
 
+        /// <summary>
+        /// Id
+        /// </summary>
         public string id
         {
             get => _id;
             set => _id = value;
         }
 
+        /// <summary>
+        /// 父级
+        /// </summary>
         public EditorGraphAsset parent
         {
             get => _parent;
             set => _parent = value;
         }
 
+        /// <summary>
+        /// 所有Node
+        /// </summary>
         public IReadOnlyList<EditorNodeAsset> nodes => _nodes;
+
+        /// <summary>
+        /// 所有Edge
+        /// </summary>
         public IReadOnlyList<EditorEdgeAsset> edges => _edges;
+
+        /// <summary>
+        /// 所有Item
+        /// </summary>
         public IReadOnlyList<EditorItemAsset> items => _items;
 
+        /// <summary>
+        /// 根据Id获取Node
+        /// </summary>
         public IReadOnlyDictionary<string, EditorNodeAsset> nodeMap => _nodeMap;
+
+        /// <summary>
+        /// 根据Id获取Edge
+        /// </summary>
         public IReadOnlyDictionary<string, EditorEdgeAsset> edgeMap => _edgeMap;
+
+        /// <summary>
+        /// 根据Id获取Item
+        /// </summary>
         public IReadOnlyDictionary<string, EditorItemAsset> itemMap => _itemMap;
 
         public PropertyTree propertyTree => _propertyTree;
@@ -73,6 +100,9 @@ namespace Emilia.Node.Editor
             _propertyTree = PropertyTree.Create(this);
         }
 
+        /// <summary>
+        /// 添加Node
+        /// </summary>
         public void AddNode(EditorNodeAsset nodeAsset)
         {
             if (this._nodeMap.ContainsKey(nodeAsset.id)) return;
@@ -83,6 +113,9 @@ namespace Emilia.Node.Editor
             EditorAssetKit.SaveAssetIntoObject(nodeAsset, this);
         }
 
+        /// <summary>
+        /// 添加Edge
+        /// </summary>
         public void AddEdge(EditorEdgeAsset edgeAsset)
         {
             if (this._edgeMap.ContainsKey(edgeAsset.id)) return;
@@ -93,6 +126,9 @@ namespace Emilia.Node.Editor
             EditorAssetKit.SaveAssetIntoObject(edgeAsset, this);
         }
 
+        /// <summary>
+        /// 添加Item
+        /// </summary>
         public void AddItem(EditorItemAsset itemAsset)
         {
             if (this._itemMap.ContainsKey(itemAsset.id)) return;
@@ -103,6 +139,9 @@ namespace Emilia.Node.Editor
             EditorAssetKit.SaveAssetIntoObject(itemAsset, this);
         }
 
+        /// <summary>
+        /// 移除Node
+        /// </summary>
         public void RemoveNode(EditorNodeAsset nodeAsset)
         {
             if (this._nodeMap.ContainsKey(nodeAsset.id) == false) return;
@@ -111,6 +150,9 @@ namespace Emilia.Node.Editor
             this._nodeMap.Remove(nodeAsset.id);
         }
 
+        /// <summary>
+        /// 移除Edge
+        /// </summary>
         public void RemoveEdge(EditorEdgeAsset edgeAsset)
         {
             if (this._edgeMap.ContainsKey(edgeAsset.id) == false) return;
@@ -119,6 +161,9 @@ namespace Emilia.Node.Editor
             this._edgeMap.Remove(edgeAsset.id);
         }
 
+        /// <summary>
+        /// 移除Item
+        /// </summary>
         public void RemoveItem(EditorItemAsset itemAsset)
         {
             if (this._itemMap.ContainsKey(itemAsset.id) == false) return;

@@ -22,7 +22,7 @@ namespace Emilia.Node.Universal.Editor
             string labelString = key;
             if (string.IsNullOrEmpty(labelString) == false)
             {
-                EditorParameter parameter = universalGraphAsset.editorParametersManage.parameters.Find(p => p.key == key);
+                EditorParameter parameter = universalGraphAsset.editorParametersManage.GetParameter(key);
                 if (parameter != null) labelString = parameter.description;
             }
 

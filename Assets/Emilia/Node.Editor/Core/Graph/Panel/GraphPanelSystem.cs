@@ -27,9 +27,19 @@ namespace Emilia.Node.Editor
         private VisualElement dockLeisureArea;
         private Rect dockAreaOffset;
 
+        /// <summary>
+        /// 停靠主容器
+        /// </summary>
         public GraphPanelContainer dockRootContainer => this._dockRootContainer;
 
+        /// <summary>
+        /// 实际GraphView的Rect
+        /// </summary>
         public Rect graphRect { get; set; }
+
+        /// <summary>
+        /// 实际GraphView的LayoutRect
+        /// </summary>
         public Rect graphLayoutRect { get; set; }
 
         public void Reset(EditorGraphView graphView)
@@ -64,6 +74,9 @@ namespace Emilia.Node.Editor
 
         }
 
+        /// <summary>
+        /// 打开面板以浮动形式
+        /// </summary>
         public T OpenFloatPanel<T>() where T : IGraphPanel
         {
             T panel = ReflectUtility.CreateInstance<T>();
@@ -77,6 +90,9 @@ namespace Emilia.Node.Editor
             return panel;
         }
 
+        /// <summary>
+        /// 打开面板以停靠的形式
+        /// </summary>
         public T OpenDockPanel<T>(float size, GraphDockPosition position) where T : IGraphPanel
         {
             T panel = ReflectUtility.CreateInstance<T>();
@@ -91,6 +107,9 @@ namespace Emilia.Node.Editor
             return panel;
         }
 
+        /// <summary>
+        /// 打开面板以停靠的形式
+        /// </summary>
         public T OpenDockPanel<T>(VisualElement dockArea, float size, GraphDockPosition position) where T : IGraphPanel
         {
             VisualElement addDockArea = dockArea;
@@ -136,6 +155,9 @@ namespace Emilia.Node.Editor
             return panel;
         }
 
+        /// <summary>
+        /// 设置面板激活状态
+        /// </summary>
         public void SetActive<T>(bool isActive) where T : IGraphPanel
         {
             IGraphPanel panel = this.openPanelMap.GetValueOrDefault(typeof(T));
@@ -143,6 +165,9 @@ namespace Emilia.Node.Editor
             panel.rootView.style.display = isActive ? DisplayStyle.Flex : DisplayStyle.None;
         }
 
+        /// <summary>
+        /// 关闭面板
+        /// </summary>
         public void ClosePanel<T>() where T : IGraphPanel
         {
             IGraphPanel panel = this.openPanelMap.GetValueOrDefault(typeof(T));
@@ -158,11 +183,17 @@ namespace Emilia.Node.Editor
             this.openPanelMap.Remove(typeof(T));
         }
 
+        /// <summary>
+        /// 获取面板
+        /// </summary>
         public T GetPanel<T>() where T : IGraphPanel
         {
             return (T) this.openPanelMap.GetValueOrDefault(typeof(T));
         }
 
+        /// <summary>
+        /// 更新GraphView的Rect
+        /// </summary>
         public void UpdateGraphRect()
         {
             Rect rect = this.dockLeisureArea.worldBound;
@@ -256,7 +287,10 @@ namespace Emilia.Node.Editor
                     break;
             }
         }
-
+        
+        /// <summary>
+        /// 关闭所有面板
+        /// </summary>
         public void CloseAllPanel()
         {
             foreach (IGraphPanel panel in this.openPanels)

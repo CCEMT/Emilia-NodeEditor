@@ -22,6 +22,10 @@ namespace Emilia.Node.Editor
         private Texture2D nullIcon;
 
         private ICreateNodeMenuHandle handle;
+
+        /// <summary>
+        /// 缓存的创建节点Handle
+        /// </summary>
         public List<ICreateNodeHandle> createNodeHandleCacheList { get; private set; } = new List<ICreateNodeHandle>();
 
         public void Reset(EditorGraphView graphView)
@@ -41,11 +45,17 @@ namespace Emilia.Node.Editor
             handle?.InitializeCache();
         }
 
+        /// <summary>
+        /// 显示创建节点菜单
+        /// </summary>
         public void ShowCreateNodeMenu(NodeCreationContext nodeCreationContext)
         {
             handle?.ShowCreateNodeMenu(nodeCreationContext);
         }
 
+        /// <summary>
+        /// 创建节点初始化
+        /// </summary>
         public void MenuCreateInitialize(CreateNodeContext context)
         {
             if (this.handle == null) return;
@@ -54,6 +64,9 @@ namespace Emilia.Node.Editor
             handle.MenuCreateInitialize(this.createNodeContext);
         }
 
+        /// <summary>
+        /// 获取节点菜单项
+        /// </summary>
         public List<SearchTreeEntry> OnCreateSearchTree(SearchWindowContext context)
         {
             List<SearchTreeEntry> searchTreeEntries = new List<SearchTreeEntry>();
@@ -186,13 +199,16 @@ namespace Emilia.Node.Editor
                     level = menuItem.level + 1,
                     userData = menuItem.info
                 });
-                    
+
                 createNodePaths.Add(nodePath);
             }
 
             return searchTreeEntries;
         }
 
+        /// <summary>
+        /// 选择选项
+        /// </summary>
         public bool OnSelectEntry(SearchTreeEntry SearchTreeEntry, SearchWindowContext context)
         {
             EditorWindow window = graphView.window;
@@ -205,7 +221,7 @@ namespace Emilia.Node.Editor
 
             Undo.IncrementCurrentGroup();
 
-            IEditorNodeView nodeView = this.graphView.nodeSystem.CreateNode(createNodeInfo.nodeAssetType, graphMousePosition, createNodeInfo.userData);
+            IEditorNodeView nodeView = this.graphView.nodeSystem.CreateNode(createNodeInfo.editorNodeAssetType, graphMousePosition, createNodeInfo.nodeData);
             if (string.IsNullOrEmpty(this.createNodeContext.createNodeConnector.originalNodeId) == false) CreateConnect(nodeView);
 
             Undo.CollapseUndoOperations(Undo.GetCurrentGroup());
@@ -252,7 +268,7 @@ namespace Emilia.Node.Editor
         public void Dispose()
         {
             if (this.graphView == null) return;
-            
+
             createNodeHandleCacheList.Clear();
 
             if (this.nullIcon != null)

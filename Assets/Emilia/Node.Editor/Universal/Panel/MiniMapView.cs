@@ -38,6 +38,9 @@ namespace Emilia.Node.Universal.Editor
 
         private MiniMapViewPosition _viewPosition = MiniMapViewPosition.BottomRight;
 
+        /// <summary>
+        /// 显示位置
+        /// </summary>
         public MiniMapViewPosition viewPosition
         {
             get => this._viewPosition;

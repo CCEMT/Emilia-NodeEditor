@@ -18,7 +18,7 @@ namespace Emilia.Node.Universal.Editor
             for (int i = 0; i < methodInfosLength; i++)
             {
                 PropertyInfo propertyInfo = propertyInfos[i];
-                if (!propertyInfo.CanRead || !propertyInfo.CanWrite) continue;
+                if (! propertyInfo.CanRead || ! propertyInfo.CanWrite) continue;
 
                 ToggleToolbarAttribute toggleToolbarAttribute = propertyInfo.GetCustomAttribute<ToggleToolbarAttribute>();
                 if (toggleToolbarAttribute == null) continue;

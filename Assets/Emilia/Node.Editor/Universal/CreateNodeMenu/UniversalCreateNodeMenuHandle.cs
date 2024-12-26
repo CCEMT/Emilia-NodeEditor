@@ -89,8 +89,8 @@ namespace Emilia.Node.Universal.Editor
                 if (nodeHandle.validity == false) continue;
 
                 CreateNodeInfo createNodeInfo = new CreateNodeInfo();
-                createNodeInfo.userData = nodeHandle.userData;
-                createNodeInfo.nodeAssetType = nodeHandle.editorNodeType;
+                createNodeInfo.nodeData = nodeHandle.nodeData;
+                createNodeInfo.editorNodeAssetType = nodeHandle.editorNodeType;
                 createNodeInfo.path = nodeHandle.path;
                 createNodeInfo.priority = nodeHandle.priority;
                 createNodeInfo.icon = nodeHandle.icon;

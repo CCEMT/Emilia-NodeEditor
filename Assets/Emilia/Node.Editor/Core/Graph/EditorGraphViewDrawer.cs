@@ -3,17 +3,26 @@ using UnityEngine;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// GraphView绘制器
+    /// </summary>
     public class EditorGraphViewDrawer
     {
         private EditorGraphView _graphView;
         public OdinImGuiElement guiElement;
 
+        /// <summary>
+        /// 初始化
+        /// </summary>
         public void Initialize(EditorGraphView graphView)
         {
             _graphView = graphView;
             this.guiElement = new OdinImGuiElement(graphView);
         }
 
+        /// <summary>
+        /// 绘制
+        /// </summary>
         public void Draw(float height, float width = -1)
         {
             if (guiElement == null) return;
@@ -27,6 +36,9 @@ namespace Emilia.Node.Editor
             if (targetHeight > 0) _graphView.style.height = targetHeight;
         }
 
+        /// <summary>
+        /// 释放
+        /// </summary>
         public void Dispose()
         {
             guiElement = null;

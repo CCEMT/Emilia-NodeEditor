@@ -11,6 +11,10 @@ namespace Emilia.Node.Editor
         private EditorGraphView graphView;
 
         private IOperateMenuHandle handle;
+
+        /// <summary>
+        /// 缓存操作菜单信息
+        /// </summary>
         public List<OperateMenuActionInfo> actionInfoCache { get; private set; } = new List<OperateMenuActionInfo>();
 
         public void Reset(EditorGraphView graphView)
@@ -23,10 +27,13 @@ namespace Emilia.Node.Editor
             handle?.InitializeCache();
         }
 
+        /// <summary>
+        /// 构建菜单
+        /// </summary>
         public void BuildMenu(OperateMenuContext menuContext)
         {
             if (handle == null) return;
-            
+
             List<OperateMenuItem> graphMenuItems = new List<OperateMenuItem>();
             handle.CollectMenuItems(graphMenuItems, menuContext);
 
@@ -66,7 +73,7 @@ namespace Emilia.Node.Editor
         public void Dispose()
         {
             if (this.graphView == null) return;
-            
+
             actionInfoCache.Clear();
 
             if (handle != null)

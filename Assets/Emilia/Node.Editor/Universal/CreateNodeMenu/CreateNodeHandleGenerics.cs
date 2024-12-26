@@ -11,12 +11,12 @@ namespace Emilia.Node.Editor
 
         public virtual Type editorNodeType => this._value.defaultEditorNodeType;
 
-        public virtual object userData
+        public virtual object nodeData
         {
             get
             {
                 if (parentCreateNodeHandle == null) return null;
-                return parentCreateNodeHandle.userData;
+                return parentCreateNodeHandle.nodeData;
             }
         }
 

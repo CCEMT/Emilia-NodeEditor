@@ -11,6 +11,9 @@ namespace Emilia.Node.Editor
         [OdinSerialize, NonSerialized]
         private List<CopyPasteNode> nodes = new List<CopyPasteNode>();
 
+        /// <summary>
+        /// 开始粘贴
+        /// </summary>
         public void StartPaste(object userData)
         {
             Undo.IncrementCurrentGroup();
@@ -74,6 +77,9 @@ namespace Emilia.Node.Editor
             return inputPacks;
         }
 
+        /// <summary>
+        /// 添加Pack
+        /// </summary>
         public void AddPack(ICopyPastePack pack)
         {
             CopyPasteNode addNode = new CopyPasteNode(pack);
@@ -98,6 +104,9 @@ namespace Emilia.Node.Editor
             nodes.Add(addNode);
         }
 
+        /// <summary>
+        /// 移除Pack
+        /// </summary>
         public void RemovePack(ICopyPastePack pack)
         {
             CopyPasteNode removeNode = null;

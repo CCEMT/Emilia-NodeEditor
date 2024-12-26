@@ -2,6 +2,9 @@
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 剪切
+    /// </summary>
     [Action("Cut", 5400, OperateMenuTagDefine.BaseActionTag)]
     public class CutAction : OperateMenuAction
     {

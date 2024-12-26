@@ -31,7 +31,7 @@ namespace Emilia.Node.Universal.Editor
                 case NodeMessageLevel.Error:
                     return Color.red;
             }
-            
+
             return Color.white;
         }
     }

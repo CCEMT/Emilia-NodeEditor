@@ -21,7 +21,7 @@ namespace Emilia.Node.Universal.Editor
             inputContainer = new VisualElement();
             inputContainer.name = "inputContainer";
             top.Add(inputContainer);
-            
+
             VisualElement spacer = new VisualElement();
             spacer.name = "spacer";
             spacer.style.flexGrow = 1;

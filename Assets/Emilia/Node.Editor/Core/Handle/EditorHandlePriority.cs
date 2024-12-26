@@ -2,6 +2,9 @@
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// EditorHandle优先级
+    /// </summary>
     public struct EditorHandlePriority : IComparable
     {
         public double value;

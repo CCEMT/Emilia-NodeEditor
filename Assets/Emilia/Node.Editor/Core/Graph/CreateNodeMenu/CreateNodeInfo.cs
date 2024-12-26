@@ -5,8 +5,8 @@ namespace Emilia.Node.Editor
 {
     public struct CreateNodeInfo
     {
-        public Type nodeAssetType;
-        public object userData;
+        public Type editorNodeAssetType;
+        public object nodeData;
         public string portId;
 
         public string path;

@@ -6,6 +6,9 @@ namespace Emilia.Node.Editor
 {
     public static class EditorGraphAssetUtility
     {
+        /// <summary>
+        /// 为指定的资源绑定EditorGraphAsset
+        /// </summary>
         public static T CreateAsAttached<T>(string assetPath) where T : EditorGraphAsset
         {
             Object masterAsset = AssetDatabase.LoadAssetAtPath<Object>(assetPath);
@@ -21,6 +24,9 @@ namespace Emilia.Node.Editor
             return asset;
         }
 
+        /// <summary>
+        /// 创建EditorGraphAsset
+        /// </summary>
         public static T Create<T>(string savePath) where T : EditorGraphAsset
         {
             T asset = ScriptableObject.CreateInstance<T>();

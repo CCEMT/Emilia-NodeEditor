@@ -12,20 +12,45 @@ namespace Emilia.Node.Editor
 
         IReadOnlyList<IEditorPortView> portViews { get; }
 
+        /// <summary>
+        /// 初始化
+        /// </summary>
         void Initialize(EditorGraphView graphView, EditorNodeAsset asset);
 
+        /// <summary>
+        /// 收集静态端口资源
+        /// </summary>
+        /// <returns></returns>
         List<EditorPortInfo> CollectStaticPortAssets();
 
+        /// <summary>
+        /// 根据id获取IEditorPortView
+        /// </summary>
         IEditorPortView GetPortView(string portId);
 
+        /// <summary>
+        /// 添加IEditorPortView
+        /// </summary>
         IEditorPortView AddPortView(EditorPortInfo asset);
 
+        /// <summary>
+        /// 设置位置
+        /// </summary>
         void SetPosition(Rect position);
 
+        /// <summary>
+        /// 设置位置，不记录撤销
+        /// </summary>
         void SetPositionNoUndo(Rect position);
 
+        /// <summary>
+        /// 值改变
+        /// </summary>
         void OnValueChanged();
 
+        /// <summary>
+        /// 释放
+        /// </summary>
         void Dispose();
     }
 }

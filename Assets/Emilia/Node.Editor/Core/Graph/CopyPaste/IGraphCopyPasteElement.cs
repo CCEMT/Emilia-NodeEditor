@@ -2,6 +2,9 @@
 {
     public interface IGraphCopyPasteElement
     {
+        /// <summary>
+        /// 获取复制粘贴包
+        /// </summary>
         ICopyPastePack GetPack();
     }
 }

@@ -2,6 +2,9 @@
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 删除
+    /// </summary>
     [Action("Delete", 6000, OperateMenuTagDefine.BaseActionTag)]
     public class DeleteAction : OperateMenuAction
     {

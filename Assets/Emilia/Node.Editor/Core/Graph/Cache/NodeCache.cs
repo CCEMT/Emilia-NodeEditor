@@ -2,12 +2,12 @@
 {
     public struct NodeCache
     {
-        public object userData;
+        public object nodeData;
         public IEditorNodeView nodeView;
 
-        public NodeCache(object userData, IEditorNodeView nodeView)
+        public NodeCache(object nodeData, IEditorNodeView nodeView)
         {
-            this.userData = userData;
+            this.nodeData = nodeData;
             this.nodeView = nodeView;
         }
     }

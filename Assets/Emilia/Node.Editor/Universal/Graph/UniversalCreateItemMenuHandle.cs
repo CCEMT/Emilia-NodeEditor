@@ -12,11 +12,11 @@ namespace Emilia.Node.Universal.Editor
             group.path = "Group";
 
             itemTypes.Add(group);
-            
+
             CreateItemMenuInfo sticky = new CreateItemMenuInfo();
             sticky.itemAssetType = typeof(StickyNoteAsset);
             sticky.path = "Sticky Note";
-            
+
             itemTypes.Add(sticky);
         }
     }

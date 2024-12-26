@@ -1,10 +1,8 @@
-.Vertical
-{
+.Vertical {
     height: 16px;
     justify-content: center;
 }
 
-.Vertical>.connectorText
-{
+.Vertical > .connectorText {
     display: none;
 }

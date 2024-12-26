@@ -51,7 +51,6 @@ namespace Emilia.Node.Editor
         protected virtual bool editInNode => false;
 
         protected virtual bool canDelete => true;
-        protected virtual Type portViewType => null;
         protected virtual string styleFilePath { get; } = string.Empty;
 
         public virtual void Initialize(EditorGraphView graphView, EditorNodeAsset asset)
@@ -352,18 +351,6 @@ namespace Emilia.Node.Editor
             return new NodeCopyPastePack(asset);
         }
 
-        public virtual void Dispose()
-        {
-            int amount = this._portViews.Count;
-            for (int i = 0; i < amount; i++)
-            {
-                IEditorPortView portView = this._portViews[i];
-                portView.Dispose();
-            }
-
-            RemoveFromHierarchy();
-        }
-
         public virtual IEnumerable<Object> CollectSelectedObjects()
         {
             if (editInNode) yield break;
@@ -375,6 +362,18 @@ namespace Emilia.Node.Editor
         public override string ToString()
         {
             return title;
+        }
+
+        public virtual void Dispose()
+        {
+            int amount = this._portViews.Count;
+            for (int i = 0; i < amount; i++)
+            {
+                IEditorPortView portView = this._portViews[i];
+                portView.Dispose();
+            }
+
+            RemoveFromHierarchy();
         }
     }
 }

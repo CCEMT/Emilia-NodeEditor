@@ -15,8 +15,19 @@ namespace Emilia.Node.Editor
 
         private List<NodeCache> _nodeViewCache = new List<NodeCache>();
 
+        /// <summary>
+        /// 根据id获取IEditorNodeView
+        /// </summary>
         public IReadOnlyDictionary<string, IEditorNodeView> nodeViewById => this._nodeViewById;
+
+        /// <summary>
+        /// 根据id获取IEditorEdgeView
+        /// </summary>
         public IReadOnlyDictionary<string, IEditorEdgeView> edgeViewById => this._edgeViewById;
+
+        /// <summary>
+        /// 根据id获取IEditorItemView
+        /// </summary>
         public IReadOnlyDictionary<string, IEditorItemView> itemViewById => this._itemViewById;
 
         public void BuildCache(EditorGraphView graphView)
@@ -34,14 +45,14 @@ namespace Emilia.Node.Editor
 
                 EditorNodeAsset nodeAsset = this.editorGraphView.nodeSystem.CreateNode(createNodeHandle.editorNodeType, Vector2.zero);
 
-                object userData = createNodeHandle.userData;
-                nodeAsset.userData = this.editorGraphView.graphCopyPaste.CreateCopy(userData);
+                object nodeData = createNodeHandle.nodeData;
+                nodeAsset.userData = this.editorGraphView.graphCopyPaste.CreateCopy(nodeData);
 
                 Type nodeViewType = GraphTypeCache.GetNodeViewType(nodeAsset.GetType());
                 IEditorNodeView nodeView = ReflectUtility.CreateInstance(nodeViewType) as IEditorNodeView;
                 nodeView.Initialize(this.editorGraphView, nodeAsset);
 
-                NodeCache nodeCache = new NodeCache(userData, nodeView);
+                NodeCache nodeCache = new NodeCache(nodeData, nodeView);
                 this._nodeViewCache.Add(nodeCache);
             }
         }
@@ -81,9 +92,9 @@ namespace Emilia.Node.Editor
             return nodeViewById.GetValueOrDefault(id);
         }
 
-        public List<PortInfo> GetUserDataTypeByPortType(IEditorPortView form)
+        public List<PortInfo> GetPortInfoTypeByPort(IEditorPortView form)
         {
-            List<PortInfo> userDataTypeList = new List<PortInfo>();
+            List<PortInfo> portInfos = new List<PortInfo>();
 
             int nodeViewAmount = this._nodeViewCache.Count;
             for (int i = 0; i < nodeViewAmount; i++)
@@ -98,16 +109,19 @@ namespace Emilia.Node.Editor
                     if (canConnect == false) continue;
                     PortInfo portInfo = new PortInfo();
                     portInfo.nodeAssetType = nodeCache.nodeView.asset.GetType();
-                    portInfo.userData = nodeCache.userData;
+                    portInfo.nodeData = nodeCache.nodeData;
                     portInfo.portId = portView.info.id;
                     portInfo.displayName = portView.info.displayName;
-                    userDataTypeList.Add(portInfo);
+                    portInfos.Add(portInfo);
                 }
             }
 
-            return userDataTypeList;
+            return portInfos;
         }
 
+        /// <summary>
+        /// 根据端口获取IEditorEdgeView
+        /// </summary>
         public IEditorEdgeView GetEdgeView(IEditorPortView xPort, IEditorPortView yPort)
         {
             int edgeAmount = this.editorGraphView.edgeViews.Count;

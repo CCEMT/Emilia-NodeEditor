@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Emilia.Node.Editor
 {
@@ -16,6 +15,9 @@ namespace Emilia.Node.Editor
             this.handle = EditorHandleUtility.BuildHandle<ICreateItemMenuHandle>(graphView.graphAsset.GetType(), graphView);
         }
 
+        /// <summary>
+        /// 收集所有的创建Item菜单
+        /// </summary>
         public List<CreateItemMenuInfo> CollectItemMenus()
         {
             List<CreateItemMenuInfo> types = new List<CreateItemMenuInfo>();

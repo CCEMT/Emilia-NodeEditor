@@ -5,18 +5,37 @@ namespace Emilia.Node.Editor
 {
     public interface IEditorItemView : IDeleteGraphElement, IRemoveViewElement, IGraphCopyPasteElement, ISelectableGraphElement
     {
+        /// <summary>
+        /// 资产
+        /// </summary>
         EditorItemAsset asset { get; }
 
         GraphElement element { get; }
 
+        /// <summary>
+        /// 初始化
+        /// </summary>
         void Initialize(EditorGraphView graphView, EditorItemAsset asset);
 
+        /// <summary>
+        /// 设置位置
+        /// </summary>
+        /// <param name="position"></param>
         void SetPosition(Rect position);
 
+        /// <summary>
+        /// 设置位置，不记录撤销
+        /// </summary>
         void SetPositionNoUndo(Rect position);
-        
+
+        /// <summary>
+        /// 值改变
+        /// </summary>
         void OnValueChanged();
 
+        /// <summary>
+        /// 释放
+        /// </summary>
         void Dispose();
     }
 }

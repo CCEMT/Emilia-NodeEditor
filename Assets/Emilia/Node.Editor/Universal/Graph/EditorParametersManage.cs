@@ -29,6 +29,9 @@ namespace Emilia.Node.Universal.Editor
     {
         public override string title => "参数列表";
 
+        /// <summary>
+        /// 菜单过滤的类型
+        /// </summary>
         public virtual IList<Type> filterTypes => TypeCache.GetTypesDerivedFrom<Variable>();
 
         [LabelText("参数定义"), HideReferenceObjectPicker, NonSerialized, OdinSerialize,
@@ -71,6 +74,14 @@ namespace Emilia.Node.Universal.Editor
             }
         }
 
+        public EditorParameter GetParameter(string key)
+        {
+            return parameters.Find(p => p.key == key);
+        }
+
+        /// <summary>
+        /// 转换为VariablesManage
+        /// </summary>
         public VariablesManage ToParametersManage()
         {
             VariablesManage variablesManage = new VariablesManage();

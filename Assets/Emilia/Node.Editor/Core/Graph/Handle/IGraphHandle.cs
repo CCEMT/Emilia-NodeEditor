@@ -4,7 +4,7 @@
     {
         void OnLoadBefore();
         void OnLoadAfter();
-        
+
         void OnFocus();
         void OnUpdate();
     }

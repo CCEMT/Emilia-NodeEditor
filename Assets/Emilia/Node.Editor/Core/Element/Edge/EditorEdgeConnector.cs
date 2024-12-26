@@ -59,7 +59,7 @@ namespace Emilia.Node.Editor
 
             Port graphElement = target as Port;
             if (graphElement == null) return;
-            
+
             downPosition = evt.localMousePosition;
 
             this.edgeViewCandidate = ReflectUtility.CreateInstance(this.edgeViewType) as IEditorEdgeView;

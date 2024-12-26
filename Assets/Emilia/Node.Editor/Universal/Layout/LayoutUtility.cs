@@ -16,6 +16,9 @@ namespace Emilia.Node.Universal.Editor
 {
     public static class LayoutUtility
     {
+        /// <summary>
+        /// 开始布局
+        /// </summary>
         public static void RunLayout(EditorGraphView graphView)
         {
             GeometryGraph layoutGraph = new GeometryGraph();

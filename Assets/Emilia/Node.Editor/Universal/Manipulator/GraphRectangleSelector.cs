@@ -20,7 +20,10 @@ namespace Emilia.Node.Editor
             {
                 activators.Add(new ManipulatorActivationFilter {button = MouseButton.LeftMouse, modifiers = EventModifiers.Command});
             }
-            else { activators.Add(new ManipulatorActivationFilter {button = MouseButton.LeftMouse, modifiers = EventModifiers.Control}); }
+            else
+            {
+                activators.Add(new ManipulatorActivationFilter {button = MouseButton.LeftMouse, modifiers = EventModifiers.Control});
+            }
             m_Rectangle = new RectangleSelect();
             m_Rectangle.style.position = Position.Absolute;
             m_Rectangle.style.top = 0f;
@@ -139,7 +142,10 @@ namespace Emilia.Node.Editor
                             graphView.RemoveFromSelection(selectable);
                         }
                     }
-                    else { graphView.AddToSelection(selectable); }
+                    else
+                    {
+                        graphView.AddToSelection(selectable);
+                    }
             }
             m_Active = false;
             target.ReleaseMouse();

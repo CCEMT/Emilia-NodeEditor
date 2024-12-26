@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Emilia.Node.Attributes;
-using Sirenix.OdinInspector.Editor;
 using Sirenix.OdinInspector.Editor.ValueResolvers;
 using Sirenix.Utilities;
 using Sirenix.Utilities.Editor;
@@ -29,6 +27,9 @@ namespace Emilia.Node.Editor
             }
         }
 
+        /// <summary>
+        /// 打开GraphView窗口
+        /// </summary>
         public static IEditorGraphWindow OpenGraphWindow(Type type, EditorGraphAsset graphAsset)
         {
             if (graphWindows.TryGetValue(graphAsset, out var graphWindow))

@@ -2,6 +2,9 @@
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 用于EditorEdgeView指定EditorEdgeAsset
+    /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
     public class EditorEdgeAttribute : Attribute
     {

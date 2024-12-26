@@ -34,7 +34,7 @@ namespace Emilia.Node.Editor
         public void Dispose()
         {
             if (graphView == null) return;
-            
+
             graphView.UnregisterCallback<DragUpdatedEvent>(DragUpdatedCallback);
             graphView.UnregisterCallback<DragPerformEvent>(DragPerformedCallback);
 

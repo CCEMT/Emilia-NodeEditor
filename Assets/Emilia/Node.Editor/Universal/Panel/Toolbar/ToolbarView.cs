@@ -35,6 +35,9 @@ namespace Emilia.Node.Universal.Editor
             EditorApplication.playModeStateChanged += (_) => ReInitControls();
         }
 
+        /// <summary>
+        /// 设置边距
+        /// </summary>
         public void SetMargins(float size)
         {
             this._leftMargin = size;
@@ -64,6 +67,9 @@ namespace Emilia.Node.Universal.Editor
             }
         }
 
+        /// <summary>
+        /// 添加控件
+        /// </summary>
         public void AddControl(IToolbarViewControl control, ToolbarViewControlPosition position = ToolbarViewControlPosition.LeftOrTop)
         {
             if (controls.TryGetValue(position, out var list) == false) controls[position] = list = new List<IToolbarViewControl>();
