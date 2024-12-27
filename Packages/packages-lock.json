@@ -4,8 +4,10 @@
       "version": "https://github.com/CCEMT/Emilia-Kit.git?path=Assets/Emilia/Kit",
       "depth": 0,
       "source": "git",
-      "dependencies": {},
-      "hash": "37d84407a31f2bda7ff7ad04c2409ecd073bc669"
+      "dependencies": {
+        "com.unity.editorcoroutines": "1.0.0"
+      },
+      "hash": "e5118f18862d7e8e0e682bc04d1466470fcd0789"
     },
     "com.unity.editorcoroutines": {
       "version": "1.0.0",
