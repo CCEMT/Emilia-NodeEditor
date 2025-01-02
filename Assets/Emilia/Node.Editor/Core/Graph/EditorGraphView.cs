@@ -703,24 +703,33 @@ namespace Emilia.Node.Editor
             }
         }
 
+        /// <summary>
+        /// 保存
+        /// </summary>
+        public void Save()
+        {
+            if (graphAsset == null) return;
+            graphAsset.Save();
+        }
+
         public void Dispose()
         {
+            Save();
+
             if (loadElementCoroutine != null) EditorCoroutineUtility.StopCoroutine(loadElementCoroutine);
             loadElementCoroutine = null;
 
             RemoveAllElement();
+            DisposeSystem();
 
             Undo.undoRedoPerformed -= OnUndoRedoPerformed;
 
+            if (focusedGraphView == this) focusedGraphView = null;
             if (this.graphHandle != null)
             {
                 EditorHandleUtility.ReleaseHandle(this.graphHandle);
                 this.graphHandle = null;
             }
-
-            DisposeSystem();
-
-            if (focusedGraphView == this) focusedGraphView = null;
         }
 
         private void DisposeSystem()
