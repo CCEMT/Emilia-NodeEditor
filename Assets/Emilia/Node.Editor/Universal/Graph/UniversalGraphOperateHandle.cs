@@ -39,7 +39,7 @@ namespace Emilia.Node.Universal.Editor
 
         public override void Save()
         {
-            AssetDatabase.SaveAssetIfDirty(smartValue.graphAsset);
+            smartValue.Save();
         }
     }
 }

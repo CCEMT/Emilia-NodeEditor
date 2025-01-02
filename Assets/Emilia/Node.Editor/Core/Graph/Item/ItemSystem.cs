@@ -36,7 +36,7 @@ namespace Emilia.Node.Editor
             graphView.RegisterCompleteObjectUndo("Graph CreateItem");
             IEditorItemView editorItemView = this.graphView.AddItem(itemAsset);
             handle?.OnCreateItem(editorItemView);
-
+            
             Undo.CollapseUndoOperations(Undo.GetCurrentGroup());
             Undo.IncrementCurrentGroup();
 
