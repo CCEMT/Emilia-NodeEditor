@@ -211,7 +211,7 @@ namespace Emilia.Node.Editor
             foreach (Type type in types)
             {
                 if (type.IsAbstract) continue;
-                GraphViewModule module = Activator.CreateInstance(type) as GraphViewModule;
+                GraphViewModule module = ReflectUtility.CreateInstance(type) as GraphViewModule;
                 if (module == null) continue;
                 modules[type] = module;
             }
