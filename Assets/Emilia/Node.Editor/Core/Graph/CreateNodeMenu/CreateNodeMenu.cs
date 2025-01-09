@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Editor
 {
-    public class CreateNodeMenu
+    public class CreateNodeMenu : GraphViewModule
     {
         struct MenuItem
         {
@@ -17,7 +17,6 @@ namespace Emilia.Node.Editor
         }
 
         private CreateNodeContext createNodeContext;
-        private EditorGraphView graphView;
 
         private Texture2D nullIcon;
 
@@ -28,9 +27,9 @@ namespace Emilia.Node.Editor
         /// </summary>
         public List<ICreateNodeHandle> createNodeHandleCacheList { get; private set; } = new List<ICreateNodeHandle>();
 
-        public void Reset(EditorGraphView graphView)
+        public override void Reset(EditorGraphView graphView)
         {
-            this.graphView = graphView;
+            base.Reset(graphView);
             createNodeHandleCacheList.Clear();
 
             if (nullIcon == null)
@@ -265,7 +264,7 @@ namespace Emilia.Node.Editor
             }
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             if (this.graphView == null) return;
 
@@ -283,7 +282,7 @@ namespace Emilia.Node.Editor
                 handle = null;
             }
 
-            this.graphView = null;
+            base.Dispose();
         }
     }
 }

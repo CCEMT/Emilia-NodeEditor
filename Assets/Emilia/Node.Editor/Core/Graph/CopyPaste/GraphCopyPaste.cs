@@ -3,14 +3,13 @@ using UnityEditor.Experimental.GraphView;
 
 namespace Emilia.Node.Editor
 {
-    public class GraphCopyPaste
+    public class GraphCopyPaste : GraphViewModule
     {
-        private EditorGraphView graphView;
         private IGraphCopyPasteHandle handle;
 
-        public void Reset(EditorGraphView graphView)
+        public override void Reset(EditorGraphView graphView)
         {
-            this.graphView = graphView;
+            base.Reset(graphView);
             if (handle != null) EditorHandleUtility.ReleaseHandle(handle);
             handle = EditorHandleUtility.BuildHandle<IGraphCopyPasteHandle>(graphView.graphAsset.GetType(), graphView);
         }
@@ -51,7 +50,7 @@ namespace Emilia.Node.Editor
             return handle.CreateCopy(value);
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             if (handle != null)
             {
@@ -59,7 +58,7 @@ namespace Emilia.Node.Editor
                 handle = null;
             }
 
-            graphView = null;
+            base.Dispose();
         }
     }
 }
