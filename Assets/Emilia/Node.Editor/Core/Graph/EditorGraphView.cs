@@ -22,6 +22,7 @@ namespace Emilia.Node.Editor
         public static EditorGraphView focusedGraphView { get; private set; }
 
         private IGraphHandle graphHandle;
+        private Dictionary<Type, GraphViewModule> modules = new Dictionary<Type, GraphViewModule>();
 
         private List<IEditorNodeView> _nodeViews = new List<IEditorNodeView>();
         private List<IEditorEdgeView> _edgeViews = new List<IEditorEdgeView>();
@@ -66,14 +67,14 @@ namespace Emilia.Node.Editor
         public GraphSettingAttribute graphSetting { get; private set; }
 
         /// <summary>
-        /// 本地设置
-        /// </summary>
-        public GraphLocalSettingSystem graphLocalSettingSystem { get; private set; }
-
-        /// <summary>
         /// Element缓存
         /// </summary>
         public GraphElementCache graphElementCache { get; private set; }
+
+        /// <summary>
+        /// 本地设置
+        /// </summary>
+        public GraphLocalSettingSystem graphLocalSettingSystem { get; private set; }
 
         /// <summary>
         /// 操作
@@ -167,21 +168,24 @@ namespace Emilia.Node.Editor
 
         public void Initialize()
         {
-            graphLocalSettingSystem = new GraphLocalSettingSystem();
+            InitializeModule();
+
+            graphLocalSettingSystem = GetModule<GraphLocalSettingSystem>();
+            graphOperate = GetModule<GraphOperate>();
+            graphCopyPaste = GetModule<GraphCopyPaste>();
+            graphUndo = GetModule<GraphUndo>();
+            graphSelected = GetModule<GraphSelected>();
+            graphPanelSystem = GetModule<GraphPanelSystem>();
+            hotKeys = GetModule<GraphHotKeys>();
+            nodeSystem = GetModule<NodeSystem>();
+            connectSystem = GetModule<ConnectSystem>();
+            itemSystem = GetModule<ItemSystem>();
+            operateMenu = GetModule<OperateMenu>();
+            createNodeMenu = GetModule<CreateNodeMenu>();
+            createItemMenu = GetModule<CreateItemMenu>();
+            dragAndDrop = GetModule<GraphDragAndDrop>();
+
             graphElementCache = new GraphElementCache();
-            graphOperate = new GraphOperate();
-            graphCopyPaste = new GraphCopyPaste();
-            graphUndo = new GraphUndo();
-            graphSelected = new GraphSelected();
-            graphPanelSystem = new GraphPanelSystem();
-            hotKeys = new GraphHotKeys();
-            nodeSystem = new NodeSystem();
-            connectSystem = new ConnectSystem();
-            itemSystem = new ItemSystem();
-            operateMenu = new OperateMenu();
-            createNodeMenu = new CreateNodeMenu();
-            createItemMenu = new CreateItemMenu();
-            dragAndDrop = new GraphDragAndDrop();
 
             serializeGraphElements = OnSerializeGraphElements;
             canPasteSerializedData = OnCanPasteSerializedData;
@@ -197,6 +201,28 @@ namespace Emilia.Node.Editor
 
             SetupZoom(0.15f, 3f);
             SetViewTransform(Vector3.zero, Vector3.one, 0);
+        }
+
+        private void InitializeModule()
+        {
+            modules.Clear();
+
+            IList<Type> types = TypeCache.GetTypesDerivedFrom<GraphViewModule>();
+            foreach (Type type in types)
+            {
+                if (type.IsAbstract) continue;
+                GraphViewModule module = ReflectUtility.CreateInstance(type) as GraphViewModule;
+                if (module == null) continue;
+                modules[type] = module;
+            }
+        }
+
+        /// <summary>
+        /// 获取模块
+        /// </summary>
+        public T GetModule<T>() where T : GraphViewModule
+        {
+            return this.modules.GetValueOrDefault(typeof(T)) as T;
         }
 
         public void OnFocus()
@@ -248,7 +274,8 @@ namespace Emilia.Node.Editor
         {
             this.graphHandle = EditorHandleUtility.BuildHandle<IGraphHandle>(graphAsset.GetType(), this);
 
-            ResetSystem();
+            foreach (GraphViewModule module in this.modules.Values) module.Reset(this);
+
             RemoveAllElement();
 
             nodeCreationRequest = (c) => createNodeMenu.ShowCreateNodeMenu(c);
@@ -260,24 +287,6 @@ namespace Emilia.Node.Editor
         {
             RemoveAllElement();
             loadElementCoroutine = EditorCoroutineUtility.StartCoroutineOwnerless(LoadElement());
-        }
-
-        private void ResetSystem()
-        {
-            graphLocalSettingSystem.Reset(this);
-            graphOperate.Reset(this);
-            graphCopyPaste.Reset(this);
-            graphUndo.Reset(this);
-            graphSelected.Reset(this);
-            graphPanelSystem.Reset(this);
-            hotKeys.Reset(this);
-            nodeSystem.Reset(this);
-            connectSystem.Reset(this);
-            itemSystem.Reset(this);
-            operateMenu.Reset(this);
-            createNodeMenu.Reset(this);
-            createItemMenu.Reset(this);
-            dragAndDrop.Reset(this);
         }
 
         private IEnumerator LoadElement()
@@ -718,9 +727,12 @@ namespace Emilia.Node.Editor
 
             if (loadElementCoroutine != null) EditorCoroutineUtility.StopCoroutine(loadElementCoroutine);
             loadElementCoroutine = null;
-
+            
             RemoveAllElement();
-            DisposeSystem();
+
+            foreach (GraphViewModule module in this.modules.Values) module.Dispose();
+            
+            graphElementCache.Clear();
 
             Undo.undoRedoPerformed -= OnUndoRedoPerformed;
 
@@ -730,25 +742,6 @@ namespace Emilia.Node.Editor
                 EditorHandleUtility.ReleaseHandle(this.graphHandle);
                 this.graphHandle = null;
             }
-        }
-
-        private void DisposeSystem()
-        {
-            graphLocalSettingSystem.Dispose();
-            graphElementCache.Dispose();
-            graphOperate.Dispose();
-            graphCopyPaste.Dispose();
-            graphUndo.Dispose();
-            graphSelected.Dispose();
-            graphPanelSystem.Dispose();
-            hotKeys.Dispose();
-            nodeSystem.Dispose();
-            connectSystem.Dispose();
-            itemSystem.Dispose();
-            operateMenu.Dispose();
-            createNodeMenu.Dispose();
-            createItemMenu.Dispose();
-            dragAndDrop.Dispose();
         }
     }
 }

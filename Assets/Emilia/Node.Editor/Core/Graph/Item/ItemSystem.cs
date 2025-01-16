@@ -6,14 +6,13 @@ using Object = UnityEngine.Object;
 
 namespace Emilia.Node.Editor
 {
-    public class ItemSystem
+    public class ItemSystem : GraphViewModule
     {
-        private EditorGraphView graphView;
         private IItemSystemHandle handle;
 
-        public void Reset(EditorGraphView graphView)
+        public override void Reset(EditorGraphView graphView)
         {
-            this.graphView = graphView;
+            base.Reset(graphView);
 
             if (handle != null) EditorHandleUtility.ReleaseHandle(handle);
             handle = EditorHandleUtility.BuildHandle<IItemSystemHandle>(graphView.graphAsset.GetType(), graphView);
@@ -36,7 +35,7 @@ namespace Emilia.Node.Editor
             graphView.RegisterCompleteObjectUndo("Graph CreateItem");
             IEditorItemView editorItemView = this.graphView.AddItem(itemAsset);
             handle?.OnCreateItem(editorItemView);
-            
+
             Undo.CollapseUndoOperations(Undo.GetCurrentGroup());
             Undo.IncrementCurrentGroup();
 
@@ -86,7 +85,7 @@ namespace Emilia.Node.Editor
             }
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             if (this.handle != null)
             {
@@ -94,7 +93,7 @@ namespace Emilia.Node.Editor
                 this.handle = null;
             }
 
-            graphView = null;
+            base.Dispose();
         }
     }
 }

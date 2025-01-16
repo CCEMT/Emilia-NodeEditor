@@ -17,11 +17,11 @@ namespace Emilia.Node.Universal.Editor
         {
             createNodeMenuProvider = ScriptableObject.CreateInstance<CreateNodeMenuProvider>();
 
-            InitializeNodeSettingCache();
+            InitializeRuntimeNodeCache();
             InitializeEditorNodeCache();
         }
 
-        private void InitializeNodeSettingCache()
+        private void InitializeRuntimeNodeCache()
         {
             Type assetType = smartValue.graphAsset.GetType();
             NodeToRuntimeAttribute attribute = assetType.GetCustomAttribute<NodeToRuntimeAttribute>(true);

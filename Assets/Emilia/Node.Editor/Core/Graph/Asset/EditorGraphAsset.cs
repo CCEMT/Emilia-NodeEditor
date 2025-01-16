@@ -4,6 +4,7 @@ using Emilia.Kit;
 using Sirenix.OdinInspector;
 using Sirenix.OdinInspector.Editor;
 using Sirenix.Serialization;
+using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -92,6 +93,7 @@ namespace Emilia.Node.Editor
         protected virtual void Reset()
         {
             _id = Guid.NewGuid().ToString();
+            AssetDatabase.SaveAssetIfDirty(this);
         }
 
         protected void OnEnable()

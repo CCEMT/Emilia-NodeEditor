@@ -2,14 +2,13 @@
 
 namespace Emilia.Node.Editor
 {
-    public class GraphOperate
+    public class GraphOperate : GraphViewModule
     {
-        private EditorGraphView graphView;
         private IGraphOperateHandle handle;
 
-        public void Reset(EditorGraphView graphView)
+        public override void Reset(EditorGraphView graphView)
         {
-            this.graphView = graphView;
+            base.Reset(graphView);
             if (handle != null) EditorHandleUtility.ReleaseHandle(handle);
             handle = EditorHandleUtility.BuildHandle<IGraphOperateHandle>(graphView.graphAsset.GetType(), graphView);
         }
@@ -70,7 +69,7 @@ namespace Emilia.Node.Editor
             handle?.Save();
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             if (handle != null)
             {
@@ -78,7 +77,7 @@ namespace Emilia.Node.Editor
                 handle = null;
             }
 
-            this.graphView = null;
+            base.Dispose();
         }
     }
 }

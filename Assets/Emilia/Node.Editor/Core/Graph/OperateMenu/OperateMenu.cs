@@ -4,11 +4,9 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Editor
 {
-    public class OperateMenu
+    public class OperateMenu : GraphViewModule
     {
         public const int SeparatorAt = 1000;
-
-        private EditorGraphView graphView;
 
         private IOperateMenuHandle handle;
 
@@ -17,10 +15,10 @@ namespace Emilia.Node.Editor
         /// </summary>
         public List<OperateMenuActionInfo> actionInfoCache { get; private set; } = new List<OperateMenuActionInfo>();
 
-        public void Reset(EditorGraphView graphView)
+        public override void Reset(EditorGraphView graphView)
         {
+            base.Reset(graphView);
             actionInfoCache.Clear();
-            this.graphView = graphView;
 
             if (handle != null) EditorHandleUtility.ReleaseHandle(handle);
             handle = EditorHandleUtility.BuildHandle<IOperateMenuHandle>(this.graphView.graphAsset.GetType(), this.graphView);
@@ -70,7 +68,7 @@ namespace Emilia.Node.Editor
             }
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             if (this.graphView == null) return;
 
@@ -82,7 +80,7 @@ namespace Emilia.Node.Editor
                 handle = null;
             }
 
-            this.graphView = null;
+            base.Dispose();
         }
     }
 }

@@ -7,15 +7,15 @@ using Object = UnityEngine.Object;
 
 namespace Emilia.Node.Editor
 {
-    public class ConnectSystem
+    public class ConnectSystem : GraphViewModule
     {
-        private EditorGraphView graphView;
         private IConnectSystemHandle handle;
         public EditorEdgeConnectorListener connectorListener { get; private set; }
 
-        public void Reset(EditorGraphView graphView)
+        public override void Reset(EditorGraphView graphView)
         {
-            this.graphView = graphView;
+            base.Reset(this.graphView);
+            
             if (handle != null) EditorHandleUtility.ReleaseHandle(handle);
             handle = EditorHandleUtility.BuildHandle<IConnectSystemHandle>(graphView.graphAsset.GetType(), graphView);
 
@@ -122,7 +122,7 @@ namespace Emilia.Node.Editor
             }
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             if (handle != null)
             {
@@ -130,7 +130,7 @@ namespace Emilia.Node.Editor
                 handle = null;
             }
 
-            graphView = null;
+            base.Dispose();
         }
     }
 }

@@ -1,14 +1,7 @@
 ﻿namespace Emilia.Node.Editor
 {
-    public class GraphUndo
+    public class GraphUndo : GraphViewModule
     {
-        private EditorGraphView graphView;
-
-        public void Reset(EditorGraphView graphView)
-        {
-            this.graphView = graphView;
-        }
-
         public void OnUndoRedoPerformed()
         {
             UndoNode();
@@ -145,11 +138,6 @@
                 if (contains) continue;
                 this.graphView.AddItem(item);
             }
-        }
-
-        public void Dispose()
-        {
-            graphView = default;
         }
     }
 }

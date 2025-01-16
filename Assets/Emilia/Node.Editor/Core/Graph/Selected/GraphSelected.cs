@@ -3,16 +3,15 @@ using UnityEditor.Experimental.GraphView;
 
 namespace Emilia.Node.Editor
 {
-    public class GraphSelected
+    public class GraphSelected:GraphViewModule
     {
-        private EditorGraphView graphView;
         private IGraphSelectedHandle handle;
 
         private List<IGraphSelectedDrawer> selectedDrawers = new List<IGraphSelectedDrawer>();
 
-        public void Reset(EditorGraphView graphView)
+        public override void Reset(EditorGraphView graphView)
         {
-            this.graphView = graphView;
+            base.Reset(graphView);
 
             if (this.handle != null) EditorHandleUtility.ReleaseHandle(this.handle);
             this.handle = EditorHandleUtility.BuildHandle<IGraphSelectedHandle>(graphView.graphAsset.GetType(), graphView);
@@ -75,7 +74,7 @@ namespace Emilia.Node.Editor
             }
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             int amount = selectedDrawers.Count;
             for (int i = 0; i < amount; i++)
@@ -90,7 +89,7 @@ namespace Emilia.Node.Editor
                 handle = null;
             }
 
-            graphView = null;
+            base.Dispose();
         }
     }
 }

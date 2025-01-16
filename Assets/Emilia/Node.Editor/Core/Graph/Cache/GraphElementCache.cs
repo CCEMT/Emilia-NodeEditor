@@ -144,7 +144,7 @@ namespace Emilia.Node.Editor
             return default;
         }
 
-        public void Dispose()
+        public void Clear()
         {
             this.editorGraphView = null;
             this._nodeViewById.Clear();

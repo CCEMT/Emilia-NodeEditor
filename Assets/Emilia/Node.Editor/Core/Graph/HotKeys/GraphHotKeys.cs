@@ -2,14 +2,13 @@
 
 namespace Emilia.Node.Editor
 {
-    public class GraphHotKeys
+    public class GraphHotKeys : GraphViewModule
     {
-        private EditorGraphView graphView;
         private IGraphHotKeysHandle handle;
 
-        public void Reset(EditorGraphView graphView)
+        public override void Reset(EditorGraphView graphView)
         {
-            this.graphView = graphView;
+            base.Reset(graphView);
 
             if (this.handle != null) EditorHandleUtility.ReleaseHandle(this.handle);
             this.handle = EditorHandleUtility.BuildHandle<IGraphHotKeysHandle>(graphView.graphAsset.GetType(), graphView);
@@ -23,7 +22,7 @@ namespace Emilia.Node.Editor
             this.handle?.OnKeyDown(evt);
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             if (this.handle != null)
             {
@@ -32,7 +31,8 @@ namespace Emilia.Node.Editor
             }
 
             graphView.UnregisterCallback<KeyDownEvent>(OnKeyDown);
-            graphView = null;
+
+            base.Dispose();
         }
     }
 }

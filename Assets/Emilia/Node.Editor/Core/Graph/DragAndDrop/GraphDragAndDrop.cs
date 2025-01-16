@@ -2,14 +2,13 @@
 
 namespace Emilia.Node.Editor
 {
-    public class GraphDragAndDrop
+    public class GraphDragAndDrop : GraphViewModule
     {
-        private EditorGraphView graphView;
         private IGraphDragAndDropHandle handle;
 
-        public void Reset(EditorGraphView graphView)
+        public override void Reset(EditorGraphView graphView)
         {
-            this.graphView = graphView;
+            base.Reset(graphView);
 
             if (this.handle != null) EditorHandleUtility.ReleaseHandle(this.handle);
             this.handle = EditorHandleUtility.BuildHandle<IGraphDragAndDropHandle>(graphView.graphAsset.GetType(), graphView);
@@ -31,7 +30,7 @@ namespace Emilia.Node.Editor
             handle?.DragPerformedCallback(evt);
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             if (graphView == null) return;
 
@@ -44,7 +43,7 @@ namespace Emilia.Node.Editor
                 handle = null;
             }
 
-            graphView = null;
+            base.Dispose();
         }
     }
 }

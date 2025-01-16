@@ -7,12 +7,11 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Editor
 {
-    public class GraphPanelSystem
+    public class GraphPanelSystem : GraphViewModule
     {
         private const string SplitViewPlaceholderName = "splitView-placeholder";
         private const float DockOffsetSize = 5f;
 
-        private EditorGraphView graphView;
         private IGraphPanelHandle handle;
 
         private List<IGraphPanel> openPanels = new List<IGraphPanel>();
@@ -42,11 +41,11 @@ namespace Emilia.Node.Editor
         /// </summary>
         public Rect graphLayoutRect { get; set; }
 
-        public void Reset(EditorGraphView graphView)
+        public override void Reset(EditorGraphView graphView)
         {
+            base.Reset(graphView);
             CloseAllPanel();
 
-            this.graphView = graphView;
             if (handle != null) EditorHandleUtility.ReleaseHandle(handle);
             handle = EditorHandleUtility.BuildHandle<IGraphPanelHandle>(graphView.graphAsset.GetType(), graphView);
 
@@ -287,7 +286,7 @@ namespace Emilia.Node.Editor
                     break;
             }
         }
-        
+
         /// <summary>
         /// 关闭所有面板
         /// </summary>
@@ -305,7 +304,7 @@ namespace Emilia.Node.Editor
             this.dockPanels.Clear();
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             CloseAllPanel();
 
@@ -317,6 +316,8 @@ namespace Emilia.Node.Editor
 
             this.dockLeisureArea = null;
             this.dockAreaOffset = default;
+
+            base.Dispose();
         }
     }
 }

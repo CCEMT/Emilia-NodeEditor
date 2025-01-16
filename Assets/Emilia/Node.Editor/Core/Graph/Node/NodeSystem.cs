@@ -6,13 +6,13 @@ using Object = UnityEngine.Object;
 
 namespace Emilia.Node.Editor
 {
-    public class NodeSystem
+    public class NodeSystem : GraphViewModule
     {
-        private EditorGraphView graphView;
         private INodeSystemHandle handle;
 
-        public void Reset(EditorGraphView graphView)
+        public override void Reset(EditorGraphView graphView)
         {
+            base.Reset(graphView);
             this.graphView = graphView;
 
             if (handle != null) EditorHandleUtility.ReleaseHandle(handle);
@@ -95,15 +95,15 @@ namespace Emilia.Node.Editor
             }
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             if (this.handle != null)
             {
                 EditorHandleUtility.ReleaseHandle(handle);
                 this.handle = null;
             }
-
-            this.graphView = null;
+            
+            base.Dispose();
         }
     }
 }

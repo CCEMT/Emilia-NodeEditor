@@ -2,14 +2,13 @@
 
 namespace Emilia.Node.Editor
 {
-    public class CreateItemMenu
+    public class CreateItemMenu : GraphViewModule
     {
-        private EditorGraphView graphView;
         private ICreateItemMenuHandle handle;
 
-        public void Reset(EditorGraphView graphView)
+        public override void Reset(EditorGraphView graphView)
         {
-            this.graphView = graphView;
+            base.Reset(graphView);
 
             if (this.handle != null) EditorHandleUtility.ReleaseHandle(this.handle);
             this.handle = EditorHandleUtility.BuildHandle<ICreateItemMenuHandle>(graphView.graphAsset.GetType(), graphView);
@@ -25,7 +24,7 @@ namespace Emilia.Node.Editor
             return types;
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             if (this.handle != null)
             {
@@ -33,7 +32,7 @@ namespace Emilia.Node.Editor
                 this.handle = null;
             }
 
-            graphView = null;
+            base.Dispose();
         }
     }
 }
