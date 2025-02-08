@@ -2,6 +2,7 @@
 {
     public class GraphUndo : GraphViewModule
     {
+        public override int order => 400;
         public void OnUndoRedoPerformed()
         {
             UndoNode();

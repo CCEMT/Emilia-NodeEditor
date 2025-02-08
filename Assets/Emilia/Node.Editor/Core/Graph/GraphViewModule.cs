@@ -3,6 +3,7 @@
     public abstract class GraphViewModule
     {
         protected EditorGraphView graphView;
+        public abstract int order { get; }
 
         public virtual void Reset(EditorGraphView graphView)
         {

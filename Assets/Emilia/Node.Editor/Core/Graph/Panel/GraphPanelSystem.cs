@@ -40,6 +40,8 @@ namespace Emilia.Node.Editor
         /// 实际GraphView的LayoutRect
         /// </summary>
         public Rect graphLayoutRect { get; set; }
+        
+        public override int order => 600;
 
         public override void Reset(EditorGraphView graphView)
         {

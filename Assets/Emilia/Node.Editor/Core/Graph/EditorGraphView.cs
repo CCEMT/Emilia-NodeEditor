@@ -208,13 +208,19 @@ namespace Emilia.Node.Editor
             modules.Clear();
 
             IList<Type> types = TypeCache.GetTypesDerivedFrom<GraphViewModule>();
+            List<GraphViewModule> moduleList = new List<GraphViewModule>();
+            
             foreach (Type type in types)
             {
                 if (type.IsAbstract) continue;
                 GraphViewModule module = ReflectUtility.CreateInstance(type) as GraphViewModule;
                 if (module == null) continue;
-                modules[type] = module;
+                moduleList.Add(module);
             }
+            
+            moduleList.Sort((x, y) => x.order.CompareTo(y.order));
+            
+            foreach (GraphViewModule module in moduleList) modules.Add(module.GetType(), module);
         }
 
         /// <summary>

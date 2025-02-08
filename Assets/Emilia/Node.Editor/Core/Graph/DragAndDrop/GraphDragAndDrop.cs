@@ -5,6 +5,7 @@ namespace Emilia.Node.Editor
     public class GraphDragAndDrop : GraphViewModule
     {
         private IGraphDragAndDropHandle handle;
+        public override int order => 1400;
 
         public override void Reset(EditorGraphView graphView)
         {
