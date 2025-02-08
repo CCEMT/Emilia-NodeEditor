@@ -11,7 +11,7 @@ namespace Emilia.Node.Editor
     {
         private IConnectSystemHandle handle;
         public EditorEdgeConnectorListener connectorListener { get; private set; }
-
+        public override int order => 900;
         public override void Reset(EditorGraphView graphView)
         {
             base.Reset(this.graphView);

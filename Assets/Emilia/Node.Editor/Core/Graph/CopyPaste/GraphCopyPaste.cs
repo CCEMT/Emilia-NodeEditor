@@ -6,6 +6,7 @@ namespace Emilia.Node.Editor
     public class GraphCopyPaste : GraphViewModule
     {
         private IGraphCopyPasteHandle handle;
+        public override int order => 300;
 
         public override void Reset(EditorGraphView graphView)
         {

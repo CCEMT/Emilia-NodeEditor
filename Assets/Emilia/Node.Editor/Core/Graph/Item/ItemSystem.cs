@@ -9,6 +9,7 @@ namespace Emilia.Node.Editor
     public class ItemSystem : GraphViewModule
     {
         private IItemSystemHandle handle;
+        public override int order => 1000;
 
         public override void Reset(EditorGraphView graphView)
         {

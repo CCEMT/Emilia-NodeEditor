@@ -5,6 +5,7 @@ namespace Emilia.Node.Editor
     public class GraphOperate : GraphViewModule
     {
         private IGraphOperateHandle handle;
+        public override int order => 200;
 
         public override void Reset(EditorGraphView graphView)
         {

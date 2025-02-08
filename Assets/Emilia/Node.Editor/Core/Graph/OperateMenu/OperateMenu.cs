@@ -14,6 +14,7 @@ namespace Emilia.Node.Editor
         /// 缓存操作菜单信息
         /// </summary>
         public List<OperateMenuActionInfo> actionInfoCache { get; private set; } = new List<OperateMenuActionInfo>();
+        public override int order => 1100;
 
         public override void Reset(EditorGraphView graphView)
         {

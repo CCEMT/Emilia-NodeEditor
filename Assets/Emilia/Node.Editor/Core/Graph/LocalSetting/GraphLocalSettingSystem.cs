@@ -13,6 +13,10 @@ namespace Emilia.Node.Editor
         private IGraphLocalSetting _setting;
         public IGraphLocalSetting setting => this._setting;
 
+        private string saveKey => GraphLocalSettingSaveKey + this.graphView.graphAsset.id;
+
+        public override int order => 100;
+
         public override void Reset(EditorGraphView graphView)
         {
             base.Reset(graphView);
@@ -28,7 +32,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void ReadSetting()
         {
-            if (OdinEditorPrefs.HasValue(GraphLocalSettingSaveKey)) _setting = OdinEditorPrefs.GetValue<IGraphLocalSetting>(GraphLocalSettingSaveKey);
+            if (OdinEditorPrefs.HasValue(saveKey)) _setting = OdinEditorPrefs.GetValue<IGraphLocalSetting>(saveKey);
 
             if (this._setting == null)
             {
@@ -44,7 +48,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void Save()
         {
-            OdinEditorPrefs.SetValue(GraphLocalSettingSaveKey, this._setting);
+            OdinEditorPrefs.SetValue(saveKey, this._setting);
         }
 
         public override void Dispose()

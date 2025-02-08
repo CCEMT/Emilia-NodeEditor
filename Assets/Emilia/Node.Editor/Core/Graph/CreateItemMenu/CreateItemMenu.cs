@@ -5,7 +5,7 @@ namespace Emilia.Node.Editor
     public class CreateItemMenu : GraphViewModule
     {
         private ICreateItemMenuHandle handle;
-
+        public override int order => 1300;
         public override void Reset(EditorGraphView graphView)
         {
             base.Reset(graphView);
