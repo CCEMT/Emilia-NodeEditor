@@ -5,11 +5,11 @@ namespace Emilia.Node.Universal.Editor
 {
     public class UniversalGraphLocalSettingHandle : GraphLocalSettingHandle<EditorUniversalGraphAsset>
     {
-        public override Type settingType => typeof(UniversalGraphLocalSetting);
+        public override Type assetSettingType => typeof(UniversalGraphAssetLocalSetting);
 
-        public override void OnReadSetting(IGraphLocalSetting setting)
+        public override void OnReadAssetSetting(IGraphAssetLocalSetting setting)
         {
-            UniversalGraphLocalSetting universalSetting = setting as UniversalGraphLocalSetting;
+            UniversalGraphAssetLocalSetting universalSetting = setting as UniversalGraphAssetLocalSetting;
             smartValue.UpdateViewTransform(universalSetting.position, universalSetting.scale);
         }
     }

@@ -16,18 +16,32 @@ namespace Emilia.Node.Editor
             parentHandle = parent as IGraphLocalSettingHandle;
         }
 
-        public virtual Type settingType
+        public Type typeSettingType
         {
             get
             {
                 if (parentHandle == null) return null;
-                return parentHandle.settingType;
+                return parentHandle.typeSettingType;
             }
         }
 
-        public virtual void OnReadSetting(IGraphLocalSetting setting)
+        public virtual Type assetSettingType
         {
-            parentHandle?.OnReadSetting(setting);
+            get
+            {
+                if (parentHandle == null) return null;
+                return parentHandle.assetSettingType;
+            }
+        }
+
+        public void OnReadTypeSetting(IGraphTypeLocalSetting setting)
+        {
+            parentHandle?.OnReadTypeSetting(setting);
+        }
+
+        public virtual void OnReadAssetSetting(IGraphAssetLocalSetting setting)
+        {
+            parentHandle?.OnReadAssetSetting(setting);
         }
 
         public override void Dispose()
