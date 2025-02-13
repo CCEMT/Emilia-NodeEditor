@@ -17,6 +17,11 @@ namespace Emilia.Node.Attributes
         public bool fastUndo = true;
 
         /// <summary>
+        /// 实时保存
+        /// </summary>
+        public bool immediatelySave = true;
+
+        /// <summary>
         /// Zoom的最小和最大值
         /// </summary>
         public Vector2 zoomSize = new Vector2(0.15f, 3f);

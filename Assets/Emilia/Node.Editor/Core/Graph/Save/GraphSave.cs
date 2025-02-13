@@ -29,6 +29,8 @@
 
             if (this.graphView.graphAsset != null) graphView.graphAsset.Save();
 
+            this.graphView.graphLocalSettingSystem.SaveAll();
+
             this._dirty = false;
 
             handle?.OnSaveAfter();
