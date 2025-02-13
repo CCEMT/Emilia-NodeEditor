@@ -34,24 +34,29 @@ namespace Emilia.Node.Editor
 
         private void UpdateTitle()
         {
+            titleContent.text = graphAsset.name;
+
             WindowSettingsAttribute settings = graphAsset.GetType().GetAttribute<WindowSettingsAttribute>();
-            if (settings == null) return;
-
-            if (string.IsNullOrEmpty(settings.titleExpression))
+            if (settings != null)
             {
-                titleContent = new GUIContent(settings.title);
-                return;
+                if (string.IsNullOrEmpty(settings.titleExpression))
+                {
+                    titleContent.text = settings.title;
+                    return;
+                }
+
+                ValueResolver<string> valueResolver = ValueResolver.Get<string>(graphAsset.propertyTree.RootProperty, settings.titleExpression);
+                if (valueResolver.HasError)
+                {
+                    Debug.LogError($"UpdateTitle Error: {valueResolver.ErrorMessage}");
+                    return;
+                }
+
+                string getTitle = valueResolver.GetValue();
+                titleContent.text = getTitle;
             }
 
-            ValueResolver<string> valueResolver = ValueResolver.Get<string>(graphAsset.propertyTree.RootProperty, settings.titleExpression);
-            if (valueResolver.HasError)
-            {
-                Debug.LogError($"UpdateTitle Error: {valueResolver.ErrorMessage}");
-                return;
-            }
-
-            string getTitle = valueResolver.GetValue();
-            titleContent = new GUIContent(getTitle);
+            if (_graphRoot?.graphView?.graphSave?.dirty ?? false) titleContent.text += "*";
         }
 
         /// <summary>

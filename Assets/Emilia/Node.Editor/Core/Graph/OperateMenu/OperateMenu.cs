@@ -6,7 +6,7 @@ namespace Emilia.Node.Editor
 {
     public class OperateMenu : GraphViewModule
     {
-        public const int SeparatorAt = 1000;
+        public const int SeparatorAt = 1200;
 
         private IOperateMenuHandle handle;
 

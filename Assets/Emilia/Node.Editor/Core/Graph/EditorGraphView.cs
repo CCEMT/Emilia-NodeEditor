@@ -93,6 +93,11 @@ namespace Emilia.Node.Editor
         public GraphUndo graphUndo { get; private set; }
 
         /// <summary>
+        /// 保存处理
+        /// </summary>
+        public GraphSave graphSave { get; private set; }
+
+        /// <summary>
         /// 选中处理
         /// </summary>
         public GraphSelected graphSelected { get; private set; }
@@ -286,11 +291,11 @@ namespace Emilia.Node.Editor
 
             foreach (GraphViewModule customModule in this.customModules.Values) customModule.Dispose();
             this.customModules.Clear();
-            
+
             foreach (GraphViewModule module in this.modules.Values) module.Reset(this);
 
             graphHandle.InitializeCustomModule(this.customModules);
-            
+
             foreach (GraphViewModule customModule in this.customModules.Values) customModule.Reset(this);
 
             RemoveAllElement();
@@ -630,6 +635,8 @@ namespace Emilia.Node.Editor
             graphAsset.CollectAsset(objects);
 
             Undo.RegisterCompleteObjectUndo(objects.ToArray(), name);
+
+            graphSave.SetDirty();
         }
 
         private void RemoveAllElement()
@@ -734,8 +741,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void Save()
         {
-            if (graphAsset == null) return;
-            graphAsset.Save();
+            graphSave?.OnSave();
         }
 
         public void Dispose()

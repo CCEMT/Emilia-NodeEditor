@@ -8,7 +8,7 @@ namespace Emilia.Node.Editor
         private IGraphSelectedHandle handle;
 
         private List<IGraphSelectedDrawer> selectedDrawers = new List<IGraphSelectedDrawer>();
-        public override int order => 500;
+        public override int order => 600;
 
         public override void Reset(EditorGraphView graphView)
         {
