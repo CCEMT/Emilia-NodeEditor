@@ -155,5 +155,16 @@
                 this.graphView.AddItem(item);
             }
         }
+
+        public override void Dispose()
+        {
+            if (handle != null)
+            {
+                EditorHandleUtility.ReleaseHandle(handle);
+                handle = null;
+            }
+            
+            base.Dispose();
+        }
     }
 }

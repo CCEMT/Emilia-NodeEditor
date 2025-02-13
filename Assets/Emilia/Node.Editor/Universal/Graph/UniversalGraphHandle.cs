@@ -29,8 +29,6 @@ namespace Emilia.Node.Universal.Editor
             UniversalGraphAssetLocalSetting setting = smartValue.graphLocalSettingSystem.assetSetting as UniversalGraphAssetLocalSetting;
             setting.position = position;
             setting.scale = scale;
-
-            smartValue.graphLocalSettingSystem.SaveAll();
         }
 
         protected void AddManipulator()

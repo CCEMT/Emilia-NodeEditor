@@ -270,7 +270,7 @@ namespace Emilia.Node.Editor
                 bool allReload = graphAsset == null || graphAsset.GetType() != asset.GetType();
                 graphAsset = asset;
 
-                this.graphSetting = graphAsset.GetType().GetCustomAttribute<GraphSettingAttribute>();
+                graphSetting = graphAsset.GetType().GetCustomAttribute<GraphSettingAttribute>();
                 SyncSetting();
 
                 loadProgress = 0;
@@ -284,6 +284,7 @@ namespace Emilia.Node.Editor
             if (graphSetting == null) return;
             maxLoadTimeMs = graphSetting.maxLoadTimeMs;
             SetupZoom(graphSetting.zoomSize.x, graphSetting.zoomSize.y);
+            if (graphSetting.immediatelySave == false) graphAsset = graphSave.ResetCopy(graphAsset);
         }
 
         private void AllReload()
