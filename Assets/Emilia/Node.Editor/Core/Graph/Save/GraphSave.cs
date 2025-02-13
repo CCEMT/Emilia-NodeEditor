@@ -19,6 +19,7 @@
 
         public void SetDirty()
         {
+            if (this.graphView.loadProgress != 1) return;
             this._dirty = true;
         }
 
