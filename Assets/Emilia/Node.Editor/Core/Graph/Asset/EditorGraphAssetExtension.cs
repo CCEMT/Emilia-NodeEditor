@@ -5,16 +5,6 @@ namespace Emilia.Node.Editor
     public static class EditorGraphAssetExtension
     {
         /// <summary>
-        /// 获取根GraphAsset
-        /// </summary>
-        public static EditorGraphAsset GetRootGraphAsset(this EditorGraphAsset graphAsset)
-        {
-            EditorGraphAsset rootGraphAsset = graphAsset;
-            while (rootGraphAsset.parent != null) rootGraphAsset = rootGraphAsset.parent;
-            return rootGraphAsset;
-        }
-
-        /// <summary>
         /// 获取Output节点
         /// </summary>
         public static List<EditorNodeAsset> GetOutputNodes(this EditorGraphAsset graphAsset, EditorNodeAsset nodeAsset)
