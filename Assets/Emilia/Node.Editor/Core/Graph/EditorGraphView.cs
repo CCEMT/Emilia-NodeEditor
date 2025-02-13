@@ -748,7 +748,7 @@ namespace Emilia.Node.Editor
 
         public void Dispose()
         {
-            if (graphSetting != null && graphSetting.immediatelySave == false)
+            if (graphSetting != null && graphSetting.immediatelySave == false && graphSave.dirty)
             {
                 if (EditorUtility.DisplayDialog("是否保存", "是否保存当前修改", "保存", "不保存")) Save();
             }
