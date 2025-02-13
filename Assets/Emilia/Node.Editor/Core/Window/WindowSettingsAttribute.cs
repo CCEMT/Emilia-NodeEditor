@@ -3,6 +3,24 @@ using UnityEngine;
 
 namespace Emilia.Node
 {
+    public enum OpenWindowMode
+    {
+        /// <summary>
+        /// 每个资源都会打开一个新的窗口
+        /// </summary>
+        Asset,
+
+        /// <summary>
+        /// 每个资源类型只会打开一个窗口
+        /// </summary>
+        Type,
+
+        /// <summary>
+        /// 只会打开一个窗口
+        /// </summary>
+        Single
+    }
+    
     /// <summary>
     /// Window窗口设置
     /// </summary>
@@ -28,6 +46,11 @@ namespace Emilia.Node
         /// 允许通过资源打开窗口
         /// </summary>
         public bool canOpenAsset = true;
+        
+        /// <summary>
+        /// 窗口打开模式
+        /// </summary>
+        public OpenWindowMode openMode = OpenWindowMode.Asset;
 
         /// <summary>
         /// 获取开始大小表达式

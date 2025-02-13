@@ -3,17 +3,74 @@ using Emilia.Kit.Editor;
 using Sirenix.OdinInspector.Editor.ValueResolvers;
 using Sirenix.Serialization;
 using Sirenix.Utilities;
+using Sirenix.Utilities.Editor;
+using UnityEditor;
+using UnityEditor.Callbacks;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Emilia.Node.Editor
 {
-    public class EditorGraphWindow : OdinProEditorWindow, IEditorGraphWindow
+    public class EditorGraphWindow : OdinProEditorWindow, IEditorAssetWindow
     {
         [NonSerialized, OdinSerialize]
         private EditorGraphRoot _graphRoot;
 
         public EditorGraphAsset graphAsset => this._graphRoot?.asset;
+        public string id => GetId(graphAsset);
+
+        public void OnReOpen(object arg)
+        {
+            if (graphAsset == null)
+            {
+                Focus();
+                return;
+            }
+
+            WindowSettingsAttribute settings = graphAsset.GetType().GetAttribute<WindowSettingsAttribute>();
+            if (settings == null)
+            {
+                Focus();
+                return;
+            }
+
+            if (settings.openMode == OpenWindowMode.Asset) Focus();
+            else
+            {
+                EditorGraphAsset editorGraphAsset = arg as EditorGraphAsset;
+                if (editorGraphAsset != null) SetGraphAsset(editorGraphAsset);
+            }
+        }
+
+        public void OnOpen(object arg)
+        {
+            EditorGraphAsset editorGraphAsset = arg as EditorGraphAsset;
+            if (editorGraphAsset != null)
+            {
+                position = GetPosition(editorGraphAsset);
+
+                SetGraphAsset(editorGraphAsset);
+            }
+        }
+
+        private static Rect GetPosition(EditorGraphAsset graphAsset)
+        {
+            WindowSettingsAttribute settings = graphAsset.GetType().GetAttribute<WindowSettingsAttribute>();
+            if (settings == null) return GUIHelper.GetEditorWindowRect().AlignCenter(850, 600);
+
+            if (string.IsNullOrEmpty(settings.getStartSizeExpression)) return GUIHelper.GetEditorWindowRect().AlignCenter(settings.startSize.x, settings.startSize.y);
+
+            ValueResolver<Vector2> valueResolver = ValueResolver.Get<Vector2>(graphAsset.propertyTree.RootProperty, settings.getStartSizeExpression);
+            if (valueResolver.HasError)
+            {
+                Debug.LogError($"GetPosition Error: {valueResolver.ErrorMessage}");
+                return GUIHelper.GetEditorWindowRect().AlignCenter(850, 600);
+            }
+
+            Vector2 size = valueResolver.GetValue();
+
+            return GUIHelper.GetEditorWindowRect().AlignCenter(size.x, size.y);
+        }
 
         private void OnEnable()
         {
@@ -83,6 +140,48 @@ namespace Emilia.Node.Editor
             base.OnDestroy();
 
             this._graphRoot = default;
+        }
+
+        [OnOpenAsset]
+        private static bool OnOpenAsset(int instanceID, int line)
+        {
+            EditorGraphAsset asset = EditorUtility.InstanceIDToObject(instanceID) as EditorGraphAsset;
+            if (asset == null) return false;
+
+            string id = GetId(asset);
+            Type windowType = GetWindowType(asset.GetType());
+
+            EditorAssetWindowUtility.OpenWindow(windowType, id, asset);
+
+            return true;
+        }
+
+        private static Type GetWindowType(Type assetType)
+        {
+            WindowSettingsAttribute settings = assetType.GetAttribute<WindowSettingsAttribute>();
+            if (settings == null) return typeof(EditorGraphWindow);
+            return settings.windowType ?? typeof(EditorGraphWindow);
+        }
+
+        public static string GetId(EditorGraphAsset editorGraphAsset)
+        {
+            const string SingleKey = "{SingleWindow}";
+
+            if (editorGraphAsset == null) return string.Empty;
+            WindowSettingsAttribute settings = editorGraphAsset.GetType().GetAttribute<WindowSettingsAttribute>();
+            if (settings == null) return editorGraphAsset.id;
+
+            switch (settings.openMode)
+            {
+                case OpenWindowMode.Asset:
+                    return editorGraphAsset.id;
+                case OpenWindowMode.Type:
+                    return editorGraphAsset.GetType().FullName;
+                case OpenWindowMode.Single:
+                    return SingleKey;
+            }
+
+            return string.Empty;
         }
     }
 }
