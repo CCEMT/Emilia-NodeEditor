@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Emilia.Node.Universal.Editor
 {
     [Serializable]
-    public class UniversalGraphLocalSetting : IGraphLocalSetting
+    public class UniversalGraphAssetLocalSetting : IGraphAssetLocalSetting
     {
         public Vector3 position;
         public Vector3 scale = Vector3.one;

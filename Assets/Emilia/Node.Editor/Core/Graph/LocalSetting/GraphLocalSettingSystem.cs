@@ -10,10 +10,13 @@ namespace Emilia.Node.Editor
 
         private IGraphLocalSettingHandle handle;
 
-        private IGraphLocalSetting _setting;
-        public IGraphLocalSetting setting => this._setting;
+        private IGraphTypeLocalSetting _typeSetting;
+        private IGraphAssetLocalSetting _assetSetting;
+        public IGraphTypeLocalSetting typeSetting => this._typeSetting;
+        public IGraphAssetLocalSetting assetSetting => this._assetSetting;
 
-        private string saveKey => GraphLocalSettingSaveKey + this.graphView.graphAsset.id;
+        private string typeSaveKey => GraphLocalSettingSaveKey + this.graphView.graphAsset.GetType().FullName;
+        private string assetSaveKey => GraphLocalSettingSaveKey + this.graphView.graphAsset.id;
 
         public override int order => 100;
 
@@ -32,23 +35,48 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void ReadSetting()
         {
-            if (OdinEditorPrefs.HasValue(saveKey)) _setting = OdinEditorPrefs.GetValue<IGraphLocalSetting>(saveKey);
+            if (OdinEditorPrefs.HasValue(typeSaveKey)) this._typeSetting = OdinEditorPrefs.GetValue<IGraphTypeLocalSetting>(typeSaveKey);
+            if (OdinEditorPrefs.HasValue(assetSaveKey)) this._assetSetting = OdinEditorPrefs.GetValue<IGraphAssetLocalSetting>(assetSaveKey);
 
-            if (this._setting == null)
+            if (this._typeSetting == null)
             {
-                Type createSettingType = this.handle?.settingType;
-                if (typeof(IGraphLocalSetting).IsAssignableFrom(createSettingType)) this._setting = ReflectUtility.CreateInstance(createSettingType) as IGraphLocalSetting;
+                Type createSettingType = this.handle?.typeSettingType;
+                if (typeof(IGraphTypeLocalSetting).IsAssignableFrom(createSettingType)) this._typeSetting = ReflectUtility.CreateInstance(createSettingType) as IGraphTypeLocalSetting;
+            }
+            
+            if (this._assetSetting == null)
+            {
+                Type createSettingType = this.handle?.assetSettingType;
+                if (typeof(IGraphAssetLocalSetting).IsAssignableFrom(createSettingType)) this._assetSetting = ReflectUtility.CreateInstance(createSettingType) as IGraphAssetLocalSetting;
             }
 
-            if (_setting != null) this.handle?.OnReadSetting(_setting);
+            if (this._typeSetting != null) this.handle?.OnReadTypeSetting(this._typeSetting);
+            if (this._assetSetting != null) this.handle?.OnReadAssetSetting(this._assetSetting);
         }
 
         /// <summary>
-        /// 保存设置
+        /// 保存类型设置
         /// </summary>
-        public void Save()
+        public void SaveTypeSetting()
         {
-            OdinEditorPrefs.SetValue(saveKey, this._setting);
+            OdinEditorPrefs.SetValue(typeSaveKey, this._typeSetting);
+        }
+        
+        /// <summary>
+        /// 保存资源设置
+        /// </summary>
+        public void SaveAssetSetting()
+        {
+            OdinEditorPrefs.SetValue(assetSaveKey, this._assetSetting);
+        }
+        
+        /// <summary>
+        /// 保存所有设置
+        /// </summary>
+        public void SaveAll()
+        {
+            OdinEditorPrefs.SetValue(typeSaveKey, this._typeSetting);
+            OdinEditorPrefs.SetValue(assetSaveKey, this._assetSetting);
         }
 
         public override void Dispose()

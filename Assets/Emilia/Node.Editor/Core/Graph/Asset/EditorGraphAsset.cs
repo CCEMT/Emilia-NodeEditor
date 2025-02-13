@@ -6,18 +6,14 @@ using Sirenix.OdinInspector.Editor;
 using Sirenix.Serialization;
 using UnityEditor;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace Emilia.Node.Editor
 {
     [Serializable]
-    public class EditorGraphAsset : SerializedScriptableObject, IGraphAsset
+    public partial class EditorGraphAsset : SerializedScriptableObject
     {
         [SerializeField, HideInInspector]
         private string _id;
-
-        [NonSerialized, OdinSerialize, HideInInspector]
-        private EditorGraphAsset _parent;
 
         [NonSerialized, OdinSerialize, HideInInspector]
         private List<EditorNodeAsset> _nodes = new List<EditorNodeAsset>();
@@ -47,15 +43,6 @@ namespace Emilia.Node.Editor
         {
             get => _id;
             set => _id = value;
-        }
-
-        /// <summary>
-        /// 父级
-        /// </summary>
-        public EditorGraphAsset parent
-        {
-            get => _parent;
-            set => _parent = value;
         }
 
         /// <summary>
@@ -172,83 +159,6 @@ namespace Emilia.Node.Editor
 
             this._items.Remove(itemAsset);
             this._itemMap.Remove(itemAsset.id);
-        }
-
-        public virtual void SetChildren(List<Object> childAssets)
-        {
-            _nodes.Clear();
-            _edges.Clear();
-            _items.Clear();
-
-            this._nodeMap.Clear();
-            this._edgeMap.Clear();
-            this._itemMap.Clear();
-
-            for (var i = 0; i < childAssets.Count; i++)
-            {
-                Object childAsset = childAssets[i];
-
-                switch (childAsset)
-                {
-                    case EditorNodeAsset node:
-                        this.AddNode(node);
-                        break;
-                    case EditorEdgeAsset edge:
-                        this.AddEdge(edge);
-                        break;
-                    case EditorItemAsset item:
-                        this.AddItem(item);
-                        break;
-                }
-            }
-        }
-
-        public virtual List<Object> GetChildren()
-        {
-            List<Object> assets = new List<Object>();
-
-            for (var i = 0; i < this._nodes.Count; i++)
-            {
-                EditorNodeAsset node = this._nodes[i];
-                assets.Add(node);
-            }
-
-            for (var i = 0; i < this._edges.Count; i++)
-            {
-                EditorEdgeAsset edge = this._edges[i];
-                assets.Add(edge);
-            }
-
-            for (var i = 0; i < this._items.Count; i++)
-            {
-                EditorItemAsset item = this._items[i];
-                assets.Add(item);
-            }
-
-            return assets;
-        }
-
-        public virtual void CollectAsset(List<Object> allAssets)
-        {
-            allAssets.Add(this);
-
-            for (var i = 0; i < this._nodes.Count; i++)
-            {
-                EditorNodeAsset node = this._nodes[i];
-                node.CollectAsset(allAssets);
-            }
-
-            for (var i = 0; i < this._edges.Count; i++)
-            {
-                EditorEdgeAsset edge = this._edges[i];
-                edge.CollectAsset(allAssets);
-            }
-
-            for (var i = 0; i < this._items.Count; i++)
-            {
-                EditorItemAsset item = this._items[i];
-                item.CollectAsset(allAssets);
-            }
         }
 
         protected virtual void OnDisable()

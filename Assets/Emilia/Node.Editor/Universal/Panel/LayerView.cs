@@ -33,7 +33,7 @@ namespace Emilia.Node.Universal.Editor
             while (current != null)
             {
                 graphAssets.Push(current);
-                current = current.parent;
+                current = current.parent as EditorGraphAsset;
             }
 
             int i = 0;

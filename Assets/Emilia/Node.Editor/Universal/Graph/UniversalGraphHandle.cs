@@ -26,11 +26,11 @@ namespace Emilia.Node.Universal.Editor
 
         private void OnLogicTransformChange(Vector3 position, Vector3 scale)
         {
-            UniversalGraphLocalSetting setting = smartValue.graphLocalSettingSystem.setting as UniversalGraphLocalSetting;
+            UniversalGraphAssetLocalSetting setting = smartValue.graphLocalSettingSystem.assetSetting as UniversalGraphAssetLocalSetting;
             setting.position = position;
             setting.scale = scale;
 
-            smartValue.graphLocalSettingSystem.Save();
+            smartValue.graphLocalSettingSystem.SaveAll();
         }
 
         protected void AddManipulator()
