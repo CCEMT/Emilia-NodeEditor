@@ -23,6 +23,7 @@ namespace Emilia.Node.Editor
 
         private IGraphHandle graphHandle;
         private Dictionary<Type, GraphViewModule> modules = new Dictionary<Type, GraphViewModule>();
+        private Dictionary<Type, GraphViewModule> customModules = new Dictionary<Type, GraphViewModule>();
 
         private List<IEditorNodeView> _nodeViews = new List<IEditorNodeView>();
         private List<IEditorEdgeView> _edgeViews = new List<IEditorEdgeView>();
@@ -209,7 +210,7 @@ namespace Emilia.Node.Editor
 
             IList<Type> types = TypeCache.GetTypesDerivedFrom<GraphViewModule>();
             List<GraphViewModule> moduleList = new List<GraphViewModule>();
-            
+
             foreach (Type type in types)
             {
                 if (type.IsAbstract) continue;
@@ -217,9 +218,9 @@ namespace Emilia.Node.Editor
                 if (module == null) continue;
                 moduleList.Add(module);
             }
-            
+
             moduleList.Sort((x, y) => x.order.CompareTo(y.order));
-            
+
             foreach (GraphViewModule module in moduleList) modules.Add(module.GetType(), module);
         }
 
@@ -228,7 +229,10 @@ namespace Emilia.Node.Editor
         /// </summary>
         public T GetModule<T>() where T : GraphViewModule
         {
-            return this.modules.GetValueOrDefault(typeof(T)) as T;
+            T result = this.modules.GetValueOrDefault(typeof(T)) as T;
+            if (result != null) return result;
+
+            return this.customModules.GetValueOrDefault(typeof(T)) as T;
         }
 
         public void OnFocus()
@@ -280,7 +284,14 @@ namespace Emilia.Node.Editor
         {
             this.graphHandle = EditorHandleUtility.BuildHandle<IGraphHandle>(graphAsset.GetType(), this);
 
+            foreach (GraphViewModule customModule in this.customModules.Values) customModule.Dispose();
+            this.customModules.Clear();
+            
             foreach (GraphViewModule module in this.modules.Values) module.Reset(this);
+
+            graphHandle.InitializeCustomModule(this.customModules);
+            
+            foreach (GraphViewModule customModule in this.customModules.Values) customModule.Reset(this);
 
             RemoveAllElement();
 
@@ -733,11 +744,14 @@ namespace Emilia.Node.Editor
 
             if (loadElementCoroutine != null) EditorCoroutineUtility.StopCoroutine(loadElementCoroutine);
             loadElementCoroutine = null;
-            
+
             RemoveAllElement();
 
+            foreach (GraphViewModule customModule in this.customModules.Values) customModule.Dispose();
+            this.customModules.Clear();
+
             foreach (GraphViewModule module in this.modules.Values) module.Dispose();
-            
+
             graphElementCache.Clear();
 
             Undo.undoRedoPerformed -= OnUndoRedoPerformed;
