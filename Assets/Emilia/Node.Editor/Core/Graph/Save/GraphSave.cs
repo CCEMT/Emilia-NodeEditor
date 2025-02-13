@@ -28,9 +28,11 @@ namespace Emilia.Node.Editor
             this.sourceGraphAsset = source;
 
             string path = AssetDatabase.GetAssetPath(source);
-            string tempPath = $"{EditorAssetKit.dataParentPath}/Temp/{source.name}.asset";
+            string tempPath = $"{TempFolderKit.TempFolderPath}/{source.name}.asset";
 
-            File.Copy(path, tempPath, true);
+            TempFolderKit.CreateTempFolder();
+
+            AssetDatabase.CopyAsset(path, tempPath);
 
             EditorGraphAsset copy = AssetDatabase.LoadAssetAtPath<EditorGraphAsset>(tempPath);
 
@@ -56,7 +58,10 @@ namespace Emilia.Node.Editor
                 string path = AssetDatabase.GetAssetPath(graphView.graphAsset);
                 string savePath = AssetDatabase.GetAssetPath(this.sourceGraphAsset);
 
-                File.Copy(path, savePath, true);
+                string filePath = Path.GetFullPath(path);
+                string saveFilePath = Path.GetFullPath(savePath);
+
+                File.Copy(filePath, saveFilePath, true);
                 AssetDatabase.ImportAsset(savePath);
             }
 
@@ -68,15 +73,15 @@ namespace Emilia.Node.Editor
         public override void Dispose()
         {
             this._dirty = false;
-            
+
             this.sourceGraphAsset = null;
-            
+
             if (handle != null)
             {
                 EditorHandleUtility.ReleaseHandle(handle);
                 handle = null;
             }
-            
+
             base.Dispose();
         }
     }

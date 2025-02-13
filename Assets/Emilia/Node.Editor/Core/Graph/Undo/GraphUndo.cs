@@ -22,6 +22,8 @@
             UndoEdge();
             UndoItem();
 
+            if (EditorGraphView.focusedGraphView == this.graphView) this.graphView.UpdateSelected();
+
             this.handle?.OnUndoAfter();
         }
 
@@ -163,7 +165,7 @@
                 EditorHandleUtility.ReleaseHandle(handle);
                 handle = null;
             }
-            
+
             base.Dispose();
         }
     }

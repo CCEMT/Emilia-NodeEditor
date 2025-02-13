@@ -748,7 +748,14 @@ namespace Emilia.Node.Editor
 
         public void Dispose()
         {
-            Save();
+            if (graphSetting != null && graphSetting.immediatelySave == false)
+            {
+                if (EditorUtility.DisplayDialog("是否保存", "是否保存当前修改", "保存", "不保存")) Save();
+            }
+            else
+            {
+                Save();
+            }
 
             if (loadElementCoroutine != null) EditorCoroutineUtility.StopCoroutine(loadElementCoroutine);
             loadElementCoroutine = null;
