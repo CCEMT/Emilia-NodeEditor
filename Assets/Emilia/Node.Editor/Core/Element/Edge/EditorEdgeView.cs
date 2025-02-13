@@ -81,7 +81,7 @@ namespace Emilia.Node.Editor
             StyleSheet styleSheet = ResourceUtility.LoadResource<StyleSheet>(styleFilePath);
             styleSheets.Add(styleSheet);
 
-            schedule.Execute(OnValueChanged).ExecuteLater(1);
+            schedule.Execute(() => schedule.Execute(ForceUpdateEdgeControl).ExecuteLater(1)).ExecuteLater(1);
         }
 
         /// <summary>

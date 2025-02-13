@@ -23,7 +23,6 @@ namespace Emilia.Node.Editor
         protected Dictionary<string, VisualElement> inputEditElements = new Dictionary<string, VisualElement>();
         protected Dictionary<string, InspectorPropertyField> inputFields = new Dictionary<string, InspectorPropertyField>();
 
-        [OnValueChanged(nameof(OnValueChanged), true)]
         public EditorNodeAsset asset { get; private set; }
 
         public EditorGraphView graphView { get; private set; }
