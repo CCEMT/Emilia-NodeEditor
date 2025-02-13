@@ -41,7 +41,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public Rect graphLayoutRect { get; set; }
         
-        public override int order => 600;
+        public override int order => 700;
 
         public override void Reset(EditorGraphView graphView)
         {

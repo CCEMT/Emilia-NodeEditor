@@ -2,12 +2,27 @@
 {
     public class GraphUndo : GraphViewModule
     {
+        private IGraphUndoHandle handle;
+
         public override int order => 400;
+
+        public override void Reset(EditorGraphView graphView)
+        {
+            base.Reset(graphView);
+
+            if (handle != null) EditorHandleUtility.ReleaseHandle(handle);
+            handle = EditorHandleUtility.BuildHandle<IGraphUndoHandle>(this.graphView.graphAsset.GetType(), this.graphView);
+        }
+
         public void OnUndoRedoPerformed()
         {
+            this.handle?.OnUndoBefore();
+
             UndoNode();
             UndoEdge();
             UndoItem();
+
+            this.handle?.OnUndoAfter();
         }
 
         private void UndoNode()

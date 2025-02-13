@@ -26,7 +26,7 @@ namespace Emilia.Node.Editor
         /// 缓存的创建节点Handle
         /// </summary>
         public List<ICreateNodeHandle> createNodeHandleCacheList { get; private set; } = new List<ICreateNodeHandle>();
-        public override int order => 1200;
+        public override int order => 1300;
 
         public override void Reset(EditorGraphView graphView)
         {

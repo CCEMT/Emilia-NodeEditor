@@ -5,7 +5,7 @@ namespace Emilia.Node.Editor
     public class GraphHotKeys : GraphViewModule
     {
         private IGraphHotKeysHandle handle;
-        public override int order => 700;
+        public override int order => 800;
 
         public override void Reset(EditorGraphView graphView)
         {

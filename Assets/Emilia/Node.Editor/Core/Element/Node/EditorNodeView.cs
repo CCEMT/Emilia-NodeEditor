@@ -287,11 +287,14 @@ namespace Emilia.Node.Editor
         {
             SetPositionNoUndo(asset.position);
             foreach (InspectorPropertyField value in inputFields.Values) value.Update();
+
+            graphView.graphSave.SetDirty();
         }
 
         public void RegisterCompleteObjectUndo(string name)
         {
             Undo.RegisterCompleteObjectUndo(asset, name);
+            graphView.graphSave.SetDirty();
         }
 
         public override void CollectElements(HashSet<GraphElement> collectedElementSet, Func<GraphElement, bool> conditionFunc)
