@@ -41,6 +41,11 @@ namespace Emilia.Node.Editor
             parentHandle?.OnFocus();
         }
 
+        public virtual void OnUnFocus()
+        {
+            parentHandle?.OnUnFocus();
+        }
+
         public virtual void OnUpdate()
         {
             parentHandle?.OnUpdate();
