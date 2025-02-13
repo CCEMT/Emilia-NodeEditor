@@ -180,6 +180,7 @@ namespace Emilia.Node.Editor
             graphOperate = GetModule<GraphOperate>();
             graphCopyPaste = GetModule<GraphCopyPaste>();
             graphUndo = GetModule<GraphUndo>();
+            graphSave = GetModule<GraphSave>();
             graphSelected = GetModule<GraphSelected>();
             graphPanelSystem = GetModule<GraphPanelSystem>();
             hotKeys = GetModule<GraphHotKeys>();
