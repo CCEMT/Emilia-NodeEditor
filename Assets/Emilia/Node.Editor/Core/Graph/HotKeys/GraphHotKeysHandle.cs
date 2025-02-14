@@ -19,5 +19,12 @@ namespace Emilia.Node.Editor
         {
             parentHandle?.OnKeyDown(evt);
         }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            smartValue = null;
+            parentHandle = null;
+        }
     }
 }

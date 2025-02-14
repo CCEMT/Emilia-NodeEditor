@@ -25,7 +25,7 @@ namespace Emilia.Node.Editor
         public event Action<IEditorPortView, IEditorEdgeView> onConnected;
         public event Action<IEditorPortView, IEditorEdgeView> OnDisconnected;
 
-        public EditorPortView() : base(default, default, default, default) { }
+        public EditorPortView() : base(default, default, default, null) { }
 
         public void Initialize(IEditorNodeView master, EditorPortInfo info)
         {
@@ -66,7 +66,7 @@ namespace Emilia.Node.Editor
         {
             base.Connect(edge);
             IEditorEdgeView editorEdge = edge as IEditorEdgeView;
-            if (editorEdge == default) return;
+            if (editorEdge == null) return;
 
             _edges.Add(editorEdge);
             onConnected?.Invoke(this, editorEdge);

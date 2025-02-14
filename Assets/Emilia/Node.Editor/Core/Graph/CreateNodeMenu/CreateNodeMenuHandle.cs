@@ -41,7 +41,8 @@ namespace Emilia.Node.Editor
         public override void Dispose()
         {
             base.Dispose();
-            this.smartValue = default;
+            smartValue = null;
+            parentHandle = null;
         }
     }
 }

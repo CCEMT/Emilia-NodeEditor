@@ -22,13 +22,13 @@ namespace Emilia.Node.Editor
                 switch (childAsset)
                 {
                     case EditorNodeAsset node:
-                        this.AddNode(node);
+                        AddNode(node);
                         break;
                     case EditorEdgeAsset edge:
-                        this.AddEdge(edge);
+                        AddEdge(edge);
                         break;
                     case EditorItemAsset item:
-                        this.AddItem(item);
+                        AddItem(item);
                         break;
                 }
             }

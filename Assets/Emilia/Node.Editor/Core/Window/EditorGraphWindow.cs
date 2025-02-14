@@ -139,7 +139,7 @@ namespace Emilia.Node.Editor
         {
             base.OnDestroy();
 
-            this._graphRoot = default;
+            this._graphRoot = null;
         }
 
         [OnOpenAsset]

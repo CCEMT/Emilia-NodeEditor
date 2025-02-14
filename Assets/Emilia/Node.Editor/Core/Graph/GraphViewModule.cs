@@ -12,7 +12,7 @@
 
         public virtual void Dispose()
         {
-            graphView = default;
+            graphView = null;
         }
     }
 }

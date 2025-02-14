@@ -143,7 +143,7 @@ namespace Emilia.Node.Editor
                 if (addDockArea is GraphTwoPaneSplitView splitViewArea) area = splitViewArea.Q(SplitViewPlaceholderName);
                 else area = addDockArea;
 
-                VisualElement original = default;
+                VisualElement original = null;
                 if (area.contentContainer.childCount > 0) original = area.contentContainer.Children().FirstOrDefault();
 
                 GraphTwoPaneSplitView addSplitView = AddDockPanel(panel, size, position, area);
@@ -216,7 +216,7 @@ namespace Emilia.Node.Editor
             return container;
         }
 
-        private GraphTwoPaneSplitView AddDockPanel(IGraphPanel panel, float size, GraphDockPosition position, VisualElement dockArea = default)
+        private GraphTwoPaneSplitView AddDockPanel(IGraphPanel panel, float size, GraphDockPosition position, VisualElement dockArea = null)
         {
             bool isInverted = false;
             TwoPaneSplitViewOrientation orientation = default;

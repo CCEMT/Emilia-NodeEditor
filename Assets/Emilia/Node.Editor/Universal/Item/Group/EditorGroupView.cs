@@ -50,7 +50,7 @@ namespace Emilia.Node.Editor
                 string nodeId = this.groupAsset.innerNodes[i];
 
                 EditorNodeView nodeView = this.graphView.graphElementCache.nodeViewById.GetValueOrDefault(nodeId) as EditorNodeView;
-                if (nodeView == default)
+                if (nodeView == null)
                 {
                     groupAsset.innerNodes.RemoveAt(i);
                     i--;
@@ -96,7 +96,7 @@ namespace Emilia.Node.Editor
             foreach (GraphElement graphElement in elements)
             {
                 EditorNodeView nodeView = graphElement as EditorNodeView;
-                if (nodeView == default) continue;
+                if (nodeView == null) continue;
 
                 ContextualMenuManipulator manipulator = new ContextualMenuManipulator(GroupMenu);
                 nodeView.AddManipulator(manipulator);
@@ -118,7 +118,7 @@ namespace Emilia.Node.Editor
             foreach (GraphElement graphElement in elements)
             {
                 EditorNodeView nodeView = graphElement as EditorNodeView;
-                if (nodeView == default) continue;
+                if (nodeView == null) continue;
 
                 string id = nodeView.asset.id;
 
@@ -167,7 +167,7 @@ namespace Emilia.Node.Editor
             foreach (GraphElement graphElement in containedElements.ToList())
             {
                 EditorNodeView nodeView = graphElement as EditorNodeView;
-                if (nodeView == default) continue;
+                if (nodeView == null) continue;
 
                 bool contains = this.groupAsset.innerNodes.Contains(nodeView.asset.id);
                 if (contains) continue;
@@ -180,9 +180,9 @@ namespace Emilia.Node.Editor
             foreach (string nodeId in this.groupAsset.innerNodes.ToList())
             {
                 EditorNodeView nodeView = this.graphView.graphElementCache.nodeViewById.GetValueOrDefault(nodeId) as EditorNodeView;
-                if (nodeView == default) continue;
+                if (nodeView == null) continue;
 
-                bool contains = this.containedElements.Contains(nodeView);
+                bool contains = containedElements.Contains(nodeView);
                 if (contains) continue;
                 AddElement(nodeView);
             }

@@ -10,7 +10,7 @@
         public override void Initialize(object weakSmartValue)
         {
             base.Initialize(weakSmartValue);
-            this.smartValue = weakSmartValue as EditorGraphView;
+            smartValue = weakSmartValue as EditorGraphView;
             parentHandle = parent as INodeSystemHandle;
         }
 
@@ -22,7 +22,8 @@
         public override void Dispose()
         {
             base.Dispose();
-            smartValue = default;
+            smartValue = null;
+            parentHandle = null;
         }
     }
 }

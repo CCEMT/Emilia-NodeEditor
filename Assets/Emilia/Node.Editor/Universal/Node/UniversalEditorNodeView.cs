@@ -109,9 +109,9 @@ namespace Emilia.Node.Universal.Editor
             focusBorder.pickingMode = PickingMode.Ignore;
             focusBorder.name = "focus-border";
 
-            this.RegisterCallback<GeometryChangedEvent>(_ => {
-                focusBorder.style.width = this.layout.width + borderWidth;
-                focusBorder.style.height = this.layout.height + borderWidth;
+            RegisterCallback<GeometryChangedEvent>(_ => {
+                focusBorder.style.width = layout.width + borderWidth;
+                focusBorder.style.height = layout.height + borderWidth;
             });
 
             Add(focusBorder);

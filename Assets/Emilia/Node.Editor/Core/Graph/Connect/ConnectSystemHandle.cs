@@ -13,18 +13,12 @@ namespace Emilia.Node.Editor
         public override void Initialize(object weakSmartValue)
         {
             base.Initialize(weakSmartValue);
-            this.smartValue = weakSmartValue as EditorGraphView;
+            smartValue = weakSmartValue as EditorGraphView;
             parentHandle = parent as IConnectSystemHandle;
             OnInitialize();
         }
 
         protected virtual void OnInitialize() { }
-
-        public override void Dispose()
-        {
-            base.Dispose();
-            this.smartValue = default;
-        }
 
         public virtual Type GetEdgeTypeByPort(IEditorPortView portView)
         {
@@ -44,6 +38,13 @@ namespace Emilia.Node.Editor
         public virtual void AfterConnect(IEditorEdgeView edgeView)
         {
             parentHandle?.AfterConnect(edgeView);
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            smartValue = null;
+            parentHandle = null;
         }
     }
 }

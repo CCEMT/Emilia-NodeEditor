@@ -47,7 +47,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public object CreateCopy(object value)
         {
-            if (handle == default) return default;
+            if (handle == null) return null;
             return handle.CreateCopy(value);
         }
 
