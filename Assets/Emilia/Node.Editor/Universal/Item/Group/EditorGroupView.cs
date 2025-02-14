@@ -156,7 +156,7 @@ namespace Emilia.Node.Editor
             SetPositionNoUndo(asset.position);
             RemoveNode();
             AddNode();
-            
+
             graphView.graphSave.SetDirty();
 
             this.isUndo = true;

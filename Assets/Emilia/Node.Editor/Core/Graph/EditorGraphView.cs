@@ -203,7 +203,7 @@ namespace Emilia.Node.Editor
 
             RegisterCallback<MouseDownEvent>(OnMouseDown);
             RegisterCallback<MouseUpEvent>(OnMouseUp);
-            
+
             RegisterCallback<MouseEnterEvent>((_) => OnFocus());
             RegisterCallback<MouseMoveEvent>((_) => OnFocus());
             RegisterCallback<MouseLeaveEvent>((_) => OnUnFocus());
@@ -268,7 +268,11 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void Reload(EditorGraphAsset asset)
         {
-            if (asset == null) return;
+            if (asset == null)
+            {
+                Debug.LogError("Reload asset 为空");
+                return;
+            }
 
             schedule.Execute(OnReload).ExecuteLater(1);
 
@@ -358,12 +362,20 @@ namespace Emilia.Node.Editor
                 IEditorNodeView inputNode = graphElementCache.GetEditorNodeView(edge.inputNodeId);
                 IEditorNodeView outputNode = graphElementCache.GetEditorNodeView(edge.outputNodeId);
 
-                if (inputNode == null || outputNode == null) continue;
+                if (inputNode == null || outputNode == null)
+                {
+                    Debug.LogError("加载Edge时找不到节点");
+                    continue;
+                }
 
                 IEditorPortView inputPort = inputNode.GetPortView(edge.inputPortId);
                 IEditorPortView outputPort = outputNode.GetPortView(edge.outputPortId);
 
-                if (inputPort == null || outputPort == null) continue;
+                if (inputPort == null || outputPort == null)
+                {
+                    Debug.LogError("加载Edge时找不到端口");
+                    continue;
+                }
 
                 AddEdgeView(edge);
 
@@ -387,7 +399,11 @@ namespace Emilia.Node.Editor
 
         private void LoadSuccess()
         {
-            if (graphAsset == null) return;
+            if (graphAsset == null)
+            {
+                Debug.LogError("加载失败 graphAsset 为空");
+                return;
+            }
 
             UpdateSelected();
             loadElementCoroutine = null;
@@ -412,7 +428,11 @@ namespace Emilia.Node.Editor
         public IEditorNodeView AddNodeView(EditorNodeAsset nodeAsset)
         {
             Type nodeViewType = GraphTypeCache.GetNodeViewType(nodeAsset.GetType());
-            if (nodeViewType == null) return null;
+            if (nodeViewType == null)
+            {
+                Debug.LogError($"AddNodeView {nodeViewType.FullName}找不到IEditorNodeView，请在找不到IEditorNodeView使用EditorNodeAttribute指定{nodeViewType.FullName}");
+                return null;
+            }
 
             IEditorNodeView nodeView = ReflectUtility.CreateInstance(nodeViewType) as IEditorNodeView;
             nodeView.Initialize(this, nodeAsset);
@@ -428,7 +448,12 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void RemoveNodeView(IEditorNodeView nodeView)
         {
-            if (nodeView == null) return;
+            if (nodeView == null)
+            {
+                Debug.LogError("RemoveNodeView nodeView 为空");
+                return;
+            }
+
             if (nodeView.asset != null) graphElementCache.RemoveNodeViewCache(nodeView.asset.id);
 
             nodeView.Dispose();
@@ -452,7 +477,11 @@ namespace Emilia.Node.Editor
         public IEditorEdgeView AddEdgeView(EditorEdgeAsset asset)
         {
             Type edgeViewType = GraphTypeCache.GetEdgeViewType(asset.GetType());
-            if (edgeViewType == null) return null;
+            if (edgeViewType == null)
+            {
+                Debug.LogError($"AddEdgeView时 {edgeViewType.FullName}找不到IEditorEdgeView，请在找不到IEditorEdgeView使用EditorEdgeAttribute指定{edgeViewType.FullName}");
+                return null;
+            }
 
             IEditorEdgeView edgeView = ReflectUtility.CreateInstance(edgeViewType) as IEditorEdgeView;
             edgeView.edgeElement.RegisterCallback<MouseDownEvent>((_) => UpdateSelected());
@@ -469,7 +498,12 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void RemoveEdgeView(IEditorEdgeView edge)
         {
-            if (edge == null) return;
+            if (edge == null)
+            {
+                Debug.LogError("RemoveEdgeView edge 为空");
+                return;
+            }
+
             if (edge.asset != null) graphElementCache.RemoveEdgeViewCache(edge.asset.id);
 
             edge.Dispose();
@@ -496,7 +530,12 @@ namespace Emilia.Node.Editor
         public IEditorItemView AddItemView(EditorItemAsset asset)
         {
             Type itemViewType = GraphTypeCache.GetItemViewType(asset.GetType());
-            if (itemViewType == null) return null;
+            if (itemViewType == null)
+            {
+                Debug.LogError($"AddNodeView {itemViewType.FullName}找不到IEditorItemView，请在找不到IEditorItemView使用EditorItemAttribute指定{itemViewType.FullName}");
+                return null;
+            }
+
             IEditorItemView itemView = ReflectUtility.CreateInstance(itemViewType) as IEditorItemView;
             itemView.element.RegisterCallback<MouseDownEvent>((_) => UpdateSelected());
             itemView.Initialize(this, asset);
@@ -512,7 +551,11 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void RemoveItemView(IEditorItemView item)
         {
-            if (item == null) return;
+            if (item == null)
+            {
+                Debug.LogError("RemoveItemView item 为空");
+                return;
+            }
             if (item.asset != null) graphElementCache.RemoveItemViewCache(item.asset.id);
 
             item.Dispose();
@@ -539,7 +582,12 @@ namespace Emilia.Node.Editor
             foreach (Port port in this.ports)
             {
                 IEditorPortView portView = port as IEditorPortView;
-                if (portView == null) continue;
+                if (portView == null)
+                {
+                    Debug.LogError("端口需要继承IEditorPortView");
+                    continue;
+                }
+
                 if (startPortView.master == portView.master) continue;
 
                 bool canConnect = connectSystem.CanConnect(startPortView, portView);

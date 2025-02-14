@@ -20,7 +20,6 @@ namespace Emilia.Node.Editor
         /// <summary>
         /// 收集静态端口资源
         /// </summary>
-        /// <returns></returns>
         List<EditorPortInfo> CollectStaticPortAssets();
 
         /// <summary>

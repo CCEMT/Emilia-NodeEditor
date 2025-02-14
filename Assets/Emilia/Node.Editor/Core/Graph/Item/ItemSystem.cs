@@ -24,7 +24,11 @@ namespace Emilia.Node.Editor
         /// </summary>
         public IEditorItemView CreateItem(Type type, Vector2 position)
         {
-            if (typeof(EditorItemAsset).IsAssignableFrom(type) == false) return null;
+            if (typeof(EditorItemAsset).IsAssignableFrom(type) == false)
+            {
+                Debug.LogError($"CreateItem Error: {type}未继承EditorItemAsset");
+                return null;
+            }
 
             EditorItemAsset itemAsset = ScriptableObject.CreateInstance(type) as EditorItemAsset;
             itemAsset.id = Guid.NewGuid().ToString();

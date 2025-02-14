@@ -43,7 +43,7 @@ namespace Emilia.Node.Editor
                 Type createSettingType = this.handle?.typeSettingType;
                 if (typeof(IGraphTypeLocalSetting).IsAssignableFrom(createSettingType)) this._typeSetting = ReflectUtility.CreateInstance(createSettingType) as IGraphTypeLocalSetting;
             }
-            
+
             if (this._assetSetting == null)
             {
                 Type createSettingType = this.handle?.assetSettingType;
@@ -61,7 +61,7 @@ namespace Emilia.Node.Editor
         {
             OdinEditorPrefs.SetValue(typeSaveKey, this._typeSetting);
         }
-        
+
         /// <summary>
         /// 保存资源设置
         /// </summary>
@@ -69,7 +69,7 @@ namespace Emilia.Node.Editor
         {
             OdinEditorPrefs.SetValue(assetSaveKey, this._assetSetting);
         }
-        
+
         /// <summary>
         /// 保存所有设置
         /// </summary>

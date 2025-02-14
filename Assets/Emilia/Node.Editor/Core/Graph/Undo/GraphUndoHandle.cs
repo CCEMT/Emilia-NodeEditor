@@ -22,7 +22,7 @@
         {
             parentHandle?.OnUndoAfter();
         }
-        
+
         public override void Dispose()
         {
             base.Dispose();

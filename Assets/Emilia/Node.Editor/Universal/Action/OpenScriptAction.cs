@@ -13,7 +13,6 @@ namespace Emilia.Node.Universal.Editor
     /// <summary>
     /// 打开脚本
     /// </summary>
-
     [Action("OpenScript", 8100, OperateMenuTagDefine.UniversalActionTag)]
     public class OpenScriptAction : OperateMenuAction
     {

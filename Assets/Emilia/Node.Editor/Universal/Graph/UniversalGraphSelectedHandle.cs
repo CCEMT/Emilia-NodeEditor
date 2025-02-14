@@ -16,7 +16,7 @@ namespace Emilia.Node.Universal.Editor
             bool isUseSelection = smartValue.window.GetType() != InspectorWindow_Internals.inspectorWindowType_Internals;
             if (isUseSelection == false) return;
             Selection.selectionChanged -= OnSelectionChanged;
-            Selection.selectionChanged += OnSelectionChanged; 
+            Selection.selectionChanged += OnSelectionChanged;
         }
 
         private void OnSelectionChanged()

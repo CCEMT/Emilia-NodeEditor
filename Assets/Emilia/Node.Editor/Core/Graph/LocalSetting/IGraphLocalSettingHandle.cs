@@ -18,7 +18,7 @@ namespace Emilia.Node.Editor
         /// 读取类型设置
         /// </summary>
         void OnReadTypeSetting(IGraphTypeLocalSetting setting);
-        
+
         /// <summary>
         /// 读取资产设置
         /// </summary>
