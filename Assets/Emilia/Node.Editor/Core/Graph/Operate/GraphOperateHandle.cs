@@ -11,49 +11,50 @@ namespace Emilia.Node.Editor
         public override void Initialize(object weakSmartValue)
         {
             base.Initialize(weakSmartValue);
-            this.smartValue = weakSmartValue as EditorGraphView;
+            smartValue = weakSmartValue as EditorGraphView;
             parentHandle = parent as IGraphOperateHandle;
         }
 
         public virtual void OpenCreateNodeMenu(Vector2 mousePosition, CreateNodeContext createNodeContext = default)
         {
-            this.parentHandle?.OpenCreateNodeMenu(mousePosition, createNodeContext);
+            parentHandle?.OpenCreateNodeMenu(mousePosition, createNodeContext);
         }
 
         public virtual void Cut()
         {
-            this.parentHandle?.Cut();
+            parentHandle?.Cut();
         }
 
         public virtual void Copy()
         {
-            this.parentHandle?.Copy();
+            parentHandle?.Copy();
         }
 
         public virtual void Paste()
         {
-            this.parentHandle?.Paste();
+            parentHandle?.Paste();
         }
 
         public virtual void Delete()
         {
-            this.parentHandle?.Delete();
+            parentHandle?.Delete();
         }
 
         public virtual void Duplicate()
         {
-            this.parentHandle?.Duplicate();
+            parentHandle?.Duplicate();
         }
 
         public virtual void Save()
         {
-            this.parentHandle?.Save();
+            parentHandle?.Save();
         }
 
         public override void Dispose()
         {
             base.Dispose();
-            this.smartValue = default;
+            smartValue = null;
+            parentHandle = null;
         }
     }
 }

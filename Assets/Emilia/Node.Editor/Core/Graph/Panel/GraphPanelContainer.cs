@@ -6,8 +6,8 @@ namespace Emilia.Node.Editor
     {
         public GraphPanelContainer()
         {
-            this.pickingMode = PickingMode.Ignore;
-            this.style.flexGrow = 1;
+            pickingMode = PickingMode.Ignore;
+            style.flexGrow = 1;
             style.position = Position.Absolute;
 
             this.StretchToParentSize();

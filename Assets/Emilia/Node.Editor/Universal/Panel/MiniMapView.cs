@@ -64,7 +64,7 @@ namespace Emilia.Node.Universal.Editor
             this.AddManipulator(new ContextualMenuManipulator(BuildContextualMenu));
             this.ResetPositionProperties_Internal();
 
-            this.generateVisualContent += OnGenerateVisualContent;
+            generateVisualContent += OnGenerateVisualContent;
         }
 
         public virtual void BuildContextualMenu(ContextualMenuPopulateEvent evt) { }

@@ -65,7 +65,6 @@ namespace Emilia.Node.Editor
             }
 
             this._drawer?.Draw(height, width);
-            graphView?.OnFocus();
         }
 
         /// <summary>

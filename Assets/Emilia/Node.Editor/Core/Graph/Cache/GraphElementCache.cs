@@ -141,7 +141,7 @@ namespace Emilia.Node.Editor
                 if (hasInputNode && hasOutputNode && hasInputPort && hasOutputPort) return edge;
             }
 
-            return default;
+            return null;
         }
 
         public void Clear()

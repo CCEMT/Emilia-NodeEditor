@@ -11,6 +11,7 @@ namespace Emilia.Node.Editor
         void OnLoadAfter();
 
         void OnFocus();
+        void OnUnFocus();
         void OnUpdate();
     }
 }

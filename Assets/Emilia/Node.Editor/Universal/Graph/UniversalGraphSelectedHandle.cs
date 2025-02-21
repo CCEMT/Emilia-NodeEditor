@@ -13,10 +13,10 @@ namespace Emilia.Node.Universal.Editor
         public override void Initialize(object weakSmartValue)
         {
             base.Initialize(weakSmartValue);
-            bool isUseSelection = this.smartValue.window.GetType() != InspectorWindow_Internals.inspectorWindowType_Internals;
+            bool isUseSelection = smartValue.window.GetType() != InspectorWindow_Internals.inspectorWindowType_Internals;
             if (isUseSelection == false) return;
             Selection.selectionChanged -= OnSelectionChanged;
-            Selection.selectionChanged += OnSelectionChanged; 
+            Selection.selectionChanged += OnSelectionChanged;
         }
 
         private void OnSelectionChanged()
@@ -52,8 +52,8 @@ namespace Emilia.Node.Universal.Editor
                 if (isUseSelection) Selection.objects = selectedInspectors.ToArray();
                 else
                 {
-                    InspectorView inspectorView = this.smartValue.graphPanelSystem.GetPanel<InspectorView>();
-                    if (inspectorView == null) inspectorView = this.smartValue.graphPanelSystem.OpenFloatPanel<InspectorView>();
+                    InspectorView inspectorView = smartValue.graphPanelSystem.GetPanel<InspectorView>();
+                    if (inspectorView == null) inspectorView = smartValue.graphPanelSystem.OpenFloatPanel<InspectorView>();
                     inspectorView.SetObjects(selectedInspectors);
                 }
             }
@@ -66,7 +66,7 @@ namespace Emilia.Node.Universal.Editor
 
         public override void Dispose()
         {
-            bool isUseSelection = this.smartValue.window.GetType() != InspectorWindow_Internals.inspectorWindowType_Internals;
+            bool isUseSelection = smartValue.window.GetType() != InspectorWindow_Internals.inspectorWindowType_Internals;
             if (isUseSelection) Selection.selectionChanged -= OnSelectionChanged;
 
             base.Dispose();

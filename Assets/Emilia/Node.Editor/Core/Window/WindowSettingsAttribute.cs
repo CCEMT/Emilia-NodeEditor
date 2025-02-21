@@ -20,7 +20,7 @@ namespace Emilia.Node
         /// </summary>
         Single
     }
-    
+
     /// <summary>
     /// Window窗口设置
     /// </summary>
@@ -46,7 +46,7 @@ namespace Emilia.Node
         /// 允许通过资源打开窗口
         /// </summary>
         public bool canOpenAsset = true;
-        
+
         /// <summary>
         /// 窗口打开模式
         /// </summary>

@@ -3,7 +3,7 @@
     public interface IGraphSaveHandle : IEditorHandle
     {
         void OnSaveBefore();
-        
+
         void OnSaveAfter();
     }
 }

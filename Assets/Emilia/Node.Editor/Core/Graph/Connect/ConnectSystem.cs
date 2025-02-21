@@ -12,10 +12,11 @@ namespace Emilia.Node.Editor
         private IConnectSystemHandle handle;
         public EditorEdgeConnectorListener connectorListener { get; private set; }
         public override int order => 1000;
+
         public override void Reset(EditorGraphView graphView)
         {
             base.Reset(this.graphView);
-            
+
             if (handle != null) EditorHandleUtility.ReleaseHandle(handle);
             handle = EditorHandleUtility.BuildHandle<IConnectSystemHandle>(graphView.graphAsset.GetType(), graphView);
 

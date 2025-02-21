@@ -15,9 +15,9 @@ namespace Emilia.Node.Universal.Editor
     {
         protected override void DrawPropertyLayout(GUIContent label)
         {
-            VariableTypeFilterAttribute attribute = this.Attribute;
+            VariableTypeFilterAttribute attribute = Attribute;
 
-            if (typeof(Variable).IsAssignableFrom(this.Property.ValueEntry.TypeOfValue) == false) return;
+            if (typeof(Variable).IsAssignableFrom(Property.ValueEntry.TypeOfValue) == false) return;
 
             EditorGraphView graphView = EditorGraphView.focusedGraphView;
             if (graphView == null) return;
@@ -25,10 +25,10 @@ namespace Emilia.Node.Universal.Editor
             EditorUniversalGraphAsset universalGraphAsset = graphView.graphAsset as EditorUniversalGraphAsset;
             if (universalGraphAsset == null) return;
 
-            Variable variable = this.Property.ValueEntry.WeakSmartValue as Variable;
+            Variable variable = Property.ValueEntry.WeakSmartValue as Variable;
             Type type = GetVariableType(universalGraphAsset, attribute);
             if (type == null) return;
-            if (type != variable.GetType()) this.Property.ValueEntry.WeakSmartValue = Activator.CreateInstance(type);
+            if (type != variable.GetType()) Property.ValueEntry.WeakSmartValue = Activator.CreateInstance(type);
             CallNextDrawer(label);
         }
 

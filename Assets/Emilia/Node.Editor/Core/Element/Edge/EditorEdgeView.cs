@@ -63,7 +63,7 @@ namespace Emilia.Node.Editor
             this.graphView = graphView;
             this.asset = asset;
 
-            if (asset != default)
+            if (asset != null)
             {
                 IEditorNodeView inputNode = graphView.graphElementCache.GetEditorNodeView(asset.inputNodeId);
                 IEditorNodeView outputNode = graphView.graphElementCache.GetEditorNodeView(asset.outputNodeId);

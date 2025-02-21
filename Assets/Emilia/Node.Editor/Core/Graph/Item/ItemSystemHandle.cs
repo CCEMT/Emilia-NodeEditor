@@ -9,7 +9,7 @@
         public override void Initialize(object weakSmartValue)
         {
             base.Initialize(weakSmartValue);
-            this.smartValue = weakSmartValue as EditorGraphView;
+            smartValue = weakSmartValue as EditorGraphView;
             parentHandle = parent as IItemSystemHandle;
         }
 

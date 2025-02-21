@@ -26,7 +26,11 @@ namespace Emilia.Node.Editor
         public IEditorNodeView CreateNode(Type nodeType, Vector2 position, object userData)
         {
             EditorNodeAsset nodeAsset = CreateNode(nodeType, position);
-            if (nodeAsset == null) return null;
+            if (nodeAsset == null)
+            {
+                Debug.LogError("Create Node Error: " + nodeType + "需要经常EditorNodeAsset");
+                return null;
+            }
             Undo.RegisterCreatedObjectUndo(nodeAsset, "Graph CreateNode");
 
             if (userData != null) nodeAsset.userData = graphView.graphCopyPaste.CreateCopy(userData);
@@ -103,7 +107,7 @@ namespace Emilia.Node.Editor
                 EditorHandleUtility.ReleaseHandle(handle);
                 this.handle = null;
             }
-            
+
             base.Dispose();
         }
     }

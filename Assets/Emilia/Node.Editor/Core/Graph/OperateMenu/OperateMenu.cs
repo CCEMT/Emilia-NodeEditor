@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Emilia.Node.Editor
@@ -14,6 +15,7 @@ namespace Emilia.Node.Editor
         /// 缓存操作菜单信息
         /// </summary>
         public List<OperateMenuActionInfo> actionInfoCache { get; private set; } = new List<OperateMenuActionInfo>();
+
         public override int order => 1100;
 
         public override void Reset(EditorGraphView graphView)
@@ -31,7 +33,11 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void BuildMenu(OperateMenuContext menuContext)
         {
-            if (handle == null) return;
+            if (handle == null)
+            {
+                Debug.LogError("未找到操作菜单处理器，请创建并继承OperateMenuHandle<>");
+                return;
+            }
 
             List<OperateMenuItem> graphMenuItems = new List<OperateMenuItem>();
             handle.CollectMenuItems(graphMenuItems, menuContext);

@@ -32,7 +32,16 @@ namespace Emilia.Node.Universal.Editor
             set => _isFold = value;
         }
 
-        public override string title => NodeViewDefaultTitle();
+        public override string title
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_displayName)) return defaultDisplayName;
+                return _displayName;
+            }
+        }
+
+        protected virtual string defaultDisplayName => "节点";
 
         protected virtual void OnValueChanged()
         {
@@ -40,15 +49,6 @@ namespace Emilia.Node.Universal.Editor
             if (graphView == null) return;
             UniversalEditorNodeView nodeView = graphView.graphElementCache.nodeViewById.GetValueOrDefault(id) as UniversalEditorNodeView;
             if (nodeView != null) nodeView.OnValueChanged();
-        }
-
-        protected virtual string NodeViewDefaultTitle()
-        {
-            EditorGraphView graphView = EditorGraphView.focusedGraphView;
-            if (graphView == null) return base.title;
-            UniversalEditorNodeView nodeView = graphView.graphElementCache.nodeViewById.GetValueOrDefault(id) as UniversalEditorNodeView;
-            if (nodeView != null) return nodeView.defaultDisplayName;
-            return base.title;
         }
     }
 }

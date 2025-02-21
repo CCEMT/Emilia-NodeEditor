@@ -4,6 +4,7 @@ using Emilia.Kit;
 using Emilia.Kit.Editor;
 using Emilia.Reflection.Editor;
 using UnityEditor.Experimental.GraphView;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Emilia.Node.Editor
@@ -25,7 +26,7 @@ namespace Emilia.Node.Editor
         public event Action<IEditorPortView, IEditorEdgeView> onConnected;
         public event Action<IEditorPortView, IEditorEdgeView> OnDisconnected;
 
-        public EditorPortView() : base(default, default, default, default) { }
+        public EditorPortView() : base(default, default, default, null) { }
 
         public void Initialize(IEditorNodeView master, EditorPortInfo info)
         {
@@ -66,7 +67,11 @@ namespace Emilia.Node.Editor
         {
             base.Connect(edge);
             IEditorEdgeView editorEdge = edge as IEditorEdgeView;
-            if (editorEdge == default) return;
+            if (editorEdge == null)
+            {
+                Debug.LogError($"{nameof(Edge)}必须继承{nameof(IEditorEdgeView)}");
+                return;
+            }
 
             _edges.Add(editorEdge);
             onConnected?.Invoke(this, editorEdge);
@@ -76,7 +81,11 @@ namespace Emilia.Node.Editor
         {
             base.Disconnect(edge);
             IEditorEdgeView editorEdge = edge as IEditorEdgeView;
-            if (editorEdge == null) return;
+            if (editorEdge == null)
+            {
+                Debug.LogError($"{nameof(Edge)}必须继承{nameof(IEditorEdgeView)}");
+                return;
+            }
 
             _edges.Remove(editorEdge);
             OnDisconnected?.Invoke(this, editorEdge);

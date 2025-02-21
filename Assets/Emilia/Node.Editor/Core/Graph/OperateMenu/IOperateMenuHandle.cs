@@ -8,7 +8,7 @@ namespace Emilia.Node.Editor
         /// 初始化缓存
         /// </summary>
         void InitializeCache();
-        
+
         /// <summary>
         /// 收集菜单项
         /// </summary>

@@ -49,7 +49,6 @@ namespace Emilia.Node.Universal.Editor
         }
 
         protected virtual bool canRename => false;
-        public virtual string defaultDisplayName => "节点";
         protected virtual string iconPath => null;
         protected override string styleFilePath => "Node/Styles/UniversalEditorNodeView.uss";
 
@@ -109,9 +108,9 @@ namespace Emilia.Node.Universal.Editor
             focusBorder.pickingMode = PickingMode.Ignore;
             focusBorder.name = "focus-border";
 
-            this.RegisterCallback<GeometryChangedEvent>(_ => {
-                focusBorder.style.width = this.layout.width + borderWidth;
-                focusBorder.style.height = this.layout.height + borderWidth;
+            RegisterCallback<GeometryChangedEvent>(_ => {
+                focusBorder.style.width = layout.width + borderWidth;
+                focusBorder.style.height = layout.height + borderWidth;
             });
 
             Add(focusBorder);
@@ -188,8 +187,7 @@ namespace Emilia.Node.Universal.Editor
         /// </summary>
         public void UpdateTitle()
         {
-            if (string.IsNullOrEmpty(this._universalNodeAsset.displayName)) title = defaultDisplayName;
-            else title = this._universalNodeAsset.displayName;
+            title = this._universalNodeAsset.title;
         }
 
         public override List<EditorPortInfo> CollectStaticPortAssets()

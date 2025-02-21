@@ -8,7 +8,7 @@ namespace Emilia.Node.Editor
         /// 资产
         /// </summary>
         EditorEdgeAsset asset { get; }
-        
+
         EditorGraphView graphView { get; }
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace Emilia.Node.Editor
         /// 是否正在拖拽
         /// </summary>
         bool isDrag { get; set; }
-        
+
         Edge edgeElement { get; }
 
         /// <summary>

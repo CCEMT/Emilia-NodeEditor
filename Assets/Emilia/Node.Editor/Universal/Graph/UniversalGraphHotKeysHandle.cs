@@ -10,7 +10,7 @@ namespace Emilia.Node.Universal.Editor
         {
             if (evt.keyCode == KeyCode.S && evt.actionKey)
             {
-                this.smartValue.graphOperate.Save();
+                smartValue.graphOperate.Save();
                 evt.StopPropagation();
             }
         }

@@ -17,7 +17,11 @@ namespace Emilia.Node.Editor
         public virtual void OnDropOutsidePort(Edge edge, Vector2 position)
         {
             IEditorEdgeView edgeView = edge as IEditorEdgeView;
-            if (edgeView == null) return;
+            if (edgeView == null)
+            {
+                Debug.LogError($"{nameof(Edge)}必须继承{nameof(IEditorEdgeView)}");
+                return;
+            }
 
             if (edgeView.edgeElement.isGhostEdge == false)
             {
@@ -55,7 +59,11 @@ namespace Emilia.Node.Editor
             EditorGraphView editorGraphView = graphView as EditorGraphView;
 
             IEditorEdgeView edgeView = edge as IEditorEdgeView;
-            if (edgeView == null) return;
+            if (edgeView == null)
+            {
+                Debug.LogError($"{nameof(Edge)}必须继承{nameof(IEditorEdgeView)}");
+                return;
+            }
 
             if (edge.input == null || edge.output == null) return;
 

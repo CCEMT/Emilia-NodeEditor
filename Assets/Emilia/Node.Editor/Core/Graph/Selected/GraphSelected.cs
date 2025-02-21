@@ -3,7 +3,7 @@ using UnityEditor.Experimental.GraphView;
 
 namespace Emilia.Node.Editor
 {
-    public class GraphSelected:GraphViewModule
+    public class GraphSelected : GraphViewModule
     {
         private IGraphSelectedHandle handle;
 
