@@ -7,7 +7,7 @@ using Object = UnityEngine.Object;
 
 namespace Emilia.Node.Editor
 {
-    public class ConnectSystem : GraphViewModule
+    public class GraphConnectSystem : GraphViewModule
     {
         private IConnectSystemHandle handle;
         public EditorEdgeConnectorListener connectorListener { get; private set; }

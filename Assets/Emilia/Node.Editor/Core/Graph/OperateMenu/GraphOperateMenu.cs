@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Editor
 {
-    public class OperateMenu : GraphViewModule
+    public class GraphOperateMenu : GraphViewModule
     {
         public const int SeparatorAt = 1200;
 

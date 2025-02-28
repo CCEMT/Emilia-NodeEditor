@@ -2,7 +2,7 @@
 
 namespace Emilia.Node.Editor
 {
-    public class CreateItemMenu : GraphViewModule
+    public class GraphCreateItemMenu : GraphViewModule
     {
         private ICreateItemMenuHandle handle;
         public override int order => 1400;

@@ -2,7 +2,7 @@
 {
     public struct CreateNodeContext
     {
-        public CreateNodeMenu nodeMenu;
+        public GraphCreateNodeMenu nodeMenu;
         public ICreateNodeCollect nodeCollect;
         public CreateNodeConnector createNodeConnector;
     }
