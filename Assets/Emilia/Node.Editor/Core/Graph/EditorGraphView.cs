@@ -168,6 +168,11 @@ namespace Emilia.Node.Editor
         public EditorWindow window { get; set; }
 
         /// <summary>
+        /// 更新事件
+        /// </summary>
+        public event Action onUpdate;
+
+        /// <summary>
         /// 逻辑Transform改变事件
         /// </summary>
         public event Action<Vector3, Vector3> onLogicTransformChange;
@@ -261,6 +266,7 @@ namespace Emilia.Node.Editor
         {
             lastUpdateTime = EditorApplication.timeSinceStartup;
             this.graphHandle?.OnUpdate();
+            onUpdate?.Invoke();
         }
 
         /// <summary>
