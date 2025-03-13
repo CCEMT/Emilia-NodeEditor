@@ -9,7 +9,7 @@ namespace Emilia.Node.Universal.Editor
     {
         protected virtual void OnValueChanged()
         {
-            EditorGraphView graphView = EditorGraphView.focusedGraphView;
+            EditorGraphView graphView = EditorGraphView.GetGraphView(graphAsset);
             if (graphView == null) return;
             IEditorItemView itemView = graphView.graphElementCache.itemViewById.GetValueOrDefault(id);
             if (itemView == null) return;

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Emilia.Node.Universal.Editor
+namespace Emilia.Node.Attributes
 {
     /// <summary>
     /// 节点颜色

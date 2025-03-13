@@ -16,6 +16,8 @@ namespace Emilia.Node.Editor
 {
     public class EditorGraphView : GraphView_Hook
     {
+        private static Dictionary<EditorGraphAsset, EditorGraphView> graphViews = new Dictionary<EditorGraphAsset, EditorGraphView>();
+
         /// <summary>
         /// 聚焦的GraphView
         /// </summary>
@@ -280,6 +282,8 @@ namespace Emilia.Node.Editor
                 return;
             }
 
+            graphViews[asset] = this;
+            
             schedule.Execute(OnReload).ExecuteLater(1);
 
             void OnReload()
@@ -820,6 +824,8 @@ namespace Emilia.Node.Editor
 
         public void Dispose()
         {
+            if (graphAsset != null && graphViews.ContainsKey(graphAsset)) graphViews.Remove(graphAsset);
+            
             Save(false);
 
             if (loadElementCoroutine != null) EditorCoroutineUtility.StopCoroutine(loadElementCoroutine);
@@ -842,6 +848,19 @@ namespace Emilia.Node.Editor
                 EditorHandleUtility.ReleaseHandle(this.graphHandle);
                 this.graphHandle = null;
             }
+        }
+        
+        public static EditorGraphView GetGraphView(EditorGraphAsset asset)
+        {
+            if (asset == null) return null;
+            EditorGraphView graphView = graphViews.GetValueOrDefault(asset);
+            if (graphView == null) return null;
+
+            bool validate = graphView.hierarchy.parent != null;
+            if (validate) return graphView;
+
+            graphViews.Remove(asset);
+            return null;
         }
     }
 }

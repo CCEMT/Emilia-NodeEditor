@@ -96,6 +96,8 @@ namespace Emilia.Node.Editor
         {
             if (this._nodeMap.ContainsKey(nodeAsset.id)) return;
 
+            nodeAsset.graphAsset = this;
+
             _nodes.Add(nodeAsset);
             this._nodeMap[nodeAsset.id] = nodeAsset;
 
@@ -108,6 +110,8 @@ namespace Emilia.Node.Editor
         public void AddEdge(EditorEdgeAsset edgeAsset)
         {
             if (this._edgeMap.ContainsKey(edgeAsset.id)) return;
+
+            edgeAsset.graphAsset = this;
 
             _edges.Add(edgeAsset);
             this._edgeMap[edgeAsset.id] = edgeAsset;
@@ -122,6 +126,8 @@ namespace Emilia.Node.Editor
         {
             if (this._itemMap.ContainsKey(itemAsset.id)) return;
 
+            itemAsset.graphAsset = this;
+
             _items.Add(itemAsset);
             this._itemMap[itemAsset.id] = itemAsset;
 
@@ -135,6 +141,8 @@ namespace Emilia.Node.Editor
         {
             if (this._nodeMap.ContainsKey(nodeAsset.id) == false) return;
 
+            nodeAsset.graphAsset = null;
+
             this._nodes.Remove(nodeAsset);
             this._nodeMap.Remove(nodeAsset.id);
         }
@@ -146,6 +154,8 @@ namespace Emilia.Node.Editor
         {
             if (this._edgeMap.ContainsKey(edgeAsset.id) == false) return;
 
+            edgeAsset.graphAsset = null;
+            
             this._edges.Remove(edgeAsset);
             this._edgeMap.Remove(edgeAsset.id);
         }
@@ -156,6 +166,8 @@ namespace Emilia.Node.Editor
         public void RemoveItem(EditorItemAsset itemAsset)
         {
             if (this._itemMap.ContainsKey(itemAsset.id) == false) return;
+            
+            itemAsset.graphAsset = null;
 
             this._items.Remove(itemAsset);
             this._itemMap.Remove(itemAsset.id);
