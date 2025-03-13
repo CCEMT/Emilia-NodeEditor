@@ -45,7 +45,7 @@ namespace Emilia.Node.Universal.Editor
 
         protected virtual void OnValueChanged()
         {
-            EditorGraphView graphView = EditorGraphView.focusedGraphView;
+            EditorGraphView graphView = EditorGraphView.GetGraphView(graphAsset);
             if (graphView == null) return;
             UniversalEditorNodeView nodeView = graphView.graphElementCache.nodeViewById.GetValueOrDefault(id) as UniversalEditorNodeView;
             if (nodeView != null) nodeView.OnValueChanged();

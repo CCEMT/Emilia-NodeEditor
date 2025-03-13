@@ -16,6 +16,9 @@ namespace Emilia.Node.Editor
         [SerializeField, HideInInspector]
         private Rect _position;
 
+        [SerializeField, HideInInspector]
+        private EditorGraphAsset _graphAsset;
+
         [NonSerialized]
         private PropertyTree _propertyTree;
 
@@ -35,6 +38,12 @@ namespace Emilia.Node.Editor
         {
             get => this._position;
             set => this._position = value;
+        }
+
+        public EditorGraphAsset graphAsset
+        {
+            get => this._graphAsset;
+            set => this._graphAsset = value;
         }
 
         public PropertyTree propertyTree => _propertyTree;

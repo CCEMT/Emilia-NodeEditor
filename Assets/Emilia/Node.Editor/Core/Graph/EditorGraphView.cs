@@ -16,6 +16,8 @@ namespace Emilia.Node.Editor
 {
     public class EditorGraphView : GraphView_Hook
     {
+        private static Dictionary<EditorGraphAsset, EditorGraphView> graphViews = new Dictionary<EditorGraphAsset, EditorGraphView>();
+
         /// <summary>
         /// 聚焦的GraphView
         /// </summary>
@@ -115,32 +117,32 @@ namespace Emilia.Node.Editor
         /// <summary>
         /// 节点管理
         /// </summary>
-        public NodeSystem nodeSystem { get; private set; }
+        public GraphNodeSystem nodeSystem { get; private set; }
 
         /// <summary>
         /// 连接管理
         /// </summary>
-        public ConnectSystem connectSystem { get; private set; }
+        public GraphConnectSystem connectSystem { get; private set; }
 
         /// <summary>
         /// Item管理
         /// </summary>
-        public ItemSystem itemSystem { get; private set; }
+        public GraphItemSystem itemSystem { get; private set; }
 
         /// <summary>
         /// 操作菜单
         /// </summary>
-        public OperateMenu operateMenu { get; private set; }
+        public GraphOperateMenu operateMenu { get; private set; }
 
         /// <summary>
         /// 创建节点菜单
         /// </summary>
-        public CreateNodeMenu createNodeMenu { get; private set; }
+        public GraphCreateNodeMenu createNodeMenu { get; private set; }
 
         /// <summary>
         /// 创建Item菜单
         /// </summary>
-        public CreateItemMenu createItemMenu { get; private set; }
+        public GraphCreateItemMenu createItemMenu { get; private set; }
 
         /// <summary>
         /// 拖拽管理
@@ -168,6 +170,11 @@ namespace Emilia.Node.Editor
         public EditorWindow window { get; set; }
 
         /// <summary>
+        /// 更新事件
+        /// </summary>
+        public event Action onUpdate;
+
+        /// <summary>
         /// 逻辑Transform改变事件
         /// </summary>
         public event Action<Vector3, Vector3> onLogicTransformChange;
@@ -184,12 +191,12 @@ namespace Emilia.Node.Editor
             graphSelected = GetModule<GraphSelected>();
             graphPanelSystem = GetModule<GraphPanelSystem>();
             hotKeys = GetModule<GraphHotKeys>();
-            nodeSystem = GetModule<NodeSystem>();
-            connectSystem = GetModule<ConnectSystem>();
-            itemSystem = GetModule<ItemSystem>();
-            operateMenu = GetModule<OperateMenu>();
-            createNodeMenu = GetModule<CreateNodeMenu>();
-            createItemMenu = GetModule<CreateItemMenu>();
+            nodeSystem = GetModule<GraphNodeSystem>();
+            connectSystem = GetModule<GraphConnectSystem>();
+            itemSystem = GetModule<GraphItemSystem>();
+            operateMenu = GetModule<GraphOperateMenu>();
+            createNodeMenu = GetModule<GraphCreateNodeMenu>();
+            createItemMenu = GetModule<GraphCreateItemMenu>();
             dragAndDrop = GetModule<GraphDragAndDrop>();
 
             graphElementCache = new GraphElementCache();
@@ -261,6 +268,7 @@ namespace Emilia.Node.Editor
         {
             lastUpdateTime = EditorApplication.timeSinceStartup;
             this.graphHandle?.OnUpdate();
+            onUpdate?.Invoke();
         }
 
         /// <summary>
@@ -274,6 +282,8 @@ namespace Emilia.Node.Editor
                 return;
             }
 
+            graphViews[asset] = this;
+            
             schedule.Execute(OnReload).ExecuteLater(1);
 
             void OnReload()
@@ -798,21 +808,25 @@ namespace Emilia.Node.Editor
         /// <summary>
         /// 保存
         /// </summary>
-        public void Save()
+        public void Save(bool force = true)
         {
-            graphSave?.OnSave();
+            if (force) graphSave?.OnSave();
+            else
+            {
+                bool isInquire = graphSetting != null && graphSetting.immediatelySave == false && graphSave.dirty;
+                if (isInquire == false) graphSave?.OnSave();
+                else
+                {
+                    if (EditorUtility.DisplayDialog("是否保存", "是否保存当前修改", "保存", "不保存")) graphSave?.OnSave();
+                }
+            }
         }
 
         public void Dispose()
         {
-            if (graphSetting != null && graphSetting.immediatelySave == false && graphSave.dirty)
-            {
-                if (EditorUtility.DisplayDialog("是否保存", "是否保存当前修改", "保存", "不保存")) Save();
-            }
-            else
-            {
-                Save();
-            }
+            if (graphAsset != null && graphViews.ContainsKey(graphAsset)) graphViews.Remove(graphAsset);
+            
+            Save(false);
 
             if (loadElementCoroutine != null) EditorCoroutineUtility.StopCoroutine(loadElementCoroutine);
             loadElementCoroutine = null;
@@ -834,6 +848,19 @@ namespace Emilia.Node.Editor
                 EditorHandleUtility.ReleaseHandle(this.graphHandle);
                 this.graphHandle = null;
             }
+        }
+        
+        public static EditorGraphView GetGraphView(EditorGraphAsset asset)
+        {
+            if (asset == null) return null;
+            EditorGraphView graphView = graphViews.GetValueOrDefault(asset);
+            if (graphView == null) return null;
+
+            bool validate = graphView.hierarchy.parent != null;
+            if (validate) return graphView;
+
+            graphViews.Remove(asset);
+            return null;
         }
     }
 }

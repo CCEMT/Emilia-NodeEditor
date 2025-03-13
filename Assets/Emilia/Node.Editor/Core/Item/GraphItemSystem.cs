@@ -6,7 +6,7 @@ using Object = UnityEngine.Object;
 
 namespace Emilia.Node.Editor
 {
-    public class ItemSystem : GraphViewModule
+    public class GraphItemSystem : GraphViewModule
     {
         private IItemSystemHandle handle;
         public override int order => 1100;

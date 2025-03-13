@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Editor
 {
-    public class CreateNodeMenu : GraphViewModule
+    public class GraphCreateNodeMenu : GraphViewModule
     {
         struct MenuItem
         {
