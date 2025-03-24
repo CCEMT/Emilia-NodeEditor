@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Emilia.Variables;
+using Emilia.Variables.Editor;
 
 namespace Emilia.Node.Universal.Editor
 {

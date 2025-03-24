@@ -1,4 +1,5 @@
 ﻿using Emilia.Node.Editor;
+using Emilia.Variables.Editor;
 
 namespace Emilia.Node.Universal.Editor
 {

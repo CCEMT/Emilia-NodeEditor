@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Emilia.Kit;
 using Emilia.Node.Editor;
 using UnityEditor;
 using UnityEngine;
@@ -27,31 +28,32 @@ namespace Emilia.Node.Universal.Editor
         {
             GUILayout.BeginHorizontal(EditorStyles.toolbar);
 
-            Stack<EditorGraphAsset> graphAssets = new Stack<EditorGraphAsset>();
+            Stack<IHierarchyAsset> hierarchyAssets = new Stack<IHierarchyAsset>();
 
-            EditorGraphAsset current = graphView.graphAsset;
+            IHierarchyAsset current = graphView.graphAsset;
             while (current != null)
             {
-                graphAssets.Push(current);
-                current = current.parent as EditorGraphAsset;
+                hierarchyAssets.Push(current);
+                current = current.parent;
             }
 
             int i = 0;
-            while (graphAssets.Count > 0)
+            while (hierarchyAssets.Count > 0)
             {
-                EditorGraphAsset graphAsset = graphAssets.Pop();
+                IHierarchyAsset hierarchyAsset = hierarchyAssets.Pop();
 
                 GUIStyle style1 = i == 0 ? BreadCrumbLeft : BreadCrumbMid;
                 GUIStyle style2 = i == 0 ? BreadCrumbLeftBg : BreadCrumbMidBg;
 
-                string label = graphAsset.name;
+                string label = hierarchyAsset.ToString();
                 GUIContent guiContent = new GUIContent(label);
                 Rect rect = GetLayoutRect(guiContent, style1);
                 if (Event.current.type == EventType.Repaint) style2.Draw(rect, GUIContent.none, 0);
 
                 if (GUI.Button(rect, guiContent, style1))
                 {
-                    if (graphView.graphAsset != graphAsset) graphView.Reload(graphAsset);
+                    EditorGraphAsset currentGraphAsset = hierarchyAsset as EditorGraphAsset;
+                    if (currentGraphAsset != null && graphView.graphAsset != currentGraphAsset) graphView.Reload(currentGraphAsset);
                 }
 
                 i++;

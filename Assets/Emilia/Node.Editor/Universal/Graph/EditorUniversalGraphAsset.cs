@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Emilia.Kit;
 using Emilia.Node.Editor;
+using Emilia.Variables.Editor;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using UnityEngine;

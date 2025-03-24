@@ -4,6 +4,7 @@ using System.Linq;
 using Emilia.BehaviorTree.Attributes;
 using Emilia.Node.Editor;
 using Emilia.Variables;
+using Emilia.Variables.Editor;
 using Sirenix.OdinInspector.Editor;
 using Sirenix.OdinInspector.Editor.ValueResolvers;
 using UnityEditor;

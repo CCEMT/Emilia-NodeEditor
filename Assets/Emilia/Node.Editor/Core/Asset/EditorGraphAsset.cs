@@ -83,6 +83,11 @@ namespace Emilia.Node.Editor
             AssetDatabase.SaveAssetIfDirty(this);
         }
 
+        public override string ToString()
+        {
+            return name;
+        }
+
         protected void OnEnable()
         {
             if (_propertyTree != null) _propertyTree.Dispose();

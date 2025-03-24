@@ -1,6 +1,7 @@
 ﻿using Emilia.Kit;
 using Emilia.Node.Attributes;
 using Emilia.Node.Editor;
+using Emilia.Variables.Editor;
 using Sirenix.OdinInspector.Editor;
 using UnityEngine;
 
