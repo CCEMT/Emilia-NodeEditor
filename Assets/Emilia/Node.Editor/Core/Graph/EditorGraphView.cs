@@ -283,7 +283,7 @@ namespace Emilia.Node.Editor
             }
 
             graphViews[asset] = this;
-            
+
             schedule.Execute(OnReload).ExecuteLater(1);
 
             void OnReload()
@@ -825,7 +825,7 @@ namespace Emilia.Node.Editor
         public void Dispose()
         {
             if (graphAsset != null && graphViews.ContainsKey(graphAsset)) graphViews.Remove(graphAsset);
-            
+
             Save(false);
 
             if (loadElementCoroutine != null) EditorCoroutineUtility.StopCoroutine(loadElementCoroutine);
@@ -849,7 +849,7 @@ namespace Emilia.Node.Editor
                 this.graphHandle = null;
             }
         }
-        
+
         public static EditorGraphView GetGraphView(EditorGraphAsset asset)
         {
             if (asset == null) return null;
