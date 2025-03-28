@@ -160,7 +160,7 @@ namespace Emilia.Node.Editor
             if (this._edgeMap.ContainsKey(edgeAsset.id) == false) return;
 
             edgeAsset.graphAsset = null;
-            
+
             this._edges.Remove(edgeAsset);
             this._edgeMap.Remove(edgeAsset.id);
         }
@@ -171,7 +171,7 @@ namespace Emilia.Node.Editor
         public void RemoveItem(EditorItemAsset itemAsset)
         {
             if (this._itemMap.ContainsKey(itemAsset.id) == false) return;
-            
+
             itemAsset.graphAsset = null;
 
             this._items.Remove(itemAsset);

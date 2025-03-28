@@ -2,16 +2,14 @@
 
 namespace Emilia.Node.Editor
 {
-    public class GraphCreateItemMenu : GraphViewModule
+    public class GraphCreateItemMenu : BasicGraphViewModule
     {
         private ICreateItemMenuHandle handle;
         public override int order => 1400;
 
-        public override void Reset(EditorGraphView graphView)
+        public override void Initialize(EditorGraphView graphView)
         {
-            base.Reset(graphView);
-
-            if (this.handle != null) EditorHandleUtility.ReleaseHandle(this.handle);
+            base.Initialize(graphView);
             this.handle = EditorHandleUtility.BuildHandle<ICreateItemMenuHandle>(graphView.graphAsset.GetType(), graphView);
         }
 

@@ -7,28 +7,28 @@ using Object = UnityEngine.Object;
 
 namespace Emilia.Node.Editor
 {
-    public class GraphConnectSystem : GraphViewModule
+    public class GraphConnectSystem : BasicGraphViewModule
     {
         private IConnectSystemHandle handle;
         public EditorEdgeConnectorListener connectorListener { get; private set; }
         public override int order => 1000;
 
-        public override void Reset(EditorGraphView graphView)
+        public override void Initialize(EditorGraphView graphView)
         {
-            base.Reset(this.graphView);
-
-            if (handle != null) EditorHandleUtility.ReleaseHandle(handle);
+            base.Initialize(graphView);
             handle = EditorHandleUtility.BuildHandle<IConnectSystemHandle>(graphView.graphAsset.GetType(), graphView);
+        }
 
-            if (connectorListener == null && handle != null)
-            {
-                Type type = handle.connectorListenerType;
-                if (type != null)
-                {
-                    connectorListener = ReflectUtility.CreateInstance(type) as EditorEdgeConnectorListener;
-                    connectorListener.Initialize(graphView);
-                }
-            }
+        public override void AllModuleInitializeSuccess()
+        {
+            base.AllModuleInitializeSuccess();
+            if (this.handle == null) return;
+            
+            Type type = handle.connectorListenerType;
+            if (type == null) return;
+            
+            connectorListener = ReflectUtility.CreateInstance(type) as EditorEdgeConnectorListener;
+            connectorListener.Initialize(this.graphView);
         }
 
         /// <summary>
@@ -131,6 +131,7 @@ namespace Emilia.Node.Editor
                 handle = null;
             }
 
+            connectorListener = null;
             base.Dispose();
         }
     }

@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Editor
 {
-    public class GraphPanelSystem : GraphViewModule
+    public class GraphPanelSystem : BasicGraphViewModule
     {
         private const string SplitViewPlaceholderName = "splitView-placeholder";
         private const float DockOffsetSize = 5f;
@@ -43,12 +43,9 @@ namespace Emilia.Node.Editor
 
         public override int order => 700;
 
-        public override void Reset(EditorGraphView graphView)
+        public override void Initialize(EditorGraphView graphView)
         {
-            base.Reset(graphView);
-            CloseAllPanel();
-
-            if (handle != null) EditorHandleUtility.ReleaseHandle(handle);
+            base.Initialize(graphView);
             handle = EditorHandleUtility.BuildHandle<IGraphPanelHandle>(graphView.graphAsset.GetType(), graphView);
 
             CreateContainer();
@@ -58,7 +55,11 @@ namespace Emilia.Node.Editor
             dockAreaOffset = Rect.zero;
 
             graphView.RegisterCallback<GeometryChangedEvent>((_) => UpdateGraphRect());
+        }
 
+        public override void AllModuleInitializeSuccess()
+        {
+            base.AllModuleInitializeSuccess();
             handle?.LoadPanel(this);
         }
 
@@ -72,7 +73,6 @@ namespace Emilia.Node.Editor
             if (this.floatRootContainer != null) this.floatRootContainer.RemoveFromHierarchy();
             this.floatRootContainer = new GraphPanelContainer() {name = "floatPanel-root"};
             graphView.Add(this.floatRootContainer);
-
         }
 
         /// <summary>

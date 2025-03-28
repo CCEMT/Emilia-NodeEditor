@@ -4,7 +4,7 @@ using Emilia.Kit.Editor;
 
 namespace Emilia.Node.Editor
 {
-    public class GraphLocalSettingSystem : GraphViewModule
+    public class GraphLocalSettingSystem : BasicGraphViewModule
     {
         private const string GraphLocalSettingSaveKey = "GraphLocalSetting";
 
@@ -20,13 +20,15 @@ namespace Emilia.Node.Editor
 
         public override int order => 100;
 
-        public override void Reset(EditorGraphView graphView)
+        public override void Initialize(EditorGraphView graphView)
         {
-            base.Reset(graphView);
-
-            if (handle != null) EditorHandleUtility.ReleaseHandle(handle);
+            base.Initialize(graphView);
             this.handle = EditorHandleUtility.BuildHandle<IGraphLocalSettingHandle>(graphView.graphAsset.GetType(), graphView);
+        }
 
+        public override void AllModuleInitializeSuccess()
+        {
+            base.AllModuleInitializeSuccess();
             ReadSetting();
         }
 
@@ -95,6 +97,9 @@ namespace Emilia.Node.Editor
                 EditorHandleUtility.ReleaseHandle(handle);
                 this.handle = null;
             }
+
+            _typeSetting = null;
+            _assetSetting = null;
 
             base.Dispose();
         }

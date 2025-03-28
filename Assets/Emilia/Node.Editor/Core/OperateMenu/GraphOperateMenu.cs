@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Editor
 {
-    public class GraphOperateMenu : GraphViewModule
+    public class GraphOperateMenu : BasicGraphViewModule
     {
         public const int SeparatorAt = 1200;
 
@@ -18,13 +18,16 @@ namespace Emilia.Node.Editor
 
         public override int order => 1100;
 
-        public override void Reset(EditorGraphView graphView)
+        public override void Initialize(EditorGraphView graphView)
         {
-            base.Reset(graphView);
+            base.Initialize(graphView);
             actionInfoCache.Clear();
-
-            if (handle != null) EditorHandleUtility.ReleaseHandle(handle);
             handle = EditorHandleUtility.BuildHandle<IOperateMenuHandle>(this.graphView.graphAsset.GetType(), this.graphView);
+        }
+
+        public override void AllModuleInitializeSuccess()
+        {
+            base.AllModuleInitializeSuccess();
             handle?.InitializeCache();
         }
 

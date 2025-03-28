@@ -16,12 +16,12 @@ namespace Emilia.Node.Editor
             parentHandle = parent as IGraphHandle;
         }
 
-        public virtual void InitializeCustomModule(Dictionary<Type, GraphViewModule> modules)
+        public virtual void InitializeCustomModule(Dictionary<Type, CustomGraphViewModule> modules)
         {
             parentHandle?.InitializeCustomModule(modules);
         }
 
-        protected void AddModule<TModule>(Dictionary<Type, GraphViewModule> modules) where TModule : GraphViewModule, new()
+        protected void AddModule<TModule>(Dictionary<Type, CustomGraphViewModule> modules) where TModule : CustomGraphViewModule, new()
         {
             modules.Add(typeof(TModule), new TModule());
         }

@@ -3,15 +3,14 @@ using UnityEditor.Experimental.GraphView;
 
 namespace Emilia.Node.Editor
 {
-    public class GraphCopyPaste : GraphViewModule
+    public class GraphCopyPaste : BasicGraphViewModule
     {
         private IGraphCopyPasteHandle handle;
         public override int order => 300;
 
-        public override void Reset(EditorGraphView graphView)
+        public override void Initialize(EditorGraphView graphView)
         {
-            base.Reset(graphView);
-            if (handle != null) EditorHandleUtility.ReleaseHandle(handle);
+            base.Initialize(graphView);
             handle = EditorHandleUtility.BuildHandle<IGraphCopyPasteHandle>(graphView.graphAsset.GetType(), graphView);
         }
 

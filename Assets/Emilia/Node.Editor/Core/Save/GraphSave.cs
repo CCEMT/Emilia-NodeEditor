@@ -4,7 +4,7 @@ using UnityEditor;
 
 namespace Emilia.Node.Editor
 {
-    public class GraphSave : GraphViewModule
+    public class GraphSave : BasicGraphViewModule
     {
         private EditorGraphAsset sourceGraphAsset;
 
@@ -15,11 +15,9 @@ namespace Emilia.Node.Editor
         public bool dirty => this._dirty;
         public override int order => 500;
 
-        public override void Reset(EditorGraphView graphView)
+        public override void Initialize(EditorGraphView graphView)
         {
-            base.Reset(graphView);
-
-            if (handle != null) EditorHandleUtility.ReleaseHandle(handle);
+            base.Initialize(graphView);
             handle = EditorHandleUtility.BuildHandle<IGraphSaveHandle>(this.graphView.graphAsset.GetType(), this.graphView);
         }
 

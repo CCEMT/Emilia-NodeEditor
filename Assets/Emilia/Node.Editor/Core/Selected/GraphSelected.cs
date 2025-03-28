@@ -3,20 +3,23 @@ using UnityEditor.Experimental.GraphView;
 
 namespace Emilia.Node.Editor
 {
-    public class GraphSelected : GraphViewModule
+    public class GraphSelected : BasicGraphViewModule
     {
         private IGraphSelectedHandle handle;
 
         private List<IGraphSelectedDrawer> selectedDrawers = new List<IGraphSelectedDrawer>();
         public override int order => 600;
 
-        public override void Reset(EditorGraphView graphView)
+        public override void Initialize(EditorGraphView graphView)
         {
-            base.Reset(graphView);
-
-            if (this.handle != null) EditorHandleUtility.ReleaseHandle(this.handle);
+            base.Initialize(graphView);
             this.handle = EditorHandleUtility.BuildHandle<IGraphSelectedHandle>(graphView.graphAsset.GetType(), graphView);
+        }
 
+        public override void AllModuleInitializeSuccess()
+        {
+            base.AllModuleInitializeSuccess();
+            
             int oldAmount = selectedDrawers.Count;
             for (int i = 0; i < oldAmount; i++)
             {

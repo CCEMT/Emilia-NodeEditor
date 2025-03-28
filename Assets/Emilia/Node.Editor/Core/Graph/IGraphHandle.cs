@@ -5,7 +5,7 @@ namespace Emilia.Node.Editor
 {
     public interface IGraphHandle : IEditorHandle
     {
-        void InitializeCustomModule(Dictionary<Type, GraphViewModule> modules);
+        void InitializeCustomModule(Dictionary<Type, CustomGraphViewModule> modules);
 
         void OnLoadBefore();
         void OnLoadAfter();
