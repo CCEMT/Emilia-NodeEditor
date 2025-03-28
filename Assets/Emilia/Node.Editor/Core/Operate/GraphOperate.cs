@@ -2,15 +2,14 @@
 
 namespace Emilia.Node.Editor
 {
-    public class GraphOperate : GraphViewModule
+    public class GraphOperate : BasicGraphViewModule
     {
         private IGraphOperateHandle handle;
         public override int order => 200;
 
-        public override void Reset(EditorGraphView graphView)
+        public override void Initialize(EditorGraphView graphView)
         {
-            base.Reset(graphView);
-            if (handle != null) EditorHandleUtility.ReleaseHandle(handle);
+            base.Initialize(graphView);
             handle = EditorHandleUtility.BuildHandle<IGraphOperateHandle>(graphView.graphAsset.GetType(), graphView);
         }
 

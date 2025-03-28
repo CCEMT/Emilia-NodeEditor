@@ -2,16 +2,14 @@
 
 namespace Emilia.Node.Editor
 {
-    public class GraphDragAndDrop : GraphViewModule
+    public class GraphDragAndDrop : BasicGraphViewModule
     {
         private IGraphDragAndDropHandle handle;
         public override int order => 1500;
 
-        public override void Reset(EditorGraphView graphView)
+        public override void Initialize(EditorGraphView graphView)
         {
-            base.Reset(graphView);
-
-            if (this.handle != null) EditorHandleUtility.ReleaseHandle(this.handle);
+            base.Initialize(graphView);
             this.handle = EditorHandleUtility.BuildHandle<IGraphDragAndDropHandle>(graphView.graphAsset.GetType(), graphView);
 
             graphView.UnregisterCallback<DragUpdatedEvent>(DragUpdatedCallback);

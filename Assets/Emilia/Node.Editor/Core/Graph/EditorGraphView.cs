@@ -24,8 +24,8 @@ namespace Emilia.Node.Editor
         public static EditorGraphView focusedGraphView { get; private set; }
 
         private IGraphHandle graphHandle;
-        private Dictionary<Type, GraphViewModule> modules = new Dictionary<Type, GraphViewModule>();
-        private Dictionary<Type, GraphViewModule> customModules = new Dictionary<Type, GraphViewModule>();
+        private Dictionary<Type, BasicGraphViewModule> modules = new Dictionary<Type, BasicGraphViewModule>();
+        private Dictionary<Type, CustomGraphViewModule> customModules = new Dictionary<Type, CustomGraphViewModule>();
 
         private List<IEditorNodeView> _nodeViews = new List<IEditorNodeView>();
         private List<IEditorEdgeView> _edgeViews = new List<IEditorEdgeView>();
@@ -225,20 +225,20 @@ namespace Emilia.Node.Editor
         {
             modules.Clear();
 
-            IList<Type> types = TypeCache.GetTypesDerivedFrom<GraphViewModule>();
-            List<GraphViewModule> moduleList = new List<GraphViewModule>();
+            IList<Type> types = TypeCache.GetTypesDerivedFrom<BasicGraphViewModule>();
+            List<BasicGraphViewModule> moduleList = new List<BasicGraphViewModule>();
 
             foreach (Type type in types)
             {
                 if (type.IsAbstract) continue;
-                GraphViewModule module = ReflectUtility.CreateInstance(type) as GraphViewModule;
+                BasicGraphViewModule module = ReflectUtility.CreateInstance(type) as BasicGraphViewModule;
                 if (module == null) continue;
                 moduleList.Add(module);
             }
 
             moduleList.Sort((x, y) => x.order.CompareTo(y.order));
 
-            foreach (GraphViewModule module in moduleList) modules.Add(module.GetType(), module);
+            foreach (BasicGraphViewModule module in moduleList) modules.Add(module.GetType(), module);
         }
 
         /// <summary>
@@ -314,19 +314,21 @@ namespace Emilia.Node.Editor
         {
             this.graphHandle = EditorHandleUtility.BuildHandle<IGraphHandle>(graphAsset.GetType(), this);
 
-            foreach (GraphViewModule customModule in this.customModules.Values) customModule.Dispose();
+            foreach (CustomGraphViewModule customModule in this.customModules.Values) customModule.Dispose();
             this.customModules.Clear();
 
-            foreach (GraphViewModule module in this.modules.Values) module.Reset(this);
+            foreach (BasicGraphViewModule module in this.modules.Values) module.Dispose();
+
+            foreach (BasicGraphViewModule module in this.modules.Values) module.Initialize(this);
 
             graphHandle.InitializeCustomModule(this.customModules);
 
-            foreach (GraphViewModule customModule in this.customModules.Values) customModule.Reset(this);
+            foreach (CustomGraphViewModule customModule in this.customModules.Values) customModule.Initialize(this);
+
+            foreach (BasicGraphViewModule module in this.modules.Values) module.AllModuleInitializeSuccess();
+            foreach (CustomGraphViewModule customModule in this.customModules.Values) customModule.AllModuleInitializeSuccess();
 
             RemoveAllElement();
-
-            nodeCreationRequest = (c) => createNodeMenu.ShowCreateNodeMenu(c);
-
             loadElementCoroutine = EditorCoroutineUtility.StartCoroutineOwnerless(LoadElement());
         }
 
@@ -607,15 +609,9 @@ namespace Emilia.Node.Editor
             return compatiblePorts;
         }
 
-        private string OnSerializeGraphElements(IEnumerable<GraphElement> elements)
-        {
-            return graphCopyPaste.SerializeGraphElementsCallback(elements);
-        }
+        private string OnSerializeGraphElements(IEnumerable<GraphElement> elements) => graphCopyPaste.SerializeGraphElementsCallback(elements);
 
-        private bool OnCanPasteSerializedData(string data)
-        {
-            return graphCopyPaste.CanPasteSerializedDataCallback(data);
-        }
+        private bool OnCanPasteSerializedData(string data) => graphCopyPaste.CanPasteSerializedDataCallback(data);
 
         private void OnUnserializeAndPaste(string operationName, string data)
         {

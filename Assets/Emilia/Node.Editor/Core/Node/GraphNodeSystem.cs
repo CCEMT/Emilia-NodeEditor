@@ -6,17 +6,14 @@ using Object = UnityEngine.Object;
 
 namespace Emilia.Node.Editor
 {
-    public class GraphNodeSystem : GraphViewModule
+    public class GraphNodeSystem : BasicGraphViewModule
     {
         private INodeSystemHandle handle;
         public override int order => 900;
 
-        public override void Reset(EditorGraphView graphView)
+        public override void Initialize(EditorGraphView graphView)
         {
-            base.Reset(graphView);
-            this.graphView = graphView;
-
-            if (handle != null) EditorHandleUtility.ReleaseHandle(handle);
+            base.Initialize(graphView);
             handle = EditorHandleUtility.BuildHandle<INodeSystemHandle>(graphView.graphAsset.GetType(), graphView);
         }
 

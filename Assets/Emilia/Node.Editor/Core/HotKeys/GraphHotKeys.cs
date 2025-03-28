@@ -2,16 +2,14 @@
 
 namespace Emilia.Node.Editor
 {
-    public class GraphHotKeys : GraphViewModule
+    public class GraphHotKeys : BasicGraphViewModule
     {
         private IGraphHotKeysHandle handle;
         public override int order => 800;
 
-        public override void Reset(EditorGraphView graphView)
+        public override void Initialize(EditorGraphView graphView)
         {
-            base.Reset(graphView);
-
-            if (this.handle != null) EditorHandleUtility.ReleaseHandle(this.handle);
+            base.Initialize(graphView);
             this.handle = EditorHandleUtility.BuildHandle<IGraphHotKeysHandle>(graphView.graphAsset.GetType(), graphView);
 
             graphView.UnregisterCallback<KeyDownEvent>(OnKeyDown);
