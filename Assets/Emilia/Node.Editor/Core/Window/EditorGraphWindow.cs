@@ -81,6 +81,7 @@ namespace Emilia.Node.Editor
 
         private void OnInspectorUpdate()
         {
+            if (graphAsset != null) EditorAssetWindowUtility.Refresh(this);
             UpdateTitle();
         }
 
@@ -96,7 +97,7 @@ namespace Emilia.Node.Editor
                 titleContent.text = "Graph";
                 return;
             }
-            
+
             titleContent.text = graphAsset.name;
 
             WindowSettingsAttribute settings = graphAsset.GetType().GetAttribute<WindowSettingsAttribute>();
