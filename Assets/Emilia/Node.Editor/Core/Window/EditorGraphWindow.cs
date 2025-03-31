@@ -91,6 +91,12 @@ namespace Emilia.Node.Editor
 
         private void UpdateTitle()
         {
+            if (graphAsset == null)
+            {
+                titleContent.text = "Graph";
+                return;
+            }
+            
             titleContent.text = graphAsset.name;
 
             WindowSettingsAttribute settings = graphAsset.GetType().GetAttribute<WindowSettingsAttribute>();
