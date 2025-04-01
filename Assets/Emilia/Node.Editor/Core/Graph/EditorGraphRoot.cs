@@ -73,8 +73,6 @@ namespace Emilia.Node.Editor
             {
                 InitTipsStyle();
                 GUILayout.Label("当前编辑的对象为空", tipsStyle, GUILayout.Height(height));
-
-                OnDragLoadAsset();
             }
         }
 
@@ -84,27 +82,6 @@ namespace Emilia.Node.Editor
             tipsStyle = new GUIStyle(GUI.skin.label);
             tipsStyle.alignment = TextAnchor.MiddleCenter;
             tipsStyle.fontSize = 20;
-        }
-
-        private void OnDragLoadAsset()
-        {
-            Event evt = Event.current;
-            Rect rect = GUILayoutUtility.GetLastRect();
-
-            if (! rect.Contains(evt.mousePosition)) return;
-            if (evt.type != EventType.DragUpdated && evt.type != EventType.DragPerform) return;
-
-            Object[] dragObjects = DragAndDrop.objectReferences;
-            EditorGraphAsset[] graphAssets = dragObjects.OfType<EditorGraphAsset>().ToArray();
-
-            if (graphAssets.Length <= 0) return;
-
-            DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
-            if (evt.type != EventType.DragPerform) return;
-
-            DragAndDrop.AcceptDrag();
-            EditorGraphAsset editorGraphAsset = graphAssets.FirstOrDefault();
-            SetAsset(editorGraphAsset);
         }
 
         /// <summary>
