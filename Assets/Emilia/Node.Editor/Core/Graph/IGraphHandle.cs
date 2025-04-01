@@ -10,8 +10,9 @@ namespace Emilia.Node.Editor
         void OnLoadBefore();
         void OnLoadAfter();
 
+        void OnEnterFocus();
         void OnFocus();
-        void OnUnFocus();
+        void OnExitFocus();
         void OnUpdate();
     }
 }

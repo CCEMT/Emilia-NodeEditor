@@ -211,9 +211,9 @@ namespace Emilia.Node.Editor
             RegisterCallback<MouseDownEvent>(OnMouseDown);
             RegisterCallback<MouseUpEvent>(OnMouseUp);
 
-            RegisterCallback<MouseEnterEvent>((_) => OnFocus());
+            RegisterCallback<MouseEnterEvent>((_) => OnEnterFocus());
             RegisterCallback<MouseMoveEvent>((_) => OnFocus());
-            RegisterCallback<MouseLeaveEvent>((_) => OnUnFocus());
+            RegisterCallback<MouseLeaveEvent>((_) => OnExitFocus());
 
             Undo.undoRedoPerformed += OnUndoRedoPerformed;
 
@@ -252,6 +252,12 @@ namespace Emilia.Node.Editor
             return this.customModules.GetValueOrDefault(typeof(T)) as T;
         }
 
+        public void OnEnterFocus()
+        {
+            graphUndo.OnUndoRedoPerformed();
+            this.graphHandle?.OnEnterFocus();
+        }
+
         public void OnFocus()
         {
             if (focusedGraphView != this) UpdateSelected();
@@ -259,9 +265,9 @@ namespace Emilia.Node.Editor
             this.graphHandle?.OnFocus();
         }
 
-        public void OnUnFocus()
+        public void OnExitFocus()
         {
-            this.graphHandle?.OnUnFocus();
+            this.graphHandle?.OnExitFocus();
         }
 
         public void OnUpdate()

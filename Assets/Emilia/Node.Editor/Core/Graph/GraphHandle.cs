@@ -36,14 +36,19 @@ namespace Emilia.Node.Editor
             parentHandle?.OnLoadAfter();
         }
 
+        public virtual void OnEnterFocus()
+        {
+            parentHandle?.OnEnterFocus();
+        }
+
         public virtual void OnFocus()
         {
             parentHandle?.OnFocus();
         }
 
-        public virtual void OnUnFocus()
+        public virtual void OnExitFocus()
         {
-            parentHandle?.OnUnFocus();
+            parentHandle?.OnExitFocus();
         }
 
         public virtual void OnUpdate()
