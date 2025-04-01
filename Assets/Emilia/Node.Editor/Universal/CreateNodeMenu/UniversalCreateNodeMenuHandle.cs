@@ -76,6 +76,7 @@ namespace Emilia.Node.Universal.Editor
 
         public override void ShowCreateNodeMenu(NodeCreationContext c)
         {
+            if (createNodeMenuProvider.createNodeContext.nodeMenu == null) return;
             SearchWindowContext searchWindowContext = new SearchWindowContext(c.screenMousePosition);
             SearchWindow.Open(searchWindowContext, createNodeMenuProvider);
         }

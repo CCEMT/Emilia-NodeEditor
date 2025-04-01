@@ -8,6 +8,7 @@ namespace Emilia.Node.Universal.Editor
     public class CreateNodeMenuProvider : ScriptableObject, ISearchWindowProvider
     {
         private CreateNodeContext _createNodeContext;
+        public CreateNodeContext createNodeContext => _createNodeContext;
 
         public void Initialize(CreateNodeContext createNodeContext)
         {
