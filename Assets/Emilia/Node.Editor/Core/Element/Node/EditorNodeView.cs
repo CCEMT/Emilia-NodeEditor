@@ -161,10 +161,7 @@ namespace Emilia.Node.Editor
 
         public abstract List<EditorPortInfo> CollectStaticPortAssets();
 
-        public virtual IEditorPortView GetPortView(string portId)
-        {
-            return this._portViewMap.GetValueOrDefault(portId);
-        }
+        public virtual IEditorPortView GetPortView(string portId) => this._portViewMap.GetValueOrDefault(portId);
 
         public virtual IEditorPortView AddPortView(EditorPortInfo info)
         {
@@ -347,10 +344,7 @@ namespace Emilia.Node.Editor
             graphView.RemoveNodeView(this);
         }
 
-        public virtual ICopyPastePack GetPack()
-        {
-            return new NodeCopyPastePack(asset);
-        }
+        public virtual ICopyPastePack GetPack() => new NodeCopyPastePack(asset);
 
         public virtual IEnumerable<Object> CollectSelectedObjects()
         {
@@ -360,10 +354,7 @@ namespace Emilia.Node.Editor
 
         public virtual void UpdateSelected() { }
 
-        public override string ToString()
-        {
-            return title;
-        }
+        public override string ToString() => title;
 
         public virtual void Dispose()
         {

@@ -12,7 +12,7 @@
             handle = EditorHandleUtility.BuildHandle<IGraphUndoHandle>(this.graphView.graphAsset.GetType(), this.graphView);
         }
 
-        public void OnUndoRedoPerformed()
+        public void OnUndoRedoPerformed(bool updateSelected = true)
         {
             this.handle?.OnUndoBefore();
 
@@ -20,7 +20,7 @@
             UndoEdge();
             UndoItem();
 
-            if (EditorGraphView.focusedGraphView == this.graphView) this.graphView.UpdateSelected();
+            if (updateSelected && EditorGraphView.focusedGraphView == this.graphView) this.graphView.UpdateSelected();
 
             this.handle?.OnUndoAfter();
         }

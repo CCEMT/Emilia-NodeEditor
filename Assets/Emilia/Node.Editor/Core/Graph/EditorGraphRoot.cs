@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using Sirenix.Serialization;
 using UnityEditor;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Emilia.Node.Editor
 {
@@ -15,6 +17,8 @@ namespace Emilia.Node.Editor
         private EditorGraphAsset _asset;
 
         private EditorGraphViewDrawer _drawer;
+
+        private GUIStyle tipsStyle;
 
         /// <summary>
         /// 窗口
@@ -64,7 +68,20 @@ namespace Emilia.Node.Editor
                 EditorApplication.update += Update;
             }
 
-            this._drawer?.Draw(height, width);
+            if (this._drawer != null && asset != null) this._drawer.Draw(height, width);
+            else
+            {
+                InitTipsStyle();
+                GUILayout.Label("当前编辑的对象为空", tipsStyle, GUILayout.Height(height));
+            }
+        }
+
+        private void InitTipsStyle()
+        {
+            if (this.tipsStyle != null) return;
+            tipsStyle = new GUIStyle(GUI.skin.label);
+            tipsStyle.alignment = TextAnchor.MiddleCenter;
+            tipsStyle.fontSize = 20;
         }
 
         /// <summary>
@@ -72,6 +89,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void Update()
         {
+            if (this._asset == null) Reload();
             graphView?.OnUpdate();
         }
 
