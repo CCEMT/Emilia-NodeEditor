@@ -254,12 +254,14 @@ namespace Emilia.Node.Editor
 
         public void OnEnterFocus()
         {
+            if (loadProgress != 1) return;
             graphUndo.OnUndoRedoPerformed();
             this.graphHandle?.OnEnterFocus();
         }
 
         public void OnFocus()
         {
+            if (loadProgress != 1) return;
             if (focusedGraphView != this) UpdateSelected();
             focusedGraphView = this;
             this.graphHandle?.OnFocus();
@@ -267,6 +269,7 @@ namespace Emilia.Node.Editor
 
         public void OnExitFocus()
         {
+            if (loadProgress != 1) return;
             this.graphHandle?.OnExitFocus();
         }
 
@@ -289,6 +292,7 @@ namespace Emilia.Node.Editor
             }
 
             graphViews[asset] = this;
+            loadProgress = 0;
 
             schedule.Execute(OnReload).ExecuteLater(1);
 
@@ -302,7 +306,6 @@ namespace Emilia.Node.Editor
                 graphSetting = graphAsset.GetType().GetCustomAttribute<GraphSettingAttribute>();
                 SyncSetting();
 
-                loadProgress = 0;
                 if (allReload) AllReload();
                 else ElementReload();
             }
