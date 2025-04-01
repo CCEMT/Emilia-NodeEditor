@@ -308,6 +308,27 @@ namespace Emilia.Node.Editor
             }
         }
 
+        /// <summary>
+        /// 简单加载
+        /// </summary>
+        public void SimpleReload(EditorGraphAsset asset)
+        {
+            if (asset == null)
+            {
+                Debug.LogError("SimpleLoad asset 为空");
+                return;
+            }
+
+            graphAsset = asset;
+
+            ReloadHandle();
+            ReloadModule();
+            RemoveAllElement();
+
+            graphElementCache.BuildCache(this);
+            loadProgress = 1;
+        }
+
         private void SyncSetting()
         {
             if (graphSetting == null) return;
@@ -318,8 +339,21 @@ namespace Emilia.Node.Editor
 
         private void AllReload()
         {
-            this.graphHandle = EditorHandleUtility.BuildHandle<IGraphHandle>(graphAsset.GetType(), this);
+            ReloadHandle();
+            ReloadModule();
 
+            RemoveAllElement();
+            loadElementCoroutine = EditorCoroutineUtility.StartCoroutineOwnerless(LoadElement());
+        }
+
+        private void ReloadHandle()
+        {
+            if (this.graphHandle != null) EditorHandleUtility.ReleaseHandle(this.graphHandle);
+            this.graphHandle = EditorHandleUtility.BuildHandle<IGraphHandle>(graphAsset.GetType(), this);
+        }
+
+        private void ReloadModule()
+        {
             foreach (CustomGraphViewModule customModule in this.customModules.Values) customModule.Dispose();
             this.customModules.Clear();
 
@@ -333,9 +367,6 @@ namespace Emilia.Node.Editor
 
             foreach (BasicGraphViewModule module in this.modules.Values) module.AllModuleInitializeSuccess();
             foreach (CustomGraphViewModule customModule in this.customModules.Values) customModule.AllModuleInitializeSuccess();
-
-            RemoveAllElement();
-            loadElementCoroutine = EditorCoroutineUtility.StartCoroutineOwnerless(LoadElement());
         }
 
         private void ElementReload()
