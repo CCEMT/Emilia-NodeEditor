@@ -23,6 +23,8 @@ namespace Emilia.Node.Editor
 
         public override void Dispose()
         {
+            if (graphView == null) return;
+            
             if (this.handle != null)
             {
                 EditorHandleUtility.ReleaseHandle(this.handle);
