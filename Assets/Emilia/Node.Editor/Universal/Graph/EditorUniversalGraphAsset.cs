@@ -26,11 +26,12 @@ namespace Emilia.Node.Universal.Editor
 
         public override void SetChildren(List<Object> childAssets)
         {
-            editorParametersManage = null;
             base.SetChildren(childAssets);
 
             EditorParametersManage parametersManage = childAssets.OfType<EditorParametersManage>().FirstOrDefault();
             if (parametersManage == null) return;
+            
+            if (this.editorParametersManage != null) DestroyImmediate(this.editorParametersManage);
 
             this.editorParametersManage = parametersManage;
             EditorAssetKit.SaveAssetIntoObject(this.editorParametersManage, this);
