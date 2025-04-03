@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector.Editor.Internal.UIToolkitIntegration;
+﻿using System;
+using Sirenix.OdinInspector.Editor.Internal.UIToolkitIntegration;
 using UnityEngine;
 
 namespace Emilia.Node.Editor
@@ -27,13 +28,17 @@ namespace Emilia.Node.Editor
         {
             if (guiElement == null) return;
 
-            Rect rect = ImguiElementUtils.EmbedVisualElementAndDrawItHere(this.guiElement);
+            try
+            {
+                Rect rect = ImguiElementUtils.EmbedVisualElementAndDrawItHere(this.guiElement);
 
-            float targetWidth = width <= 0 ? rect.width : width;
-            if (targetWidth > 0) _graphView.style.width = targetWidth;
+                float targetWidth = width <= 0 ? rect.width : width;
+                if (targetWidth > 0) _graphView.style.width = targetWidth;
 
-            float targetHeight = height;
-            if (targetHeight > 0) _graphView.style.height = targetHeight;
+                float targetHeight = height;
+                if (targetHeight > 0) _graphView.style.height = targetHeight;
+            }
+            catch (ArgumentException) { }
         }
 
         /// <summary>
