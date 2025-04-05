@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Emilia.Kit;
 using UnityEditor.Experimental.GraphView;
 
 namespace Emilia.Node.Editor
@@ -8,7 +9,7 @@ namespace Emilia.Node.Editor
         /// <summary>
         /// 更新选中的Inspector
         /// </summary>
-        void UpdateSelectedInspector(List<ISelectable> selection);
+        void UpdateSelectedInspector(List<ISelectedHandle> selection);
 
         /// <summary>
         /// 收集选中的Drawer
@@ -18,11 +19,11 @@ namespace Emilia.Node.Editor
         /// <summary>
         /// 更新选择前
         /// </summary>
-        void BeforeUpdateSelected(List<ISelectable> selection);
+        void BeforeUpdateSelected(List<ISelectedHandle> selection);
 
         /// <summary>
         /// 更新选择后
         /// </summary>
-        void AfterUpdateSelected(List<ISelectable> selection);
+        void AfterUpdateSelected(List<ISelectedHandle> selection);
     }
 }

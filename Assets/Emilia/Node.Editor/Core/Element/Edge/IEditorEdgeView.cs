@@ -2,7 +2,7 @@
 
 namespace Emilia.Node.Editor
 {
-    public interface IEditorEdgeView : IDeleteGraphElement, IRemoveViewElement, IGraphCopyPasteElement, ISelectableGraphElement
+    public interface IEditorEdgeView : IDeleteGraphElement, IRemoveViewElement, IGraphCopyPasteElement, IGraphSelectable
     {
         /// <summary>
         /// 资产

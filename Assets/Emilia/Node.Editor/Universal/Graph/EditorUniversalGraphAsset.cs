@@ -33,6 +33,8 @@ namespace Emilia.Node.Universal.Editor
             
             if (this.editorParametersManage != null) DestroyImmediate(this.editorParametersManage);
 
+            if (this.editorParametersManage != null) DestroyImmediate(this.editorParametersManage);
+
             this.editorParametersManage = parametersManage;
             EditorAssetKit.SaveAssetIntoObject(this.editorParametersManage, this);
         }

@@ -15,7 +15,7 @@ namespace Emilia.Node.Universal.Editor
 
             string key = Property.ValueEntry.WeakSmartValue as string;
 
-            EditorGraphView editorGraphView = EditorGraphView.focusedGraphView;
+            EditorGraphView editorGraphView = GraphSelectedOwner.GetSelectedOwner(Property);
             if (editorGraphView == null) return;
             EditorUniversalGraphAsset universalGraphAsset = editorGraphView.graphAsset as EditorUniversalGraphAsset;
             if (universalGraphAsset == null) return;

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Emilia.Kit;
 using Emilia.Kit.Editor;
 using Emilia.Node.Attributes;
 using Emilia.Reflection.Editor;
@@ -255,15 +257,14 @@ namespace Emilia.Node.Editor
         public void OnEnterFocus()
         {
             if (loadProgress != 1) return;
-            graphUndo.OnUndoRedoPerformed();
+            graphUndo.OnUndoRedoPerformed(false);
             this.graphHandle?.OnEnterFocus();
         }
 
         public void OnFocus()
         {
             if (loadProgress != 1) return;
-            if (focusedGraphView != this) UpdateSelected();
-            focusedGraphView = this;
+            if (focusedGraphView != this) focusedGraphView = this;
             this.graphHandle?.OnFocus();
         }
 
@@ -649,9 +650,15 @@ namespace Emilia.Node.Editor
             return compatiblePorts;
         }
 
-        private string OnSerializeGraphElements(IEnumerable<GraphElement> elements) => graphCopyPaste.SerializeGraphElementsCallback(elements);
+        private string OnSerializeGraphElements(IEnumerable<GraphElement> elements)
+        {
+            return graphCopyPaste.SerializeGraphElementsCallback(elements);
+        }
 
-        private bool OnCanPasteSerializedData(string data) => graphCopyPaste.CanPasteSerializedDataCallback(data);
+        private bool OnCanPasteSerializedData(string data)
+        {
+            return graphCopyPaste.CanPasteSerializedDataCallback(data);
+        }
 
         private void OnUnserializeAndPaste(string operationName, string data)
         {
@@ -728,7 +735,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void UpdateSelected()
         {
-            graphSelected.UpdateSelected(selection);
+            graphSelected.UpdateSelected(selection.OfType<ISelectedHandle>().ToList());
         }
 
         /// <summary>
@@ -858,6 +865,14 @@ namespace Emilia.Node.Editor
             }
         }
 
+        /// <summary>
+        /// 有效性
+        /// </summary>
+        public bool Validate()
+        {
+            return hierarchy.parent != null;
+        }
+
         public void Dispose()
         {
             if (graphAsset != null && graphViews.ContainsKey(graphAsset)) graphViews.Remove(graphAsset);
@@ -892,7 +907,7 @@ namespace Emilia.Node.Editor
             EditorGraphView graphView = graphViews.GetValueOrDefault(asset);
             if (graphView == null) return null;
 
-            bool validate = graphView.hierarchy.parent != null;
+            bool validate = graphView.Validate();
             if (validate) return graphView;
 
             graphViews.Remove(asset);
