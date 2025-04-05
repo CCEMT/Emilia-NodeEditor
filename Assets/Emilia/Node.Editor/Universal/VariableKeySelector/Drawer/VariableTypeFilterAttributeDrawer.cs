@@ -20,7 +20,7 @@ namespace Emilia.Node.Universal.Editor
 
             if (typeof(Variable).IsAssignableFrom(Property.ValueEntry.TypeOfValue) == false) return;
 
-            EditorGraphView graphView = EditorGraphView.focusedGraphView;
+            EditorGraphView graphView = GraphSelectedOwner.GetSelectedOwner(Property);
             if (graphView == null) return;
 
             EditorUniversalGraphAsset universalGraphAsset = graphView.graphAsset as EditorUniversalGraphAsset;

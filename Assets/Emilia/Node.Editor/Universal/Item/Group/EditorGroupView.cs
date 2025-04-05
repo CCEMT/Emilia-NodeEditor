@@ -6,6 +6,7 @@ using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Object = UnityEngine.Object;
 
 namespace Emilia.Node.Editor
 {
@@ -22,6 +23,7 @@ namespace Emilia.Node.Editor
         public EditorItemAsset asset => groupAsset;
         public GraphElement element => this;
 
+        public bool isSelected { get; protected set; }
         public virtual Color groupColor => new Color(0, 0, 0, 0.3f);
 
         public virtual void Initialize(EditorGraphView graphView, EditorItemAsset asset)
@@ -198,12 +200,30 @@ namespace Emilia.Node.Editor
             groupAsset.size = GetPosition().size;
         }
 
-        public virtual IEnumerable<Object> CollectSelectedObjects()
+        public virtual bool Validate()
+        {
+            return true;
+        }
+
+        public virtual bool IsSelected()
+        {
+            return isSelected;
+        }
+
+        public virtual void Select()
+        {
+            isSelected = true;
+        }
+
+        public virtual void Unselect()
+        {
+            isSelected = false;
+        }
+
+        public virtual IEnumerable<Object> GetSelectedObjects()
         {
             yield return asset;
         }
-
-        public virtual void UpdateSelected() { }
 
         public virtual void Delete()
         {

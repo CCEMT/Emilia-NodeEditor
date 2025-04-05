@@ -46,6 +46,7 @@ namespace Emilia.Node.Editor
         public virtual GraphElement element => this;
         public IReadOnlyList<IEditorPortView> portViews => this._portViews;
 
+        public bool isSelected { get; protected set; }
         protected virtual bool editInNode => false;
 
         protected virtual bool canDelete => true;
@@ -161,7 +162,10 @@ namespace Emilia.Node.Editor
 
         public abstract List<EditorPortInfo> CollectStaticPortAssets();
 
-        public virtual IEditorPortView GetPortView(string portId) => this._portViewMap.GetValueOrDefault(portId);
+        public virtual IEditorPortView GetPortView(string portId)
+        {
+            return this._portViewMap.GetValueOrDefault(portId);
+        }
 
         public virtual IEditorPortView AddPortView(EditorPortInfo info)
         {
@@ -344,17 +348,41 @@ namespace Emilia.Node.Editor
             graphView.RemoveNodeView(this);
         }
 
-        public virtual ICopyPastePack GetPack() => new NodeCopyPastePack(asset);
+        public virtual ICopyPastePack GetPack()
+        {
+            return new NodeCopyPastePack(asset);
+        }
 
-        public virtual IEnumerable<Object> CollectSelectedObjects()
+        public virtual bool Validate()
+        {
+            return true;
+        }
+
+        public virtual bool IsSelected()
+        {
+            return isSelected;
+        }
+
+        public virtual void Select()
+        {
+            isSelected = true;
+        }
+
+        public virtual void Unselect()
+        {
+            isSelected = false;
+        }
+
+        public virtual IEnumerable<Object> GetSelectedObjects()
         {
             if (editInNode) yield break;
             if (asset != null) yield return asset;
         }
 
-        public virtual void UpdateSelected() { }
-
-        public override string ToString() => title;
+        public override string ToString()
+        {
+            return title;
+        }
 
         public virtual void Dispose()
         {

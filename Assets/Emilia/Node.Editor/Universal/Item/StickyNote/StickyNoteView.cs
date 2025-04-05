@@ -5,6 +5,7 @@ using Emilia.Node.Editor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Object = UnityEngine.Object;
 
 namespace Emilia.Node.Universal.Editor
 {
@@ -15,6 +16,7 @@ namespace Emilia.Node.Universal.Editor
         private StickyNoteAsset stickyAsset;
         public EditorItemAsset asset => stickyAsset;
         public GraphElement element => this;
+        public bool isSelected { get; protected set; }
 
         public void Initialize(EditorGraphView graphView, EditorItemAsset asset)
         {
@@ -80,12 +82,30 @@ namespace Emilia.Node.Universal.Editor
             graphView.RemoveItemView(this);
         }
 
-        public IEnumerable<Object> CollectSelectedObjects()
+        public virtual bool Validate()
+        {
+            return true;
+        }
+
+        public virtual bool IsSelected()
+        {
+            return isSelected;
+        }
+
+        public virtual void Select()
+        {
+            isSelected = true;
+        }
+
+        public virtual void Unselect()
+        {
+            isSelected = false;
+        }
+
+        public virtual IEnumerable<Object> GetSelectedObjects()
         {
             yield return asset;
         }
-
-        public void UpdateSelected() { }
 
         public void Dispose()
         {

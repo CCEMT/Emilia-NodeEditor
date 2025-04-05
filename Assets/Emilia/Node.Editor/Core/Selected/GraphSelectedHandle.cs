@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
+using Emilia.Kit;
 
 namespace Emilia.Node.Editor
 {
@@ -17,7 +17,7 @@ namespace Emilia.Node.Editor
             parentHandle = parent as IGraphSelectedHandle;
         }
 
-        public virtual void UpdateSelectedInspector(List<ISelectable> selection)
+        public virtual void UpdateSelectedInspector(List<ISelectedHandle> selection)
         {
             parentHandle?.UpdateSelectedInspector(selection);
         }
@@ -27,12 +27,12 @@ namespace Emilia.Node.Editor
             parentHandle?.CollectSelectedDrawer(drawers);
         }
 
-        public virtual void BeforeUpdateSelected(List<ISelectable> selection)
+        public virtual void BeforeUpdateSelected(List<ISelectedHandle> selection)
         {
             parentHandle?.BeforeUpdateSelected(selection);
         }
 
-        public virtual void AfterUpdateSelected(List<ISelectable> selection)
+        public virtual void AfterUpdateSelected(List<ISelectedHandle> selection)
         {
             parentHandle?.AfterUpdateSelected(selection);
         }

@@ -23,15 +23,13 @@ namespace Emilia.Node.Editor
 
         public override void Dispose()
         {
-            if (graphView == null) return;
-            
             if (this.handle != null)
             {
                 EditorHandleUtility.ReleaseHandle(this.handle);
                 this.handle = null;
             }
 
-            graphView.UnregisterCallback<KeyDownEvent>(OnKeyDown);
+            if (graphView != null) graphView.UnregisterCallback<KeyDownEvent>(OnKeyDown);
 
             base.Dispose();
         }

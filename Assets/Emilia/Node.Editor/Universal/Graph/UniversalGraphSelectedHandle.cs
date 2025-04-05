@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Emilia.Kit;
 using Emilia.Node.Editor;
 using Emilia.Reflection.Editor;
 using UnityEditor;
@@ -25,31 +26,38 @@ namespace Emilia.Node.Universal.Editor
 
             foreach (ISelectable selectable in smartValue.selection)
             {
-                ISelectableGraphElement selectableElement = selectable as ISelectableGraphElement;
+                IGraphSelectable selectableElement = selectable as IGraphSelectable;
                 if (selectableElement == null) continue;
-                selectedInspectors.AddRange(selectableElement.CollectSelectedObjects());
+                selectedInspectors.AddRange(selectableElement.GetSelectedObjects());
             }
 
             bool isGraphSelect = Selection.objects.Any(selectedObject => selectedInspectors.Contains(selectedObject));
             if (isGraphSelect == false) smartValue.ClearSelection();
         }
 
-        public override void UpdateSelectedInspector(List<ISelectable> selection)
+        public override void UpdateSelectedInspector(List<ISelectedHandle> selection)
         {
             List<Object> selectedInspectors = new List<Object>();
 
-            foreach (ISelectable selectable in selection)
-            {
-                ISelectableGraphElement selectableElement = selectable as ISelectableGraphElement;
-                if (selectableElement == null) continue;
-                selectedInspectors.AddRange(selectableElement.CollectSelectedObjects());
-            }
+            foreach (ISelectedHandle selectable in selection) selectedInspectors.AddRange(selectable.GetSelectedObjects());
 
             bool isUseSelection = smartValue.window.GetType() != InspectorWindow_Internals.inspectorWindowType_Internals;
 
             if (selectedInspectors.Count > 0)
             {
-                if (isUseSelection) Selection.objects = selectedInspectors.ToArray();
+                if (isUseSelection)
+                {
+                    int selectedCount = selectedInspectors.Count;
+                    for (int i = 0; i < selectedCount; i++)
+                    {
+                        Object selectedObject = selectedInspectors[i];
+                        if (selectedObject == null) continue;
+                        GraphSelectedOwner.SetSelectedOwner(selectedObject, smartValue);
+                        GraphSelectedOwner.Update();
+                    }
+
+                    Selection.objects = selectedInspectors.ToArray();
+                }
                 else
                 {
                     InspectorView inspectorView = smartValue.graphPanelSystem.GetPanel<InspectorView>();
@@ -59,7 +67,11 @@ namespace Emilia.Node.Universal.Editor
             }
             else
             {
-                if (isUseSelection) Selection.objects = null;
+                if (isUseSelection)
+                {
+                    Selection.objects = null;
+                    GraphSelectedOwner.Update();
+                }
                 else smartValue.graphPanelSystem.ClosePanel<InspectorView>();
             }
         }
@@ -71,6 +83,7 @@ namespace Emilia.Node.Universal.Editor
 
             base.Dispose();
             Selection.objects = null;
+            GraphSelectedOwner.Update();
         }
     }
 }

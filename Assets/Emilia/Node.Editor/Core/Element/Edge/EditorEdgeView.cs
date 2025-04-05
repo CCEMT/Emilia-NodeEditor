@@ -3,6 +3,7 @@ using Emilia.Kit;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Object = UnityEngine.Object;
 
 namespace Emilia.Node.Editor
 {
@@ -56,6 +57,7 @@ namespace Emilia.Node.Editor
         }
 
         public Edge edgeElement => this;
+        public bool isSelected { get; protected set; }
         protected virtual string styleFilePath => "Node/Styles/UniversalEditorEdgeView.uss";
 
         public virtual void Initialize(EditorGraphView graphView, EditorEdgeAsset asset)
@@ -148,12 +150,30 @@ namespace Emilia.Node.Editor
             return new EdgeCopyPastePack(asset);
         }
 
-        public virtual IEnumerable<Object> CollectSelectedObjects()
+        public virtual bool Validate()
+        {
+            return true;
+        }
+
+        public virtual bool IsSelected()
+        {
+            return isSelected;
+        }
+
+        public virtual void Select()
+        {
+            isSelected = true;
+        }
+
+        public virtual void Unselect()
+        {
+            isSelected = false;
+        }
+
+        public virtual IEnumerable<Object> GetSelectedObjects()
         {
             if (asset != null) yield return asset;
         }
-
-        public virtual void UpdateSelected() { }
 
         public virtual void Delete()
         {

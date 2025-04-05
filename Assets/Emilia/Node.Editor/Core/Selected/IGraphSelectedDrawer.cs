@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
+using Emilia.Kit;
 
 namespace Emilia.Node.Editor
 {
@@ -7,7 +7,7 @@ namespace Emilia.Node.Editor
     {
         void Initialize(EditorGraphView graphView);
 
-        void SelectedUpdate(List<ISelectable> selection);
+        void SelectedUpdate(List<ISelectedHandle> selection);
 
         void Dispose();
     }

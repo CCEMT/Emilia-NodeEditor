@@ -45,6 +45,8 @@ namespace Emilia.Node.Editor
 
         public void OnSave()
         {
+            if (this.graphView == null) return;
+            
             handle?.OnSaveBefore();
 
             if (this.graphView.graphAsset != null) graphView.graphAsset.Save();
