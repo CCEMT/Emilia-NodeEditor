@@ -162,10 +162,7 @@ namespace Emilia.Node.Editor
 
         public abstract List<EditorPortInfo> CollectStaticPortAssets();
 
-        public virtual IEditorPortView GetPortView(string portId)
-        {
-            return this._portViewMap.GetValueOrDefault(portId);
-        }
+        public virtual IEditorPortView GetPortView(string portId) => this._portViewMap.GetValueOrDefault(portId);
 
         public virtual IEditorPortView AddPortView(EditorPortInfo info)
         {
@@ -282,12 +279,12 @@ namespace Emilia.Node.Editor
             inputEditElements[portName] = editContainer;
         }
 
-        public virtual void OnValueChanged()
+        public virtual void OnValueChanged(bool isSilent = false)
         {
             SetPositionNoUndo(asset.position);
             foreach (InspectorPropertyField value in inputFields.Values) value.Update();
 
-            graphView.graphSave.SetDirty();
+            if (isSilent) graphView.graphSave.SetDirty();
         }
 
         public void RegisterCompleteObjectUndo(string name)
@@ -348,20 +345,11 @@ namespace Emilia.Node.Editor
             graphView.RemoveNodeView(this);
         }
 
-        public virtual ICopyPastePack GetPack()
-        {
-            return new NodeCopyPastePack(asset);
-        }
+        public virtual ICopyPastePack GetPack() => new NodeCopyPastePack(asset);
 
-        public virtual bool Validate()
-        {
-            return true;
-        }
+        public virtual bool Validate() => true;
 
-        public virtual bool IsSelected()
-        {
-            return isSelected;
-        }
+        public virtual bool IsSelected() => isSelected;
 
         public virtual void Select()
         {
@@ -379,10 +367,7 @@ namespace Emilia.Node.Editor
             if (asset != null) yield return asset;
         }
 
-        public override string ToString()
-        {
-            return title;
-        }
+        public override string ToString() => title;
 
         public virtual void Dispose()
         {

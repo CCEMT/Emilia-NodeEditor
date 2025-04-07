@@ -30,9 +30,9 @@ namespace Emilia.Node.Editor
             parentHandle?.Copy();
         }
 
-        public virtual void Paste()
+        public virtual void Paste(Vector2? mousePosition = null)
         {
-            parentHandle?.Paste();
+            parentHandle?.Paste(mousePosition);
         }
 
         public virtual void Delete()

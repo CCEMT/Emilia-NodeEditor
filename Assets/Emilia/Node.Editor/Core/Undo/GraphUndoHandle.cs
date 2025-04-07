@@ -13,14 +13,14 @@
             parentHandle = parent as IGraphUndoHandle;
         }
 
-        public virtual void OnUndoBefore()
+        public virtual void OnUndoBefore(bool isSilent)
         {
-            parentHandle?.OnUndoBefore();
+            parentHandle?.OnUndoBefore(isSilent);
         }
 
-        public virtual void OnUndoAfter()
+        public virtual void OnUndoAfter(bool isSilent)
         {
-            parentHandle?.OnUndoAfter();
+            parentHandle?.OnUndoAfter(isSilent);
         }
 
         public override void Dispose()

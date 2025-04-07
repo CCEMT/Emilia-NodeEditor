@@ -18,11 +18,16 @@ namespace Emilia.Node.Editor
         /// <summary>
         /// 反序列化处理
         /// </summary>
-        void UnserializeAndPasteCallback(string operationName, string serializedData);
+        void UnserializeAndPasteCallback(string operationName, string serializedData, GraphCopyPasteContext copyPasteContext);
 
         /// <summary>
         /// 创建拷贝
         /// </summary>
         object CreateCopy(object value);
+
+        /// <summary>
+        /// 获取拷贝的元素
+        /// </summary>
+        IEnumerable<GraphElement> GetCopyGraphElements(string serializedData);
     }
 }

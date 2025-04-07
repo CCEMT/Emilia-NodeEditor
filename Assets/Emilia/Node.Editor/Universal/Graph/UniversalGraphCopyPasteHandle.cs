@@ -34,15 +34,59 @@ namespace Emilia.Node.Universal.Editor
             }
         }
 
-        public override void UnserializeAndPasteCallback(string operationName, string serializedData)
+        public override void UnserializeAndPasteCallback(string operationName, string serializedData, GraphCopyPasteContext copyPasteContext)
         {
             CopyPasteGraph graph = SerializableUtility.FromJson<CopyPasteGraph>(serializedData);
-            graph.StartPaste(smartValue);
+            graph.StartPaste(copyPasteContext);
         }
 
-        public override object CreateCopy(object value)
+        public override IEnumerable<GraphElement> GetCopyGraphElements(string serializedData)
         {
-            return SerializationUtility.CreateCopy(value);
+            try
+            {
+                CopyPasteGraph graph = SerializableUtility.FromJson<CopyPasteGraph>(serializedData);
+                if (graph == null) return null;
+
+                List<GraphElement> graphElements = new List<GraphElement>();
+                List<ICopyPastePack> copyPastePacks = graph.GetAllPacks();
+
+                int amount = copyPastePacks.Count;
+                for (int i = 0; i < amount; i++)
+                {
+                    ICopyPastePack copyPastePack = copyPastePacks[i];
+
+                    switch (copyPastePack)
+                    {
+                        case INodeCopyPastePack nodeCopyPastePack:
+                            IEditorNodeView nodeView = smartValue.graphElementCache.nodeViewById.GetValueOrDefault(nodeCopyPastePack.copyAsset.id);
+                            if (nodeView == null) continue;
+                            graphElements.Add(nodeView.element);
+                            break;
+
+                        case IEdgeCopyPastePack edgeCopyPastePack:
+                            IEditorEdgeView edgeView = smartValue.graphElementCache.edgeViewById.GetValueOrDefault(edgeCopyPastePack.copyAsset.id);
+                            if (edgeView == null) continue;
+                            graphElements.Add(edgeView.edgeElement);
+                            break;
+
+                        case IItemCopyPastePack itemCopyPastePack:
+                            IEditorItemView itemView = smartValue.graphElementCache.itemViewById.GetValueOrDefault(itemCopyPastePack.copyAsset.id);
+                            if (itemView == null) continue;
+                            graphElements.Add(itemView.element);
+                            break;
+                    }
+                }
+
+                return graphElements;
+            }
+            catch
+            {
+                return null;
+            }
+
+            return null;
         }
+
+        public override object CreateCopy(object value) => SerializationUtility.CreateCopy(value);
     }
 }

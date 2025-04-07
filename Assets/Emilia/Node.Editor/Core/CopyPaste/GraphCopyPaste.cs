@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
+using UnityEngine;
 
 namespace Emilia.Node.Editor
 {
@@ -35,10 +36,20 @@ namespace Emilia.Node.Editor
         /// <summary>
         /// 反序列化处理
         /// </summary>
-        public void UnserializeAndPasteCallback(string operationName, string serializedData)
+        public void UnserializeAndPasteCallback(string operationName, string serializedData, Vector2? mousePosition = null)
         {
             if (this.handle == null) return;
-            this.handle.UnserializeAndPasteCallback(operationName, serializedData);
+            GraphCopyPasteContext graphCopyPasteContext = new GraphCopyPasteContext();
+            graphCopyPasteContext.graphView = this.graphView;
+            graphCopyPasteContext.createPosition = mousePosition;
+
+            this.handle.UnserializeAndPasteCallback(operationName, serializedData, graphCopyPasteContext);
+        }
+
+        public IEnumerable<GraphElement> GetCopyGraphElements(string serializedData)
+        {
+            if (this.handle == null) return null;
+            return handle.GetCopyGraphElements(serializedData);
         }
 
         /// <summary>

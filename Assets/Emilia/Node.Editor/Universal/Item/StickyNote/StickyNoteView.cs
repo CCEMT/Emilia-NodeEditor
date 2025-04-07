@@ -38,13 +38,15 @@ namespace Emilia.Node.Universal.Editor
             });
         }
 
-        public void OnValueChanged()
+        public virtual void OnValueChanged(bool isSilent = false)
         {
             title = this.stickyAsset.stickyTitle;
             contents = this.stickyAsset.content;
             theme = this.stickyAsset.theme;
+
             SetPositionNoUndo(stickyAsset.position);
-            graphView.graphSave.SetDirty();
+
+            if (isSilent) graphView.graphSave.SetDirty();
         }
 
         public override void SetPosition(Rect rect)
@@ -67,10 +69,7 @@ namespace Emilia.Node.Universal.Editor
             stickyAsset.position = GetPosition();
         }
 
-        public ICopyPastePack GetPack()
-        {
-            return new ItemCopyPastePack(asset);
-        }
+        public ICopyPastePack GetPack() => new ItemCopyPastePack(asset);
 
         public void Delete()
         {
@@ -82,15 +81,9 @@ namespace Emilia.Node.Universal.Editor
             graphView.RemoveItemView(this);
         }
 
-        public virtual bool Validate()
-        {
-            return true;
-        }
+        public virtual bool Validate() => true;
 
-        public virtual bool IsSelected()
-        {
-            return isSelected;
-        }
+        public virtual bool IsSelected() => isSelected;
 
         public virtual void Select()
         {
