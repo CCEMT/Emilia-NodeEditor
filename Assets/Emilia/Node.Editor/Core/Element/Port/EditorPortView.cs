@@ -17,6 +17,7 @@ namespace Emilia.Node.Editor
 
         public EditorPortInfo info { get; private set; }
         public IEditorNodeView master { get; private set; }
+        public EditorGraphView graphView => master?.graphView;
 
         public virtual EditorPortDirection portDirection => info.direction;
         public virtual EditorOrientation editorOrientation => info.orientation;
@@ -44,10 +45,10 @@ namespace Emilia.Node.Editor
 
             if (portType != null) visualClass = "Port_" + portType.Name;
 
-            Type edgeAssetType = master.graphView.connectSystem.GetEdgeTypeByPort(this);
+            Type edgeAssetType = graphView.connectSystem.GetEdgeTypeByPort(this);
             Type edgeViewType = GraphTypeCache.GetEdgeViewType(edgeAssetType);
 
-            EditorEdgeConnectorListener connectorListener = master.graphView.connectSystem.connectorListener;
+            EditorEdgeConnectorListener connectorListener = graphView.connectSystem.connectorListener;
 
             EditorEdgeConnector connector = ReflectUtility.CreateInstance(info.edgeConnectorType) as EditorEdgeConnector;
             connector.Initialize(edgeViewType, connectorListener);
@@ -81,30 +82,41 @@ namespace Emilia.Node.Editor
 
         protected virtual void OnCopyConnect()
         {
-            master.graphView.ClearSelection();
-            master.graphView.AddToSelection(this);
-            master.graphView.graphOperate.Copy();
+            graphView.ClearSelection();
+            graphView.AddToSelection(this);
+            graphView.UpdateSelected();
+            
+            graphView.graphOperate.Copy();
         }
 
         protected virtual bool CanPaste()
         {
-            bool canPaste = master.graphView.graphCopyPaste.CanPasteSerializedDataCallback(master.graphView.GetSerializedData_Internal());
-            if (canPaste == false) return false;
-            IEditorEdgeView editorEdgeView = master.graphView.graphCopyPaste.GetCopyGraphElements(master.graphView.GetSerializedData_Internal()).OfType<IEditorEdgeView>().FirstOrDefault();
-            if (editorEdgeView == null) return false;
-            return true;
+            if (graphView.graphCopyPaste.CanPasteSerializedDataCallback(graphView.GetSerializedData_Internal()) == false) return false;
+
+            IEditorPortView portView = graphView.graphCopyPaste
+                .GetCopyGraphElements(graphView.GetSerializedData_Internal())
+                .OfType<IEditorPortView>()
+                .FirstOrDefault();
+
+            if (portView == null) return false;
+            if (portView.info.direction != info.direction) return false;
+
+            List<IEditorEdgeView> edgeViews = graphView.graphElementCache.GetEdgeView(portView);
+
+            bool allCanConnect = edgeViews.All(edgeView => portView.info.direction == EditorPortDirection.Input
+                ? graphView.connectSystem.CanConnect(this, edgeView.outputPortView)
+                : graphView.connectSystem.CanConnect(this, edgeView.inputPortView));
+
+            return allCanConnect;
         }
 
         protected virtual void OnPasteConnect()
         {
-            master.graphView.ClearSelection();
-            master.graphView.AddToSelection(this);
-            master.graphView.graphOperate.Paste();
-        }
-
-        private void OnContextualMenuPopulateEvent(ContextualMenuPopulateEvent evt)
-        {
-            Debug.Log("cc");
+            graphView.ClearSelection();
+            graphView.AddToSelection(this);
+            graphView.UpdateSelected();
+            
+            graphView.graphOperate.Paste();
         }
 
         public override void Connect(Edge edge)
@@ -140,9 +152,15 @@ namespace Emilia.Node.Editor
             collectedElementSet.Add(this);
         }
 
-        public bool Validate() => true;
+        public bool Validate()
+        {
+            return true;
+        }
 
-        public bool IsSelected() => isSelected;
+        public bool IsSelected()
+        {
+            return isSelected;
+        }
 
         public void Select()
         {
@@ -161,17 +179,17 @@ namespace Emilia.Node.Editor
 
         public virtual ICopyPastePack GetPack()
         {
-            List<IEditorEdgeView> edgeViews = master.graphView.graphElementCache.GetEdgeView(this);
+            List<IEditorEdgeView> edgeViews = graphView.graphElementCache.GetEdgeView(this);
 
-            List<ICopyPastePack> packs = new List<ICopyPastePack>(edgeViews.Count);
+            List<IEdgeCopyPastePack> packs = new List<IEdgeCopyPastePack>(edgeViews.Count);
             for (int i = 0; i < edgeViews.Count; i++)
             {
                 IEditorEdgeView edgeView = edgeViews[i];
-                ICopyPastePack edgePack = edgeView.GetPack();
+                IEdgeCopyPastePack edgePack = edgeView.GetPack() as IEdgeCopyPastePack;
                 packs.Add(edgePack);
             }
 
-            PortCopyPastePack pack = new PortCopyPastePack(info.id, packs);
+            PortCopyPastePack pack = new PortCopyPastePack(master.asset.id, info.id, info.portType, info.direction, packs);
             return pack;
         }
 

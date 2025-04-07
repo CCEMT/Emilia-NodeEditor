@@ -1,23 +1,51 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Emilia.Kit;
+using Sirenix.Serialization;
+using UnityEditor;
+using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Emilia.Node.Editor
 {
+    [Serializable]
     public class PortCopyPastePack : IPortCopyPastePack
     {
-        private string portId;
-        private List<ICopyPastePack> _connectionPacks;
+        [SerializeField]
+        private string _nodeId;
+        [SerializeField]
+        private string _portId;
+        
+        [OdinSerialize, NonSerialized]
+        private Type _portType;
+        
+        [SerializeField]
+        private EditorPortDirection _direction;
 
-        public List<ICopyPastePack> connectionPacks => _connectionPacks;
+        [OdinSerialize, NonSerialized]
+        private List<IEdgeCopyPastePack> _connectionPacks;
 
-        public PortCopyPastePack(string portId, List<ICopyPastePack> connectionPacks)
+        public string nodeId => _nodeId;
+        public string portId => this._portId;
+        public Type portType => this._portType;
+        public EditorPortDirection direction => _direction;
+        public List<IEdgeCopyPastePack> connectionPacks => _connectionPacks;
+
+        public PortCopyPastePack(string nodeId, string portId, Type portType, EditorPortDirection direction, List<IEdgeCopyPastePack> connectionPacks)
         {
-            this.portId = portId;
+            this._nodeId = nodeId;
+            this._portId = portId;
+            this._portType = portType;
+            this._direction = direction;
+
             this._connectionPacks = connectionPacks;
         }
 
-        public bool CanDependency(ICopyPastePack pack) => false;
+        public bool CanDependency(ICopyPastePack pack)
+        {
+            return false;
+        }
 
         public void Paste(CopyPasteContext copyPasteContext)
         {
@@ -28,8 +56,35 @@ namespace Emilia.Node.Editor
             IEditorPortView portView = graphView.graphSelected.selected.OfType<IEditorPortView>().FirstOrDefault();
             if (portView == null) return;
 
-            //TODO
+            int connectionAmount = _connectionPacks.Count;
+            for (int i = 0; i < connectionAmount; i++)
+            {
+                IEdgeCopyPastePack edgeCopyPastePack = _connectionPacks[i];
+                if (edgeCopyPastePack == null) continue;
 
+                EditorEdgeAsset copyAsset = edgeCopyPastePack.copyAsset;
+
+                EditorEdgeAsset pasteAsset = Object.Instantiate(copyAsset);
+                pasteAsset.name = copyAsset.name;
+                pasteAsset.id = Guid.NewGuid().ToString();
+
+                GraphCopyPasteUtility.PasteChild(pasteAsset);
+
+                if (direction == EditorPortDirection.Input)
+                {
+                    pasteAsset.inputNodeId = portView.master.asset.id;
+                    pasteAsset.inputPortId = portView.info.id;
+                }
+                else
+                {
+                    pasteAsset.outputNodeId = portView.master.asset.id;
+                    pasteAsset.outputPortId = portView.info.id;
+                }
+
+                graphView.RegisterCompleteObjectUndo("Graph Paste");
+                graphView.AddEdge(pasteAsset);
+                Undo.RegisterCreatedObjectUndo(pasteAsset, "Graph Pause");
+            }
         }
     }
 }

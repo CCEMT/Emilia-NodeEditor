@@ -58,22 +58,34 @@ namespace Emilia.Node.Universal.Editor
                     switch (copyPastePack)
                     {
                         case INodeCopyPastePack nodeCopyPastePack:
+                        {
                             IEditorNodeView nodeView = smartValue.graphElementCache.nodeViewById.GetValueOrDefault(nodeCopyPastePack.copyAsset.id);
                             if (nodeView == null) continue;
                             graphElements.Add(nodeView.element);
                             break;
-
+                        }
                         case IEdgeCopyPastePack edgeCopyPastePack:
+                        {
                             IEditorEdgeView edgeView = smartValue.graphElementCache.edgeViewById.GetValueOrDefault(edgeCopyPastePack.copyAsset.id);
                             if (edgeView == null) continue;
                             graphElements.Add(edgeView.edgeElement);
                             break;
-
+                        }
                         case IItemCopyPastePack itemCopyPastePack:
+                        {
                             IEditorItemView itemView = smartValue.graphElementCache.itemViewById.GetValueOrDefault(itemCopyPastePack.copyAsset.id);
                             if (itemView == null) continue;
                             graphElements.Add(itemView.element);
                             break;
+                        }
+                        case IPortCopyPastePack portCopyPastePack:
+                        {
+                            IEditorNodeView nodeView = smartValue.graphElementCache.nodeViewById.GetValueOrDefault(portCopyPastePack.nodeId);
+                            if (nodeView == null) continue; 
+                            IEditorPortView portView = nodeView.GetPortView(portCopyPastePack.portId);
+                            graphElements.Add(portView.portElement);
+                            break;
+                        }
                     }
                 }
 
@@ -83,8 +95,6 @@ namespace Emilia.Node.Universal.Editor
             {
                 return null;
             }
-
-            return null;
         }
 
         public override object CreateCopy(object value) => SerializationUtility.CreateCopy(value);
