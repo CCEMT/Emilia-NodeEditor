@@ -257,7 +257,7 @@ namespace Emilia.Node.Editor
         public void OnEnterFocus()
         {
             if (loadProgress != 1) return;
-            graphUndo.OnUndoRedoPerformed(false);
+            graphUndo.OnUndoRedoPerformed(true);
             this.graphHandle?.OnEnterFocus();
         }
 
@@ -650,15 +650,9 @@ namespace Emilia.Node.Editor
             return compatiblePorts;
         }
 
-        private string OnSerializeGraphElements(IEnumerable<GraphElement> elements)
-        {
-            return graphCopyPaste.SerializeGraphElementsCallback(elements);
-        }
+        private string OnSerializeGraphElements(IEnumerable<GraphElement> elements) => graphCopyPaste.SerializeGraphElementsCallback(elements);
 
-        private bool OnCanPasteSerializedData(string data)
-        {
-            return graphCopyPaste.CanPasteSerializedDataCallback(data);
-        }
+        private bool OnCanPasteSerializedData(string data) => graphCopyPaste.CanPasteSerializedDataCallback(data);
 
         private void OnUnserializeAndPaste(string operationName, string data)
         {
@@ -727,7 +721,11 @@ namespace Emilia.Node.Editor
         private void OnUndoRedoPerformed()
         {
             if (graphSetting != null && graphSetting.fastUndo == false) Reload(graphAsset);
-            else graphUndo.OnUndoRedoPerformed();
+            else
+            {
+                graphUndo.OnUndoRedoPerformed();
+                if (focusedGraphView == this) this.UpdateSelected();
+            }
         }
 
         /// <summary>
@@ -747,6 +745,19 @@ namespace Emilia.Node.Editor
             graphAsset.CollectAsset(objects);
 
             Undo.RegisterCompleteObjectUndo(objects.ToArray(), name);
+
+            graphSave.SetDirty();
+        }
+        
+        /// <summary>
+        /// 注册Undo
+        /// </summary>
+        public void RecordObjectUndo(string name)
+        {
+            List<Object> objects = new List<Object>();
+            graphAsset.CollectAsset(objects);
+
+            Undo.RecordObjects(objects.ToArray(), name);
 
             graphSave.SetDirty();
         }
@@ -868,10 +879,7 @@ namespace Emilia.Node.Editor
         /// <summary>
         /// 有效性
         /// </summary>
-        public bool Validate()
-        {
-            return hierarchy.parent != null;
-        }
+        public bool Validate() => hierarchy.parent != null;
 
         public void Dispose()
         {

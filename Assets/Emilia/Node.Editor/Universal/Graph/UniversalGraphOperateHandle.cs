@@ -21,9 +21,10 @@ namespace Emilia.Node.Universal.Editor
             smartValue.CopySelectionCallback_Internals();
         }
 
-        public override void Paste()
+        public override void Paste(Vector2? mousePosition = null)
         {
-            smartValue.PasteCallback_Internals();
+            if (mousePosition == null) smartValue.PasteCallback_Internals();
+            else smartValue.graphCopyPaste.UnserializeAndPasteCallback("Paste", smartValue.GetSerializedData_Internal());
         }
 
         public override void Delete()

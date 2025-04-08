@@ -22,7 +22,7 @@ namespace Emilia.Node.Editor
         /// <summary>
         /// 粘贴
         /// </summary>
-        void Paste();
+        void Paste(Vector2? mousePosition = null);
 
         /// <summary>
         /// 删除

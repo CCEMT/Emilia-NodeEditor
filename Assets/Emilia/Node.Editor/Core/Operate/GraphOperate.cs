@@ -40,9 +40,9 @@ namespace Emilia.Node.Editor
         /// <summary>
         /// 粘贴
         /// </summary>
-        public void Paste()
+        public void Paste(Vector2? mousePosition = null)
         {
-            handle?.Paste();
+            handle?.Paste(mousePosition);
         }
 
         /// <summary>

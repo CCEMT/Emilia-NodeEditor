@@ -36,7 +36,7 @@ namespace Emilia.Node.Editor
         /// <summary>
         /// 值改变
         /// </summary>
-        void OnValueChanged();
+        void OnValueChanged(bool isSilent = false);
 
         /// <summary>
         /// 释放

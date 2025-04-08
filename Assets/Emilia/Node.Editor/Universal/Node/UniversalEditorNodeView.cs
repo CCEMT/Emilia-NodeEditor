@@ -176,9 +176,9 @@ namespace Emilia.Node.Universal.Editor
             else messageContainer.style.display = DisplayStyle.None;
         }
 
-        public override void OnValueChanged()
+        public override void OnValueChanged(bool isSilent = false)
         {
-            base.OnValueChanged();
+            base.OnValueChanged(isSilent);
             UpdateTitle();
         }
 

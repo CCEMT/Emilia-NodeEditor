@@ -144,6 +144,30 @@ namespace Emilia.Node.Editor
             return null;
         }
 
+        public List<IEditorEdgeView> GetEdgeView(IEditorPortView port)
+        {
+            List<IEditorEdgeView> edges = new List<IEditorEdgeView>();
+
+            int edgeAmount = this.editorGraphView.edgeViews.Count;
+            for (int i = 0; i < edgeAmount; i++)
+            {
+                IEditorEdgeView edge = this.editorGraphView.edgeViews[i];
+
+                bool hasInputNode = edge.inputPortView.master.asset.id == port.master.asset.id;
+                bool hasOutputNode = edge.outputPortView.master.asset.id == port.master.asset.id;
+
+                bool hasInputPort = edge.inputPortView.info.id == port.info.id;
+                bool hasOutputPort = edge.outputPortView.info.id == port.info.id;
+
+                bool hasInput = hasInputNode && hasInputPort;
+                bool hasOutput = hasOutputNode && hasOutputPort;
+
+                if (hasInput || hasOutput) edges.Add(edge);
+            }
+
+            return edges;
+        }
+        
         public void Clear()
         {
             this.editorGraphView = null;

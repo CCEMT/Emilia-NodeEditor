@@ -150,7 +150,7 @@ namespace Emilia.Node.Editor
             asset.position = position;
         }
 
-        public virtual void OnValueChanged()
+        public virtual void OnValueChanged(bool isSilent = false)
         {
             title = groupAsset.groupTitle;
             this.isUndo = false;
@@ -159,7 +159,7 @@ namespace Emilia.Node.Editor
             RemoveNode();
             AddNode();
 
-            graphView.graphSave.SetDirty();
+            if (isSilent) graphView.graphSave.SetDirty();
 
             this.isUndo = true;
         }
@@ -190,25 +190,16 @@ namespace Emilia.Node.Editor
             }
         }
 
-        public virtual ICopyPastePack GetPack()
-        {
-            return new GroupCopyPastePack(asset);
-        }
+        public virtual ICopyPastePack GetPack() => new GroupCopyPastePack(asset);
 
         public virtual void OnElementResized()
         {
             groupAsset.size = GetPosition().size;
         }
 
-        public virtual bool Validate()
-        {
-            return true;
-        }
+        public virtual bool Validate() => true;
 
-        public virtual bool IsSelected()
-        {
-            return isSelected;
-        }
+        public virtual bool IsSelected() => isSelected;
 
         public virtual void Select()
         {

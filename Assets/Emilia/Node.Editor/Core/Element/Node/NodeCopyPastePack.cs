@@ -30,7 +30,8 @@ namespace Emilia.Node.Editor
 
         public void Paste(CopyPasteContext copyPasteContext)
         {
-            EditorGraphView graphView = copyPasteContext.userData as EditorGraphView;
+            GraphCopyPasteContext graphCopyPasteContext = (GraphCopyPasteContext) copyPasteContext.userData;
+            EditorGraphView graphView = graphCopyPasteContext.graphView;
 
             if (graphView == null) return;
             if (this._copyAsset == null) return;
@@ -41,6 +42,8 @@ namespace Emilia.Node.Editor
 
             Rect rect = _pasteAsset.position;
             rect.position += new Vector2(20, 20);
+            if (graphCopyPasteContext.createPosition != null) rect.position = graphCopyPasteContext.createPosition.Value;
+            
             _pasteAsset.position = rect;
 
             GraphCopyPasteUtility.PasteChild(this._pasteAsset);

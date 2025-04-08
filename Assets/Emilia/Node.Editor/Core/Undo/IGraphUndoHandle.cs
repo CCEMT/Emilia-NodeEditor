@@ -2,7 +2,7 @@
 {
     public interface IGraphUndoHandle : IEditorHandle
     {
-        void OnUndoBefore();
-        void OnUndoAfter();
+        void OnUndoBefore(bool isSilent);
+        void OnUndoAfter(bool isSilent);
     }
 }

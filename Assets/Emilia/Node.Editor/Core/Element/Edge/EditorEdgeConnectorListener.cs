@@ -72,11 +72,9 @@ namespace Emilia.Node.Editor
 
             if (inputPortView == null || outputPortView == null) return;
 
-            Undo.IncrementCurrentGroup();
-
             if (IsConnected(edgeView))
             {
-                editorGraphView.RegisterCompleteObjectUndo("Graph RedirectionEdge");
+                editorGraphView.RecordObjectUndo("Graph RedirectionEdge");
 
                 edgeView.asset.inputNodeId = inputPortView.master.asset.id;
                 edgeView.asset.inputPortId = inputPortView.info.id;
@@ -93,9 +91,6 @@ namespace Emilia.Node.Editor
                 if (canConnect) this.graphView.connectSystem.Connect(inputPortView, outputPortView);
                 else this.graphView.connectSystem.Disconnect(edgeView);
             }
-
-            Undo.CollapseUndoOperations(Undo.GetCurrentGroup());
-            Undo.IncrementCurrentGroup();
         }
 
         protected bool IsConnected(IEditorEdgeView editorEdgeView)

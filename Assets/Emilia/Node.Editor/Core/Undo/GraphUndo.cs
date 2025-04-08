@@ -12,20 +12,18 @@
             handle = EditorHandleUtility.BuildHandle<IGraphUndoHandle>(this.graphView.graphAsset.GetType(), this.graphView);
         }
 
-        public void OnUndoRedoPerformed(bool updateSelected = true)
+        public void OnUndoRedoPerformed(bool isSilent = false)
         {
-            this.handle?.OnUndoBefore();
+            this.handle?.OnUndoBefore(isSilent);
 
-            UndoNode();
-            UndoEdge();
-            UndoItem();
+            UndoNode(isSilent);
+            UndoEdge(isSilent);
+            UndoItem(isSilent);
 
-            if (updateSelected && EditorGraphView.focusedGraphView == this.graphView) this.graphView.UpdateSelected();
-
-            this.handle?.OnUndoAfter();
+            this.handle?.OnUndoAfter(isSilent);
         }
 
-        private void UndoNode()
+        private void UndoNode(bool isSilent)
         {
             DeleteNode();
             CreateNode();
@@ -62,7 +60,7 @@
             }
         }
 
-        private void UndoEdge()
+        private void UndoEdge(bool isSilent)
         {
             RemoveEdgeView();
             DeleteEdge();
@@ -72,7 +70,7 @@
             for (int i = 0; i < amount; i++)
             {
                 IEditorEdgeView edgeView = this.graphView.edgeViews[i];
-                edgeView.OnValueChanged();
+                edgeView.OnValueChanged(isSilent);
             }
         }
 
@@ -119,7 +117,7 @@
             }
         }
 
-        private void UndoItem()
+        private void UndoItem(bool isSilent)
         {
             DeleteItem();
             CreateItem();
@@ -128,7 +126,7 @@
             for (int i = 0; i < amount; i++)
             {
                 IEditorItemView itemView = this.graphView.itemViews[i];
-                itemView.OnValueChanged();
+                itemView.OnValueChanged(isSilent);
             }
         }
 

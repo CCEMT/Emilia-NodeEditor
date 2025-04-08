@@ -29,7 +29,8 @@ namespace Emilia.Node.Editor
 
         public virtual void Paste(CopyPasteContext copyPasteContext)
         {
-            EditorGraphView graphView = copyPasteContext.userData as EditorGraphView;
+            GraphCopyPasteContext graphCopyPasteContext = (GraphCopyPasteContext) copyPasteContext.userData;
+            EditorGraphView graphView = graphCopyPasteContext.graphView;
 
             if (graphView == null) return;
             if (this._copyAsset == null) return;

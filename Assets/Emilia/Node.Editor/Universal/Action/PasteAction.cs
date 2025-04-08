@@ -10,7 +10,7 @@ namespace Emilia.Node.Universal.Editor
     {
         public override OperateMenuActionValidity GetValidity(OperateMenuContext context)
         {
-            return context.graphView.graphCopyPaste.CanPasteSerializedDataCallback(context.graphView.clipboard_Internal) ? OperateMenuActionValidity.Valid : OperateMenuActionValidity.Invalid;
+            return context.graphView.graphCopyPaste.CanPasteSerializedDataCallback(context.graphView.GetSerializedData_Internal()) ? OperateMenuActionValidity.Valid : OperateMenuActionValidity.Invalid;
         }
 
         public override void Execute(OperateMenuActionContext context)

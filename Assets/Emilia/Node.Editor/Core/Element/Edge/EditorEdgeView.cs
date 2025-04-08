@@ -123,10 +123,10 @@ namespace Emilia.Node.Editor
             return points[amount - 1];
         }
 
-        public virtual void OnValueChanged()
+        public virtual void OnValueChanged(bool isSilent = false)
         {
             schedule.Execute(ForceUpdateEdgeControl).ExecuteLater(1);
-            graphView.graphSave.SetDirty();
+            if (isSilent) graphView.graphSave.SetDirty();
         }
 
         protected override EdgeControl CreateEdgeControl()
@@ -145,20 +145,11 @@ namespace Emilia.Node.Editor
             UpdateEdgeControl();
         }
 
-        public virtual ICopyPastePack GetPack()
-        {
-            return new EdgeCopyPastePack(asset);
-        }
+        public virtual ICopyPastePack GetPack() => new EdgeCopyPastePack(asset);
 
-        public virtual bool Validate()
-        {
-            return true;
-        }
+        public virtual bool Validate() => true;
 
-        public virtual bool IsSelected()
-        {
-            return isSelected;
-        }
+        public virtual bool IsSelected() => isSelected;
 
         public virtual void Select()
         {

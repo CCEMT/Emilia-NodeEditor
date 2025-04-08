@@ -1,24 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Emilia.Kit;
 using Emilia.Kit.Editor;
 using Emilia.Reflection.Editor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Object = UnityEngine.Object;
 
 namespace Emilia.Node.Editor
 {
-    public class EditorPortView : Port_Internals, IEditorPortView
+    public class EditorPortView : Port_Internals, IEditorPortView, ICollectibleElement
     {
         private List<IEditorEdgeView> _edges = new List<IEditorEdgeView>();
 
         public EditorPortInfo info { get; private set; }
         public IEditorNodeView master { get; private set; }
+        public EditorGraphView graphView => master?.graphView;
 
         public virtual EditorPortDirection portDirection => info.direction;
         public virtual EditorOrientation editorOrientation => info.orientation;
         public Port portElement => this;
+        public bool isSelected { get; protected set; }
         public IReadOnlyList<IEditorEdgeView> edges => _edges;
 
         protected virtual string portStyleFilePath => "Node/Styles/UniversalEditorPortView.uss";
@@ -28,7 +32,7 @@ namespace Emilia.Node.Editor
 
         public EditorPortView() : base(default, default, default, null) { }
 
-        public void Initialize(IEditorNodeView master, EditorPortInfo info)
+        public virtual void Initialize(IEditorNodeView master, EditorPortInfo info)
         {
             this.info = info;
             this.master = master;
@@ -41,10 +45,10 @@ namespace Emilia.Node.Editor
 
             if (portType != null) visualClass = "Port_" + portType.Name;
 
-            Type edgeAssetType = master.graphView.connectSystem.GetEdgeTypeByPort(this);
+            Type edgeAssetType = graphView.connectSystem.GetEdgeTypeByPort(this);
             Type edgeViewType = GraphTypeCache.GetEdgeViewType(edgeAssetType);
 
-            EditorEdgeConnectorListener connectorListener = master.graphView.connectSystem.connectorListener;
+            EditorEdgeConnectorListener connectorListener = graphView.connectSystem.connectorListener;
 
             EditorEdgeConnector connector = ReflectUtility.CreateInstance(info.edgeConnectorType) as EditorEdgeConnector;
             connector.Initialize(edgeViewType, connectorListener);
@@ -61,6 +65,58 @@ namespace Emilia.Node.Editor
             if (info.orientation == EditorOrientation.Vertical) AddToClassList("Vertical");
 
             portColor = info.color;
+
+            capabilities |= Capabilities.Copiable;
+
+            ContextualMenuManipulator contextualMenuManipulator = new ContextualMenuManipulator(OnContextualMenuManipulator);
+            this.AddManipulator(contextualMenuManipulator);
+        }
+
+        private void OnContextualMenuManipulator(ContextualMenuPopulateEvent evt)
+        {
+            evt.menu.AppendAction($"Copy {info.displayName} Connect", (_) => OnCopyConnect());
+            evt.menu.AppendAction($"Paste Connect To {info.displayName}", (_) => OnPasteConnect(), CanPaste() ? DropdownMenuAction.Status.Normal : DropdownMenuAction.Status.Disabled);
+
+            evt.menu.AppendSeparator();
+        }
+
+        protected virtual void OnCopyConnect()
+        {
+            graphView.ClearSelection();
+            graphView.AddToSelection(this);
+            graphView.UpdateSelected();
+            
+            graphView.graphOperate.Copy();
+        }
+
+        protected virtual bool CanPaste()
+        {
+            if (graphView.graphCopyPaste.CanPasteSerializedDataCallback(graphView.GetSerializedData_Internal()) == false) return false;
+
+            IEditorPortView portView = graphView.graphCopyPaste
+                .GetCopyGraphElements(graphView.GetSerializedData_Internal())
+                .OfType<IEditorPortView>()
+                .FirstOrDefault();
+
+            if (portView == null) return false;
+            if (portView.info.direction != info.direction) return false;
+
+            List<IEditorEdgeView> edgeViews = graphView.graphElementCache.GetEdgeView(portView);
+
+            bool allCanConnect = edgeViews.All(edgeView => portView.info.direction == EditorPortDirection.Input
+                ? graphView.connectSystem.CanConnect(this, edgeView.outputPortView)
+                : graphView.connectSystem.CanConnect(this, edgeView.inputPortView));
+
+            return allCanConnect;
+        }
+
+        protected virtual void OnPasteConnect()
+        {
+            graphView.ClearSelection();
+            graphView.AddToSelection(this);
+            graphView.UpdateSelected();
+            
+            graphView.graphOperate.Paste();
         }
 
         public override void Connect(Edge edge)
@@ -91,7 +147,53 @@ namespace Emilia.Node.Editor
             OnDisconnected?.Invoke(this, editorEdge);
         }
 
-        public void Dispose()
+        public void CollectElements(HashSet<GraphElement> collectedElementSet, Func<GraphElement, bool> conditionFunc)
+        {
+            collectedElementSet.Add(this);
+        }
+
+        public bool Validate()
+        {
+            return true;
+        }
+
+        public bool IsSelected()
+        {
+            return isSelected;
+        }
+
+        public void Select()
+        {
+            isSelected = true;
+        }
+
+        public void Unselect()
+        {
+            isSelected = false;
+        }
+
+        public IEnumerable<Object> GetSelectedObjects()
+        {
+            yield return null;
+        }
+
+        public virtual ICopyPastePack GetPack()
+        {
+            List<IEditorEdgeView> edgeViews = graphView.graphElementCache.GetEdgeView(this);
+
+            List<IEdgeCopyPastePack> packs = new List<IEdgeCopyPastePack>(edgeViews.Count);
+            for (int i = 0; i < edgeViews.Count; i++)
+            {
+                IEditorEdgeView edgeView = edgeViews[i];
+                IEdgeCopyPastePack edgePack = edgeView.GetPack() as IEdgeCopyPastePack;
+                packs.Add(edgePack);
+            }
+
+            PortCopyPastePack pack = new PortCopyPastePack(master.asset.id, info.id, info.portType, info.direction, packs);
+            return pack;
+        }
+
+        public virtual void Dispose()
         {
             _edges.Clear();
 
