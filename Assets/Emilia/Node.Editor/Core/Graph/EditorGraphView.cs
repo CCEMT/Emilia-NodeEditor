@@ -748,6 +748,19 @@ namespace Emilia.Node.Editor
 
             graphSave.SetDirty();
         }
+        
+        /// <summary>
+        /// 注册Undo
+        /// </summary>
+        public void RecordObjectUndo(string name)
+        {
+            List<Object> objects = new List<Object>();
+            graphAsset.CollectAsset(objects);
+
+            Undo.RecordObjects(objects.ToArray(), name);
+
+            graphSave.SetDirty();
+        }
 
         private void RemoveAllElement()
         {
