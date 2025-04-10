@@ -5,6 +5,7 @@ using Emilia.Kit.Editor;
 using Emilia.Node.Editor;
 using Sirenix.OdinInspector.Editor.ValueResolvers;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Emilia.Node.Universal.Editor
 {
@@ -126,6 +127,7 @@ namespace Emilia.Node.Universal.Editor
             List<CreateItemMenuInfo> types = context.graphView.createItemMenu.CollectItemMenus();
 
             Vector2 mousePosition = context.evt.mousePosition;
+            Vector2 graphMousePosition = context.graphView.contentViewContainer.WorldToLocal(mousePosition);
 
             int amount = types.Count;
             for (int i = 0; i < amount; i++)
@@ -137,7 +139,7 @@ namespace Emilia.Node.Universal.Editor
                 OperateMenuUtility.PathToNameAndCategory(fullPath, out menuItem.menuName, out menuItem.category);
 
                 menuItem.priority = 1000 + i + 1;
-                menuItem.onAction = () => context.graphView.itemSystem.CreateItem(createItem.itemAssetType, mousePosition);
+                menuItem.onAction = () => context.graphView.itemSystem.CreateItem(createItem.itemAssetType, graphMousePosition);
 
                 menuItems.Add(menuItem);
             }
