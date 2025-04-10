@@ -1,4 +1,6 @@
 ﻿using Emilia.Node.Editor;
+using Emilia.Reflection.Editor;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 namespace Emilia.Node.Universal.Editor
@@ -7,8 +9,17 @@ namespace Emilia.Node.Universal.Editor
     {
         public override void OpenCreateNodeMenu(Vector2 mousePosition, CreateNodeContext createNodeContext = default)
         {
+            Rect? screenPosition = smartValue.GetElementPanelOwnerObjectScreenPosition_Internal();
+            if (screenPosition == null) return;
+
             smartValue.createNodeMenu.MenuCreateInitialize(createNodeContext);
-            smartValue.RequestNodeCreation_Internals(null, -1, mousePosition);
+
+            NodeCreationContext nodeCreationContext = new NodeCreationContext {
+                screenMousePosition = screenPosition.Value.position + mousePosition,
+                index = -1,
+            };
+
+            smartValue.createNodeMenu.ShowCreateNodeMenu(nodeCreationContext);
         }
 
         public override void Cut()

@@ -45,7 +45,14 @@ namespace Emilia.Node.Editor
         {
             base.AllModuleInitializeSuccess();
             handle?.InitializeCache();
-            this.graphView.nodeCreationRequest = ShowCreateNodeMenu;
+            
+            this.graphView.nodeCreationRequest = OnNodeCreationRequest;
+        }
+        
+        private void OnNodeCreationRequest(NodeCreationContext nodeCreationContext)
+        {
+            MenuCreateInitialize(new CreateNodeContext());
+            ShowCreateNodeMenu(nodeCreationContext);
         }
 
         /// <summary>
