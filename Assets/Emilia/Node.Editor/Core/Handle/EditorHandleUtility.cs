@@ -133,7 +133,18 @@ namespace Emilia.Node.Editor
 
             while (currentType != null)
             {
-                if (handleTypeCache.TryGetValue(currentType, out Type[] types) == false)
+                Type[] types = null;
+
+                Type[] interfaces = ReflectUtility.GetDirectInterfaces(currentType);
+                int interfaceCount = interfaces.Length;
+                for (int i = 0; i < interfaceCount; i++)
+                {
+                    Type handleType = interfaces[i];
+                    types = handleTypeCache.GetValueOrDefault(handleType);
+                    if (types != null) break;
+                }
+                
+                if (handleTypeCache.TryGetValue(currentType, out types) == false)
                 {
                     currentType = currentType.BaseType;
                     continue;

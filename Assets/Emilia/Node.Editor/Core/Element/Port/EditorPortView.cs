@@ -72,7 +72,7 @@ namespace Emilia.Node.Editor
             this.AddManipulator(contextualMenuManipulator);
         }
 
-        private void OnContextualMenuManipulator(ContextualMenuPopulateEvent evt)
+        protected virtual void OnContextualMenuManipulator(ContextualMenuPopulateEvent evt)
         {
             evt.menu.AppendAction($"Copy {info.displayName} Connect", (_) => OnCopyConnect());
             evt.menu.AppendAction($"Paste Connect To {info.displayName}", (_) => OnPasteConnect(), CanPaste() ? DropdownMenuAction.Status.Normal : DropdownMenuAction.Status.Disabled);
@@ -147,32 +147,32 @@ namespace Emilia.Node.Editor
             OnDisconnected?.Invoke(this, editorEdge);
         }
 
-        public void CollectElements(HashSet<GraphElement> collectedElementSet, Func<GraphElement, bool> conditionFunc)
+        public virtual void CollectElements(HashSet<GraphElement> collectedElementSet, Func<GraphElement, bool> conditionFunc)
         {
             collectedElementSet.Add(this);
         }
 
-        public bool Validate()
+        public virtual bool Validate()
         {
             return true;
         }
 
-        public bool IsSelected()
+        public virtual bool IsSelected()
         {
             return isSelected;
         }
 
-        public void Select()
+        public virtual void Select()
         {
             isSelected = true;
         }
 
-        public void Unselect()
+        public virtual void Unselect()
         {
             isSelected = false;
         }
 
-        public IEnumerable<Object> GetSelectedObjects()
+        public virtual IEnumerable<Object> GetSelectedObjects()
         {
             yield return null;
         }
