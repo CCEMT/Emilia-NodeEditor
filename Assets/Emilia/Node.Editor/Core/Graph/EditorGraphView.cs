@@ -650,9 +650,15 @@ namespace Emilia.Node.Editor
             return compatiblePorts;
         }
 
-        private string OnSerializeGraphElements(IEnumerable<GraphElement> elements) => graphCopyPaste.SerializeGraphElementsCallback(elements);
+        private string OnSerializeGraphElements(IEnumerable<GraphElement> elements)
+        {
+            return graphCopyPaste.SerializeGraphElementsCallback(elements);
+        }
 
-        private bool OnCanPasteSerializedData(string data) => graphCopyPaste.CanPasteSerializedDataCallback(data);
+        private bool OnCanPasteSerializedData(string data)
+        {
+            return graphCopyPaste.CanPasteSerializedDataCallback(data);
+        }
 
         private void OnUnserializeAndPaste(string operationName, string data)
         {
@@ -737,6 +743,24 @@ namespace Emilia.Node.Editor
         }
 
         /// <summary>
+        /// 发送事件
+        /// </summary>
+        public void SendGraphEvent(IGraphEvent graphEvent)
+        {
+            graphEvent.graphView = this;
+            this.SendEvent_Internal(graphEvent.eventTarget, DispatchMode_Internals.Immediate);
+        }
+
+        /// <summary>
+        /// 发送事件
+        /// </summary>
+        public void SendGraphEvent(EventBase eventBase)
+        {
+            eventBase.target = this;
+            this.SendEvent_Internal(eventBase, DispatchMode_Internals.Immediate);
+        }
+
+        /// <summary>
         /// 注册Undo
         /// </summary>
         public void RegisterCompleteObjectUndo(string name)
@@ -748,7 +772,7 @@ namespace Emilia.Node.Editor
 
             graphSave.SetDirty();
         }
-        
+
         /// <summary>
         /// 注册Undo
         /// </summary>
@@ -879,7 +903,10 @@ namespace Emilia.Node.Editor
         /// <summary>
         /// 有效性
         /// </summary>
-        public bool Validate() => hierarchy.parent != null;
+        public bool Validate()
+        {
+            return hierarchy.parent != null;
+        }
 
         public void Dispose()
         {

@@ -18,7 +18,7 @@ namespace Emilia.Node.Editor
         /// <summary>
         /// 反序列化处理
         /// </summary>
-        void UnserializeAndPasteCallback(string operationName, string serializedData, GraphCopyPasteContext copyPasteContext);
+        IEnumerable<GraphElement> UnserializeAndPasteCallback(string operationName, string serializedData, GraphCopyPasteContext copyPasteContext);
 
         /// <summary>
         /// 创建拷贝

@@ -36,14 +36,14 @@ namespace Emilia.Node.Editor
         /// <summary>
         /// 反序列化处理
         /// </summary>
-        public void UnserializeAndPasteCallback(string operationName, string serializedData, Vector2? mousePosition = null)
+        public IEnumerable<GraphElement> UnserializeAndPasteCallback(string operationName, string serializedData, Vector2? mousePosition = null)
         {
-            if (this.handle == null) return;
+            if (this.handle == null) return null;
             GraphCopyPasteContext graphCopyPasteContext = new GraphCopyPasteContext();
             graphCopyPasteContext.graphView = this.graphView;
             graphCopyPasteContext.createPosition = mousePosition;
 
-            this.handle.UnserializeAndPasteCallback(operationName, serializedData, graphCopyPasteContext);
+            return this.handle.UnserializeAndPasteCallback(operationName, serializedData, graphCopyPasteContext);
         }
 
         public IEnumerable<GraphElement> GetCopyGraphElements(string serializedData)

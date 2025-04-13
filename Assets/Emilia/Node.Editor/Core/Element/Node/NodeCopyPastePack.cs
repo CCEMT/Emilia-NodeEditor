@@ -43,13 +43,15 @@ namespace Emilia.Node.Editor
             Rect rect = _pasteAsset.position;
             rect.position += new Vector2(20, 20);
             if (graphCopyPasteContext.createPosition != null) rect.position = graphCopyPasteContext.createPosition.Value;
-            
+
             _pasteAsset.position = rect;
 
             GraphCopyPasteUtility.PasteChild(this._pasteAsset);
 
             graphView.RegisterCompleteObjectUndo("Graph Paste");
-            graphView.AddNode(this._pasteAsset);
+            IEditorNodeView nodeView = graphView.AddNode(this._pasteAsset);
+
+            copyPasteContext.pasteContent.Add(nodeView);
 
             Undo.RegisterCreatedObjectUndo(this._pasteAsset, "Graph Pause");
         }

@@ -39,7 +39,7 @@
         private void DeleteNode()
         {
             int amount = this.graphView.nodeViews.Count;
-            for (int i = 0; i < amount; i++)
+            for (int i = amount - 1; i >= 0; i--)
             {
                 IEditorNodeView nodeView = this.graphView.nodeViews[i];
                 bool contains = this.graphView.graphAsset.nodeMap.ContainsKey(nodeView.asset.id);
@@ -133,7 +133,7 @@
         private void DeleteItem()
         {
             int amount = this.graphView.itemViews.Count;
-            for (int i = 0; i < amount; i++)
+            for (int i = amount - 1; i >= 0; i--)
             {
                 IEditorItemView itemView = this.graphView.itemViews[i];
                 bool contains = this.graphView.graphAsset.itemMap.ContainsKey(itemView.asset.id);
