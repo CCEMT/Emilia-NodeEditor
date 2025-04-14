@@ -34,6 +34,9 @@ namespace Emilia.Node.Universal.Editor
         private List<NodeMessageElement> messageElements = new List<NodeMessageElement>();
 
         private Dictionary<string, NodeTipsElement> tipsElements = new Dictionary<string, NodeTipsElement>();
+        
+        protected NodeDuplicateDragger duplicateDragger;
+        protected NodeInsertDragger insertDragger;
 
         public virtual bool canExpanded => true;
 
@@ -61,6 +64,12 @@ namespace Emilia.Node.Universal.Editor
 
             UpdateTitle();
             UpdateFoldState();
+
+            duplicateDragger = new NodeDuplicateDragger();
+            this.insertDragger = new NodeInsertDragger();
+            
+            this.AddManipulator(this.duplicateDragger);
+            this.AddManipulator(this.insertDragger);
         }
 
         protected override void InitializeNodeView()
@@ -169,7 +178,7 @@ namespace Emilia.Node.Universal.Editor
 
             topLayerContainer.Add(messageContainer);
         }
-
+        
         private void SwitchMessageContainerState()
         {
             if (messageContainer.style.display == DisplayStyle.None) messageContainer.style.display = DisplayStyle.Flex;

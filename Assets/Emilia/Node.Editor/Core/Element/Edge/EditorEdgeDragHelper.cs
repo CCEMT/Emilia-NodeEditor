@@ -23,6 +23,8 @@ namespace Emilia.Node.Editor
         protected List<IEditorPortView> portViews = new List<IEditorPortView>();
         protected Dictionary<IEditorNodeView, List<IEditorPortView>> nodeByPort = new Dictionary<IEditorNodeView, List<IEditorPortView>>();
 
+        protected Dictionary<IEditorPortView, IEditorEdgeView> preConnectEdgeViews = new Dictionary<IEditorPortView, IEditorEdgeView>();
+
         protected IEditorEdgeView ghostEdge;
         protected EditorGraphView graphView;
         protected EditorEdgeConnectorListener listener;
@@ -205,6 +207,34 @@ namespace Emilia.Node.Editor
 
             if (endPort != null)
             {
+                if (evt.shiftKey)
+                {
+                    if (preConnectEdgeViews.ContainsKey(endPort) == false)
+                    {
+                        IEditorEdgeView preConnectEdgeView = ReflectUtility.CreateInstance(this.edgeViewType) as IEditorEdgeView;
+                        preConnectEdgeView.edgeElement.isGhostEdge = true;
+                        preConnectEdgeView.edgeElement.pickingMode = PickingMode.Ignore;
+                        this.graphView.AddElement(preConnectEdgeView.edgeElement);
+
+                        if (this.edgeCandidateView.outputPortView == null)
+                        {
+                            preConnectEdgeView.inputPortView = edgeCandidateView.inputPortView;
+                            if (preConnectEdgeView.outputPortView != null) preConnectEdgeView.outputPortView.portElement.portCapLit = false;
+                            preConnectEdgeView.outputPortView = endPort.portElement as IEditorPortView;
+                            preConnectEdgeView.outputPortView.portElement.portCapLit = true;
+                        }
+                        else
+                        {
+                            if (preConnectEdgeView.inputPortView != null) preConnectEdgeView.inputPortView.portElement.portCapLit = false;
+                            preConnectEdgeView.inputPortView = endPort.portElement as IEditorPortView;
+                            preConnectEdgeView.inputPortView.portElement.portCapLit = true;
+                            preConnectEdgeView.outputPortView = edgeCandidateView.outputPortView;
+                        }
+
+                        preConnectEdgeViews[endPort] = preConnectEdgeView;
+                    }
+                }
+
                 if (ghostEdge == null)
                 {
                     ghostEdge = ReflectUtility.CreateInstance(this.edgeViewType) as IEditorEdgeView;
@@ -285,7 +315,7 @@ namespace Emilia.Node.Editor
 
             if (disconnectPortView != null) disconnectPortView.portElement.Disconnect(edgeCandidateView.edgeElement);
 
-            if (endPort == null && listener != null) listener.OnDropOutsidePort(edgeCandidate, mousePosition);
+            if (endPort == null && listener != null && preConnectEdgeViews.Count == 0) listener.OnDropOutsidePort(edgeCandidate, mousePosition);
 
             edgeCandidate.SetEnabled(true);
 
@@ -296,7 +326,24 @@ namespace Emilia.Node.Editor
 
             IEditorPortView port = draggedPort as IEditorPortView;
 
-            if (port != null && endPort != null)
+            IEditorPortView originalInputPort = edgeCandidateView.inputPortView;
+            IEditorPortView originalOutputPort = edgeCandidateView.outputPortView;
+
+            foreach (var itemPair in preConnectEdgeViews)
+            {
+                edgeCandidateView.inputPortView = originalInputPort;
+                edgeCandidateView.outputPortView = originalOutputPort;
+
+                if (edgeCandidateView.inputPortView == null) edgeCandidateView.inputPortView = itemPair.Key;
+                else edgeCandidateView.outputPortView = itemPair.Key;
+
+                listener.OnDrop(graphView, edgeCandidateView.edgeElement);
+                didConnect = true;
+
+                itemPair.Value.edgeElement.RemoveFromHierarchy();
+            }
+
+            if (port != null && endPort != null && preConnectEdgeViews.Count == 0)
             {
                 if (edgeCandidateView.inputPortView == null) edgeCandidateView.inputPortView = endPort;
                 else edgeCandidateView.outputPortView = endPort;
@@ -326,6 +373,7 @@ namespace Emilia.Node.Editor
             edgeCandidateView.isDrag = false;
             edgeCandidate.ResetLayer();
 
+            preConnectEdgeViews.Clear();
             portViews.Clear();
             edgeCandidate = null;
             disconnectPortView = null;

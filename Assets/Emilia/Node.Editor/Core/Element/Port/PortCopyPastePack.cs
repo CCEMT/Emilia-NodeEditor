@@ -14,12 +14,13 @@ namespace Emilia.Node.Editor
     {
         [SerializeField]
         private string _nodeId;
+
         [SerializeField]
         private string _portId;
-        
+
         [OdinSerialize, NonSerialized]
         private Type _portType;
-        
+
         [SerializeField]
         private EditorPortDirection _direction;
 
@@ -82,7 +83,10 @@ namespace Emilia.Node.Editor
                 }
 
                 graphView.RegisterCompleteObjectUndo("Graph Paste");
-                graphView.AddEdge(pasteAsset);
+                IEditorEdgeView edgeView = graphView.AddEdge(pasteAsset);
+
+                copyPasteContext.pasteContent.Add(edgeView);
+
                 Undo.RegisterCreatedObjectUndo(pasteAsset, "Graph Pause");
             }
         }

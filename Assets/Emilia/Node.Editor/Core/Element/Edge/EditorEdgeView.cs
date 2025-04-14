@@ -126,7 +126,7 @@ namespace Emilia.Node.Editor
         public virtual void OnValueChanged(bool isSilent = false)
         {
             schedule.Execute(ForceUpdateEdgeControl).ExecuteLater(1);
-            if (isSilent) graphView.graphSave.SetDirty();
+            if (isSilent == false)  graphView.graphSave.SetDirty();
         }
 
         protected override EdgeControl CreateEdgeControl()

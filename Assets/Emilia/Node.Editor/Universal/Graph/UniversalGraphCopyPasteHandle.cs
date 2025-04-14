@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Emilia.Kit;
 using Emilia.Node.Editor;
 using Sirenix.Serialization;
@@ -24,20 +25,15 @@ namespace Emilia.Node.Universal.Editor
 
         public override bool CanPasteSerializedDataCallback(string serializedData)
         {
-            try
-            {
-                return SerializableUtility.FromJson<CopyPasteGraph>(serializedData) != null;
-            }
-            catch
-            {
-                return false;
-            }
+            try { return SerializableUtility.FromJson<CopyPasteGraph>(serializedData) != null; }
+            catch { return false; }
         }
 
-        public override void UnserializeAndPasteCallback(string operationName, string serializedData, GraphCopyPasteContext copyPasteContext)
+        public override IEnumerable<GraphElement> UnserializeAndPasteCallback(string operationName, string serializedData, GraphCopyPasteContext copyPasteContext)
         {
             CopyPasteGraph graph = SerializableUtility.FromJson<CopyPasteGraph>(serializedData);
-            graph.StartPaste(copyPasteContext);
+            List<object> pasteContent = graph.StartPaste(copyPasteContext);
+            return pasteContent.OfType<GraphElement>();
         }
 
         public override IEnumerable<GraphElement> GetCopyGraphElements(string serializedData)
@@ -81,7 +77,7 @@ namespace Emilia.Node.Universal.Editor
                         case IPortCopyPastePack portCopyPastePack:
                         {
                             IEditorNodeView nodeView = smartValue.graphElementCache.nodeViewById.GetValueOrDefault(portCopyPastePack.nodeId);
-                            if (nodeView == null) continue; 
+                            if (nodeView == null) continue;
                             IEditorPortView portView = nodeView.GetPortView(portCopyPastePack.portId);
                             graphElements.Add(portView.portElement);
                             break;
@@ -91,12 +87,12 @@ namespace Emilia.Node.Universal.Editor
 
                 return graphElements;
             }
-            catch
-            {
-                return null;
-            }
+            catch { return null; }
         }
 
-        public override object CreateCopy(object value) => SerializationUtility.CreateCopy(value);
+        public override object CreateCopy(object value)
+        {
+            return SerializationUtility.CreateCopy(value);
+        }
     }
 }

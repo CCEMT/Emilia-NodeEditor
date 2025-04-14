@@ -159,7 +159,7 @@ namespace Emilia.Node.Editor
             RemoveNode();
             AddNode();
 
-            if (isSilent) graphView.graphSave.SetDirty();
+            if (isSilent == false)  graphView.graphSave.SetDirty();
 
             this.isUndo = true;
         }

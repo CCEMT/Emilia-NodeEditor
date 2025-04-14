@@ -71,6 +71,9 @@ namespace Emilia.Node.Universal.Editor
         {
             this.loadingContainer.style.display = DisplayStyle.None;
             smartValue.SetEnabled(true);
+            
+            UniversalGraphAssetLocalSetting universalSetting = smartValue.graphLocalSettingSystem.assetSetting as UniversalGraphAssetLocalSetting;
+            smartValue.UpdateViewTransform(universalSetting.position, universalSetting.scale);
         }
 
         public override void Dispose()

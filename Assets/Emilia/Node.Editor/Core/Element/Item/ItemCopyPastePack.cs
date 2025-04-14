@@ -38,18 +38,20 @@ namespace Emilia.Node.Editor
 
             _pasteAsset = Object.Instantiate(_copyAsset);
             this._pasteAsset.id = Guid.NewGuid().ToString();
-            
+
             Rect rect = _pasteAsset.position;
             rect.position += new Vector2(20, 20);
             if (graphCopyPasteContext.createPosition != null) rect.position = graphCopyPasteContext.createPosition.Value;
-            
+
             _pasteAsset.position = rect;
-            
+
             GraphCopyPasteUtility.PasteChild(this._pasteAsset);
             PasteDependency(copyPasteContext);
 
             graphView.RegisterCompleteObjectUndo("Graph Paste");
-            graphView.AddItem(_pasteAsset);
+            IEditorItemView itemView = graphView.AddItem(_pasteAsset);
+
+            copyPasteContext.pasteContent.Add(itemView);
 
             Undo.RegisterCreatedObjectUndo(this._pasteAsset, "Graph Pause");
         }

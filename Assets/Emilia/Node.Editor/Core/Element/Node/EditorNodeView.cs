@@ -284,7 +284,7 @@ namespace Emilia.Node.Editor
             SetPositionNoUndo(asset.position);
             foreach (InspectorPropertyField value in inputFields.Values) value.Update();
 
-            if (isSilent) graphView.graphSave.SetDirty();
+            if (isSilent == false) graphView.graphSave.SetDirty();
         }
 
         public void RegisterCompleteObjectUndo(string name)

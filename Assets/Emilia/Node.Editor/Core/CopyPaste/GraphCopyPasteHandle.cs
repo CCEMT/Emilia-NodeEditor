@@ -16,18 +16,30 @@ namespace Emilia.Node.Editor
             parentHandle = parent as IGraphCopyPasteHandle;
         }
 
-        public virtual string SerializeGraphElementsCallback(IEnumerable<GraphElement> elements) => parentHandle?.SerializeGraphElementsCallback(elements);
-
-        public virtual bool CanPasteSerializedDataCallback(string serializedData) => parentHandle?.CanPasteSerializedDataCallback(serializedData) ?? false;
-
-        public virtual void UnserializeAndPasteCallback(string operationName, string serializedData, GraphCopyPasteContext copyPasteContext)
+        public virtual string SerializeGraphElementsCallback(IEnumerable<GraphElement> elements)
         {
-            parentHandle?.UnserializeAndPasteCallback(operationName, serializedData, copyPasteContext);
+            return parentHandle?.SerializeGraphElementsCallback(elements);
         }
 
-        public virtual object CreateCopy(object value) => parentHandle?.CreateCopy(value);
+        public virtual bool CanPasteSerializedDataCallback(string serializedData)
+        {
+            return parentHandle?.CanPasteSerializedDataCallback(serializedData) ?? false;
+        }
 
-        public virtual IEnumerable<GraphElement> GetCopyGraphElements(string serializedData) => parentHandle?.GetCopyGraphElements(serializedData);
+        public virtual IEnumerable<GraphElement> UnserializeAndPasteCallback(string operationName, string serializedData, GraphCopyPasteContext copyPasteContext)
+        {
+            return parentHandle?.UnserializeAndPasteCallback(operationName, serializedData, copyPasteContext);
+        }
+
+        public virtual object CreateCopy(object value)
+        {
+            return parentHandle?.CreateCopy(value);
+        }
+
+        public virtual IEnumerable<GraphElement> GetCopyGraphElements(string serializedData)
+        {
+            return parentHandle?.GetCopyGraphElements(serializedData);
+        }
 
         public override void Dispose()
         {
