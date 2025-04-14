@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Emilia.Node.Universal.Editor
 {
-    public static class LayoutUtility
+    public static class GraphLayoutUtility
     {
         [Flags]
         public enum AlignmentType
@@ -38,6 +38,7 @@ namespace Emilia.Node.Universal.Editor
             elements.Sort((a, b) => a.asset.position.x.CompareTo(b.asset.position.x));
 
             float startX = elements.FirstOrDefault().asset.position.x;
+            float currentX = startX;
 
             for (int i = 0; i < elements.Count; i++)
             {
@@ -45,7 +46,10 @@ namespace Emilia.Node.Universal.Editor
                 Rect position = element.asset.position;
 
                 position.y = y;
-                position.x = startX + interval * i;
+                float width = element.asset.position.width;
+
+                position.x = currentX;
+                currentX += width + interval;
 
                 element.SetPosition(position);
             }
@@ -75,13 +79,13 @@ namespace Emilia.Node.Universal.Editor
         {
             if (alignmentType.HasFlag(AlignmentType.TopOrLeft))
             {
-                float maxY = int.MinValue;
+                float minY = int.MaxValue;
                 foreach (IEditorNodeView element in elements)
                 {
-                    if (element.asset.position.y > maxY) maxY = element.asset.position.y;
+                    if (element.asset.position.y < minY) minY = element.asset.position.y;
                 }
 
-                return maxY;
+                return minY;
             }
 
             if (alignmentType.HasFlag(AlignmentType.Center))
@@ -94,12 +98,12 @@ namespace Emilia.Node.Universal.Editor
 
             if (alignmentType.HasFlag(AlignmentType.BottomOrRight))
             {
-                float minY = int.MaxValue;
+                float maxY = int.MinValue;
                 foreach (IEditorNodeView element in elements)
                 {
-                    if (element.asset.position.y < minY) minY = element.asset.position.y;
+                    if (element.asset.position.y > maxY) maxY = element.asset.position.y;
                 }
-                return minY;
+                return maxY;
             }
 
             return 0;

@@ -754,7 +754,7 @@ namespace Emilia.Node.Editor
         /// <summary>
         /// 发送事件
         /// </summary>
-        public void SendGraphEvent(EventBase eventBase)
+        public void SendEventImmediate(EventBase eventBase)
         {
             eventBase.target = this;
             this.SendEvent_Internal(eventBase, DispatchMode_Internals.Immediate);

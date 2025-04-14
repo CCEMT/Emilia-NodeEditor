@@ -32,7 +32,7 @@
             for (int i = 0; i < amount; i++)
             {
                 IEditorNodeView nodeView = this.graphView.nodeViews[i];
-                nodeView.OnValueChanged();
+                nodeView.OnValueChanged(isSilent);
             }
         }
 

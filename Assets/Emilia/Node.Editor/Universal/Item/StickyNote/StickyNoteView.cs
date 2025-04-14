@@ -46,7 +46,7 @@ namespace Emilia.Node.Universal.Editor
 
             SetPositionNoUndo(stickyAsset.position);
 
-            if (isSilent) graphView.graphSave.SetDirty();
+            if (isSilent == false)  graphView.graphSave.SetDirty();
         }
 
         public override void SetPosition(Rect rect)

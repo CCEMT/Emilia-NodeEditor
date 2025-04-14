@@ -82,6 +82,7 @@ namespace Emilia.Node.Editor
             target.RegisterCallback<MouseDownEvent>(OnMouseDown);
             target.RegisterCallback<MouseMoveEvent>(OnMouseMove);
             target.RegisterCallback<MouseUpEvent>(OnMouseUp);
+            target.RegisterCallback<GraphSelectionDraggerForceSelectedNodeEvent>(OnForceSelectedNode);
 
             target.RegisterCallback<KeyDownEvent>(OnKeyDown);
             target.RegisterCallback<MouseCaptureOutEvent>(OnMouseCaptureOutEvent);
@@ -93,6 +94,7 @@ namespace Emilia.Node.Editor
             target.UnregisterCallback<MouseDownEvent>(OnMouseDown);
             target.UnregisterCallback<MouseMoveEvent>(OnMouseMove);
             target.UnregisterCallback<MouseUpEvent>(OnMouseUp);
+            target.UnregisterCallback<GraphSelectionDraggerForceSelectedNodeEvent>(OnForceSelectedNode);
 
             target.UnregisterCallback<KeyDownEvent>(OnKeyDown);
             target.UnregisterCallback<MouseCaptureOutEvent>(OnMouseCaptureOutEvent);
@@ -142,6 +144,51 @@ namespace Emilia.Node.Editor
                 m_Active = false;
                 if (snapEnabled) this.m_Snapper.EndSnap_Internals(this.m_GraphView);
             }
+        }
+
+        private void OnForceSelectedNode(GraphSelectionDraggerForceSelectedNodeEvent evt)
+        {
+            m_GraphView = target as EditorGraphView;
+
+            m_Active = true;
+            selectedElement = evt.select;
+
+            m_OriginalPos = new Dictionary<GraphElement, OriginalPos>();
+
+            HashSet<IEditorNodeView> elementsToMove = new HashSet<IEditorNodeView>(m_GraphView.selection.OfType<IEditorNodeView>());
+
+            foreach (IEditorNodeView nodeView in elementsToMove)
+            {
+                if (nodeView == null || ! nodeView.element.IsMovable()) continue;
+
+                Rect geometry = nodeView.asset.position;
+                Rect geometryInContentViewSpace = nodeView.element.hierarchy.parent.ChangeCoordinatesTo(m_GraphView.contentViewContainer, geometry);
+                m_OriginalPos[nodeView.element] = new OriginalPos {
+                    pos = geometryInContentViewSpace,
+                    scope = nodeView.element.GetContainingScope(),
+                    stack = null,
+                    stackIndex = -1
+                };
+            }
+
+            m_originalMouse = evt.mousePosition;
+            m_ItemPanDiff = Vector3.zero;
+
+            if (m_PanSchedule == null)
+            {
+                m_PanSchedule = m_GraphView.schedule.Execute(Pan).Every(k_PanInterval).StartingIn(k_PanInterval);
+                m_PanSchedule.Pause();
+            }
+
+            // Checking if the Graph Element we are moving has the snappable Capability
+            if ((selectedElement.capabilities & Capabilities.Snappable) == 0) snapEnabled = false;
+            else snapEnabled = EditorPrefs.GetBool("GraphSnapping", true);
+
+            if (snapEnabled) this.m_Snapper.BeginSnap_Internals(this.m_GraphView);
+
+            m_Active = true;
+
+            target.CaptureMouse(); // We want to receive events even when mouse is not over ourself.
         }
 
         protected new void OnMouseDown(MouseDownEvent e)

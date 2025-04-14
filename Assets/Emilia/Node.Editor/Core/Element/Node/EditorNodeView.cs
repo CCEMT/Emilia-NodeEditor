@@ -284,7 +284,7 @@ namespace Emilia.Node.Editor
             SetPositionNoUndo(asset.position);
             foreach (InspectorPropertyField value in inputFields.Values) value.Update();
 
-            if (isSilent) graphView.graphSave.SetDirty();
+            if (isSilent == false) graphView.graphSave.SetDirty();
         }
 
         public void RegisterCompleteObjectUndo(string name)
@@ -295,7 +295,18 @@ namespace Emilia.Node.Editor
 
         public override void CollectElements(HashSet<GraphElement> collectedElementSet, Func<GraphElement, bool> conditionFunc)
         {
-            collectedElementSet.Add(this);
+            int amount = _portViews.Count;
+            for (int i = 0; i < amount; i++)
+            {
+                IEditorPortView portView = this._portViews[i];
+                List<IEditorEdgeView> edges = portView.GetEdges();
+                int edgeAmount = edges.Count;
+                for (int j = 0; j < edgeAmount; j++)
+                {
+                    IEditorEdgeView edge = edges[j];
+                    collectedElementSet.Add(edge.edgeElement);
+                }
+            }
         }
 
         public override void SetPosition(Rect newPos)
