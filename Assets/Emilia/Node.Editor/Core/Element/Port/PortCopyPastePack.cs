@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Emilia.Kit;
+using Emilia.Kit.Editor;
 using Sirenix.Serialization;
 using UnityEditor;
 using UnityEngine;
@@ -69,7 +70,7 @@ namespace Emilia.Node.Editor
                 pasteAsset.name = copyAsset.name;
                 pasteAsset.id = Guid.NewGuid().ToString();
 
-                GraphCopyPasteUtility.PasteChild(pasteAsset);
+                pasteAsset.PasteChild();
 
                 if (direction == EditorPortDirection.Input)
                 {

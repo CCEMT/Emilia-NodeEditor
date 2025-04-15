@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using Emilia.Kit;
+using Emilia.Kit.Editor;
 using UnityEditor;
 
 namespace Emilia.Node.Editor
@@ -49,7 +50,7 @@ namespace Emilia.Node.Editor
             
             handle?.OnSaveBefore();
 
-            if (this.graphView.graphAsset != null) graphView.graphAsset.Save();
+            if (this.graphView.graphAsset != null) graphView.graphAsset.SaveAll();
 
             this.graphView.graphLocalSettingSystem.SaveAll();
 

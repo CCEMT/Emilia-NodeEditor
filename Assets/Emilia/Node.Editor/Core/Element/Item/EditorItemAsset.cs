@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Emilia.Kit;
+using Emilia.Kit.Editor;
 using Sirenix.OdinInspector.Editor;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -8,7 +9,7 @@ using Object = UnityEngine.Object;
 namespace Emilia.Node.Editor
 {
     [Serializable]
-    public abstract class EditorItemAsset : TitleAsset, IGraphAsset
+    public abstract class EditorItemAsset : TitleAsset, IUnityAsset
     {
         [SerializeField, HideInInspector]
         private string _id;
