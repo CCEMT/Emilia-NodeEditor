@@ -54,6 +54,8 @@ namespace Emilia.Node.Universal.Editor
 
         public MiniMapView()
         {
+            name = "miniMap";
+
             maxWidth = 240;
             maxHeight = 135;
 
@@ -72,10 +74,23 @@ namespace Emilia.Node.Universal.Editor
         public override void Initialize(EditorGraphView graphView)
         {
             base.Initialize(graphView);
-            name = "miniMap";
 
             schedule.Execute(UpdatePosition).ExecuteLater(1);
-            graphView.RegisterCallback<GeometryChangedEvent>((_) => UpdatePosition());
+
+            graphView.UnregisterCallback<GeometryChangedEvent>(OnGeometryChangedEvent);
+            graphView.RegisterCallback<GeometryChangedEvent>(OnGeometryChangedEvent);
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            graphView.UnregisterCallback<GeometryChangedEvent>(OnGeometryChangedEvent);
+            graphView.UnregisterCallback<GeometryChangedEvent>(OnGeometryChangedEvent);
+        }
+
+        void OnGeometryChangedEvent(GeometryChangedEvent evt)
+        {
+            UpdatePosition();
         }
 
         void UpdatePosition()

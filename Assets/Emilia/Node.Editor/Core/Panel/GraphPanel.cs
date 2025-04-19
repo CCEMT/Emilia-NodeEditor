@@ -7,6 +7,8 @@ namespace Emilia.Node.Editor
     {
         protected GraphPanelCapabilities _panelCapabilities;
 
+        public virtual string id { get; set; }
+
         public virtual GraphPanelCapabilities panelCapabilities
         {
             get => _panelCapabilities;

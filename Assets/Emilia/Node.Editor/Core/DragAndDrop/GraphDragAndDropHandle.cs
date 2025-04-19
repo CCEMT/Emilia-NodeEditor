@@ -16,12 +16,12 @@ namespace Emilia.Node.Editor
             parentHandle = parent as IGraphDragAndDropHandle;
         }
 
-        public void DragUpdatedCallback(DragUpdatedEvent evt)
+        public virtual void DragUpdatedCallback(DragUpdatedEvent evt)
         {
             parentHandle?.DragUpdatedCallback(evt);
         }
 
-        public void DragPerformedCallback(DragPerformEvent evt)
+        public virtual void DragPerformedCallback(DragPerformEvent evt)
         {
             parentHandle?.DragPerformedCallback(evt);
         }

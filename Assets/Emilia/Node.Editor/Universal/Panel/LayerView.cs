@@ -14,13 +14,15 @@ namespace Emilia.Node.Universal.Editor
         public static readonly GUIStyle BreadCrumbLeftBg = "GUIEditor.BreadcrumbLeftBackground";
         public static readonly GUIStyle BreadCrumbMidBg = "GUIEditor.BreadcrumbMidBackground";
 
+        public LayerView()
+        {
+            name = nameof(LayerView);
+            Add(new IMGUIContainer(OnImGUI));
+        }
+
         public override void Initialize(EditorGraphView graphView)
         {
             base.Initialize(graphView);
-            name = nameof(LayerView);
-
-            Add(new IMGUIContainer(OnImGUI));
-
             if (parentView != null) parentView.canResizable = false;
         }
 

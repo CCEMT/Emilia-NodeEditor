@@ -14,7 +14,7 @@ namespace Emilia.Node.Editor
 
         private IGraphPanelHandle handle;
 
-        private List<IGraphPanel> openPanels = new List<IGraphPanel>();
+        private List<IGraphPanel> _openPanels = new List<IGraphPanel>();
         private Dictionary<Type, IGraphPanel> openPanelMap = new Dictionary<Type, IGraphPanel>();
 
         private GraphPanelContainer floatRootContainer;
@@ -25,6 +25,11 @@ namespace Emilia.Node.Editor
 
         private VisualElement dockLeisureArea;
         private Rect dockAreaOffset;
+
+        /// <summary>
+        /// 打开的面板列表
+        /// </summary>
+        public IReadOnlyList<IGraphPanel> openPanels => this._openPanels;
 
         /// <summary>
         /// 停靠主容器
@@ -66,12 +71,12 @@ namespace Emilia.Node.Editor
         private void CreateContainer()
         {
             if (this._dockRootContainer != null) this._dockRootContainer.RemoveFromHierarchy();
-            this._dockRootContainer = new GraphPanelContainer() {name = "dockPanel-root"};
+            this._dockRootContainer = new GraphPanelContainer {name = "dockPanel-root"};
             this.dockLeisureArea = this._dockRootContainer;
             graphView.Add(this._dockRootContainer);
 
             if (this.floatRootContainer != null) this.floatRootContainer.RemoveFromHierarchy();
-            this.floatRootContainer = new GraphPanelContainer() {name = "floatPanel-root"};
+            this.floatRootContainer = new GraphPanelContainer {name = "floatPanel-root"};
             graphView.Add(this.floatRootContainer);
         }
 
@@ -82,12 +87,14 @@ namespace Emilia.Node.Editor
         {
             T panel = ReflectUtility.CreateInstance<T>();
             GraphPanelContainer container = AddFloatPanel(panel);
-            openPanels.Add(panel);
+            this._openPanels.Add(panel);
 
             panel.rootView.RegisterCallback<GeometryChangedEvent>((_) => UpdateGraphRect());
             panel.Initialize(graphView);
-            openPanelMap[typeof(T)] = panel;
+
+            this.openPanelMap.TryAdd(typeof(T), panel);
             this.floatPanelMap[panel] = container;
+
             return panel;
         }
 
@@ -102,9 +109,11 @@ namespace Emilia.Node.Editor
             panel.rootView.RegisterCallback<GeometryChangedEvent>((_) => UpdateGraphRect());
             panel.Initialize(graphView);
 
-            this.openPanelMap[typeof(T)] = panel;
-            openPanels.Add(panel);
+            this.openPanelMap.TryAdd(typeof(T), panel);
+
+            this._openPanels.Add(panel);
             dockPanels.Add(panel);
+
             return panel;
         }
 
@@ -180,16 +189,46 @@ namespace Emilia.Node.Editor
             GraphPanelContainer container = floatPanelMap.GetValueOrDefault(panel);
             if (container != null) container.RemoveFromHierarchy();
 
-            this.openPanels.Remove(panel);
+            this._openPanels.Remove(panel);
             this.openPanelMap.Remove(typeof(T));
+        }
+
+        /// <summary>
+        /// 关闭面板
+        /// </summary>
+        public void ClosePanel(IGraphPanel panel)
+        {
+            if (panel == null) return;
+            panel.Dispose();
+
+            panel.rootView.RemoveFromHierarchy();
+
+            GraphPanelContainer container = floatPanelMap.GetValueOrDefault(panel);
+            if (container != null) container.RemoveFromHierarchy();
+
+            this.openPanelMap.Remove(panel.GetType());
+            this._openPanels.Remove(panel);
         }
 
         /// <summary>
         /// 获取面板
         /// </summary>
-        public T GetPanel<T>() where T : IGraphPanel
+        public T GetPanel<T>() where T : IGraphPanel => (T) this.openPanelMap.GetValueOrDefault(typeof(T));
+
+        /// <summary>
+        /// 获取面板（通过Id）
+        /// </summary>
+        public T GetPanelById<T>(string id) where T : IGraphPanel
         {
-            return (T) this.openPanelMap.GetValueOrDefault(typeof(T));
+            int count = this._openPanels.Count;
+            for (int i = 0; i < count; i++)
+            {
+                IGraphPanel panel = this._openPanels[i];
+                if (panel == null || panel.id != id) continue;
+                return (T) panel;
+            }
+
+            return default;
         }
 
         /// <summary>
@@ -294,13 +333,13 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void CloseAllPanel()
         {
-            foreach (IGraphPanel panel in this.openPanels)
+            foreach (IGraphPanel panel in this._openPanels)
             {
                 panel.Dispose();
                 panel.rootView.RemoveFromHierarchy();
             }
 
-            openPanels.Clear();
+            this._openPanels.Clear();
             this.openPanelMap.Clear();
             this.floatPanelMap.Clear();
             this.dockPanels.Clear();

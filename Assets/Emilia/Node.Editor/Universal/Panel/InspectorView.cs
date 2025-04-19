@@ -15,18 +15,22 @@ namespace Emilia.Node.Universal.Editor
         private PropertyTree propertyTree;
         private List<Object> selectedObjects;
 
+        public InspectorView()
+        {
+            name = nameof(InspectorView);
+            Add(new IMGUIContainer(OnImGUI));
+        }
+
         public override void Initialize(EditorGraphView graphView)
         {
             base.Initialize(graphView);
-            name = nameof(InspectorView);
-
-            Add(new IMGUIContainer(OnImGUI));
 
             UpdateTransform();
 
+            graphView.UnregisterCallback<GeometryChangedEvent>(OnGeometryChangedEvent);
             graphView.RegisterCallback<GeometryChangedEvent>(OnGeometryChangedEvent);
         }
-
+        
         /// <summary>
         /// 设置显示的对象
         /// </summary>
@@ -45,10 +49,7 @@ namespace Emilia.Node.Universal.Editor
 
                 if (ReferenceEquals(target, null)) return;
 
-                if (i == 0)
-                {
-                    targetType = target.GetType();
-                }
+                if (i == 0) { targetType = target.GetType(); }
                 else if (targetType != (otherType = target.GetType()))
                 {
                     if (targetType.IsAssignableFrom(otherType)) continue;
@@ -100,6 +101,10 @@ namespace Emilia.Node.Universal.Editor
         public override void Dispose()
         {
             base.Dispose();
+            
+            graphView.UnregisterCallback<GeometryChangedEvent>(OnGeometryChangedEvent);
+            graphView.UnregisterCallback<GeometryChangedEvent>(OnGeometryChangedEvent);
+            
             if (propertyTree != null)
             {
                 propertyTree.Dispose();
