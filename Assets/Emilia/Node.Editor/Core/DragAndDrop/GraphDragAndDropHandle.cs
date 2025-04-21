@@ -3,7 +3,7 @@
 namespace Emilia.Node.Editor
 {
     [GenericHandle]
-    public class GraphDragAndDropHandle<T> : EditorHandle, IGraphDragAndDropHandle where T : EditorGraphAsset
+    public abstract class GraphDragAndDropHandle<T> : EditorHandle, IGraphDragAndDropHandle where T : EditorGraphAsset
     {
         public EditorGraphView smartValue { get; private set; }
 

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Emilia.Kit;
 using Emilia.Node.Editor;
 using UnityEditor;
 using UnityEditor.IMGUI.Controls;
-using UnityEngine;
 
 namespace Emilia.Node.Universal.Editor
 {
@@ -107,7 +107,7 @@ namespace Emilia.Node.Universal.Editor
             {
                 string title = titlePaths[i];
                 string[] pathParts = title.Split('/');
-                int layer = pathParts.Length;
+                int layer = pathParts.Length - 1;
 
                 if (groupLayerMap.ContainsKey(layer) == false) groupLayerMap[layer] = new List<string>();
                 groupLayerMap[layer].Add(title);
@@ -144,6 +144,8 @@ namespace Emilia.Node.Universal.Editor
                             displayName = title,
                         };
 
+                        SetExpanded(titleItem.id, true);
+
                         parent.AddChild(titleItem);
 
                         treeViewItems.Add(titleItem);
@@ -161,6 +163,12 @@ namespace Emilia.Node.Universal.Editor
 
                         string[] pathParts = path.Split('/');
                         string title = pathParts.Length > 0 ? pathParts[pathParts.Length - 1] : path;
+
+                        string groupTitle = path.Substring(0, path.LastIndexOf('/'));
+                        if (parent is CreateNodeTitleTreeViewItem titleTreeViewItem)
+                        {
+                            if (titleTreeViewItem.displayName != groupTitle) continue;
+                        }
 
                         CreateNodeEntryTreeViewItem nodeItem = new CreateNodeEntryTreeViewItem(createNodeHandle) {
                             id = path.GetHashCode(),
@@ -205,6 +213,8 @@ namespace Emilia.Node.Universal.Editor
                 string[] pathParts = path.Split('/');
                 string title = pathParts.Length > 0 ? pathParts[pathParts.Length - 1] : path;
 
+                if (SearchUtility.Search(title, searchString) == false) continue;
+
                 CreateNodeEntryTreeViewItem nodeItem = new CreateNodeEntryTreeViewItem(createNodeHandle) {
                     id = path.GetHashCode(),
                     depth = 0,
@@ -216,25 +226,6 @@ namespace Emilia.Node.Universal.Editor
                 treeViewItems.Add(nodeItem);
                 createNodeHandleMap[nodeItem.id] = createNodeHandle;
             }
-        }
-
-        protected override void RowGUI(RowGUIArgs args)
-        {
-            Color oldColor = GUI.color;
-
-            CreateNodeEntryTreeViewItem item = args.item as CreateNodeEntryTreeViewItem;
-            if (item != null)
-            {
-                NodeCache? nodeCache = this.graphView.graphElementCache.GetNodeCacheByType(item.createNodeHandle.editorNodeType);
-                if (nodeCache != null)
-                {
-                    EditorNodeView nodeView = nodeCache.Value.nodeView as EditorNodeView;
-                    if (nodeView != null) GUI.color = nodeView.topicColor;
-                }
-            }
-
-            base.RowGUI(args);
-            GUI.color = oldColor;
         }
 
         protected override bool CanStartDrag(CanStartDragArgs args) => args.draggedItem is CreateNodeEntryTreeViewItem;
@@ -251,14 +242,5 @@ namespace Emilia.Node.Universal.Editor
         }
 
         protected override DragAndDropVisualMode HandleDragAndDrop(DragAndDropArgs args) => DragAndDropVisualMode.Move;
-
-        protected override void DoubleClickedItem(int id)
-        {
-            if (createNodeHandleMap.TryGetValue(id, out ICreateNodeHandle createNodeHandle))
-            {
-                Vector2 createPosition = graphView.viewTransform.position;
-                this.graphView.nodeSystem.CreateNode(createNodeHandle.editorNodeType, createPosition, createNodeHandle.nodeData);
-            }
-        }
     }
 }

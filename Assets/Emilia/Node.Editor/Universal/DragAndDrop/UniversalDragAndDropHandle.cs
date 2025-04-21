@@ -29,7 +29,9 @@ namespace Emilia.Node.Universal.Editor
             if (genericData is ICreateNodeHandle createNodeHandle)
             {
                 Vector2 mousePosition = evt.mousePosition;
-                smartValue.nodeSystem.CreateNode(createNodeHandle.editorNodeType, mousePosition, createNodeHandle.nodeData);
+                Vector2 graphMousePosition = smartValue.contentViewContainer.WorldToLocal(mousePosition);
+                
+                smartValue.nodeSystem.CreateNode(createNodeHandle.editorNodeType, graphMousePosition, createNodeHandle.nodeData);
             }
         }
     }

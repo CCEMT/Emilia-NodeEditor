@@ -47,6 +47,8 @@ namespace Emilia.Node.Editor
                 for (int j = 0; j < genericHandleTypeAmount; j++)
                 {
                     Type genericHandleType = genericHandleTypes[j];
+                    if (genericHandleType.IsAbstract == false) continue;
+                    
                     openGenericClass = type.GetArgumentsOfInheritedOpenGenericClass(genericHandleType);
                     if (openGenericClass != null) break;
                 }
