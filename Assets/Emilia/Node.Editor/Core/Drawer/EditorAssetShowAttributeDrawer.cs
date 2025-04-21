@@ -15,9 +15,10 @@ namespace Emilia.Node.Editor
         {
             EditorAssetShowAttribute attribute = Attribute;
 
-            if (this._graphRoot == null)
+            if (this._graphRoot == null) this._graphRoot = new EditorGraphRoot();
+
+            if (this._graphRoot.window == null)
             {
-                this._graphRoot = new EditorGraphRoot();
                 EditorWindow window = EditorImGUIKit.GetImGUIWindow();
                 this._graphRoot.Initialize(window);
             }
@@ -29,13 +30,20 @@ namespace Emilia.Node.Editor
                 if (asset != null) this._graphRoot.SetAsset(asset);
                 return;
             }
+            
+            if (_graphRoot == null || _graphRoot.window == null) return;
 
             this._graphRoot.OnImGUI(attribute.height, attribute.width);
         }
 
         public void Dispose()
         {
-            this._graphRoot?.Dispose();
+            if (_graphRoot != null)
+            {
+                if (_graphRoot.asset != null) this._graphRoot.asset.SaveAll();
+                this._graphRoot.Dispose();
+            }
+            
             this._graphRoot = null;
         }
     }

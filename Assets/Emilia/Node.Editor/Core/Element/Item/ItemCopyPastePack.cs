@@ -1,5 +1,6 @@
 ﻿using System;
 using Emilia.Kit;
+using Emilia.Kit.Editor;
 using Sirenix.Serialization;
 using UnityEditor;
 using UnityEngine;
@@ -45,7 +46,7 @@ namespace Emilia.Node.Editor
 
             _pasteAsset.position = rect;
 
-            GraphCopyPasteUtility.PasteChild(this._pasteAsset);
+            this._pasteAsset.PasteChild();
             PasteDependency(copyPasteContext);
 
             graphView.RegisterCompleteObjectUndo("Graph Paste");

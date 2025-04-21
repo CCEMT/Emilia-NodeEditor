@@ -42,6 +42,7 @@ namespace Emilia.Node.Universal.Editor
         {
             title = this.stickyAsset.stickyTitle;
             contents = this.stickyAsset.content;
+            fontSize = this.stickyAsset.fontSize;
             theme = this.stickyAsset.theme;
 
             SetPositionNoUndo(stickyAsset.position);

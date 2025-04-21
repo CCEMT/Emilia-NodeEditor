@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+using Emilia.Kit.Editor;
 using UnityEngine;
 
 namespace Emilia.Node.Editor
 {
-    public partial class EditorGraphAsset : IGraphAsset
+    public partial class EditorGraphAsset : IUnityAsset
     {
         public virtual void SetChildren(List<Object> childAssets)
         {

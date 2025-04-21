@@ -14,25 +14,35 @@ namespace Emilia.Node.Universal.Editor
         private float _rightMargin = 5f;
 
         private Dictionary<ToolbarViewControlPosition, List<IToolbarViewControl>> controls = new Dictionary<ToolbarViewControlPosition, List<IToolbarViewControl>>();
-
         public ToolbarViewOrientation orientation { get; set; } = ToolbarViewOrientation.Horizontal;
 
         public float leftMargin => _leftMargin;
         public float rightMargin => _rightMargin;
 
+        public ToolbarView()
+        {
+            name = nameof(ToolbarView);
+            Add(new IMGUIContainer(OnImGUI));
+        }
+
         public override void Initialize(EditorGraphView graphView)
         {
             base.Initialize(graphView);
-            name = nameof(ToolbarView);
 
             InitControls();
             InitAttributeControls();
 
-            Add(new IMGUIContainer(OnImGUI));
-
             if (parentView != null) parentView.canResizable = false;
+            
+            EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
+            EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
+        }
 
-            EditorApplication.playModeStateChanged += (_) => ReInitControls();
+        public override void Dispose()
+        {
+            base.Dispose();
+            EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
+            EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
         }
 
         /// <summary>
@@ -42,6 +52,11 @@ namespace Emilia.Node.Universal.Editor
         {
             this._leftMargin = size;
             this._rightMargin = size;
+        }
+
+        private void OnPlayModeStateChanged(PlayModeStateChange playModeStateChange)
+        {
+            ReInitControls();
         }
 
         public void ReInitControls()

@@ -1,5 +1,6 @@
 ﻿using System;
 using Emilia.Kit;
+using Emilia.Kit.Editor;
 using Sirenix.Serialization;
 using UnityEditor;
 using Object = UnityEngine.Object;
@@ -44,7 +45,7 @@ namespace Emilia.Node.Editor
             _pasteAsset.name = this._copyAsset.name;
             _pasteAsset.id = Guid.NewGuid().ToString();
 
-            GraphCopyPasteUtility.PasteChild(this._pasteAsset);
+            _pasteAsset.PasteChild();
 
             int amount = copyPasteContext.dependency.Count;
             for (int i = 0; i < amount; i++)

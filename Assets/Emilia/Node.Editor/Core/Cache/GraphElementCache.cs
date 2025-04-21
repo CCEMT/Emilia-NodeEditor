@@ -87,10 +87,7 @@ namespace Emilia.Node.Editor
             if (this._itemViewById.ContainsKey(id)) this._itemViewById.Remove(id);
         }
 
-        public IEditorNodeView GetEditorNodeView(string id)
-        {
-            return nodeViewById.GetValueOrDefault(id);
-        }
+        public IEditorNodeView GetEditorNodeView(string id) => nodeViewById.GetValueOrDefault(id);
 
         public List<PortInfo> GetPortInfoTypeByPort(IEditorPortView form)
         {
@@ -167,7 +164,19 @@ namespace Emilia.Node.Editor
 
             return edges;
         }
-        
+
+        public NodeCache? GetNodeCacheByType(Type type)
+        {
+            int amount = this._nodeViewCache.Count;
+            for (int i = 0; i < amount; i++)
+            {
+                NodeCache nodeCache = this._nodeViewCache[i];
+                if (nodeCache.nodeView.asset.GetType() == type) return nodeCache;
+            }
+
+            return null;
+        }
+
         public void Clear()
         {
             this.editorGraphView = null;

@@ -41,7 +41,7 @@ namespace Emilia.Node.Editor
 
         public Label titleLabel { get; protected set; }
 
-        protected virtual Color topicColor { get; private set; } = Color.black;
+        public virtual Color topicColor { get; private set; } = Color.black;
 
         public virtual GraphElement element => this;
         public IReadOnlyList<IEditorPortView> portViews => this._portViews;
