@@ -730,7 +730,7 @@ namespace Emilia.Node.Editor
             else
             {
                 graphUndo.OnUndoRedoPerformed();
-                if (focusedGraphView == this) this.UpdateSelected();
+                if (focusedGraphView == this) graphSelected.UpdateSelected();
             }
         }
 

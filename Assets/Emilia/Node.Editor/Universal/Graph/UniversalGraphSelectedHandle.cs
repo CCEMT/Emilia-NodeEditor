@@ -26,7 +26,7 @@ namespace Emilia.Node.Universal.Editor
 
             foreach (ISelectable selectable in smartValue.selection)
             {
-                IGraphSelectable selectableElement = selectable as IGraphSelectable;
+                ISelectedHandle selectableElement = selectable as ISelectedHandle;
                 if (selectableElement == null) continue;
                 selectedInspectors.AddRange(selectableElement.GetSelectedObjects());
             }
