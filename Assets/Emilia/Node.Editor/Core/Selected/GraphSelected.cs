@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Emilia.Kit;
 
 namespace Emilia.Node.Editor
@@ -91,7 +92,7 @@ namespace Emilia.Node.Editor
 
         public void UpdateSelected()
         {
-            UpdateSelected(this._selected);
+            UpdateSelected(this._selected.ToList());
         }
 
         /// <summary>
