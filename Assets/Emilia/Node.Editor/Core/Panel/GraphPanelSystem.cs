@@ -271,7 +271,8 @@ namespace Emilia.Node.Editor
                 isInverted = position == GraphDockPosition.Bottom;
             }
 
-            GraphTwoPaneSplitView splitView = new GraphTwoPaneSplitView(0, size, orientation);
+            int index = isInverted ? 1 : 0;
+            GraphTwoPaneSplitView splitView = new GraphTwoPaneSplitView(index, size, orientation);
             splitView.pickingMode = PickingMode.Ignore;
 
             VisualElement placeholder = new VisualElement();
