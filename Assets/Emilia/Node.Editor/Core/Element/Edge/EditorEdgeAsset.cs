@@ -8,7 +8,7 @@ using Object = UnityEngine.Object;
 
 namespace Emilia.Node.Editor
 {
-    [Serializable]
+    [Serializable, SelectedClear]
     public class EditorEdgeAsset : TitleAsset, IUnityAsset
     {
         [SerializeField, HideInInspector]
@@ -107,10 +107,7 @@ namespace Emilia.Node.Editor
 
         public virtual void SetChildren(List<Object> childAssets) { }
 
-        public virtual List<Object> GetChildren()
-        {
-            return new List<Object>();
-        }
+        public virtual List<Object> GetChildren() => new();
 
         public virtual void CollectAsset(List<Object> allAssets)
         {

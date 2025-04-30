@@ -795,7 +795,9 @@ namespace Emilia.Node.Editor
             }
         }
 
-        protected override bool OnUpdateContentZoomer()
+        protected override bool OverrideOnKeyDownShortcut(KeyDownEvent evt) => true;
+
+        protected override bool OverrideUpdateContentZoomer()
         {
             if (minScale != maxScale)
             {

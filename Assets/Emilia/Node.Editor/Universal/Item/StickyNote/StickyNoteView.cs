@@ -29,8 +29,15 @@ namespace Emilia.Node.Universal.Editor
             fontSize = this.stickyAsset.fontSize;
             SetPositionNoUndo(stickyAsset.position);
 
-            this.Q<TextField>("title-field").RegisterCallback<ChangeEvent<string>>(e => stickyAsset.stickyTitle = e.newValue);
-            this.Q<TextField>("contents-field").RegisterCallback<ChangeEvent<string>>(e => stickyAsset.content = e.newValue);
+            this.Q<TextField>("title-field").RegisterCallback<ChangeEvent<string>>(e => {
+                stickyAsset.stickyTitle = e.newValue;
+                this.graphView.RegisterCompleteObjectUndo("Graph TitleChange");
+            });
+            
+            this.Q<TextField>("contents-field").RegisterCallback<ChangeEvent<string>>(e => {
+                stickyAsset.content = e.newValue;
+                this.graphView.RegisterCompleteObjectUndo("Graph ContentChange");
+            });
 
             RegisterCallback<StickyNoteChangeEvent>((_) => {
                 stickyAsset.fontSize = fontSize;

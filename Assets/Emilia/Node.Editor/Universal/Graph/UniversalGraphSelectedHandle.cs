@@ -52,8 +52,8 @@ namespace Emilia.Node.Universal.Editor
                     {
                         Object selectedObject = selectedInspectors[i];
                         if (selectedObject == null) continue;
-                        GraphSelectedOwner.SetSelectedOwner(selectedObject, smartValue);
-                        GraphSelectedOwner.Update();
+                        SelectedOwnerUtility.SetSelectedOwner(selectedObject, smartValue);
+                        SelectedOwnerUtility.Update();
                     }
 
                     Selection.objects = selectedInspectors.ToArray();
@@ -70,7 +70,7 @@ namespace Emilia.Node.Universal.Editor
                 if (isUseSelection)
                 {
                     Selection.objects = null;
-                    GraphSelectedOwner.Update();
+                    SelectedOwnerUtility.Update();
                 }
                 else smartValue.graphPanelSystem.ClosePanel<InspectorView>();
             }
@@ -83,7 +83,7 @@ namespace Emilia.Node.Universal.Editor
 
             base.Dispose();
             Selection.objects = null;
-            GraphSelectedOwner.Update();
+            SelectedOwnerUtility.Update();
         }
     }
 }
