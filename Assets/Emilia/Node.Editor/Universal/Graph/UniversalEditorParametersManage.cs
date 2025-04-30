@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using Emilia.Kit;
 using Emilia.Variables;
 using Emilia.Variables.Editor;
 
 namespace Emilia.Node.Universal.Editor
 {
+    [SelectedClear]
     public class UniversalEditorParametersManage : EditorParametersManage
     {
         public override IList<Type> filterTypes => new List<Type>() {

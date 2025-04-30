@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Emilia.BehaviorTree.Attributes;
+using Emilia.Kit;
 using Emilia.Node.Editor;
 using Emilia.Variables;
 using Emilia.Variables.Editor;
@@ -20,7 +21,7 @@ namespace Emilia.Node.Universal.Editor
 
             if (typeof(Variable).IsAssignableFrom(Property.ValueEntry.TypeOfValue) == false) return;
 
-            EditorGraphView graphView = GraphSelectedOwner.GetSelectedOwner(Property);
+            EditorGraphView graphView = SelectedOwnerUtility.GetSelectedOwner(Property) as EditorGraphView;
             if (graphView == null) return;
 
             EditorUniversalGraphAsset universalGraphAsset = graphView.graphAsset as EditorUniversalGraphAsset;
