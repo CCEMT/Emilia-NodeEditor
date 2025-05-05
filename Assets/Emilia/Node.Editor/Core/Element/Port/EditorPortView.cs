@@ -70,6 +70,19 @@ namespace Emilia.Node.Editor
 
             ContextualMenuManipulator contextualMenuManipulator = new ContextualMenuManipulator(OnContextualMenuManipulator);
             this.AddManipulator(contextualMenuManipulator);
+            
+            schedule.Execute(RefreshEdge).ExecuteLater(1);
+        }
+        
+        public virtual void RefreshEdge()
+        {
+            List<EditorEdgeAsset> edgeAssets = graphView.graphAsset.GetEdges(master.asset.id, info.id);
+            for (int i = 0; i < edgeAssets.Count; i++)
+            {
+                EditorEdgeAsset edgeAsset = edgeAssets[i];
+                if (graphView.graphElementCache.edgeViewById.GetValueOrDefault(edgeAsset.id) != null) continue;
+                graphView.AddEdgeView(edgeAsset);
+            }
         }
 
         protected virtual void OnContextualMenuManipulator(ContextualMenuPopulateEvent evt)
@@ -191,6 +204,18 @@ namespace Emilia.Node.Editor
 
             PortCopyPastePack pack = new PortCopyPastePack(master.asset.id, info.id, info.portType, info.direction, packs);
             return pack;
+        }
+        
+        public virtual void RemoveView()
+        {
+            List<IEditorEdgeView> edgeViews = graphView.graphElementCache.GetEdgeView(this);
+            for (int i = 0; i < edgeViews.Count; i++)
+            {
+                IEditorEdgeView edgeView = edgeViews[i];
+                edgeView.RemoveView();
+            }
+
+            RemoveFromHierarchy();
         }
 
         public virtual void Dispose()

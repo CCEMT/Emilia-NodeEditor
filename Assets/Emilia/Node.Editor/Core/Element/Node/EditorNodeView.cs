@@ -1,4 +1,6 @@
-﻿using System;
+﻿#region Using
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Emilia.Kit;
@@ -10,6 +12,8 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using NodeView = UnityEditor.Experimental.GraphView.Node;
 using Object = UnityEngine.Object;
+
+#endregion
 
 namespace Emilia.Node.Editor
 {
@@ -58,7 +62,7 @@ namespace Emilia.Node.Editor
             this.asset = asset;
 
             InitializeNodeView();
-            InitializePortView();
+            RebuildPortView();
             InitializeExpandPort();
         }
 
@@ -147,16 +151,50 @@ namespace Emilia.Node.Editor
             SetColor(topicColor);
         }
 
-        protected virtual void InitializePortView()
+        protected virtual void RebuildPortView()
         {
             List<EditorPortInfo> portInfos = CollectStaticPortAssets();
             portInfos.Sort((a, b) => a.order.CompareTo(b.order));
+
+            List<EditorPortInfo> input = new List<EditorPortInfo>();
+            List<EditorPortInfo> output = new List<EditorPortInfo>();
+            List<EditorPortInfo> any = new List<EditorPortInfo>();
 
             int amount = portInfos.Count;
             for (int i = 0; i < amount; i++)
             {
                 EditorPortInfo info = portInfos[i];
-                AddPortView(info);
+                if (info.direction == EditorPortDirection.Input) input.Add(info);
+                else if (info.direction == EditorPortDirection.Output) output.Add(info);
+                else any.Add(info);
+            }
+
+            int inputAmount = input.Count;
+            for (int i = 0; i < inputAmount; i++)
+            {
+                EditorPortInfo info = input[i];
+                if (_portViewMap.ContainsKey(info.id) == false) AddPortView(i, info);
+            }
+
+            int outputAmount = output.Count;
+            for (int i = 0; i < outputAmount; i++)
+            {
+                EditorPortInfo info = output[i];
+                if (_portViewMap.ContainsKey(info.id) == false) AddPortView(i, info);
+            }
+
+            int anyAmount = any.Count;
+            for (int i = 0; i < anyAmount; i++)
+            {
+                EditorPortInfo info = any[i];
+                if (_portViewMap.ContainsKey(info.id) == false) AddPortView(i, info);
+            }
+
+            int portAmount = _portViews.Count;
+            for (int i = portAmount - 1; i >= 0; i--)
+            {
+                IEditorPortView portView = _portViews[i];
+                if (portInfos.Find(p => p.id == portView.info.id) == null) RemovePortView(portView);
             }
         }
 
@@ -164,7 +202,7 @@ namespace Emilia.Node.Editor
 
         public virtual IEditorPortView GetPortView(string portId) => this._portViewMap.GetValueOrDefault(portId);
 
-        public virtual IEditorPortView AddPortView(EditorPortInfo info)
+        public virtual IEditorPortView AddPortView(int index, EditorPortInfo info)
         {
             IEditorPortView portView = ReflectUtility.CreateInstance(info.nodePortViewType) as IEditorPortView;
             portView.Initialize(this, info);
@@ -175,6 +213,19 @@ namespace Emilia.Node.Editor
             this._portViewMap[info.id] = portView;
 
             return portView;
+        }
+
+        public virtual void RemovePortView(IEditorPortView portView)
+        {
+            if (portView == null) return;
+
+            portView.onConnected -= OnPortConnected;
+            portView.OnDisconnected -= OnPortDisconnected;
+
+            this._portViews.Remove(portView);
+            this._portViewMap.Remove(portView.info.id);
+
+            portView.RemoveView();
         }
 
         protected virtual void OnPortConnected(IEditorPortView editorPortView, IEditorEdgeView editorEdgeView)

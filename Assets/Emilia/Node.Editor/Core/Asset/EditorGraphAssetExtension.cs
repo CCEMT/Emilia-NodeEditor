@@ -133,5 +133,32 @@ namespace Emilia.Node.Editor
 
             return inputEdges;
         }
+        
+        /// <summary>
+        /// 获取指定端口的所有Edge
+        /// </summary>
+        public static List<EditorEdgeAsset> GetEdges(this EditorGraphAsset graphAsset, string nodeId, string portId)
+        {
+            List<EditorEdgeAsset> edges = new List<EditorEdgeAsset>();
+
+            int edgeCount = graphAsset.edges.Count;
+            for (int i = 0; i < edgeCount; i++)
+            {
+                EditorEdgeAsset edgeAsset = graphAsset.edges[i];
+                if (edgeAsset.inputNodeId == nodeId && edgeAsset.inputPortId == portId)
+                {
+                    edges.Add(edgeAsset);
+                    continue;
+                }
+
+                if (edgeAsset.outputNodeId == nodeId && edgeAsset.outputPortId == portId)
+                {
+                    edges.Add(edgeAsset);
+                    continue;
+                }
+            }
+
+            return edges;
+        }
     }
 }

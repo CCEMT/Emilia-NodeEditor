@@ -30,7 +30,7 @@ namespace Emilia.Node.Editor
         /// <summary>
         /// 添加IEditorPortView
         /// </summary>
-        IEditorPortView AddPortView(EditorPortInfo asset);
+        IEditorPortView AddPortView(int index,EditorPortInfo asset);
 
         /// <summary>
         /// 设置位置
