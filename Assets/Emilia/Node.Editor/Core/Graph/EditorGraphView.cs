@@ -411,25 +411,6 @@ namespace Emilia.Node.Editor
             for (int i = 0; i < amount; i++)
             {
                 EditorEdgeAsset edge = graphAsset.edges[i];
-
-                IEditorNodeView inputNode = graphElementCache.GetEditorNodeView(edge.inputNodeId);
-                IEditorNodeView outputNode = graphElementCache.GetEditorNodeView(edge.outputNodeId);
-
-                if (inputNode == null || outputNode == null)
-                {
-                    Debug.LogError("加载Edge时找不到节点");
-                    continue;
-                }
-
-                IEditorPortView inputPort = inputNode.GetPortView(edge.inputPortId);
-                IEditorPortView outputPort = outputNode.GetPortView(edge.outputPortId);
-
-                if (inputPort == null || outputPort == null)
-                {
-                    Debug.LogError("加载Edge时找不到端口");
-                    continue;
-                }
-
                 AddEdgeView(edge);
 
                 loadProgress = (graphAsset.nodes.Count + i + 1) / (float) (graphAsset.nodes.Count + graphAsset.edges.Count + graphAsset.items.Count);
@@ -529,6 +510,16 @@ namespace Emilia.Node.Editor
         /// </summary>
         public IEditorEdgeView AddEdgeView(EditorEdgeAsset asset)
         {
+            IEditorNodeView inputNode = graphElementCache.GetEditorNodeView(asset.inputNodeId);
+            IEditorNodeView outputNode = graphElementCache.GetEditorNodeView(asset.outputNodeId);
+
+            if (inputNode == null || outputNode == null) return null;
+
+            IEditorPortView inputPort = inputNode.GetPortView(asset.inputPortId);
+            IEditorPortView outputPort = outputNode.GetPortView(asset.outputPortId);
+
+            if (inputPort == null || outputPort == null) return null;
+            
             Type edgeViewType = GraphTypeCache.GetEdgeViewType(asset.GetType());
             if (edgeViewType == null)
             {

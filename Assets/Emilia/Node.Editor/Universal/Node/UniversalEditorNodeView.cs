@@ -204,24 +204,24 @@ namespace Emilia.Node.Universal.Editor
             return new List<EditorPortInfo>();
         }
 
-        public override IEditorPortView AddPortView(EditorPortInfo info)
+        public override IEditorPortView AddPortView(int index, EditorPortInfo info)
         {
-            IEditorPortView portView = base.AddPortView(info);
+            IEditorPortView portView = base.AddPortView(index,info);
 
             switch (portView.editorOrientation)
             {
                 case EditorOrientation.Horizontal:
                     if (horizontalContainer == null) CreateHorizontalContainer();
-                    if (portView.portDirection == EditorPortDirection.Input) this.horizontalInputContainer.Add(portView.portElement);
-                    else if (portView.portDirection == EditorPortDirection.Output) this.horizontalOutputContainer.Add(portView.portElement);
+                    if (portView.portDirection == EditorPortDirection.Input) this.horizontalInputContainer.Insert(index, portView.portElement);
+                    else if (portView.portDirection == EditorPortDirection.Output) this.horizontalOutputContainer.Insert(index, portView.portElement);
                     break;
                 case EditorOrientation.Vertical:
                     if (verticalContainer == null) CreateVerticalContainer();
-                    if (portView.portDirection == EditorPortDirection.Input) this.verticalInputContainer.Add(portView.portElement);
-                    else if (portView.portDirection == EditorPortDirection.Output) this.verticalOutputContainer.Add(portView.portElement);
+                    if (portView.portDirection == EditorPortDirection.Input) this.verticalInputContainer.Insert(index, portView.portElement);
+                    else if (portView.portDirection == EditorPortDirection.Output) this.verticalOutputContainer.Insert(index, portView.portElement);
                     break;
                 case EditorOrientation.Custom:
-                    AddCustomPortView(portView, info);
+                    AddCustomPortView(index, portView, info);
                     break;
             }
 
@@ -253,7 +253,7 @@ namespace Emilia.Node.Universal.Editor
         /// <summary>
         /// 添加自定义端口视图
         /// </summary>
-        protected virtual void AddCustomPortView(IEditorPortView portView, EditorPortInfo info) { }
+        protected virtual void AddCustomPortView(int index,IEditorPortView portView, EditorPortInfo info) { }
 
         /// <summary>
         /// 更新折叠状态

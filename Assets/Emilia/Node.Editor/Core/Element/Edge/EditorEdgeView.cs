@@ -72,6 +72,8 @@ namespace Emilia.Node.Editor
 
                 inputPortView = inputNode.GetPortView(asset.inputPortId);
                 outputPortView = outputNode.GetPortView(asset.outputPortId);
+                
+                if (inputPortView == null || outputPortView == null) return;
 
                 input = inputPortView.portElement;
                 output = outputPortView.portElement;
