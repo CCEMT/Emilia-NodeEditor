@@ -1,6 +1,4 @@
-﻿#region Using
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Emilia.Kit;
@@ -12,8 +10,6 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using NodeView = UnityEditor.Experimental.GraphView.Node;
 using Object = UnityEngine.Object;
-
-#endregion
 
 namespace Emilia.Node.Editor
 {
