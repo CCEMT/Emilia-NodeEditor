@@ -34,7 +34,7 @@ namespace Emilia.Node.Editor
                 }
             }
         }
-
+        
         public virtual List<Object> GetChildren()
         {
             List<Object> assets = new List<Object>();
@@ -58,29 +58,6 @@ namespace Emilia.Node.Editor
             }
 
             return assets;
-        }
-
-        public virtual void CollectAsset(List<Object> allAssets)
-        {
-            allAssets.Add(this);
-
-            for (var i = 0; i < this._nodes.Count; i++)
-            {
-                EditorNodeAsset node = this._nodes[i];
-                node.CollectAsset(allAssets);
-            }
-
-            for (var i = 0; i < this._edges.Count; i++)
-            {
-                EditorEdgeAsset edge = this._edges[i];
-                edge.CollectAsset(allAssets);
-            }
-
-            for (var i = 0; i < this._items.Count; i++)
-            {
-                EditorItemAsset item = this._items[i];
-                item.CollectAsset(allAssets);
-            }
         }
     }
 }

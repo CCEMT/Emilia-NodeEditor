@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Emilia.Kit.Editor;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -56,8 +57,7 @@ namespace Emilia.Node.Editor
             graphView.RegisterCompleteObjectUndo("Graph RemoveItem");
             graphView.graphAsset.RemoveItem(itemView.asset);
 
-            List<Object> assets = new List<Object>();
-            itemView.asset.CollectAsset(assets);
+            List<Object> assets = itemView.asset.CollectAsset();
 
             int amount = assets.Count;
             for (int i = 0; i < amount; i++)
@@ -76,8 +76,7 @@ namespace Emilia.Node.Editor
             itemView.RemoveView();
             graphView.graphAsset.RemoveItem(itemView.asset);
 
-            List<Object> assets = new List<Object>();
-            itemView.asset.CollectAsset(assets);
+            List<Object> assets = itemView.asset.CollectAsset();
 
             int amount = assets.Count;
             for (int i = 0; i < amount; i++)

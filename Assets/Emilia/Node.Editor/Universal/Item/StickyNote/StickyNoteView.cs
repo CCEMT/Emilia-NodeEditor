@@ -4,7 +4,6 @@ using Emilia.Node.Attributes;
 using Emilia.Node.Editor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using UnityEngine.UIElements;
 using Object = UnityEngine.Object;
 
 namespace Emilia.Node.Universal.Editor
@@ -29,19 +28,16 @@ namespace Emilia.Node.Universal.Editor
             fontSize = this.stickyAsset.fontSize;
             SetPositionNoUndo(stickyAsset.position);
 
-            this.Q<TextField>("title-field").RegisterCallback<ChangeEvent<string>>(e => {
-                stickyAsset.stickyTitle = e.newValue;
-                this.graphView.RegisterCompleteObjectUndo("Graph TitleChange");
-            });
-            
-            this.Q<TextField>("contents-field").RegisterCallback<ChangeEvent<string>>(e => {
-                stickyAsset.content = e.newValue;
-                this.graphView.RegisterCompleteObjectUndo("Graph ContentChange");
-            });
-
             RegisterCallback<StickyNoteChangeEvent>((_) => {
+                stickyAsset.stickyTitle = title;
+                stickyAsset.content = contents;
                 stickyAsset.fontSize = fontSize;
                 stickyAsset.theme = theme;
+                
+                Rect position = GetPosition();
+                stickyAsset.position = new Rect(position.x, position.y, style.width.value.value, style.height.value.value);
+                
+                this.graphView.RegisterCompleteObjectUndo("Graph StickyNoteChange");
             });
         }
 
@@ -54,7 +50,7 @@ namespace Emilia.Node.Universal.Editor
 
             SetPositionNoUndo(stickyAsset.position);
 
-            if (isSilent == false)  graphView.graphSave.SetDirty();
+            if (isSilent == false) graphView.graphSave.SetDirty();
         }
 
         public override void SetPosition(Rect rect)
@@ -69,12 +65,6 @@ namespace Emilia.Node.Universal.Editor
         {
             base.SetPosition(newPos);
             asset.position = newPos;
-        }
-
-        public override void OnResized()
-        {
-            base.OnResized();
-            stickyAsset.position = GetPosition();
         }
 
         public ICopyPastePack GetPack() => new ItemCopyPastePack(asset);

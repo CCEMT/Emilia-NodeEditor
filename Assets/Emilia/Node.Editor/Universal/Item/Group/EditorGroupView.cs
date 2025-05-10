@@ -35,13 +35,14 @@ namespace Emilia.Node.Editor
 
             UpdateGroupColor(groupColor);
 
-            headerContainer.Q<TextField>().RegisterCallback<ChangeEvent<string>>((text) => this.groupAsset.groupTitle = text.newValue);
+            headerContainer.Q<TextField>().RegisterCallback<ChangeEvent<string>>((text) => {
+                this.groupAsset.groupTitle = text.newValue;
+                this.graphView.RegisterCompleteObjectUndo("Graph GroupTitleChange");
+            });
 
             isUndo = false;
             InitializeInnerNodes();
             isUndo = true;
-
-            SetPositionNoUndo(asset.position);
         }
 
         private void InitializeInnerNodes()
@@ -155,7 +156,6 @@ namespace Emilia.Node.Editor
             title = groupAsset.groupTitle;
             this.isUndo = false;
 
-            SetPositionNoUndo(asset.position);
             RemoveNode();
             AddNode();
 

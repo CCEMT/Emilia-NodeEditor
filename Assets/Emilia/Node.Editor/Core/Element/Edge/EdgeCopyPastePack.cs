@@ -11,24 +11,33 @@ namespace Emilia.Node.Editor
     public class EdgeCopyPastePack : IEdgeCopyPastePack
     {
         [OdinSerialize, NonSerialized]
-        private EditorEdgeAsset _copyAsset;
+        private UnityAssetSerializationPack assetPack;
 
+        private EditorEdgeAsset _copyAsset;
         private EditorEdgeAsset _pasteAsset;
 
-        public EditorEdgeAsset copyAsset => this._copyAsset;
+        public EditorEdgeAsset copyAsset
+        {
+            get
+            {
+                if (this._copyAsset == null) this._copyAsset = UnityAssetSerializationUtility.DeserializeUnityAsset<EditorEdgeAsset>(this.assetPack);
+                return this._copyAsset;
+            }
+        }
+
         public EditorEdgeAsset pasteAsset => this._pasteAsset;
 
         public EdgeCopyPastePack(EditorEdgeAsset edgeAsset)
         {
-            this._copyAsset = edgeAsset;
+            assetPack = UnityAssetSerializationUtility.SerializeUnityAsset(edgeAsset);
         }
 
         public virtual bool CanDependency(ICopyPastePack pack)
         {
             INodeCopyPastePack nodeCopyPastePack = pack as INodeCopyPastePack;
             if (nodeCopyPastePack == null) return false;
-            bool isInput = this._copyAsset.inputNodeId == nodeCopyPastePack.copyAsset.id;
-            bool isOutput = this._copyAsset.outputNodeId == nodeCopyPastePack.copyAsset.id;
+            bool isInput = copyAsset.inputNodeId == nodeCopyPastePack.copyAsset.id;
+            bool isOutput = copyAsset.outputNodeId == nodeCopyPastePack.copyAsset.id;
             if (isInput || isOutput) return true;
             return false;
         }
@@ -39,10 +48,12 @@ namespace Emilia.Node.Editor
             EditorGraphView graphView = graphCopyPasteContext.graphView;
 
             if (graphView == null) return;
-            if (this._copyAsset == null) return;
 
-            _pasteAsset = Object.Instantiate(_copyAsset);
-            _pasteAsset.name = this._copyAsset.name;
+            EditorEdgeAsset copy = copyAsset;
+            if (copy == null) return;
+
+            _pasteAsset = Object.Instantiate(copy);
+            _pasteAsset.name = copy.name;
             _pasteAsset.id = Guid.NewGuid().ToString();
 
             _pasteAsset.PasteChild();
@@ -54,14 +65,14 @@ namespace Emilia.Node.Editor
                 INodeCopyPastePack nodeCopyPastePack = pack as INodeCopyPastePack;
                 if (nodeCopyPastePack == null) continue;
 
-                bool isInput = this._copyAsset.inputNodeId == nodeCopyPastePack.copyAsset.id;
+                bool isInput = copy.inputNodeId == nodeCopyPastePack.copyAsset.id;
                 if (isInput)
                 {
                     _pasteAsset.inputNodeId = nodeCopyPastePack.pasteAsset.id;
                     continue;
                 }
 
-                bool isOutput = this._copyAsset.outputNodeId == nodeCopyPastePack.copyAsset.id;
+                bool isOutput = copy.outputNodeId == nodeCopyPastePack.copyAsset.id;
                 if (isOutput)
                 {
                     _pasteAsset.outputNodeId = nodeCopyPastePack.pasteAsset.id;

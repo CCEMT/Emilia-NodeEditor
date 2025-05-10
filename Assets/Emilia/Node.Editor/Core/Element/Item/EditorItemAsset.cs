@@ -56,13 +56,7 @@ namespace Emilia.Node.Editor
         }
 
         public virtual void SetChildren(List<Object> childAssets) { }
-
-        public virtual List<Object> GetChildren() => new();
-
-        public virtual void CollectAsset(List<Object> allAssets)
-        {
-            allAssets.Add(this);
-        }
+        public virtual List<Object> GetChildren() => null;
 
         protected virtual void OnDisable()
         {

@@ -167,6 +167,11 @@ namespace Emilia.Node.Editor
         public float loadProgress { get; private set; }
 
         /// <summary>
+        /// 是否聚集
+        /// </summary>
+        public bool isFocus { get; private set; }
+
+        /// <summary>
         /// 当前窗口
         /// </summary>
         public EditorWindow window { get; set; }
@@ -257,6 +262,10 @@ namespace Emilia.Node.Editor
         public void OnEnterFocus()
         {
             if (loadProgress != 1) return;
+
+            if (isFocus) return;
+            isFocus = true;
+
             graphUndo.OnUndoRedoPerformed(true);
             this.graphHandle?.OnEnterFocus();
         }
@@ -271,6 +280,10 @@ namespace Emilia.Node.Editor
         public void OnExitFocus()
         {
             if (loadProgress != 1) return;
+
+            if (isFocus == false) return;
+            isFocus = false;
+
             this.graphHandle?.OnExitFocus();
         }
 
@@ -519,7 +532,7 @@ namespace Emilia.Node.Editor
             IEditorPortView outputPort = outputNode.GetPortView(asset.outputPortId);
 
             if (inputPort == null || outputPort == null) return null;
-            
+
             Type edgeViewType = GraphTypeCache.GetEdgeViewType(asset.GetType());
             if (edgeViewType == null)
             {
@@ -641,19 +654,18 @@ namespace Emilia.Node.Editor
             return compatiblePorts;
         }
 
-        private string OnSerializeGraphElements(IEnumerable<GraphElement> elements)
-        {
-            return graphCopyPaste.SerializeGraphElementsCallback(elements);
-        }
+        private string OnSerializeGraphElements(IEnumerable<GraphElement> elements) => graphCopyPaste.SerializeGraphElementsCallback(elements);
 
-        private bool OnCanPasteSerializedData(string data)
-        {
-            return graphCopyPaste.CanPasteSerializedDataCallback(data);
-        }
+        private bool OnCanPasteSerializedData(string data) => graphCopyPaste.CanPasteSerializedDataCallback(data);
 
         private void OnUnserializeAndPaste(string operationName, string data)
         {
-            graphCopyPaste.UnserializeAndPasteCallback(operationName, data);
+            var pasteObjects = graphCopyPaste.UnserializeAndPasteCallback(operationName, data);
+
+            SetSelection(pasteObjects.OfType<ISelectable>().ToList());
+            UpdateSelected();
+
+            clipboard_Internal = graphCopyPaste.SerializeGraphElementsCallback(pasteObjects);
         }
 
         private GraphViewChange OnGraphViewChanged(GraphViewChange graphViewChange)
@@ -734,6 +746,20 @@ namespace Emilia.Node.Editor
         }
 
         /// <summary>
+        /// 设置选中
+        /// </summary>
+        public void SetSelection(List<ISelectable> selectables)
+        {
+            ClearSelection();
+
+            for (int i = 0; i < selectables.Count; i++)
+            {
+                ISelectable selectable = selectables[i];
+                AddToSelection(selectable);
+            }
+        }
+
+        /// <summary>
         /// 发送事件
         /// </summary>
         public void SendGraphEvent(IGraphEvent graphEvent)
@@ -756,11 +782,8 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void RegisterCompleteObjectUndo(string name)
         {
-            List<Object> objects = new List<Object>();
-            graphAsset.CollectAsset(objects);
-
+            List<Object> objects = graphAsset.CollectAsset();
             Undo.RegisterCompleteObjectUndo(objects.ToArray(), name);
-
             graphSave.SetDirty();
         }
 
@@ -769,11 +792,8 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void RecordObjectUndo(string name)
         {
-            List<Object> objects = new List<Object>();
-            graphAsset.CollectAsset(objects);
-
+            List<Object> objects = graphAsset.CollectAsset();
             Undo.RecordObjects(objects.ToArray(), name);
-
             graphSave.SetDirty();
         }
 
@@ -896,10 +916,7 @@ namespace Emilia.Node.Editor
         /// <summary>
         /// 有效性
         /// </summary>
-        public bool Validate()
-        {
-            return hierarchy.parent != null;
-        }
+        public bool Validate() => hierarchy.parent != null;
 
         public void Dispose()
         {

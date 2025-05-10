@@ -29,17 +29,16 @@ namespace Emilia.Node.Universal.Editor
 
         private IMGUIContainer toggleContainer;
 
-        public override void Initialize(EditorGraphView graphView)
+        public AppendPanel()
         {
-            base.Initialize(graphView);
-
             name = nameof(AppendPanel);
 
             toggleContainer = new IMGUIContainer(OnToggleGUI);
             toggleContainer.name = $"{nameof(AppendPanel)}-Toolbar";
-            toggleContainer.style.width = 20;
 
             Add(this.toggleContainer);
+
+            RegisterCallback<GeometryChangedEvent>((_) => { this.toggleContainer.style.width = layout.width; });
         }
 
         public void SetMargins(float size)
@@ -60,7 +59,8 @@ namespace Emilia.Node.Universal.Editor
 
             graphPanels.Add(panelInfo);
 
-            Reset();
+            if (graphPanels.Count > 0) SwitchPanel(graphPanels.FirstOrDefault().graphPanel);
+
         }
 
         public void RemoveGraphPanel<T>()
@@ -80,25 +80,8 @@ namespace Emilia.Node.Universal.Editor
                 selectedPanel = null;
             }
 
-            Reset();
-        }
+            if (graphPanels.Count > 0) SwitchPanel(graphPanels.FirstOrDefault().graphPanel);
 
-        private void Reset()
-        {
-            int appendPanelCount = graphPanels.Count;
-
-            if (appendPanelCount > 1)
-            {
-                toggleContainer.style.display = DisplayStyle.None;
-                toggleContainer.style.width = 0;
-            }
-            else
-            {
-                toggleContainer.style.display = DisplayStyle.Flex;
-                toggleContainer.style.width = 20;
-            }
-
-            if (appendPanelCount > 0) SwitchPanel(graphPanels.FirstOrDefault().graphPanel);
         }
 
         private void SwitchPanel(IGraphPanel panel)
