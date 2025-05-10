@@ -23,10 +23,10 @@ namespace Emilia.Node.Editor
         {
             base.AllModuleInitializeSuccess();
             if (this.handle == null) return;
-            
+
             Type type = handle.connectorListenerType;
             if (type == null) return;
-            
+
             connectorListener = ReflectUtility.CreateInstance(type) as EditorEdgeConnectorListener;
             connectorListener.Initialize(this.graphView);
         }
@@ -88,8 +88,7 @@ namespace Emilia.Node.Editor
 
                 this.graphView.graphAsset.RemoveEdge(edge.asset);
 
-                List<Object> assets = new List<Object>();
-                edge.asset.CollectAsset(assets);
+                List<Object> assets = edge.asset.CollectAsset();
 
                 int amount = assets.Count;
                 for (int i = 0; i < amount; i++)
@@ -111,8 +110,7 @@ namespace Emilia.Node.Editor
             {
                 this.graphView.graphAsset.RemoveEdge(edge.asset);
 
-                List<Object> assets = new List<Object>();
-                edge.asset.CollectAsset(assets);
+                List<Object> assets = edge.asset.CollectAsset();
 
                 int amount = assets.Count;
                 for (int i = 0; i < amount; i++)

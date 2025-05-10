@@ -45,11 +45,5 @@ namespace Emilia.Node.Universal.Editor
             if (this.editorParametersManage != null) assets.Add(this.editorParametersManage);
             return assets;
         }
-
-        public override void CollectAsset(List<Object> allAssets)
-        {
-            base.CollectAsset(allAssets);
-            if (this.editorParametersManage != null) allAssets.Add(editorParametersManage);
-        }
     }
 }

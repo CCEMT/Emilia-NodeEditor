@@ -280,10 +280,10 @@ namespace Emilia.Node.Editor
         public void OnExitFocus()
         {
             if (loadProgress != 1) return;
-            
+
             if (isFocus == false) return;
             isFocus = false;
-            
+
             this.graphHandle?.OnExitFocus();
         }
 
@@ -764,11 +764,8 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void RegisterCompleteObjectUndo(string name)
         {
-            List<Object> objects = new List<Object>();
-            graphAsset.CollectAsset(objects);
-
+            List<Object> objects = graphAsset.CollectAsset();
             Undo.RegisterCompleteObjectUndo(objects.ToArray(), name);
-
             graphSave.SetDirty();
         }
 
@@ -777,11 +774,8 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void RecordObjectUndo(string name)
         {
-            List<Object> objects = new List<Object>();
-            graphAsset.CollectAsset(objects);
-
+            List<Object> objects = graphAsset.CollectAsset();
             Undo.RecordObjects(objects.ToArray(), name);
-
             graphSave.SetDirty();
         }
 
