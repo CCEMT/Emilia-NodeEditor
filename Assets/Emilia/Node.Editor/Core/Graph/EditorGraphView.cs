@@ -167,6 +167,11 @@ namespace Emilia.Node.Editor
         public float loadProgress { get; private set; }
 
         /// <summary>
+        /// 是否聚集
+        /// </summary>
+        public bool isFocus { get; private set; }
+
+        /// <summary>
         /// 当前窗口
         /// </summary>
         public EditorWindow window { get; set; }
@@ -257,6 +262,10 @@ namespace Emilia.Node.Editor
         public void OnEnterFocus()
         {
             if (loadProgress != 1) return;
+
+            if (isFocus) return;
+            isFocus = true;
+
             graphUndo.OnUndoRedoPerformed(true);
             this.graphHandle?.OnEnterFocus();
         }
@@ -271,6 +280,10 @@ namespace Emilia.Node.Editor
         public void OnExitFocus()
         {
             if (loadProgress != 1) return;
+            
+            if (isFocus == false) return;
+            isFocus = false;
+            
             this.graphHandle?.OnExitFocus();
         }
 
@@ -519,7 +532,7 @@ namespace Emilia.Node.Editor
             IEditorPortView outputPort = outputNode.GetPortView(asset.outputPortId);
 
             if (inputPort == null || outputPort == null) return null;
-            
+
             Type edgeViewType = GraphTypeCache.GetEdgeViewType(asset.GetType());
             if (edgeViewType == null)
             {
@@ -641,15 +654,9 @@ namespace Emilia.Node.Editor
             return compatiblePorts;
         }
 
-        private string OnSerializeGraphElements(IEnumerable<GraphElement> elements)
-        {
-            return graphCopyPaste.SerializeGraphElementsCallback(elements);
-        }
+        private string OnSerializeGraphElements(IEnumerable<GraphElement> elements) => graphCopyPaste.SerializeGraphElementsCallback(elements);
 
-        private bool OnCanPasteSerializedData(string data)
-        {
-            return graphCopyPaste.CanPasteSerializedDataCallback(data);
-        }
+        private bool OnCanPasteSerializedData(string data) => graphCopyPaste.CanPasteSerializedDataCallback(data);
 
         private void OnUnserializeAndPaste(string operationName, string data)
         {
@@ -896,10 +903,7 @@ namespace Emilia.Node.Editor
         /// <summary>
         /// 有效性
         /// </summary>
-        public bool Validate()
-        {
-            return hierarchy.parent != null;
-        }
+        public bool Validate() => hierarchy.parent != null;
 
         public void Dispose()
         {
