@@ -1,4 +1,6 @@
-﻿using Emilia.Node.Editor;
+﻿using System.Linq;
+using Emilia.Kit;
+using Emilia.Node.Editor;
 using Emilia.Reflection.Editor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -35,7 +37,11 @@ namespace Emilia.Node.Universal.Editor
         public override void Paste(Vector2? mousePosition = null)
         {
             if (mousePosition == null) smartValue.PasteCallback_Internals();
-            else smartValue.graphCopyPaste.UnserializeAndPasteCallback("Paste", smartValue.GetSerializedData_Internal());
+            else
+            {
+                var pasteObjects = smartValue.graphCopyPaste.UnserializeAndPasteCallback("Paste", smartValue.GetSerializedData_Internal(), mousePosition);
+                smartValue.graphSelected.UpdateSelected(pasteObjects.OfType<ISelectedHandle>().ToList());
+            }
         }
 
         public override void Delete()

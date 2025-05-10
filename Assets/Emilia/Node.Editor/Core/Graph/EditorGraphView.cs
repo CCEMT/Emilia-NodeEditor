@@ -660,7 +660,8 @@ namespace Emilia.Node.Editor
 
         private void OnUnserializeAndPaste(string operationName, string data)
         {
-            graphCopyPaste.UnserializeAndPasteCallback(operationName, data);
+            var pasteObjects = graphCopyPaste.UnserializeAndPasteCallback(operationName, data);
+            graphSelected.UpdateSelected(pasteObjects.OfType<ISelectedHandle>().ToList());
         }
 
         private GraphViewChange OnGraphViewChanged(GraphViewChange graphViewChange)
