@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Emilia.Node.Editor;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine.UIElements;
 
 namespace Emilia.Node.Universal.Editor
@@ -30,9 +32,8 @@ namespace Emilia.Node.Universal.Editor
             IEditorNodeView pasteNode = nodeViews.FirstOrDefault();
             pasteNode.asset.position = editorNodeView.asset.position;
             pasteNode.SetPositionNoUndo(editorNodeView.asset.position);
-
-            editorNodeView.graphView.ClearSelection();
-            editorNodeView.graphView.AddToSelection(pasteNode.element);
+            
+            editorNodeView.graphView.SetSelection(new List<ISelectable>(){pasteNode.element});
             editorNodeView.graphView.UpdateSelected();
 
             GraphSelectionDraggerForceSelectedNodeEvent selectEvent = GraphSelectionDraggerForceSelectedNodeEvent.Create(pasteNode.element, evt.mousePosition);

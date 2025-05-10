@@ -41,6 +41,11 @@ namespace Emilia.Node.Universal.Editor
             {
                 var pasteObjects = smartValue.graphCopyPaste.UnserializeAndPasteCallback("Paste", smartValue.GetSerializedData_Internal(), mousePosition);
                 smartValue.graphSelected.UpdateSelected(pasteObjects.OfType<ISelectedHandle>().ToList());
+
+                smartValue.SetSelection(pasteObjects.OfType<ISelectable>().ToList());
+                smartValue.UpdateSelected();
+
+                smartValue.clipboard_Internal = smartValue.graphCopyPaste.SerializeGraphElementsCallback(pasteObjects);
             }
         }
 

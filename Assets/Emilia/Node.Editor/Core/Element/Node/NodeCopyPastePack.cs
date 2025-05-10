@@ -12,22 +12,28 @@ namespace Emilia.Node.Editor
     public class NodeCopyPastePack : INodeCopyPastePack
     {
         [OdinSerialize, NonSerialized]
-        private EditorNodeAsset _copyAsset;
+        private UnityAssetSerializationPack assetPack;
 
+        private EditorNodeAsset _copyAsset;
         private EditorNodeAsset _pasteAsset;
 
-        public EditorNodeAsset copyAsset => this._copyAsset;
+        public EditorNodeAsset copyAsset
+        {
+            get
+            {
+                if (this._copyAsset == null) this._copyAsset = UnityAssetSerializationUtility.DeserializeUnityAsset<EditorNodeAsset>(this.assetPack);
+                return this._copyAsset;
+            }
+        }
+
         public EditorNodeAsset pasteAsset => _pasteAsset;
 
         public NodeCopyPastePack(EditorNodeAsset nodeAsset)
         {
-            this._copyAsset = nodeAsset;
+            assetPack = UnityAssetSerializationUtility.SerializeUnityAsset(nodeAsset);
         }
 
-        public virtual bool CanDependency(ICopyPastePack pack)
-        {
-            return false;
-        }
+        public virtual bool CanDependency(ICopyPastePack pack) => false;
 
         public void Paste(CopyPasteContext copyPasteContext)
         {
@@ -35,10 +41,12 @@ namespace Emilia.Node.Editor
             EditorGraphView graphView = graphCopyPasteContext.graphView;
 
             if (graphView == null) return;
-            if (this._copyAsset == null) return;
 
-            _pasteAsset = Object.Instantiate(_copyAsset);
-            _pasteAsset.name = this._copyAsset.name;
+            EditorNodeAsset copy = copyAsset;
+            if (copy == null) return;
+
+            _pasteAsset = Object.Instantiate(copy);
+            _pasteAsset.name = copy.name;
             _pasteAsset.id = Guid.NewGuid().ToString();
 
             Rect rect = _pasteAsset.position;

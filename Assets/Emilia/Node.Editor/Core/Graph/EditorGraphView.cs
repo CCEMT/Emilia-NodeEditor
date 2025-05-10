@@ -661,7 +661,11 @@ namespace Emilia.Node.Editor
         private void OnUnserializeAndPaste(string operationName, string data)
         {
             var pasteObjects = graphCopyPaste.UnserializeAndPasteCallback(operationName, data);
-            graphSelected.UpdateSelected(pasteObjects.OfType<ISelectedHandle>().ToList());
+
+            SetSelection(pasteObjects.OfType<ISelectable>().ToList());
+            UpdateSelected();
+
+            clipboard_Internal = graphCopyPaste.SerializeGraphElementsCallback(pasteObjects);
         }
 
         private GraphViewChange OnGraphViewChanged(GraphViewChange graphViewChange)
@@ -739,6 +743,20 @@ namespace Emilia.Node.Editor
         public void UpdateSelected()
         {
             graphSelected.UpdateSelected(selection.OfType<ISelectedHandle>().ToList());
+        }
+
+        /// <summary>
+        /// 设置选中
+        /// </summary>
+        public void SetSelection(List<ISelectable> selectables)
+        {
+            ClearSelection();
+
+            for (int i = 0; i < selectables.Count; i++)
+            {
+                ISelectable selectable = selectables[i];
+                AddToSelection(selectable);
+            }
         }
 
         /// <summary>
