@@ -11,6 +11,11 @@ namespace Emilia.Node.Editor
         public string path { get; set; }
         public int priority { get; set; }
         public Texture2D icon { get; set; }
-        public virtual void Initialize(object arg) { }
+
+        public virtual void Initialize(object arg)
+        {
+            CreateNodeHandleContext context = (CreateNodeHandleContext) arg;
+            editorNodeType = context.defaultEditorNodeType;
+        }
     }
 }
