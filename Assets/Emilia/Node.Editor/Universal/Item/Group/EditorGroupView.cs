@@ -43,6 +43,8 @@ namespace Emilia.Node.Editor
             isUndo = false;
             InitializeInnerNodes();
             isUndo = true;
+            
+            if (this.groupAsset.innerNodes.Count == 0) SetPositionNoUndo(asset.position);
         }
 
         private void InitializeInnerNodes()

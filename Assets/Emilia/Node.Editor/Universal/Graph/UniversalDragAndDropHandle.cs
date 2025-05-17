@@ -17,8 +17,10 @@ namespace Emilia.Node.Universal.Editor
             object genericData = DragAndDrop.GetGenericData(CreateNodeDragAndDropType);
             if (genericData is ICreateNodeHandle createNodeHandle)
             {
-                DragAndDrop.visualMode = DragAndDropVisualMode.Generic;
-                DragAndDrop.AcceptDrag();
+                Vector2 mousePosition = evt.mousePosition;
+                Vector2 graphMousePosition = graphView.contentViewContainer.WorldToLocal(mousePosition);
+                
+                graphView.nodeSystem.CreateNode(createNodeHandle.editorNodeType, graphMousePosition, createNodeHandle.nodeData);
             }
         }
 
@@ -28,10 +30,8 @@ namespace Emilia.Node.Universal.Editor
             object genericData = DragAndDrop.GetGenericData(CreateNodeDragAndDropType);
             if (genericData is ICreateNodeHandle createNodeHandle)
             {
-                Vector2 mousePosition = evt.mousePosition;
-                Vector2 graphMousePosition = graphView.contentViewContainer.WorldToLocal(mousePosition);
-                
-                graphView.nodeSystem.CreateNode(createNodeHandle.editorNodeType, graphMousePosition, createNodeHandle.nodeData);
+                DragAndDrop.visualMode = DragAndDropVisualMode.Generic;
+                DragAndDrop.AcceptDrag();
             }
         }
     }
