@@ -6,7 +6,6 @@ using Emilia.Kit;
 using Emilia.Kit.Editor;
 using Emilia.Node.Attributes;
 using Emilia.Reflection.Editor;
-using Sirenix.Utilities;
 using Unity.EditorCoroutines.Editor;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
@@ -69,7 +68,7 @@ namespace Emilia.Node.Editor
         /// <summary>
         /// Graph设置
         /// </summary>
-        public GraphSettingAttribute graphSetting { get; private set; }
+        public GraphSettingStruct? graphSetting { get; private set; }
 
         /// <summary>
         /// Element缓存
@@ -297,7 +296,7 @@ namespace Emilia.Node.Editor
         /// <summary>
         /// 重新加载
         /// </summary>
-        public void Reload(EditorGraphAsset asset)
+        public void Reload(EditorGraphAsset asset, GraphSettingStruct? settingStruct = null)
         {
             if (asset == null)
             {
@@ -317,7 +316,7 @@ namespace Emilia.Node.Editor
                 bool allReload = graphAsset == null || graphAsset.GetType() != asset.GetType();
                 graphAsset = asset;
 
-                graphSetting = graphAsset.GetType().GetCustomAttribute<GraphSettingAttribute>();
+                if (settingStruct != null) graphSetting = settingStruct;
                 SyncSetting();
 
                 if (allReload) AllReload();
@@ -349,9 +348,9 @@ namespace Emilia.Node.Editor
         private void SyncSetting()
         {
             if (graphSetting == null) return;
-            maxLoadTimeMs = graphSetting.maxLoadTimeMs;
-            SetupZoom(graphSetting.zoomSize.x, graphSetting.zoomSize.y);
-            if (graphSetting.immediatelySave == false) graphAsset = graphSave.ResetCopy(graphAsset);
+            maxLoadTimeMs = graphSetting.Value.maxLoadTimeMs;
+            SetupZoom(graphSetting.Value.zoomSize.x, graphSetting.Value.zoomSize.y);
+            if (graphSetting.Value.immediatelySave == false) graphAsset = graphSave.ResetCopy(graphAsset);
         }
 
         private void AllReload()
@@ -730,7 +729,7 @@ namespace Emilia.Node.Editor
 
         private void OnUndoRedoPerformed()
         {
-            if (graphSetting != null && graphSetting.fastUndo == false) Reload(graphAsset);
+            if (graphSetting != null && graphSetting.Value.fastUndo == false) Reload(graphAsset);
             else
             {
                 graphUndo.OnUndoRedoPerformed();
@@ -905,7 +904,7 @@ namespace Emilia.Node.Editor
             if (force) graphSave?.OnSave();
             else
             {
-                bool isInquire = graphSetting != null && graphSetting.immediatelySave == false && graphSave.dirty;
+                bool isInquire = graphSetting != null && graphSetting.Value.immediatelySave == false && graphSave.dirty;
                 if (isInquire == false) graphSave?.OnSave();
                 else
                 {

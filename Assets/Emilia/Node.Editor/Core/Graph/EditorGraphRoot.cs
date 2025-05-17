@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Linq;
+using Emilia.Node.Attributes;
 using Sirenix.Serialization;
+using Sirenix.Utilities;
 using UnityEditor;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace Emilia.Node.Editor
 {
@@ -15,6 +15,9 @@ namespace Emilia.Node.Editor
 
         [NonSerialized, OdinSerialize]
         private EditorGraphAsset _asset;
+
+        [NonSerialized, OdinSerialize]
+        private GraphSettingStruct? settingStruct;
 
         private EditorGraphViewDrawer _drawer;
 
@@ -50,6 +53,14 @@ namespace Emilia.Node.Editor
         }
 
         /// <summary>
+        /// 改变设置
+        /// </summary>
+        public void SetSetting(GraphSettingStruct settingStruct)
+        {
+            this.settingStruct = settingStruct;
+        }
+
+        /// <summary>
         /// ImGUI绘制
         /// </summary>
         public void OnImGUI(float height, float width = -1)
@@ -59,7 +70,11 @@ namespace Emilia.Node.Editor
                 graphView = new EditorGraphView();
                 graphView.window = window;
                 graphView.Initialize();
-                graphView.Reload(asset);
+
+                GraphSettingStruct? loadSetting = settingStruct;
+                if (settingStruct == null) loadSetting = asset.GetType().GetCustomAttribute<GraphSettingAttribute>().settingStruct;
+
+                graphView.Reload(asset, loadSetting);
 
                 this._drawer = new EditorGraphViewDrawer();
                 this._drawer.Initialize(graphView);
