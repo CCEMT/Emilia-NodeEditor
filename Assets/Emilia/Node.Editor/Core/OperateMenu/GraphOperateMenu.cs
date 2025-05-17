@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Emilia.Kit;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -9,7 +10,7 @@ namespace Emilia.Node.Editor
     {
         public const int SeparatorAt = 1200;
 
-        private IOperateMenuHandle handle;
+        private OperateMenuHandle handle;
 
         /// <summary>
         /// 缓存操作菜单信息
@@ -22,13 +23,13 @@ namespace Emilia.Node.Editor
         {
             base.Initialize(graphView);
             actionInfoCache.Clear();
-            handle = EditorHandleUtility.BuildHandle<IOperateMenuHandle>(this.graphView.graphAsset.GetType(), this.graphView);
+            handle = EditorHandleUtility.CreateHandle<OperateMenuHandle>(this.graphView.graphAsset.GetType());
         }
 
         public override void AllModuleInitializeSuccess()
         {
             base.AllModuleInitializeSuccess();
-            handle?.InitializeCache();
+            handle?.InitializeCache(this.graphView, actionInfoCache);
         }
 
         /// <summary>
@@ -43,7 +44,7 @@ namespace Emilia.Node.Editor
             }
 
             List<OperateMenuItem> graphMenuItems = new List<OperateMenuItem>();
-            handle.CollectMenuItems(graphMenuItems, menuContext);
+            handle.CollectMenuItems(this.graphView, graphMenuItems, menuContext);
 
             var sortedItems = graphMenuItems
                 .GroupBy(x => string.IsNullOrEmpty(x.category) ? x.menuName : x.category)
@@ -83,13 +84,7 @@ namespace Emilia.Node.Editor
             if (this.graphView == null) return;
 
             actionInfoCache.Clear();
-
-            if (handle != null)
-            {
-                EditorHandleUtility.ReleaseHandle(handle);
-                handle = null;
-            }
-
+            this.handle = null;
             base.Dispose();
         }
     }

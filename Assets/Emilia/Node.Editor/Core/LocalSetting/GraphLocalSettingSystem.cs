@@ -8,7 +8,7 @@ namespace Emilia.Node.Editor
     {
         private const string GraphLocalSettingSaveKey = "GraphLocalSetting";
 
-        private IGraphLocalSettingHandle handle;
+        private GraphLocalSettingHandle handle;
 
         private IGraphTypeLocalSetting _typeSetting;
         private IGraphAssetLocalSetting _assetSetting;
@@ -23,7 +23,7 @@ namespace Emilia.Node.Editor
         public override void Initialize(EditorGraphView graphView)
         {
             base.Initialize(graphView);
-            this.handle = EditorHandleUtility.BuildHandle<IGraphLocalSettingHandle>(graphView.graphAsset.GetType(), graphView);
+            this.handle = EditorHandleUtility.CreateHandle<GraphLocalSettingHandle>(graphView.graphAsset.GetType());
         }
 
         public override void AllModuleInitializeSuccess()
@@ -52,7 +52,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void ResetTypeSetting()
         {
-            Type createSettingType = this.handle?.typeSettingType;
+            Type createSettingType = this.handle?.GetTypeSettingType(this.graphView);
             if (typeof(IGraphTypeLocalSetting).IsAssignableFrom(createSettingType)) this._typeSetting = ReflectUtility.CreateInstance(createSettingType) as IGraphTypeLocalSetting;
         }
 
@@ -61,7 +61,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void ResetAssetSetting()
         {
-            Type createSettingType = this.handle?.assetSettingType;
+            Type createSettingType = this.handle?.GetAssetSettingType(this.graphView);
             if (typeof(IGraphAssetLocalSetting).IsAssignableFrom(createSettingType)) this._assetSetting = ReflectUtility.CreateInstance(createSettingType) as IGraphAssetLocalSetting;
         }
 
@@ -92,11 +92,7 @@ namespace Emilia.Node.Editor
 
         public override void Dispose()
         {
-            if (this.handle != null)
-            {
-                EditorHandleUtility.ReleaseHandle(handle);
-                this.handle = null;
-            }
+            this.handle = null;
 
             _typeSetting = null;
             _assetSetting = null;

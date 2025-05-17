@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Emilia.Kit;
 using Emilia.Kit.Editor;
 using UnityEditor;
 using UnityEngine;
@@ -9,13 +10,13 @@ namespace Emilia.Node.Editor
 {
     public class GraphNodeSystem : BasicGraphViewModule
     {
-        private INodeSystemHandle handle;
+        private NodeSystemHandle handle;
         public override int order => 900;
 
         public override void Initialize(EditorGraphView graphView)
         {
             base.Initialize(graphView);
-            handle = EditorHandleUtility.BuildHandle<INodeSystemHandle>(graphView.graphAsset.GetType(), graphView);
+            handle = EditorHandleUtility.CreateHandle<NodeSystemHandle>(graphView.graphAsset.GetType());
         }
 
         /// <summary>
@@ -35,7 +36,7 @@ namespace Emilia.Node.Editor
 
             graphView.RegisterCompleteObjectUndo("Graph CreateNode");
             IEditorNodeView nodeView = graphView.AddNode(nodeAsset);
-            handle?.OnCreateNode(nodeView);
+            handle?.OnCreateNode(this.graphView, nodeView);
 
             return nodeView;
         }
@@ -98,12 +99,7 @@ namespace Emilia.Node.Editor
 
         public override void Dispose()
         {
-            if (this.handle != null)
-            {
-                EditorHandleUtility.ReleaseHandle(handle);
-                this.handle = null;
-            }
-
+            this.handle = null;
             base.Dispose();
         }
     }

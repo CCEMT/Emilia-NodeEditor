@@ -1,44 +1,47 @@
-﻿using Emilia.Node.Editor;
+﻿using Emilia.Kit;
+using Emilia.Node.Editor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Emilia.Node.Universal.Editor
 {
-    public class UniversalGraphHotKeysHandle : GraphHotKeysHandle<EditorUniversalGraphAsset>
+    [EditorHandle(typeof(EditorUniversalGraphAsset))]
+    public class UniversalGraphHotKeysHandle : GraphHotKeysHandle
     {
-        public override void OnKeyDown(KeyDownEvent evt)
+        public override void OnKeyDown(EditorGraphView graphView, KeyDownEvent evt)
         {
+            base.OnKeyDown(graphView, evt);
             if (evt.keyCode == KeyCode.S && evt.actionKey)
             {
-                smartValue.graphOperate.Save();
+                graphView.graphOperate.Save();
                 evt.StopPropagation();
             }
 
-            OnKeyDownShortcut_Hook(evt);
+            OnKeyDownShortcut_Hook(graphView, evt);
         }
-        
-        private void OnKeyDownShortcut_Hook(KeyDownEvent evt)
+
+        private void OnKeyDownShortcut_Hook(EditorGraphView graphView, KeyDownEvent evt)
         {
-            if (! smartValue.isReframable || smartValue.panel.GetCapturingElement(PointerId.mousePointerId) != null) return;
+            if (! graphView.isReframable || graphView.panel.GetCapturingElement(PointerId.mousePointerId) != null) return;
 
             EventPropagation eventPropagation = EventPropagation.Continue;
             switch (evt.character)
             {
                 case ' ':
-                    eventPropagation = smartValue.OnInsertNodeKeyDown_Internals(evt);
+                    eventPropagation = graphView.OnInsertNodeKeyDown_Internals(evt);
                     break;
                 case '[':
-                    eventPropagation = smartValue.FramePrev();
+                    eventPropagation = graphView.FramePrev();
                     break;
                 case ']':
-                    eventPropagation = smartValue.FrameNext();
+                    eventPropagation = graphView.FrameNext();
                     break;
                 case 'a':
-                    eventPropagation = smartValue.FrameAll();
+                    eventPropagation = graphView.FrameAll();
                     break;
                 case 'o':
-                    eventPropagation = smartValue.FrameOrigin();
+                    eventPropagation = graphView.FrameOrigin();
                     break;
             }
             if (eventPropagation != EventPropagation.Stop) return;

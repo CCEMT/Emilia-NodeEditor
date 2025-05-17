@@ -7,61 +7,68 @@ using UnityEngine;
 
 namespace Emilia.Node.Universal.Editor
 {
-    public class UniversalGraphOperateHandle : GraphOperateHandle<EditorUniversalGraphAsset>
+    [EditorHandle(typeof(EditorUniversalGraphAsset))]
+    public class UniversalGraphOperateHandle : GraphOperateHandle
     {
-        public override void OpenCreateNodeMenu(Vector2 mousePosition, CreateNodeContext createNodeContext = default)
+        public override void OpenCreateNodeMenu(EditorGraphView graphView, Vector2 mousePosition, CreateNodeContext createNodeContext = default)
         {
-            Rect? screenPosition = smartValue.GetElementPanelOwnerObjectScreenPosition_Internal();
+            Rect? screenPosition = graphView.GetElementPanelOwnerObjectScreenPosition_Internal();
             if (screenPosition == null) return;
 
-            smartValue.createNodeMenu.MenuCreateInitialize(createNodeContext);
+            graphView.createNodeMenu.MenuCreateInitialize(createNodeContext);
 
             NodeCreationContext nodeCreationContext = new NodeCreationContext {
                 screenMousePosition = screenPosition.Value.position + mousePosition,
                 index = -1,
             };
 
-            smartValue.createNodeMenu.ShowCreateNodeMenu(nodeCreationContext);
+            graphView.createNodeMenu.ShowCreateNodeMenu(nodeCreationContext);
         }
 
-        public override void Cut()
+        public override void Cut(EditorGraphView graphView)
         {
-            smartValue.CutSelectionCallback_Internals();
+            base.Cut(graphView);
+            graphView.CutSelectionCallback_Internals();
         }
 
-        public override void Copy()
+        public override void Copy(EditorGraphView graphView)
         {
-            smartValue.CopySelectionCallback_Internals();
+            base.Copy(graphView);
+            graphView.CopySelectionCallback_Internals();
         }
 
-        public override void Paste(Vector2? mousePosition = null)
+        public override void Paste(EditorGraphView graphView, Vector2? mousePosition = null)
         {
-            if (mousePosition == null) smartValue.PasteCallback_Internals();
+            base.Paste(graphView, mousePosition);
+            if (mousePosition == null) graphView.PasteCallback_Internals();
             else
             {
-                var pasteObjects = smartValue.graphCopyPaste.UnserializeAndPasteCallback("Paste", smartValue.GetSerializedData_Internal(), mousePosition);
-                smartValue.graphSelected.UpdateSelected(pasteObjects.OfType<ISelectedHandle>().ToList());
+                var pasteObjects = graphView.graphCopyPaste.UnserializeAndPasteCallback("Paste", graphView.GetSerializedData_Internal(), mousePosition);
+                graphView.graphSelected.UpdateSelected(pasteObjects.OfType<ISelectedHandle>().ToList());
 
-                smartValue.SetSelection(pasteObjects.OfType<ISelectable>().ToList());
-                smartValue.UpdateSelected();
+                graphView.SetSelection(pasteObjects.OfType<ISelectable>().ToList());
+                graphView.UpdateSelected();
 
-                smartValue.clipboard_Internal = smartValue.graphCopyPaste.SerializeGraphElementsCallback(pasteObjects);
+                graphView.clipboard_Internal = graphView.graphCopyPaste.SerializeGraphElementsCallback(pasteObjects);
             }
         }
 
-        public override void Delete()
+        public override void Delete(EditorGraphView graphView)
         {
-            smartValue.DeleteSelectionCallback_Internals();
+            base.Delete(graphView);
+            graphView.DeleteSelectionCallback_Internals();
         }
 
-        public override void Duplicate()
+        public override void Duplicate(EditorGraphView graphView)
         {
-            smartValue.DuplicateSelectionCallback_Internals();
+            base.Duplicate(graphView);
+            graphView.DuplicateSelectionCallback_Internals();
         }
 
-        public override void Save()
+        public override void Save(EditorGraphView graphView)
         {
-            smartValue.Save();
+            base.Save(graphView);
+            graphView.Save();
         }
     }
 }

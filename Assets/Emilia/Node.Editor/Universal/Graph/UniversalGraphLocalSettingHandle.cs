@@ -1,10 +1,12 @@
 ﻿using System;
+using Emilia.Kit;
 using Emilia.Node.Editor;
 
 namespace Emilia.Node.Universal.Editor
 {
-    public class UniversalGraphLocalSettingHandle : GraphLocalSettingHandle<EditorUniversalGraphAsset>
+    [EditorHandle(typeof(EditorUniversalGraphAsset))]
+    public class UniversalGraphLocalSettingHandle : GraphLocalSettingHandle
     {
-        public override Type assetSettingType => typeof(UniversalGraphAssetLocalSetting);
+        public override Type GetAssetSettingType(EditorGraphView graphView) => typeof(UniversalGraphAssetLocalSetting);
     }
 }

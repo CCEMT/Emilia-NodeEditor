@@ -7,7 +7,7 @@ namespace Emilia.Node.Editor
 {
     public class GraphSelected : BasicGraphViewModule
     {
-        private IGraphSelectedHandle handle;
+        private GraphSelectedHandle handle;
 
         private List<ISelectedHandle> _selected = new List<ISelectedHandle>();
         private List<IGraphSelectedDrawer> selectedDrawers = new List<IGraphSelectedDrawer>();
@@ -20,7 +20,8 @@ namespace Emilia.Node.Editor
         public override void Initialize(EditorGraphView graphView)
         {
             base.Initialize(graphView);
-            this.handle = EditorHandleUtility.BuildHandle<IGraphSelectedHandle>(graphView.graphAsset.GetType(), graphView);
+            this.handle = EditorHandleUtility.CreateHandle<GraphSelectedHandle>(graphView.graphAsset.GetType());
+            handle.Initialize(graphView);
         }
 
         public override void AllModuleInitializeSuccess()
@@ -36,7 +37,7 @@ namespace Emilia.Node.Editor
 
             selectedDrawers.Clear();
 
-            handle?.CollectSelectedDrawer(this.selectedDrawers);
+            handle?.CollectSelectedDrawer(this.graphView, this.selectedDrawers);
 
             int newAmount = selectedDrawers.Count;
             for (int i = 0; i < newAmount; i++)
@@ -51,19 +52,19 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void UpdateSelected(List<ISelectedHandle> selection)
         {
-            handle?.BeforeUpdateSelected(this._selected);
+            handle?.BeforeUpdateSelected(this.graphView, this._selected);
 
             UnSelected(this._selected);
 
             this._selected.Clear();
             this._selected.AddRange(selection);
 
-            handle?.UpdateSelectedInspector(_selected);
+            handle?.UpdateSelectedInspector(this.graphView, _selected);
             UpdateSelectedDrawer(_selected);
 
             Selected(this._selected);
 
-            handle?.AfterUpdateSelected(_selected);
+            handle?.AfterUpdateSelected(this.graphView, _selected);
 
             onSelectedChanged?.Invoke(_selected);
         }
@@ -117,9 +118,9 @@ namespace Emilia.Node.Editor
                 drawer.Dispose();
             }
 
-            if (handle != null)
+            if (this.handle != null)
             {
-                EditorHandleUtility.ReleaseHandle(handle);
+                handle.Dispose(this.graphView);
                 handle = null;
             }
 

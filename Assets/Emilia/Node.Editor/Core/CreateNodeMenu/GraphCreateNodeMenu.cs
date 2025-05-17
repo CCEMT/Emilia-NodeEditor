@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Emilia.Kit;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -20,7 +21,7 @@ namespace Emilia.Node.Editor
 
         private Texture2D nullIcon;
 
-        private ICreateNodeMenuHandle handle;
+        private CreateNodeMenuHandle handle;
 
         /// <summary>
         /// 缓存的创建节点Handle
@@ -38,17 +39,18 @@ namespace Emilia.Node.Editor
             nullIcon.SetPixel(0, 0, Color.clear);
             nullIcon.Apply();
 
-            handle = EditorHandleUtility.BuildHandle<ICreateNodeMenuHandle>(graphView.graphAsset.GetType(), graphView);
+            handle = EditorHandleUtility.CreateHandle<CreateNodeMenuHandle>(graphView.graphAsset.GetType());
+            handle.Initialize(graphView);
         }
 
         public override void AllModuleInitializeSuccess()
         {
             base.AllModuleInitializeSuccess();
-            handle?.InitializeCache();
-            
+            handle?.InitializeCache(this.graphView, createNodeHandleCacheList);
+
             this.graphView.nodeCreationRequest = OnNodeCreationRequest;
         }
-        
+
         private void OnNodeCreationRequest(NodeCreationContext nodeCreationContext)
         {
             MenuCreateInitialize(new CreateNodeContext());
@@ -60,7 +62,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void ShowCreateNodeMenu(NodeCreationContext nodeCreationContext)
         {
-            handle?.ShowCreateNodeMenu(nodeCreationContext);
+            handle?.ShowCreateNodeMenu(graphView, nodeCreationContext);
         }
 
         /// <summary>
@@ -71,7 +73,7 @@ namespace Emilia.Node.Editor
             if (this.handle == null) return;
             this.createNodeContext = context;
             this.createNodeContext.nodeMenu = this;
-            handle.MenuCreateInitialize(this.createNodeContext);
+            handle.MenuCreateInitialize(graphView, this.createNodeContext);
         }
 
         /// <summary>
@@ -80,13 +82,13 @@ namespace Emilia.Node.Editor
         public List<SearchTreeEntry> OnCreateSearchTree(SearchWindowContext context)
         {
             List<SearchTreeEntry> searchTreeEntries = new List<SearchTreeEntry>();
-            searchTreeEntries.Add(new SearchTreeGroupEntry(new GUIContent(handle.title)));
+            searchTreeEntries.Add(new SearchTreeGroupEntry(new GUIContent(handle.GetTitle(graphView))));
 
             Dictionary<string, List<MenuItem>> titleAndPriority = new Dictionary<string, List<MenuItem>>();
             Dictionary<string, MenuItem> nodeMap = new Dictionary<string, MenuItem>();
 
             List<CreateNodeInfo> allNodeInfos = new List<CreateNodeInfo>();
-            handle.CollectAllCreateNodeInfos(allNodeInfos, this.createNodeContext);
+            handle.CollectAllCreateNodeInfos(graphView, allNodeInfos, this.createNodeContext);
 
             List<CreateNodeInfo> createNodeInfos;
             if (createNodeContext.nodeCollect != null) createNodeInfos = this.createNodeContext.nodeCollect.Collect(allNodeInfos);
@@ -287,9 +289,9 @@ namespace Emilia.Node.Editor
                 nullIcon = null;
             }
 
-            if (handle != null)
+            if (handle!=null)
             {
-                EditorHandleUtility.ReleaseHandle(handle);
+                handle.Dispose(this.graphView);
                 handle = null;
             }
 

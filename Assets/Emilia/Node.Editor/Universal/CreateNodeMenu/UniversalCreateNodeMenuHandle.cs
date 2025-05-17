@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Emilia.Kit;
 using Emilia.Node.Editor;
 using Sirenix.Utilities;
 using UnityEditor;
@@ -9,21 +10,26 @@ using Object = UnityEngine.Object;
 
 namespace Emilia.Node.Universal.Editor
 {
-    public class UniversalCreateNodeMenuHandle : CreateNodeMenuHandle<EditorUniversalGraphAsset>
+    [EditorHandle(typeof(EditorUniversalGraphAsset))]
+    public class UniversalCreateNodeMenuHandle : CreateNodeMenuHandle
     {
         public CreateNodeMenuProvider createNodeMenuProvider { get; private set; }
 
-        public override void InitializeCache()
+        public override void Initialize(EditorGraphView graphView)
         {
+            base.Initialize(graphView);
             createNodeMenuProvider = ScriptableObject.CreateInstance<CreateNodeMenuProvider>();
-
-            InitializeRuntimeNodeCache();
-            InitializeEditorNodeCache();
         }
 
-        private void InitializeRuntimeNodeCache()
+        public override void InitializeCache(EditorGraphView graphView, List<ICreateNodeHandle> createNodeHandles)
         {
-            Type assetType = smartValue.graphAsset.GetType();
+            InitializeRuntimeNodeCache(graphView, createNodeHandles);
+            InitializeEditorNodeCache(graphView, createNodeHandles);
+        }
+
+        private void InitializeRuntimeNodeCache(EditorGraphView graphView, List<ICreateNodeHandle> createNodeHandles)
+        {
+            Type assetType = graphView.graphAsset.GetType();
             NodeToRuntimeAttribute attribute = assetType.GetCustomAttribute<NodeToRuntimeAttribute>(true);
             if (attribute == null) return;
 
@@ -38,15 +44,17 @@ namespace Emilia.Node.Universal.Editor
                 createNodeHandleContext.nodeType = type;
                 createNodeHandleContext.defaultEditorNodeType = attribute.baseEditorNodeType;
 
-                ICreateNodeHandle nodeHandle = EditorHandleUtility.BuildHandle<ICreateNodeHandle>(type, createNodeHandleContext);
+                ICreateNodeHandle nodeHandle = EditorHandleUtility.CreateHandle<ICreateNodeHandle>(type);
                 if (nodeHandle == null) continue;
-                smartValue.createNodeMenu.createNodeHandleCacheList.Add(nodeHandle);
+
+                nodeHandle.Initialize(createNodeHandleContext);
+                graphView.createNodeMenu.createNodeHandleCacheList.Add(nodeHandle);
             }
         }
 
-        private void InitializeEditorNodeCache()
+        private void InitializeEditorNodeCache(EditorGraphView graphView, List<ICreateNodeHandle> createNodeHandles)
         {
-            Type assetType = smartValue.graphAsset.GetType();
+            Type assetType = graphView.graphAsset.GetType();
             NodeToEditorAttribute attribute = assetType.GetCustomAttribute<NodeToEditorAttribute>(true);
             if (attribute == null) return;
 
@@ -65,28 +73,31 @@ namespace Emilia.Node.Universal.Editor
                 createNodeHandle.priority = nodeMenuAttribute.priority;
                 createNodeHandle.editorNodeType = type;
 
-                smartValue.createNodeMenu.createNodeHandleCacheList.Add(createNodeHandle);
+                graphView.createNodeMenu.createNodeHandleCacheList.Add(createNodeHandle);
             }
         }
 
-        public override void MenuCreateInitialize(CreateNodeContext createNodeContext)
+        public override void MenuCreateInitialize(EditorGraphView graphView, CreateNodeContext createNodeContext)
         {
+            base.MenuCreateInitialize(graphView, createNodeContext);
             createNodeMenuProvider.Initialize(createNodeContext);
         }
 
-        public override void ShowCreateNodeMenu(NodeCreationContext c)
+        public override void ShowCreateNodeMenu(EditorGraphView graphView, NodeCreationContext c)
         {
+            base.ShowCreateNodeMenu(graphView, c);
             if (createNodeMenuProvider.createNodeContext.nodeMenu == null) return;
             SearchWindowContext searchWindowContext = new SearchWindowContext(c.screenMousePosition);
             SearchWindow.Open(searchWindowContext, createNodeMenuProvider);
         }
 
-        public override void CollectAllCreateNodeInfos(List<CreateNodeInfo> createNodeInfos, CreateNodeContext createNodeContext)
+        public override void CollectAllCreateNodeInfos(EditorGraphView graphView, List<CreateNodeInfo> createNodeInfos, CreateNodeContext createNodeContext)
         {
-            int amount = smartValue.createNodeMenu.createNodeHandleCacheList.Count;
+            base.CollectAllCreateNodeInfos(graphView, createNodeInfos, createNodeContext);
+            int amount = graphView.createNodeMenu.createNodeHandleCacheList.Count;
             for (int i = 0; i < amount; i++)
             {
-                ICreateNodeHandle nodeHandle = smartValue.createNodeMenu.createNodeHandleCacheList[i];
+                ICreateNodeHandle nodeHandle = graphView.createNodeMenu.createNodeHandleCacheList[i];
                 if (nodeHandle.validity == false) continue;
 
                 CreateNodeInfo createNodeInfo = new CreateNodeInfo();
@@ -99,9 +110,9 @@ namespace Emilia.Node.Universal.Editor
             }
         }
 
-        public override void Dispose()
+        public override void Dispose(EditorGraphView graphView)
         {
-            base.Dispose();
+            base.Dispose(graphView);
             if (createNodeMenuProvider != null)
             {
                 Object.DestroyImmediate(createNodeMenuProvider);

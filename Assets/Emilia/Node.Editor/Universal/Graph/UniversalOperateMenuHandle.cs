@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Emilia.Kit;
 using Emilia.Kit.Editor;
 using Emilia.Node.Editor;
 using Sirenix.OdinInspector.Editor.ValueResolvers;
@@ -9,19 +10,20 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Universal.Editor
 {
-    public class UniversalOperateMenuHandle : OperateMenuHandle<EditorUniversalGraphAsset>
+    [EditorHandle(typeof(EditorUniversalGraphAsset))]
+    public class UniversalOperateMenuHandle : OperateMenuHandle
     {
-        public override void InitializeCache()
+        public override void InitializeCache(EditorGraphView graphView, List<OperateMenuActionInfo> actionInfos)
         {
-            EditorUniversalGraphAsset editorUniversalGraphAsset = smartValue.graphAsset as EditorUniversalGraphAsset;
+            EditorUniversalGraphAsset editorUniversalGraphAsset = graphView.graphAsset as EditorUniversalGraphAsset;
 
-            smartValue.operateMenu.actionInfoCache.AddRange(OperateMenuActionUtility.GetAction(editorUniversalGraphAsset.operateMenuTags));
-            CollectMenuAttribute();
+            actionInfos.AddRange(OperateMenuActionUtility.GetAction(editorUniversalGraphAsset.operateMenuTags));
+            CollectMenuAttribute(graphView, actionInfos);
         }
 
-        protected void CollectMenuAttribute()
+        protected void CollectMenuAttribute(EditorGraphView graphView, List<OperateMenuActionInfo> actionInfos)
         {
-            Type assetType = smartValue.graphAsset.GetType();
+            Type assetType = graphView.graphAsset.GetType();
             MethodInfo[] methods = assetType.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
             for (var i = 0; i < methods.Length; i++)
             {
@@ -34,7 +36,7 @@ namespace Emilia.Node.Universal.Editor
                 if (string.IsNullOrEmpty(menuAttribute.isOnExpression) == false)
                 {
                     action.isOnCallback = () => {
-                        ValueResolver<bool> isOnResolver = ValueResolver.Get<bool>(smartValue.graphAsset.propertyTree.RootProperty, menuAttribute.isOnExpression);
+                        ValueResolver<bool> isOnResolver = ValueResolver.Get<bool>(graphView.graphAsset.propertyTree.RootProperty, menuAttribute.isOnExpression);
                         if (isOnResolver.HasError) Debug.LogError($"Method {assetType.FullName}.{method.Name} has invalid isOnMethod");
                         bool result = isOnResolver.GetValue();
                         return result;
@@ -43,30 +45,21 @@ namespace Emilia.Node.Universal.Editor
 
                 if (string.IsNullOrEmpty(menuAttribute.actionValidityMethod) == false) SetValidityCallback(method, menuAttribute, action);
 
-                if (method.GetParameters().Length == 0)
-                {
-                    action.executeCallback = (_) => ReflectUtility.Invoke(smartValue.graphAsset, method.Name);
-                }
+                if (method.GetParameters().Length == 0) { action.executeCallback = (_) => ReflectUtility.Invoke(graphView.graphAsset, method.Name); }
                 else if (method.GetParameters().Length == 1 && method.GetParameters()[0].ParameterType == typeof(OperateMenuContext))
                 {
-                    action.executeCallback = (context) => ReflectUtility.Invoke(smartValue.graphAsset, method.Name, new object[] {context});
+                    action.executeCallback = (context) => ReflectUtility.Invoke(graphView.graphAsset, method.Name, new object[] {context});
                 }
-                else
-                {
-                    Debug.LogError($"Method {assetType.FullName}.{method.Name} has invalid parameters for menu action");
-                }
+                else { Debug.LogError($"Method {assetType.FullName}.{method.Name} has invalid parameters for menu action"); }
 
                 OperateMenuActionInfo actionInfo = action.ToActionInfo(menuAttribute.name, menuAttribute.category, menuAttribute.priority);
-                smartValue.operateMenu.actionInfoCache.Add(actionInfo);
+                actionInfos.Add(actionInfo);
             }
 
             void SetValidityCallback(MethodInfo method, MenuAttribute menuAttribute, GeneralOperateMenuAction action)
             {
                 MethodInfo validityMethod = assetType.GetMethod(menuAttribute.actionValidityMethod);
-                if (validityMethod == null)
-                {
-                    Debug.LogError($"Method {assetType.FullName}.{method.Name} has invalid {menuAttribute.actionValidityMethod}");
-                }
+                if (validityMethod == null) { Debug.LogError($"Method {assetType.FullName}.{method.Name} has invalid {menuAttribute.actionValidityMethod}"); }
                 else
                 {
                     if (validityMethod.ReturnType != typeof(OperateMenuActionValidity))
@@ -74,38 +67,33 @@ namespace Emilia.Node.Universal.Editor
                         Debug.LogError($"Method {assetType.FullName}.{method.Name} has invalid return type for {menuAttribute.actionValidityMethod}");
                     }
 
-                    if (validityMethod.GetParameters().Length == 0)
-                    {
-                        action.validityCallback = (_) => (OperateMenuActionValidity) validityMethod.Invoke(smartValue.graphAsset, null);
-                    }
+                    if (validityMethod.GetParameters().Length == 0) { action.validityCallback = (_) => (OperateMenuActionValidity) validityMethod.Invoke(graphView.graphAsset, null); }
                     else if (validityMethod.GetParameters().Length == 1 && validityMethod.GetParameters()[0].ParameterType == typeof(OperateMenuContext))
                     {
-                        action.validityCallback = (context) => (OperateMenuActionValidity) validityMethod.Invoke(smartValue.graphAsset, new object[] {context});
+                        action.validityCallback = (context) => (OperateMenuActionValidity) validityMethod.Invoke(graphView.graphAsset, new object[] {context});
                     }
-                    else
-                    {
-                        Debug.LogError($"Method {assetType.FullName}.{method.Name} has invalid parameters for {menuAttribute.actionValidityMethod}");
-                    }
+                    else { Debug.LogError($"Method {assetType.FullName}.{method.Name} has invalid parameters for {menuAttribute.actionValidityMethod}"); }
                 }
             }
         }
 
-        public override void CollectMenuItems(List<OperateMenuItem> menuItems, OperateMenuContext context)
+        public override void CollectMenuItems(EditorGraphView graphView, List<OperateMenuItem> menuItems, OperateMenuContext context)
         {
-            CollectAction(menuItems, context);
+            base.CollectMenuItems(graphView, menuItems, context);
+            CollectAction(graphView, menuItems, context);
             CollectItemMenu(menuItems, context);
         }
 
-        private void CollectAction(List<OperateMenuItem> menuItems, OperateMenuContext context)
+        private void CollectAction(EditorGraphView graphView, List<OperateMenuItem> menuItems, OperateMenuContext context)
         {
             OperateMenuActionContext actionContext = new OperateMenuActionContext();
             actionContext.graphView = context.graphView;
             actionContext.mousePosition = context.evt.mousePosition;
 
-            int amount = smartValue.operateMenu.actionInfoCache.Count;
+            int amount = graphView.operateMenu.actionInfoCache.Count;
             for (int i = 0; i < amount; i++)
             {
-                OperateMenuActionInfo item = smartValue.operateMenu.actionInfoCache[i];
+                OperateMenuActionInfo item = graphView.operateMenu.actionInfoCache[i];
                 OperateMenuActionValidity validity = item.action.GetValidity(context);
 
                 if (validity == OperateMenuActionValidity.NotApplicable) continue;

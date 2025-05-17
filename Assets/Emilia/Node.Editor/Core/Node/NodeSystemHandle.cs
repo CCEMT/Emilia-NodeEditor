@@ -1,29 +1,10 @@
-﻿namespace Emilia.Node.Editor
+﻿using Emilia.Kit;
+
+namespace Emilia.Node.Editor
 {
-    [GenericHandle]
-    public abstract class NodeSystemHandle<T> : EditorHandle, INodeSystemHandle where T : EditorGraphAsset
+    [EditorHandleGenerate]
+    public abstract class NodeSystemHandle
     {
-        public EditorGraphView smartValue { get; private set; }
-
-        public INodeSystemHandle parentHandle { get; private set; }
-
-        public override void Initialize(object weakSmartValue)
-        {
-            base.Initialize(weakSmartValue);
-            smartValue = weakSmartValue as EditorGraphView;
-            parentHandle = parent as INodeSystemHandle;
-        }
-
-        public virtual void OnCreateNode(IEditorNodeView editorNodeView)
-        {
-            parentHandle?.OnCreateNode(editorNodeView);
-        }
-
-        public override void Dispose()
-        {
-            base.Dispose();
-            smartValue = null;
-            parentHandle = null;
-        }
+        public virtual void OnCreateNode(EditorGraphView graphView,IEditorNodeView editorNodeView) { }
     }
 }

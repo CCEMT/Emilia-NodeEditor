@@ -1,36 +1,12 @@
-﻿using UnityEngine.UIElements;
+﻿using Emilia.Kit;
+using UnityEngine.UIElements;
 
 namespace Emilia.Node.Editor
 {
-    [GenericHandle]
-    public abstract class GraphDragAndDropHandle<T> : EditorHandle, IGraphDragAndDropHandle where T : EditorGraphAsset
+    [EditorHandleGenerate]
+    public abstract class GraphDragAndDropHandle
     {
-        public EditorGraphView smartValue { get; private set; }
-
-        public IGraphDragAndDropHandle parentHandle { get; private set; }
-
-        public override void Initialize(object weakSmartValue)
-        {
-            base.Initialize(weakSmartValue);
-            smartValue = weakSmartValue as EditorGraphView;
-            parentHandle = parent as IGraphDragAndDropHandle;
-        }
-
-        public virtual void DragUpdatedCallback(DragUpdatedEvent evt)
-        {
-            parentHandle?.DragUpdatedCallback(evt);
-        }
-
-        public virtual void DragPerformedCallback(DragPerformEvent evt)
-        {
-            parentHandle?.DragPerformedCallback(evt);
-        }
-
-        public override void Dispose()
-        {
-            base.Dispose();
-            smartValue = null;
-            parentHandle = null;
-        }
+        public virtual void DragUpdatedCallback(EditorGraphView graphView, DragUpdatedEvent evt) { }
+        public virtual void DragPerformedCallback(EditorGraphView graphView, DragPerformEvent evt) { }
     }
 }

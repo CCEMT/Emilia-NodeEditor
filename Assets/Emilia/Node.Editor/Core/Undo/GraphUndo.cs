@@ -1,26 +1,28 @@
-﻿namespace Emilia.Node.Editor
+﻿using Emilia.Kit;
+
+namespace Emilia.Node.Editor
 {
     public class GraphUndo : BasicGraphViewModule
     {
-        private IGraphUndoHandle handle;
+        private GraphUndoHandle handle;
 
         public override int order => 400;
 
         public override void Initialize(EditorGraphView graphView)
         {
             base.Initialize(graphView);
-            handle = EditorHandleUtility.BuildHandle<IGraphUndoHandle>(this.graphView.graphAsset.GetType(), this.graphView);
+            handle = EditorHandleUtility.CreateHandle<GraphUndoHandle>(this.graphView.graphAsset.GetType());
         }
 
         public void OnUndoRedoPerformed(bool isSilent = false)
         {
-            this.handle?.OnUndoBefore(isSilent);
+            this.handle?.OnUndoBefore(this.graphView, isSilent);
 
             UndoNode(isSilent);
             UndoEdge(isSilent);
             UndoItem(isSilent);
 
-            this.handle?.OnUndoAfter(isSilent);
+            this.handle?.OnUndoAfter(this.graphView, isSilent);
         }
 
         private void UndoNode(bool isSilent)
@@ -156,12 +158,7 @@
 
         public override void Dispose()
         {
-            if (handle != null)
-            {
-                EditorHandleUtility.ReleaseHandle(handle);
-                handle = null;
-            }
-
+            handle = null;
             base.Dispose();
         }
     }
