@@ -1,50 +1,19 @@
 ﻿using System;
+using Emilia.Kit;
 
 namespace Emilia.Node.Editor
 {
-    [GenericHandle]
-    public abstract class ConnectSystemHandle<T> : EditorHandle, IConnectSystemHandle where T : EditorGraphAsset
+    [EditorHandleGenerate]
+    public abstract class ConnectSystemHandle
     {
-        public EditorGraphView smartValue { get; private set; }
-        public IConnectSystemHandle parentHandle { get; private set; }
+        public virtual Type GetConnectorListenerType(EditorGraphView graphView) => typeof(EditorEdgeConnectorListener);
 
-        public virtual Type connectorListenerType => typeof(EditorEdgeConnectorListener);
+        public virtual Type GetEdgeTypeByPort(EditorGraphView graphView, IEditorPortView portView) => null;
 
-        public override void Initialize(object weakSmartValue)
-        {
-            base.Initialize(weakSmartValue);
-            smartValue = weakSmartValue as EditorGraphView;
-            parentHandle = parent as IConnectSystemHandle;
-            OnInitialize();
-        }
+        public virtual bool CanConnect(EditorGraphView graphView, IEditorPortView inputPort, IEditorPortView outputPort) => false;
 
-        protected virtual void OnInitialize() { }
+        public virtual bool BeforeConnect(EditorGraphView graphView, IEditorPortView input, IEditorPortView output) => false;
 
-        public virtual Type GetEdgeTypeByPort(IEditorPortView portView)
-        {
-            return parentHandle?.GetEdgeTypeByPort(portView);
-        }
-
-        public virtual bool CanConnect(IEditorPortView inputPort, IEditorPortView outputPort)
-        {
-            return parentHandle?.CanConnect(inputPort, outputPort) ?? false;
-        }
-
-        public virtual bool BeforeConnect(IEditorPortView input, IEditorPortView output)
-        {
-            return parentHandle?.BeforeConnect(input, output) ?? false;
-        }
-
-        public virtual void AfterConnect(IEditorEdgeView edgeView)
-        {
-            parentHandle?.AfterConnect(edgeView);
-        }
-
-        public override void Dispose()
-        {
-            base.Dispose();
-            smartValue = null;
-            parentHandle = null;
-        }
+        public virtual void AfterConnect(EditorGraphView graphView, IEditorEdgeView edgeView) { }
     }
 }

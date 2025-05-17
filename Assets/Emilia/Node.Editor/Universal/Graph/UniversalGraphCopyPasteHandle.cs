@@ -7,9 +7,10 @@ using UnityEditor.Experimental.GraphView;
 
 namespace Emilia.Node.Universal.Editor
 {
-    public class UniversalGraphCopyPasteHandle : GraphCopyPasteHandle<EditorUniversalGraphAsset>
+    [EditorHandle(typeof(EditorUniversalGraphAsset))]
+    public class UniversalGraphCopyPasteHandle : GraphCopyPasteHandle
     {
-        public override string SerializeGraphElementsCallback(IEnumerable<GraphElement> elements)
+        public override string SerializeGraphElementsCallback(EditorGraphView graphView, IEnumerable<GraphElement> elements)
         {
             CopyPasteGraph graph = new CopyPasteGraph();
 
@@ -23,20 +24,20 @@ namespace Emilia.Node.Universal.Editor
             return JsonSerializableUtility.ToJson(graph);
         }
 
-        public override bool CanPasteSerializedDataCallback(string serializedData)
+        public override bool CanPasteSerializedDataCallback(EditorGraphView graphView, string serializedData)
         {
             try { return JsonSerializableUtility.FromJson<CopyPasteGraph>(serializedData) != null; }
             catch { return false; }
         }
 
-        public override IEnumerable<GraphElement> UnserializeAndPasteCallback(string operationName, string serializedData, GraphCopyPasteContext copyPasteContext)
+        public override IEnumerable<GraphElement> UnserializeAndPasteCallback(EditorGraphView graphView, string operationName, string serializedData, GraphCopyPasteContext copyPasteContext)
         {
             CopyPasteGraph graph = JsonSerializableUtility.FromJson<CopyPasteGraph>(serializedData);
             List<object> pasteContent = graph.StartPaste(copyPasteContext);
             return pasteContent.OfType<GraphElement>();
         }
 
-        public override IEnumerable<GraphElement> GetCopyGraphElements(string serializedData)
+        public override IEnumerable<GraphElement> GetCopyGraphElements(EditorGraphView graphView, string serializedData)
         {
             try
             {
@@ -55,28 +56,28 @@ namespace Emilia.Node.Universal.Editor
                     {
                         case INodeCopyPastePack nodeCopyPastePack:
                         {
-                            IEditorNodeView nodeView = smartValue.graphElementCache.nodeViewById.GetValueOrDefault(nodeCopyPastePack.copyAsset.id);
+                            IEditorNodeView nodeView = graphView.graphElementCache.nodeViewById.GetValueOrDefault(nodeCopyPastePack.copyAsset.id);
                             if (nodeView == null) continue;
                             graphElements.Add(nodeView.element);
                             break;
                         }
                         case IEdgeCopyPastePack edgeCopyPastePack:
                         {
-                            IEditorEdgeView edgeView = smartValue.graphElementCache.edgeViewById.GetValueOrDefault(edgeCopyPastePack.copyAsset.id);
+                            IEditorEdgeView edgeView = graphView.graphElementCache.edgeViewById.GetValueOrDefault(edgeCopyPastePack.copyAsset.id);
                             if (edgeView == null) continue;
                             graphElements.Add(edgeView.edgeElement);
                             break;
                         }
                         case IItemCopyPastePack itemCopyPastePack:
                         {
-                            IEditorItemView itemView = smartValue.graphElementCache.itemViewById.GetValueOrDefault(itemCopyPastePack.copyAsset.id);
+                            IEditorItemView itemView = graphView.graphElementCache.itemViewById.GetValueOrDefault(itemCopyPastePack.copyAsset.id);
                             if (itemView == null) continue;
                             graphElements.Add(itemView.element);
                             break;
                         }
                         case IPortCopyPastePack portCopyPastePack:
                         {
-                            IEditorNodeView nodeView = smartValue.graphElementCache.nodeViewById.GetValueOrDefault(portCopyPastePack.nodeId);
+                            IEditorNodeView nodeView = graphView.graphElementCache.nodeViewById.GetValueOrDefault(portCopyPastePack.nodeId);
                             if (nodeView == null) continue;
                             IEditorPortView portView = nodeView.GetPortView(portCopyPastePack.portId);
                             graphElements.Add(portView.portElement);
@@ -90,9 +91,6 @@ namespace Emilia.Node.Universal.Editor
             catch { return null; }
         }
 
-        public override object CreateCopy(object value)
-        {
-            return SerializationUtility.CreateCopy(value);
-        }
+        public override object CreateCopy(EditorGraphView graphView, object value) => SerializationUtility.CreateCopy(value);
     }
 }

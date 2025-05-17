@@ -1,16 +1,17 @@
 ﻿using System.Collections.Generic;
+using Emilia.Kit;
 
 namespace Emilia.Node.Editor
 {
     public class GraphCreateItemMenu : BasicGraphViewModule
     {
-        private ICreateItemMenuHandle handle;
+        private CreateItemMenuHandle handle;
         public override int order => 1400;
 
         public override void Initialize(EditorGraphView graphView)
         {
             base.Initialize(graphView);
-            this.handle = EditorHandleUtility.BuildHandle<ICreateItemMenuHandle>(graphView.graphAsset.GetType(), graphView);
+            this.handle = EditorHandleUtility.CreateHandle<CreateItemMenuHandle>(graphView.graphAsset.GetType());
         }
 
         /// <summary>
@@ -19,18 +20,13 @@ namespace Emilia.Node.Editor
         public List<CreateItemMenuInfo> CollectItemMenus()
         {
             List<CreateItemMenuInfo> types = new List<CreateItemMenuInfo>();
-            handle.CollectItemMenus(types);
+            handle.CollectItemMenus(this.graphView, types);
             return types;
         }
 
         public override void Dispose()
         {
-            if (this.handle != null)
-            {
-                EditorHandleUtility.ReleaseHandle(this.handle);
-                this.handle = null;
-            }
-
+            this.handle = null;
             base.Dispose();
         }
     }

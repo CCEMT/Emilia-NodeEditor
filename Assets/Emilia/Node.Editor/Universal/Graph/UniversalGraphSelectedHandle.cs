@@ -9,12 +9,16 @@ using UnityEngine;
 
 namespace Emilia.Node.Universal.Editor
 {
-    public class UniversalGraphSelectedHandle : GraphSelectedHandle<EditorUniversalGraphAsset>
+    [EditorHandle(typeof(EditorUniversalGraphAsset))]
+    public class UniversalGraphSelectedHandle : GraphSelectedHandle
     {
-        public override void Initialize(object weakSmartValue)
+        protected EditorGraphView editorGraphView;
+
+        public override void Initialize(EditorGraphView graphView)
         {
-            base.Initialize(weakSmartValue);
-            bool isUseSelection = smartValue.window.GetType() != InspectorWindow_Internals.inspectorWindowType_Internals;
+            base.Initialize(graphView);
+            editorGraphView = graphView;
+            bool isUseSelection = graphView.window.GetType() != InspectorWindow_Internals.inspectorWindowType_Internals;
             if (isUseSelection == false) return;
             Selection.selectionChanged -= OnSelectionChanged;
             Selection.selectionChanged += OnSelectionChanged;
@@ -24,7 +28,7 @@ namespace Emilia.Node.Universal.Editor
         {
             List<Object> selectedInspectors = new List<Object>();
 
-            foreach (ISelectable selectable in smartValue.selection)
+            foreach (ISelectable selectable in editorGraphView.selection)
             {
                 ISelectedHandle selectableElement = selectable as ISelectedHandle;
                 if (selectableElement == null) continue;
@@ -32,16 +36,16 @@ namespace Emilia.Node.Universal.Editor
             }
 
             bool isGraphSelect = Selection.objects.Any(selectedObject => selectedInspectors.Contains(selectedObject));
-            if (isGraphSelect == false) smartValue.ClearSelection();
+            if (isGraphSelect == false) editorGraphView.ClearSelection();
         }
 
-        public override void UpdateSelectedInspector(List<ISelectedHandle> selection)
+        public override void UpdateSelectedInspector(EditorGraphView graphView, List<ISelectedHandle> selection)
         {
             List<Object> selectedInspectors = new List<Object>();
 
             foreach (ISelectedHandle selectable in selection) selectedInspectors.AddRange(selectable.GetSelectedObjects());
 
-            bool isUseSelection = smartValue.window.GetType() != InspectorWindow_Internals.inspectorWindowType_Internals;
+            bool isUseSelection = graphView.window.GetType() != InspectorWindow_Internals.inspectorWindowType_Internals;
 
             if (selectedInspectors.Count > 0)
             {
@@ -52,7 +56,7 @@ namespace Emilia.Node.Universal.Editor
                     {
                         Object selectedObject = selectedInspectors[i];
                         if (selectedObject == null) continue;
-                        SelectedOwnerUtility.SetSelectedOwner(selectedObject, smartValue);
+                        SelectedOwnerUtility.SetSelectedOwner(selectedObject, graphView);
                         SelectedOwnerUtility.Update();
                     }
 
@@ -60,8 +64,8 @@ namespace Emilia.Node.Universal.Editor
                 }
                 else
                 {
-                    InspectorView inspectorView = smartValue.graphPanelSystem.GetPanel<InspectorView>();
-                    if (inspectorView == null) inspectorView = smartValue.graphPanelSystem.OpenFloatPanel<InspectorView>();
+                    InspectorView inspectorView = graphView.graphPanelSystem.GetPanel<InspectorView>();
+                    if (inspectorView == null) inspectorView = graphView.graphPanelSystem.OpenFloatPanel<InspectorView>();
                     inspectorView.SetObjects(selectedInspectors);
                 }
             }
@@ -72,18 +76,18 @@ namespace Emilia.Node.Universal.Editor
                     Selection.objects = null;
                     SelectedOwnerUtility.Update();
                 }
-                else smartValue.graphPanelSystem.ClosePanel<InspectorView>();
+                else graphView.graphPanelSystem.ClosePanel<InspectorView>();
             }
         }
 
-        public override void Dispose()
+        public override void Dispose(EditorGraphView graphView)
         {
-            bool isUseSelection = smartValue.window.GetType() != InspectorWindow_Internals.inspectorWindowType_Internals;
+            bool isUseSelection = graphView.window.GetType() != InspectorWindow_Internals.inspectorWindowType_Internals;
             if (isUseSelection) Selection.selectionChanged -= OnSelectionChanged;
 
-            base.Dispose();
             Selection.objects = null;
             SelectedOwnerUtility.Update();
+            this.editorGraphView = null;
         }
     }
 }

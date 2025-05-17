@@ -1,18 +1,19 @@
-﻿using Emilia.Node.Editor;
+﻿using Emilia.Kit;
+using Emilia.Node.Editor;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Emilia.Node.Universal.Editor
 {
-    public class UniversalDragAndDropHandle : GraphDragAndDropHandle<EditorUniversalGraphAsset>
+    [EditorHandle(typeof(EditorUniversalGraphAsset))]
+    public class UniversalDragAndDropHandle : GraphDragAndDropHandle
     {
         public const string CreateNodeDragAndDropType = "CreateNode";
 
-        public override void DragUpdatedCallback(DragUpdatedEvent evt)
+        public override void DragPerformedCallback(EditorGraphView graphView, DragPerformEvent evt)
         {
-            base.DragUpdatedCallback(evt);
-
+            base.DragPerformedCallback(graphView, evt);
             object genericData = DragAndDrop.GetGenericData(CreateNodeDragAndDropType);
             if (genericData is ICreateNodeHandle createNodeHandle)
             {
@@ -21,17 +22,16 @@ namespace Emilia.Node.Universal.Editor
             }
         }
 
-        public override void DragPerformedCallback(DragPerformEvent evt)
+        public override void DragUpdatedCallback(EditorGraphView graphView, DragUpdatedEvent evt)
         {
-            base.DragPerformedCallback(evt);
-
+            base.DragUpdatedCallback(graphView, evt);
             object genericData = DragAndDrop.GetGenericData(CreateNodeDragAndDropType);
             if (genericData is ICreateNodeHandle createNodeHandle)
             {
                 Vector2 mousePosition = evt.mousePosition;
-                Vector2 graphMousePosition = smartValue.contentViewContainer.WorldToLocal(mousePosition);
+                Vector2 graphMousePosition = graphView.contentViewContainer.WorldToLocal(mousePosition);
                 
-                smartValue.nodeSystem.CreateNode(createNodeHandle.editorNodeType, graphMousePosition, createNodeHandle.nodeData);
+                graphView.nodeSystem.CreateNode(createNodeHandle.editorNodeType, graphMousePosition, createNodeHandle.nodeData);
             }
         }
     }

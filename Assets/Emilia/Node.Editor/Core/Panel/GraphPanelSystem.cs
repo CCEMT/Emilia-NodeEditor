@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Emilia.Kit;
 using Emilia.Kit.Editor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -12,7 +13,7 @@ namespace Emilia.Node.Editor
         private const string SplitViewPlaceholderName = "splitView-placeholder";
         private const float DockOffsetSize = 5f;
 
-        private IGraphPanelHandle handle;
+        private GraphPanelHandle handle;
 
         private List<IGraphPanel> _openPanels = new List<IGraphPanel>();
         private Dictionary<Type, IGraphPanel> openPanelMap = new Dictionary<Type, IGraphPanel>();
@@ -51,7 +52,7 @@ namespace Emilia.Node.Editor
         public override void Initialize(EditorGraphView graphView)
         {
             base.Initialize(graphView);
-            handle = EditorHandleUtility.BuildHandle<IGraphPanelHandle>(graphView.graphAsset.GetType(), graphView);
+            handle = EditorHandleUtility.CreateHandle<GraphPanelHandle>(graphView.graphAsset.GetType());
 
             CreateContainer();
 
@@ -65,7 +66,7 @@ namespace Emilia.Node.Editor
         public override void AllModuleInitializeSuccess()
         {
             base.AllModuleInitializeSuccess();
-            handle?.LoadPanel(this);
+            handle?.LoadPanel(this.graphView, this);
         }
 
         private void CreateContainer()
@@ -350,12 +351,7 @@ namespace Emilia.Node.Editor
         {
             CloseAllPanel();
 
-            if (this.handle != null)
-            {
-                EditorHandleUtility.ReleaseHandle(handle);
-                this.handle = null;
-            }
-
+            this.handle = null;
             this.dockLeisureArea = null;
             this.dockAreaOffset = default;
 

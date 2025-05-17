@@ -9,7 +9,7 @@ namespace Emilia.Node.Editor
     {
         private EditorGraphAsset sourceGraphAsset;
 
-        private IGraphSaveHandle handle;
+        private GraphSaveHandle handle;
 
         private bool _dirty;
 
@@ -19,7 +19,7 @@ namespace Emilia.Node.Editor
         public override void Initialize(EditorGraphView graphView)
         {
             base.Initialize(graphView);
-            handle = EditorHandleUtility.BuildHandle<IGraphSaveHandle>(this.graphView.graphAsset.GetType(), this.graphView);
+            handle = EditorHandleUtility.CreateHandle<GraphSaveHandle>(this.graphView.graphAsset.GetType());
         }
 
         public EditorGraphAsset ResetCopy(EditorGraphAsset source)
@@ -47,8 +47,8 @@ namespace Emilia.Node.Editor
         public void OnSave()
         {
             if (this.graphView == null) return;
-            
-            handle?.OnSaveBefore();
+
+            handle?.OnSaveBefore(this.graphView);
 
             if (this.graphView.graphAsset != null) graphView.graphAsset.SaveAll();
 
@@ -68,21 +68,14 @@ namespace Emilia.Node.Editor
 
             this._dirty = false;
 
-            handle?.OnSaveAfter();
+            handle?.OnSaveAfter(this.graphView);
         }
 
         public override void Dispose()
         {
             this._dirty = false;
-
             this.sourceGraphAsset = null;
-
-            if (handle != null)
-            {
-                EditorHandleUtility.ReleaseHandle(handle);
-                handle = null;
-            }
-
+            this.handle = null;
             base.Dispose();
         }
     }

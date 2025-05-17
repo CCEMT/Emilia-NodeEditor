@@ -6,36 +6,45 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Universal.Editor
 {
-    public class UniversalGraphHandle : GraphHandle<EditorUniversalGraphAsset>
+    [EditorHandle(typeof(EditorUniversalGraphAsset))]
+    public class UniversalGraphHandle : GraphHandle
     {
         public const string GridBackgroundStyleFilePath = "Node/Styles/GridBackground.uss";
         public const string GraphViewStyleFilePath = "Node/Styles/UniversalEditorGraphView.uss";
 
+        private EditorGraphView editorGraphView;
         private GraphLoadingContainer loadingContainer;
 
-        public override void OnLoadBefore()
+        public override void Initialize(EditorGraphView graphView)
         {
+            base.Initialize(graphView);
+            editorGraphView = graphView;
+        }
+
+        public override void OnLoadBefore(EditorGraphView graphView)
+        {
+            base.OnLoadBefore(graphView);
             AddManipulator();
             GraphViewInitialize();
             AddGridBackground();
             AddLoadingMask();
 
-            smartValue.onLogicTransformChange -= OnLogicTransformChange;
-            smartValue.onLogicTransformChange += OnLogicTransformChange;
+            graphView.onLogicTransformChange -= OnLogicTransformChange;
+            graphView.onLogicTransformChange += OnLogicTransformChange;
         }
 
         private void OnLogicTransformChange(Vector3 position, Vector3 scale)
         {
-            UniversalGraphAssetLocalSetting setting = smartValue.graphLocalSettingSystem.assetSetting as UniversalGraphAssetLocalSetting;
+            UniversalGraphAssetLocalSetting setting = editorGraphView.graphLocalSettingSystem.assetSetting as UniversalGraphAssetLocalSetting;
             setting.position = position;
             setting.scale = scale;
         }
 
-        protected void AddManipulator()
+        protected virtual void AddManipulator()
         {
-            smartValue.AddManipulator(new ContentDragger());
-            smartValue.AddManipulator(new GraphSelectionDragger());
-            smartValue.AddManipulator(new GraphRectangleSelector());
+            editorGraphView.AddManipulator(new ContentDragger());
+            editorGraphView.AddManipulator(new GraphSelectionDragger());
+            editorGraphView.AddManipulator(new GraphRectangleSelector());
         }
 
         protected void AddGridBackground()
@@ -44,42 +53,43 @@ namespace Emilia.Node.Universal.Editor
             StyleSheet styleSheet = ResourceUtility.LoadResource<StyleSheet>(GridBackgroundStyleFilePath);
             background.styleSheets.Add(styleSheet);
 
-            smartValue.Insert(0, background);
+            editorGraphView.Insert(0, background);
         }
 
         protected void GraphViewInitialize()
         {
             StyleSheet graphViewStyleSheet = ResourceUtility.LoadResource<StyleSheet>(GraphViewStyleFilePath);
-            smartValue.styleSheets.Add(graphViewStyleSheet);
+            editorGraphView.styleSheets.Add(graphViewStyleSheet);
         }
 
         private void AddLoadingMask()
         {
             if (this.loadingContainer == null)
             {
-                this.loadingContainer = new GraphLoadingContainer(smartValue);
-                smartValue.Add(this.loadingContainer);
+                this.loadingContainer = new GraphLoadingContainer(editorGraphView);
+                editorGraphView.Add(this.loadingContainer);
             }
 
             this.loadingContainer.style.display = DisplayStyle.Flex;
             this.loadingContainer.DisplayLoading();
 
-            smartValue.SetEnabled(false);
+            editorGraphView.SetEnabled(false);
         }
 
-        public override void OnLoadAfter()
+        public override void OnLoadAfter(EditorGraphView graphView)
         {
+            base.OnLoadAfter(graphView);
             this.loadingContainer.style.display = DisplayStyle.None;
-            smartValue.SetEnabled(true);
-            
-            UniversalGraphAssetLocalSetting universalSetting = smartValue.graphLocalSettingSystem.assetSetting as UniversalGraphAssetLocalSetting;
-            smartValue.UpdateViewTransform(universalSetting.position, universalSetting.scale);
+            graphView.SetEnabled(true);
+
+            UniversalGraphAssetLocalSetting universalSetting = graphView.graphLocalSettingSystem.assetSetting as UniversalGraphAssetLocalSetting;
+            graphView.UpdateViewTransform(universalSetting.position, universalSetting.scale);
         }
 
-        public override void Dispose()
+        public override void Dispose(EditorGraphView graphView)
         {
-            smartValue.onLogicTransformChange -= OnLogicTransformChange;
-            base.Dispose();
+            graphView.onLogicTransformChange -= OnLogicTransformChange;
+            editorGraphView = null;
         }
     }
 }

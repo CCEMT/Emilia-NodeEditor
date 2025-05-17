@@ -1,16 +1,17 @@
-﻿using UnityEngine.UIElements;
+﻿using Emilia.Kit;
+using UnityEngine.UIElements;
 
 namespace Emilia.Node.Editor
 {
     public class GraphDragAndDrop : BasicGraphViewModule
     {
-        private IGraphDragAndDropHandle handle;
+        private GraphDragAndDropHandle handle;
         public override int order => 1500;
 
         public override void Initialize(EditorGraphView graphView)
         {
             base.Initialize(graphView);
-            this.handle = EditorHandleUtility.BuildHandle<IGraphDragAndDropHandle>(graphView.graphAsset.GetType(), graphView);
+            this.handle = EditorHandleUtility.CreateHandle<GraphDragAndDropHandle>(graphView.graphAsset.GetType());
 
             graphView.UnregisterCallback<DragUpdatedEvent>(DragUpdatedCallback);
             graphView.UnregisterCallback<DragPerformEvent>(DragPerformedCallback);
@@ -21,12 +22,12 @@ namespace Emilia.Node.Editor
 
         private void DragUpdatedCallback(DragUpdatedEvent evt)
         {
-            handle?.DragUpdatedCallback(evt);
+            handle?.DragUpdatedCallback(this.graphView, evt);
         }
 
         private void DragPerformedCallback(DragPerformEvent evt)
         {
-            handle?.DragPerformedCallback(evt);
+            handle?.DragPerformedCallback(graphView, evt);
         }
 
         public override void Dispose()
@@ -36,12 +37,7 @@ namespace Emilia.Node.Editor
             graphView.UnregisterCallback<DragUpdatedEvent>(DragUpdatedCallback);
             graphView.UnregisterCallback<DragPerformEvent>(DragPerformedCallback);
 
-            if (handle != null)
-            {
-                EditorHandleUtility.ReleaseHandle(handle);
-                handle = null;
-            }
-
+            handle = null;
             base.Dispose();
         }
     }

@@ -1,8 +1,10 @@
 ﻿using System;
+using Emilia.Kit;
 using UnityEngine;
 
 namespace Emilia.Node.Editor
 {
+    [EditorHandleGenerate]
     public interface ICreateNodeHandle
     {
         /// <summary>
@@ -38,6 +40,6 @@ namespace Emilia.Node.Editor
         /// <summary>
         /// 初始化
         /// </summary>
-        void OnInitialize();
+        void Initialize(object arg);
     }
 }

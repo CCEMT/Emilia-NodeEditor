@@ -25,7 +25,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public static EditorGraphView focusedGraphView { get; private set; }
 
-        private IGraphHandle graphHandle;
+        private GraphHandle graphHandle;
         private Dictionary<Type, BasicGraphViewModule> modules = new Dictionary<Type, BasicGraphViewModule>();
         private Dictionary<Type, CustomGraphViewModule> customModules = new Dictionary<Type, CustomGraphViewModule>();
 
@@ -267,14 +267,14 @@ namespace Emilia.Node.Editor
             isFocus = true;
 
             graphUndo.OnUndoRedoPerformed(true);
-            this.graphHandle?.OnEnterFocus();
+            this.graphHandle?.OnEnterFocus(this);
         }
 
         public void OnFocus()
         {
             if (loadProgress != 1) return;
             if (focusedGraphView != this) focusedGraphView = this;
-            this.graphHandle?.OnFocus();
+            this.graphHandle?.OnFocus(this);
         }
 
         public void OnExitFocus()
@@ -284,13 +284,13 @@ namespace Emilia.Node.Editor
             if (isFocus == false) return;
             isFocus = false;
 
-            this.graphHandle?.OnExitFocus();
+            this.graphHandle?.OnExitFocus(this);
         }
 
         public void OnUpdate()
         {
             lastUpdateTime = EditorApplication.timeSinceStartup;
-            this.graphHandle?.OnUpdate();
+            this.graphHandle?.OnUpdate(this);
             onUpdate?.Invoke();
         }
 
@@ -365,8 +365,9 @@ namespace Emilia.Node.Editor
 
         private void ReloadHandle()
         {
-            if (this.graphHandle != null) EditorHandleUtility.ReleaseHandle(this.graphHandle);
-            this.graphHandle = EditorHandleUtility.BuildHandle<IGraphHandle>(graphAsset.GetType(), this);
+            if (this.graphHandle != null) graphHandle.Dispose(this);
+            this.graphHandle = EditorHandleUtility.CreateHandle<GraphHandle>(graphAsset.GetType());
+            this.graphHandle.Initialize(this);
         }
 
         private void ReloadModule()
@@ -378,7 +379,7 @@ namespace Emilia.Node.Editor
 
             foreach (BasicGraphViewModule module in this.modules.Values) module.Initialize(this);
 
-            graphHandle.InitializeCustomModule(this.customModules);
+            graphHandle.InitializeCustomModule(this, customModules);
 
             foreach (CustomGraphViewModule customModule in this.customModules.Values) customModule.Initialize(this);
 
@@ -396,7 +397,7 @@ namespace Emilia.Node.Editor
         {
             graphElementCache.BuildCache(this);
 
-            this.graphHandle?.OnLoadBefore();
+            this.graphHandle?.OnLoadBefore(this);
 
             yield return LoadNodeView();
             yield return LoadEdge();
@@ -456,7 +457,7 @@ namespace Emilia.Node.Editor
             loadElementCoroutine = null;
             loadProgress = 1;
 
-            this.graphHandle?.OnLoadAfter();
+            this.graphHandle?.OnLoadAfter(this);
         }
 
         /// <summary>
@@ -941,7 +942,7 @@ namespace Emilia.Node.Editor
             if (focusedGraphView == this) focusedGraphView = null;
             if (this.graphHandle != null)
             {
-                EditorHandleUtility.ReleaseHandle(this.graphHandle);
+                this.graphHandle.Dispose(this);
                 this.graphHandle = null;
             }
         }

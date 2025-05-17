@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Emilia.Kit;
 using Emilia.Kit.Editor;
 using UnityEditor;
 using UnityEngine;
@@ -9,14 +10,14 @@ namespace Emilia.Node.Editor
 {
     public class GraphConnectSystem : BasicGraphViewModule
     {
-        private IConnectSystemHandle handle;
+        private ConnectSystemHandle handle;
         public EditorEdgeConnectorListener connectorListener { get; private set; }
         public override int order => 1000;
 
         public override void Initialize(EditorGraphView graphView)
         {
             base.Initialize(graphView);
-            handle = EditorHandleUtility.BuildHandle<IConnectSystemHandle>(graphView.graphAsset.GetType(), graphView);
+            handle = EditorHandleUtility.CreateHandle<ConnectSystemHandle>(graphView.graphAsset.GetType());
         }
 
         public override void AllModuleInitializeSuccess()
@@ -24,7 +25,7 @@ namespace Emilia.Node.Editor
             base.AllModuleInitializeSuccess();
             if (this.handle == null) return;
 
-            Type type = handle.connectorListenerType;
+            Type type = handle.GetConnectorListenerType(this.graphView);
             if (type == null) return;
 
             connectorListener = ReflectUtility.CreateInstance(type) as EditorEdgeConnectorListener;
@@ -37,7 +38,7 @@ namespace Emilia.Node.Editor
         public Type GetEdgeTypeByPort(IEditorPortView portView)
         {
             if (this.handle == null) return null;
-            return this.handle.GetEdgeTypeByPort(portView);
+            return this.handle.GetEdgeTypeByPort(graphView, portView);
         }
 
         /// <summary>
@@ -46,7 +47,7 @@ namespace Emilia.Node.Editor
         public bool CanConnect(IEditorPortView inputPort, IEditorPortView outputPort)
         {
             if (this.handle == null) return false;
-            return this.handle.CanConnect(inputPort, outputPort);
+            return this.handle.CanConnect(graphView, inputPort, outputPort);
         }
 
         /// <summary>
@@ -54,10 +55,10 @@ namespace Emilia.Node.Editor
         /// </summary>
         public IEditorEdgeView Connect(IEditorPortView input, IEditorPortView output)
         {
-            if (handle.CanConnect(input, output) == false) return null;
-            if (handle.BeforeConnect(input, output)) return null;
+            if (handle.CanConnect(graphView, input, output) == false) return null;
+            if (handle.BeforeConnect(graphView, input, output)) return null;
 
-            Type edgeType = handle.GetEdgeTypeByPort(input);
+            Type edgeType = handle.GetEdgeTypeByPort(graphView, input);
             EditorEdgeAsset edge = ScriptableObject.CreateInstance(edgeType) as EditorEdgeAsset;
 
             edge.id = Guid.NewGuid().ToString();
@@ -70,7 +71,7 @@ namespace Emilia.Node.Editor
             this.graphView.RegisterCompleteObjectUndo("Graph Connect");
 
             IEditorEdgeView edgeView = graphView.AddEdge(edge);
-            handle.AfterConnect(edgeView);
+            handle.AfterConnect(graphView, edgeView);
 
             return edgeView;
         }
@@ -123,12 +124,7 @@ namespace Emilia.Node.Editor
 
         public override void Dispose()
         {
-            if (handle != null)
-            {
-                EditorHandleUtility.ReleaseHandle(handle);
-                handle = null;
-            }
-
+            handle = null;
             connectorListener = null;
             base.Dispose();
         }

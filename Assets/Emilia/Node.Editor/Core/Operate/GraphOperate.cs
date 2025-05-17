@@ -1,16 +1,17 @@
 ﻿using UnityEngine;
+using EditorHandleUtility = Emilia.Kit.EditorHandleUtility;
 
 namespace Emilia.Node.Editor
 {
     public class GraphOperate : BasicGraphViewModule
     {
-        private IGraphOperateHandle handle;
+        private GraphOperateHandle handle;
         public override int order => 200;
 
         public override void Initialize(EditorGraphView graphView)
         {
             base.Initialize(graphView);
-            handle = EditorHandleUtility.BuildHandle<IGraphOperateHandle>(graphView.graphAsset.GetType(), graphView);
+            handle = EditorHandleUtility.CreateHandle<GraphOperateHandle>(graphView.graphAsset.GetType());
         }
 
         /// <summary>
@@ -18,7 +19,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void OpenCreateNodeMenu(Vector2 mousePosition, CreateNodeContext createNodeContext = default)
         {
-            handle?.OpenCreateNodeMenu(mousePosition, createNodeContext);
+            handle?.OpenCreateNodeMenu(this.graphView, mousePosition, createNodeContext);
         }
 
         /// <summary>
@@ -26,7 +27,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void Cut()
         {
-            handle?.Cut();
+            handle?.Cut(graphView);
         }
 
         /// <summary>
@@ -34,7 +35,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void Copy()
         {
-            handle?.Copy();
+            handle?.Copy(graphView);
         }
 
         /// <summary>
@@ -42,7 +43,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void Paste(Vector2? mousePosition = null)
         {
-            handle?.Paste(mousePosition);
+            handle?.Paste(graphView, mousePosition);
         }
 
         /// <summary>
@@ -50,7 +51,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void Delete()
         {
-            handle?.Delete();
+            handle?.Delete(graphView);
         }
 
         /// <summary>
@@ -58,7 +59,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void Duplicate()
         {
-            handle?.Duplicate();
+            handle?.Duplicate(graphView);
         }
 
         /// <summary>
@@ -66,17 +67,12 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void Save()
         {
-            handle?.Save();
+            handle?.Save(graphView);
         }
 
         public override void Dispose()
         {
-            if (handle != null)
-            {
-                EditorHandleUtility.ReleaseHandle(handle);
-                handle = null;
-            }
-
+            handle = null;
             base.Dispose();
         }
     }

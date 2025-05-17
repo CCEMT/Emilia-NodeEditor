@@ -1,16 +1,15 @@
 ﻿using System;
+using Emilia.Kit;
 using Emilia.Node.Editor;
 
 namespace Emilia.Node.Universal.Editor
 {
-    public class UniversalConnectSystemHandle : ConnectSystemHandle<EditorUniversalGraphAsset>
+    [EditorHandle(typeof(EditorUniversalGraphAsset))]
+    public class UniversalConnectSystemHandle : ConnectSystemHandle
     {
-        public override Type GetEdgeTypeByPort(IEditorPortView portView)
-        {
-            return typeof(UniversalEditorEdgeAsset);
-        }
+        public override Type GetEdgeTypeByPort(EditorGraphView graphView, IEditorPortView portView) => typeof(UniversalEditorEdgeAsset);
 
-        public override bool CanConnect(IEditorPortView inputPort, IEditorPortView outputPort)
+        public override bool CanConnect(EditorGraphView graphView, IEditorPortView inputPort, IEditorPortView outputPort)
         {
             if (inputPort.portElement.portType != outputPort.portElement.portType) return false;
 
