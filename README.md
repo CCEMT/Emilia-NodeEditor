@@ -1,4 +1,5 @@
-# Emilia-NodeEditor
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/CCEMT/Emilia-NodeEditor)
+# Emilia-NodeEditor          
 
 Emilia-NodeEditor 是基于Unity的UIElements, GraphView实现的节点编辑器框架 它可以用来实现状态机，行为树和流图等编辑器  
 纯编辑器实现你可以将它接入你任何的运行时的实现
@@ -11,7 +12,7 @@ Emilia-NodeEditor 是基于Unity的UIElements, GraphView实现的节点编辑器
 子父级实现  
 完整的复制粘贴，撤销实现（快速撤销实现，撤销时不重新加载）  
 
-## 使用Emilia-NodeEditor实现的项目
+## 使用Emilia-NodeEditor实现的项目          
 
 |名称|描述|图片|  
 |----|----|----|
@@ -30,7 +31,7 @@ Odin版本：3.1.2+
 
 ### Odin为付费插件请自行导入
 
-### 使用unitypackage安装  
+### 使用unitypackage安装    
 
 在Tag界面中选择对应版本  [Tag界面](https://github.com/CCEMT/Emilia-NodeEditor/tags)  
 
@@ -48,7 +49,7 @@ Odin版本：3.1.2+
 
 将以下内容添加进manifest文件中
 
-~~~json
+~~~json  
 "com.emilia.kit": "https://github.com/CCEMT/Emilia-Kit.git?path=Assets/Emilia/Kit",
 "com.emilia.node.editor": "https://github.com/CCEMT/Emilia-NodeEditor.git?path=Assets/Emilia/Node.Editor"
 ~~~
