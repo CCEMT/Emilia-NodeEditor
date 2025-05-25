@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Emilia.Node.Editor
 {
-    public struct CreateNodeInfo
+    public class CreateNodeInfo
     {
         public Type editorNodeAssetType;
         public object nodeData;

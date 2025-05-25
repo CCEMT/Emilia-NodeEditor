@@ -15,14 +15,9 @@ namespace Emilia.Node.Universal.Editor
             Rect? screenPosition = graphView.GetElementPanelOwnerObjectScreenPosition_Internal();
             if (screenPosition == null) return;
 
-            graphView.createNodeMenu.MenuCreateInitialize(createNodeContext);
-
-            NodeCreationContext nodeCreationContext = new NodeCreationContext {
-                screenMousePosition = screenPosition.Value.position + mousePosition,
-                index = -1,
-            };
-
-            graphView.createNodeMenu.ShowCreateNodeMenu(nodeCreationContext);
+            if (createNodeContext == null) createNodeContext = new CreateNodeContext();
+            createNodeContext.screenMousePosition = screenPosition.Value.position + mousePosition;
+            graphView.createNodeMenu.ShowCreateNodeMenu(createNodeContext);
         }
 
         public override void Cut(EditorGraphView graphView)

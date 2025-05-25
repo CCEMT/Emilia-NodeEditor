@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Emilia.Kit;
+using Emilia.Kit.Editor;
 using Emilia.Node.Editor;
 using Sirenix.Utilities;
 using UnityEditor;
@@ -77,18 +78,13 @@ namespace Emilia.Node.Universal.Editor
             }
         }
 
-        public override void MenuCreateInitialize(EditorGraphView graphView, CreateNodeContext createNodeContext)
+        public override void ShowCreateNodeMenu(EditorGraphView graphView, CreateNodeContext createNodeContext)
         {
-            base.MenuCreateInitialize(graphView, createNodeContext);
-            createNodeMenuProvider.Initialize(createNodeContext);
-        }
-
-        public override void ShowCreateNodeMenu(EditorGraphView graphView, NodeCreationContext c)
-        {
-            base.ShowCreateNodeMenu(graphView, c);
+            base.ShowCreateNodeMenu(graphView, createNodeContext);
+            createNodeMenuProvider.Initialize(graphView, createNodeContext);
             if (createNodeMenuProvider.createNodeContext.nodeMenu == null) return;
-            SearchWindowContext searchWindowContext = new SearchWindowContext(c.screenMousePosition);
-            SearchWindow.Open(searchWindowContext, createNodeMenuProvider);
+            SearchWindowContext searchWindowContext = new SearchWindowContext(createNodeContext.screenMousePosition);
+            SearchWindow_Hook.Open<CreateNodeMenuProvider, SearchWindow_Hook>(searchWindowContext, createNodeMenuProvider);
         }
 
         public override void CollectAllCreateNodeInfos(EditorGraphView graphView, List<CreateNodeInfo> createNodeInfos, CreateNodeContext createNodeContext)
