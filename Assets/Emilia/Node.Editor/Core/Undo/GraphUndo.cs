@@ -14,6 +14,9 @@ namespace Emilia.Node.Editor
             handle = EditorHandleUtility.CreateHandle<GraphUndoHandle>(this.graphView.graphAsset.GetType());
         }
 
+        /// <summary>
+        /// 执行撤销重做操作
+        /// </summary>
         public void OnUndoRedoPerformed(bool isSilent = false)
         {
             this.handle?.OnUndoBefore(this.graphView, isSilent);

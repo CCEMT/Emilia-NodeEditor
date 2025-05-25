@@ -9,6 +9,9 @@ namespace Emilia.Node.Editor
         /// </summary>
         EditorEdgeAsset asset { get; }
 
+        /// <summary>
+        /// 所属GraphView
+        /// </summary>
         EditorGraphView graphView { get; }
 
         /// <summary>

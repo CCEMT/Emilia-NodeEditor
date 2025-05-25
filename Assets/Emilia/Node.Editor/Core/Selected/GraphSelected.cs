@@ -13,8 +13,15 @@ namespace Emilia.Node.Editor
         private List<IGraphSelectedDrawer> selectedDrawers = new List<IGraphSelectedDrawer>();
 
         public override int order => 600;
+
+        /// <summary>
+        /// 当前选中的元素
+        /// </summary>
         public IReadOnlyList<ISelectedHandle> selected => this._selected;
 
+        /// <summary>
+        /// 选中改变事件
+        /// </summary>
         public event Action<IReadOnlyList<ISelectedHandle>> onSelectedChanged;
 
         public override void Initialize(EditorGraphView graphView)
@@ -91,6 +98,9 @@ namespace Emilia.Node.Editor
             }
         }
 
+        /// <summary>
+        /// 更新选中状态
+        /// </summary>
         public void UpdateSelected()
         {
             UpdateSelected(this._selected.ToList());

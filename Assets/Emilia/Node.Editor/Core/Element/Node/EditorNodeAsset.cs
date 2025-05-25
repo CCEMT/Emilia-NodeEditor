@@ -46,18 +46,27 @@ namespace Emilia.Node.Editor
             set => _position = value;
         }
 
+        /// <summary>
+        /// 自定义数据
+        /// </summary>
         public object userData
         {
             get => _userData;
             set => _userData = value;
         }
 
+        /// <summary>
+        /// 所属图表资源
+        /// </summary>
         public EditorGraphAsset graphAsset
         {
             get => _graphAsset;
             set => this._graphAsset = value;
         }
 
+        /// <summary>
+        /// 自身Odin属性树
+        /// </summary>
         public PropertyTree propertyTree => _propertyTree;
 
         protected virtual void OnEnable()

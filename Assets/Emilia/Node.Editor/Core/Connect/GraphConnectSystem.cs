@@ -35,10 +35,10 @@ namespace Emilia.Node.Editor
         /// <summary>
         /// 通过端口获取Edge类型
         /// </summary>
-        public Type GetEdgeTypeByPort(IEditorPortView portView)
+        public Type GetEdgeAssetTypeByPort(IEditorPortView portView)
         {
             if (this.handle == null) return null;
-            return this.handle.GetEdgeTypeByPort(graphView, portView);
+            return this.handle.GetEdgeAssetTypeByPort(graphView, portView);
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace Emilia.Node.Editor
             if (handle.CanConnect(graphView, input, output) == false) return null;
             if (handle.BeforeConnect(graphView, input, output)) return null;
 
-            Type edgeType = handle.GetEdgeTypeByPort(graphView, input);
+            Type edgeType = handle.GetEdgeAssetTypeByPort(graphView, input);
             EditorEdgeAsset edge = ScriptableObject.CreateInstance(edgeType) as EditorEdgeAsset;
 
             edge.id = Guid.NewGuid().ToString();

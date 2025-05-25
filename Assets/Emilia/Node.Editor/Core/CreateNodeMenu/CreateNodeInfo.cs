@@ -1,16 +1,20 @@
-﻿using System;
-using UnityEngine;
-
-namespace Emilia.Node.Editor
+﻿namespace Emilia.Node.Editor
 {
     public class CreateNodeInfo
     {
-        public Type editorNodeAssetType;
-        public object nodeData;
-        public string portId;
+        /// <summary>
+        /// 节点信息
+        /// </summary>
+        public MenuNodeInfo menuInfo;
 
-        public string path;
-        public int priority;
-        public Texture2D icon;
+        /// <summary>
+        /// 创建节点时的连接器（用于在创建节点后连接目标节点）
+        /// </summary>
+        public CreateNodeConnector createNodeConnector;
+
+        public CreateNodeInfo(MenuNodeInfo menuInfo)
+        {
+            this.menuInfo = menuInfo;
+        }
     }
 }

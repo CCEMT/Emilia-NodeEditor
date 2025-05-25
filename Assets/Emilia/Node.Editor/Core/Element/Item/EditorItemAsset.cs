@@ -41,12 +41,18 @@ namespace Emilia.Node.Editor
             set => this._position = value;
         }
 
+        /// <summary>
+        /// 所属的GrpahAsset
+        /// </summary>
         public EditorGraphAsset graphAsset
         {
             get => this._graphAsset;
             set => this._graphAsset = value;
         }
 
+        /// <summary>
+        /// 自身Odin属性树
+        /// </summary>
         public PropertyTree propertyTree => _propertyTree;
 
         protected virtual void OnEnable()

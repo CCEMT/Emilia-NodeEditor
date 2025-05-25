@@ -8,6 +8,9 @@ using Object = UnityEngine.Object;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// Node拷贝粘贴Pack
+    /// </summary>
     [Serializable]
     public class NodeCopyPastePack : INodeCopyPastePack
     {

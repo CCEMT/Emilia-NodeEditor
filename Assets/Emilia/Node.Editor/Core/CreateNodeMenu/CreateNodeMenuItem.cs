@@ -2,10 +2,24 @@
 {
     public class CreateNodeMenuItem
     {
+        /// <summary>
+        /// 组目标
+        /// </summary>
         public CreateNodeMenuItem parent;
-        
+
+        /// <summary>
+        /// 节点信息
+        /// </summary>
         public CreateNodeInfo info;
+
+        /// <summary>
+        /// 标题
+        /// </summary>
         public string title;
+
+        /// <summary>
+        /// 菜单项层级
+        /// </summary>
         public int level;
 
         public CreateNodeMenuItem() { }

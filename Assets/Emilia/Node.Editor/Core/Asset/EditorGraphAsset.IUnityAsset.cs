@@ -6,6 +6,9 @@ namespace Emilia.Node.Editor
 {
     public partial class EditorGraphAsset : IUnityAsset
     {
+        /// <summary>
+        /// 设置Unity的子资产
+        /// </summary>
         public virtual void SetChildren(List<Object> childAssets)
         {
             _nodes.Clear();
@@ -35,6 +38,9 @@ namespace Emilia.Node.Editor
             }
         }
         
+        /// <summary>
+        /// 获取Unity的子资产
+        /// </summary>
         public virtual List<Object> GetChildren()
         {
             List<Object> assets = new List<Object>();

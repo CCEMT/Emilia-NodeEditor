@@ -45,7 +45,7 @@ namespace Emilia.Node.Editor
 
             if (portType != null) visualClass = "Port_" + portType.Name;
 
-            Type edgeAssetType = graphView.connectSystem.GetEdgeTypeByPort(this);
+            Type edgeAssetType = graphView.connectSystem.GetEdgeAssetTypeByPort(this);
             Type edgeViewType = GraphTypeCache.GetEdgeViewType(edgeAssetType);
 
             EditorEdgeConnectorListener connectorListener = graphView.connectSystem.connectorListener;
@@ -70,10 +70,10 @@ namespace Emilia.Node.Editor
 
             ContextualMenuManipulator contextualMenuManipulator = new ContextualMenuManipulator(OnContextualMenuManipulator);
             this.AddManipulator(contextualMenuManipulator);
-            
+
             schedule.Execute(RefreshEdge).ExecuteLater(1);
         }
-        
+
         public virtual void RefreshEdge()
         {
             List<EditorEdgeAsset> edgeAssets = graphView.graphAsset.GetEdges(master.asset.id, info.id);
@@ -98,7 +98,7 @@ namespace Emilia.Node.Editor
             graphView.ClearSelection();
             graphView.AddToSelection(this);
             graphView.UpdateSelected();
-            
+
             graphView.graphOperate.Copy();
         }
 
@@ -114,7 +114,7 @@ namespace Emilia.Node.Editor
             if (portView == null) return false;
             if (portView.info.direction != info.direction) return false;
 
-            List<IEditorEdgeView> edgeViews = graphView.graphElementCache.GetEdgeView(portView);
+            List<IEditorEdgeView> edgeViews = portView.GetEdges();
 
             bool allCanConnect = edgeViews.All(edgeView => portView.info.direction == EditorPortDirection.Input
                 ? graphView.connectSystem.CanConnect(this, edgeView.outputPortView)
@@ -128,7 +128,7 @@ namespace Emilia.Node.Editor
             graphView.ClearSelection();
             graphView.AddToSelection(this);
             graphView.UpdateSelected();
-            
+
             graphView.graphOperate.Paste();
         }
 
@@ -165,15 +165,9 @@ namespace Emilia.Node.Editor
             collectedElementSet.Add(this);
         }
 
-        public virtual bool Validate()
-        {
-            return true;
-        }
+        public virtual bool Validate() => true;
 
-        public virtual bool IsSelected()
-        {
-            return isSelected;
-        }
+        public virtual bool IsSelected() => isSelected;
 
         public virtual void Select()
         {
@@ -192,7 +186,7 @@ namespace Emilia.Node.Editor
 
         public virtual ICopyPastePack GetPack()
         {
-            List<IEditorEdgeView> edgeViews = graphView.graphElementCache.GetEdgeView(this);
+            List<IEditorEdgeView> edgeViews = this.GetEdges();
 
             List<IEdgeCopyPastePack> packs = new List<IEdgeCopyPastePack>(edgeViews.Count);
             for (int i = 0; i < edgeViews.Count; i++)
@@ -205,10 +199,10 @@ namespace Emilia.Node.Editor
             PortCopyPastePack pack = new PortCopyPastePack(master.asset.id, info.id, info.portType, info.direction, packs);
             return pack;
         }
-        
+
         public virtual void RemoveView()
         {
-            List<IEditorEdgeView> edgeViews = graphView.graphElementCache.GetEdgeView(this);
+            List<IEditorEdgeView> edgeViews = this.GetEdges();
             for (int i = 0; i < edgeViews.Count; i++)
             {
                 IEditorEdgeView edgeView = edgeViews[i];

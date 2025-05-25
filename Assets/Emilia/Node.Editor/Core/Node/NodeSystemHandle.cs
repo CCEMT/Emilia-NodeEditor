@@ -5,6 +5,9 @@ namespace Emilia.Node.Editor
     [EditorHandleGenerate]
     public abstract class NodeSystemHandle
     {
-        public virtual void OnCreateNode(EditorGraphView graphView,IEditorNodeView editorNodeView) { }
+        /// <summary>
+        /// 创建节点时的处理
+        /// </summary>
+        public virtual void OnCreateNode(EditorGraphView graphView, IEditorNodeView editorNodeView) { }
     }
 }

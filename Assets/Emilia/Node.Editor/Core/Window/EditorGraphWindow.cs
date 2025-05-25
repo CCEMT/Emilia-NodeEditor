@@ -170,6 +170,9 @@ namespace Emilia.Node.Editor
             return settings.windowType ?? typeof(EditorGraphWindow);
         }
 
+        /// <summary>
+        /// 获取窗口ID
+        /// </summary>
         public static string GetId(EditorGraphAsset editorGraphAsset)
         {
             const string SingleKey = "{SingleWindow}";

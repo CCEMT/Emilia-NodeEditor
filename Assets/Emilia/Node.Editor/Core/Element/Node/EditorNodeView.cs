@@ -194,10 +194,20 @@ namespace Emilia.Node.Editor
             }
         }
 
+        /// <summary>
+        /// 收集静态Port信息
+        /// </summary>
+        /// <returns></returns>
         public abstract List<EditorPortInfo> CollectStaticPortAssets();
 
+        /// <summary>
+        /// 根据Id获取PortView
+        /// </summary>
         public virtual IEditorPortView GetPortView(string portId) => this._portViewMap.GetValueOrDefault(portId);
 
+        /// <summary>
+        /// 添加PortView
+        /// </summary>
         public virtual IEditorPortView AddPortView(int index, EditorPortInfo info)
         {
             IEditorPortView portView = ReflectUtility.CreateInstance(info.nodePortViewType) as IEditorPortView;
@@ -211,6 +221,9 @@ namespace Emilia.Node.Editor
             return portView;
         }
 
+        /// <summary>
+        /// 移除PortView
+        /// </summary>
         public virtual void RemovePortView(IEditorPortView portView)
         {
             if (portView == null) return;
@@ -371,6 +384,9 @@ namespace Emilia.Node.Editor
             asset.position = newPos;
         }
 
+        /// <summary>
+        /// 设置节点主题颜色
+        /// </summary>
         public void SetColor(Color color)
         {
             topicColor = color;
