@@ -1,26 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Emilia.Kit;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Object = UnityEngine.Object;
 
 namespace Emilia.Node.Editor
 {
     public class GraphCreateNodeMenu : BasicGraphViewModule
     {
-        struct MenuItem
-        {
-            public CreateNodeInfo info;
-            public string title;
-            public int level;
-        }
-
-        private CreateNodeContext createNodeContext;
-
         private Texture2D nullIcon;
-
         private CreateNodeMenuHandle handle;
 
         /// <summary>
@@ -51,47 +43,39 @@ namespace Emilia.Node.Editor
             this.graphView.nodeCreationRequest = OnNodeCreationRequest;
         }
 
+        public string GetTitle()
+        {
+            if (this.handle == null) return string.Empty;
+            return this.handle.GetTitle(this.graphView);
+        }
+
         private void OnNodeCreationRequest(NodeCreationContext nodeCreationContext)
         {
-            MenuCreateInitialize(new CreateNodeContext());
-            ShowCreateNodeMenu(nodeCreationContext);
+            CreateNodeContext createNodeContext = new CreateNodeContext();
+            createNodeContext.screenMousePosition = nodeCreationContext.screenMousePosition;
+            ShowCreateNodeMenu(createNodeContext);
         }
 
-        /// <summary>
-        /// 显示创建节点菜单
-        /// </summary>
-        public void ShowCreateNodeMenu(NodeCreationContext nodeCreationContext)
-        {
-            handle?.ShowCreateNodeMenu(graphView, nodeCreationContext);
-        }
-
-        /// <summary>
-        /// 创建节点初始化
-        /// </summary>
-        public void MenuCreateInitialize(CreateNodeContext context)
+        public void ShowCreateNodeMenu(CreateNodeContext context)
         {
             if (this.handle == null) return;
-            this.createNodeContext = context;
-            this.createNodeContext.nodeMenu = this;
-            handle.MenuCreateInitialize(graphView, this.createNodeContext);
+            context.nodeMenu = this;
+            handle.ShowCreateNodeMenu(graphView, context);
         }
 
         /// <summary>
-        /// 获取节点菜单项
+        /// 创建节点树
         /// </summary>
-        public List<SearchTreeEntry> OnCreateSearchTree(SearchWindowContext context)
+        public void CreateNodeTree(CreateNodeContext createNodeContext, Action<CreateNodeMenuItem> groupCreate, Action<CreateNodeMenuItem> itemCreate)
         {
-            List<SearchTreeEntry> searchTreeEntries = new List<SearchTreeEntry>();
-            searchTreeEntries.Add(new SearchTreeGroupEntry(new GUIContent(handle.GetTitle(graphView))));
-
-            Dictionary<string, List<MenuItem>> titleAndPriority = new Dictionary<string, List<MenuItem>>();
-            Dictionary<string, MenuItem> nodeMap = new Dictionary<string, MenuItem>();
+            Dictionary<string, List<CreateNodeMenuItem>> titleAndPriority = new Dictionary<string, List<CreateNodeMenuItem>>();
+            Dictionary<string, CreateNodeMenuItem> nodeMap = new Dictionary<string, CreateNodeMenuItem>();
 
             List<CreateNodeInfo> allNodeInfos = new List<CreateNodeInfo>();
-            handle.CollectAllCreateNodeInfos(graphView, allNodeInfos, this.createNodeContext);
+            handle.CollectAllCreateNodeInfos(graphView, allNodeInfos, createNodeContext);
 
             List<CreateNodeInfo> createNodeInfos;
-            if (createNodeContext.nodeCollect != null) createNodeInfos = this.createNodeContext.nodeCollect.Collect(allNodeInfos);
+            if (createNodeContext.nodeCollect != null) createNodeInfos = createNodeContext.nodeCollect.Collect(allNodeInfos);
             else createNodeInfos = allNodeInfos;
 
             int amount = createNodeInfos.Count;
@@ -120,9 +104,9 @@ namespace Emilia.Node.Editor
 
                         level = j + 1;
 
-                        if (titleAndPriority.ContainsKey(fullTitle) == false) titleAndPriority[fullTitle] = new List<MenuItem>();
+                        if (titleAndPriority.ContainsKey(fullTitle) == false) titleAndPriority[fullTitle] = new List<CreateNodeMenuItem>();
 
-                        MenuItem menuItem = new MenuItem();
+                        CreateNodeMenuItem menuItem = new CreateNodeMenuItem();
                         menuItem.info = createNodeInfo;
                         menuItem.level = level;
                         menuItem.title = title;
@@ -131,7 +115,7 @@ namespace Emilia.Node.Editor
                     }
                 }
 
-                MenuItem nodeMenuItem = new MenuItem();
+                CreateNodeMenuItem nodeMenuItem = new CreateNodeMenuItem();
                 nodeMenuItem.info = createNodeInfo;
                 nodeMenuItem.level = level;
 
@@ -144,21 +128,21 @@ namespace Emilia.Node.Editor
 
             titlePaths.Sort((a, b) => {
 
-                List<MenuItem> aItems = titleAndPriority[a];
-                List<MenuItem> bItems = titleAndPriority[b];
+                List<CreateNodeMenuItem> aItems = titleAndPriority[a];
+                List<CreateNodeMenuItem> bItems = titleAndPriority[b];
 
                 int aMaxPriority = int.MinValue;
                 int bMaxPriority = int.MinValue;
 
                 for (var i = 0; i < aItems.Count; i++)
                 {
-                    MenuItem item = aItems[i];
+                    CreateNodeMenuItem item = aItems[i];
                     if (item.info.priority > aMaxPriority) aMaxPriority = item.info.priority;
                 }
 
                 for (var i = 0; i < bItems.Count; i++)
                 {
-                    MenuItem item = bItems[i];
+                    CreateNodeMenuItem item = bItems[i];
                     if (item.info.priority > bMaxPriority) bMaxPriority = item.info.priority;
                 }
 
@@ -169,8 +153,8 @@ namespace Emilia.Node.Editor
             nodePaths.AddRange(nodeMap.Keys);
 
             nodePaths.Sort((a, b) => {
-                MenuItem aItem = nodeMap[a];
-                MenuItem bItem = nodeMap[b];
+                CreateNodeMenuItem aItem = nodeMap[a];
+                CreateNodeMenuItem bItem = nodeMap[b];
                 return aItem.info.priority.CompareTo(bItem.info.priority);
             });
 
@@ -179,14 +163,14 @@ namespace Emilia.Node.Editor
             for (var i = 0; i < titlePaths.Count; i++)
             {
                 string titlePath = titlePaths[i];
-                MenuItem groupMenuItem = titleAndPriority[titlePath].FirstOrDefault();
-                searchTreeEntries.Add(new SearchTreeGroupEntry(new GUIContent(groupMenuItem.title), groupMenuItem.level));
+                CreateNodeMenuItem groupMenuItem = titleAndPriority[titlePath].FirstOrDefault();
+                groupCreate?.Invoke(groupMenuItem);
 
                 for (int j = 0; j < nodePaths.Count; j++)
                 {
                     string nodePath = nodePaths[j];
                     if (nodePath.Contains(titlePath) == false) continue;
-                    AddMenuItem(nodePath);
+                    AddMenuItem(groupMenuItem, nodePath);
                 }
             }
 
@@ -194,12 +178,14 @@ namespace Emilia.Node.Editor
             {
                 string nodePath = nodePaths[i];
                 if (createNodePaths.Contains(nodePath)) continue;
-                AddMenuItem(nodePath);
+                AddMenuItem(null, nodePath);
             }
 
-            void AddMenuItem(string nodePath)
+            void AddMenuItem(CreateNodeMenuItem parent, string nodePath)
             {
-                MenuItem menuItem = nodeMap[nodePath];
+                CreateNodeMenuItem menuItem = nodeMap[nodePath];
+                menuItem.parent = parent;
+
                 Texture2D icon = nullIcon;
                 if (menuItem.info.icon != null) icon = menuItem.info.icon;
 
@@ -207,34 +193,32 @@ namespace Emilia.Node.Editor
                 string[] parts = nodePath.Split('/');
                 if (parts.Length > 1) nodeName = parts[parts.Length - 1];
 
-                searchTreeEntries.Add(new SearchTreeEntry(new GUIContent(nodeName, icon)) {
-                    level = menuItem.level + 1,
-                    userData = menuItem.info
-                });
+                CreateNodeMenuItem itemMenu = new CreateNodeMenuItem(menuItem.info, nodeName, menuItem.level + 1);
+                itemMenu.info.icon = icon;
+
+                itemCreate?.Invoke(itemMenu);
 
                 createNodePaths.Add(nodePath);
             }
-
-            return searchTreeEntries;
         }
 
         /// <summary>
-        /// 选择选项
+        /// 创建节点
         /// </summary>
-        public bool OnSelectEntry(SearchTreeEntry SearchTreeEntry, SearchWindowContext context)
+        public bool CreateNode(CreateNodeInfo createNodeInfo, CreateNodeContext createNodeContext)
         {
-            EditorWindow window = graphView.window;
-            VisualElement windowRoot = this.graphView.window.rootVisualElement;
-            Vector2 windowMousePosition = windowRoot.ChangeCoordinatesTo(windowRoot.parent, context.screenMousePosition - window.position.position);
+            if (createNodeContext.nodeMenu == null) return false;
+            EditorWindow window = this.graphView.window;
+            VisualElement windowRoot = window.rootVisualElement;
+            Vector2 windowMousePosition = windowRoot.ChangeCoordinatesTo(windowRoot.parent, createNodeContext.screenMousePosition - window.position.position);
             Vector2 graphMousePosition = graphView.contentViewContainer.WorldToLocal(windowMousePosition);
 
-            CreateNodeInfo createNodeInfo = (CreateNodeInfo) SearchTreeEntry.userData;
             createNodeContext.createNodeConnector.targetPortId = createNodeInfo.portId;
 
             Undo.IncrementCurrentGroup();
 
             IEditorNodeView nodeView = this.graphView.nodeSystem.CreateNode(createNodeInfo.editorNodeAssetType, graphMousePosition, createNodeInfo.nodeData);
-            if (string.IsNullOrEmpty(this.createNodeContext.createNodeConnector.originalNodeId) == false) CreateConnect(nodeView);
+            if (string.IsNullOrEmpty(createNodeContext.createNodeConnector.originalNodeId) == false) CreateConnect(nodeView, createNodeContext);
 
             Undo.CollapseUndoOperations(Undo.GetCurrentGroup());
             Undo.IncrementCurrentGroup();
@@ -242,34 +226,34 @@ namespace Emilia.Node.Editor
             return true;
         }
 
-        private void CreateConnect(IEditorNodeView nodeView)
+        private void CreateConnect(IEditorNodeView nodeView, CreateNodeContext createNodeContext)
         {
             IEditorNodeView originalNodeView = graphView.graphElementCache.GetEditorNodeView(createNodeContext.createNodeConnector.originalNodeId);
             IEditorPortView originalPortView = originalNodeView.GetPortView(createNodeContext.createNodeConnector.originalPortId);
             IEditorPortView targetPortView = nodeView.GetPortView(createNodeContext.createNodeConnector.targetPortId);
 
-            if (string.IsNullOrEmpty(this.createNodeContext.createNodeConnector.edgeId))
+            if (string.IsNullOrEmpty(createNodeContext.createNodeConnector.edgeId))
             {
                 if (originalPortView.portDirection == EditorPortDirection.Input) this.graphView.connectSystem.Connect(originalPortView, targetPortView);
                 else this.graphView.connectSystem.Connect(targetPortView, originalPortView);
             }
             else
             {
-                IEditorEdgeView edgeView = graphView.graphElementCache.edgeViewById.GetValueOrDefault(this.createNodeContext.createNodeConnector.edgeId);
+                IEditorEdgeView edgeView = graphView.graphElementCache.edgeViewById.GetValueOrDefault(createNodeContext.createNodeConnector.edgeId);
                 if (edgeView == null) return;
 
                 this.graphView.RegisterCompleteObjectUndo("Graph RedirectionEdge");
 
                 EditorEdgeAsset edgeAsset = edgeView.asset;
-                if (edgeAsset.inputNodeId == this.createNodeContext.createNodeConnector.originalNodeId)
+                if (edgeAsset.inputNodeId == createNodeContext.createNodeConnector.originalNodeId)
                 {
                     edgeAsset.outputNodeId = nodeView.asset.id;
-                    edgeAsset.outputPortId = this.createNodeContext.createNodeConnector.targetPortId;
+                    edgeAsset.outputPortId = createNodeContext.createNodeConnector.targetPortId;
                 }
                 else
                 {
                     edgeAsset.inputNodeId = nodeView.asset.id;
-                    edgeAsset.inputPortId = this.createNodeContext.createNodeConnector.targetPortId;
+                    edgeAsset.inputPortId = createNodeContext.createNodeConnector.targetPortId;
                 }
 
                 this.graphView.RemoveEdgeView(edgeView);
@@ -289,7 +273,7 @@ namespace Emilia.Node.Editor
                 nullIcon = null;
             }
 
-            if (handle!=null)
+            if (handle != null)
             {
                 handle.Dispose(this.graphView);
                 handle = null;

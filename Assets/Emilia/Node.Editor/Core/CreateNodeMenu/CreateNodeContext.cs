@@ -1,7 +1,10 @@
-﻿namespace Emilia.Node.Editor
+﻿using UnityEngine;
+
+namespace Emilia.Node.Editor
 {
-    public struct CreateNodeContext
+    public class CreateNodeContext
     {
+        public Vector2 screenMousePosition;
         public GraphCreateNodeMenu nodeMenu;
         public ICreateNodeCollect nodeCollect;
         public CreateNodeConnector createNodeConnector;

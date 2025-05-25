@@ -166,7 +166,7 @@ namespace Emilia.Node.Editor
         public float loadProgress { get; private set; }
 
         /// <summary>
-        /// 是否聚集
+        /// 是否聚焦
         /// </summary>
         public bool isFocus { get; private set; }
 
