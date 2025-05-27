@@ -71,7 +71,7 @@ namespace Emilia.Node.Editor
             ContextualMenuManipulator contextualMenuManipulator = new ContextualMenuManipulator(OnContextualMenuManipulator);
             this.AddManipulator(contextualMenuManipulator);
 
-            schedule.Execute(RefreshEdge).ExecuteLater(1);
+            if (graphView.loadProgress == 1) schedule.Execute(RefreshEdge).ExecuteLater(1);
         }
 
         public virtual void RefreshEdge()

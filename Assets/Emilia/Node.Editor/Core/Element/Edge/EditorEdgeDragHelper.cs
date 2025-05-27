@@ -94,8 +94,6 @@ namespace Emilia.Node.Editor
 
             ghostEdge = null;
             edgeCandidate = null;
-
-            graphView = null;
         }
 
         public override bool HandleMouseDown(MouseDownEvent evt)
