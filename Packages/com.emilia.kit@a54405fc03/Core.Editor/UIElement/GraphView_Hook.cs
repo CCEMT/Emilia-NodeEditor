@@ -43,7 +43,7 @@ namespace Emilia.Kit.Editor
 
         private void UpdateContentZoomer_Hook()
         {
-            object result = ReflectUtility.Invoke(this, "OnUpdateContentZoomer");
+            object result = ReflectUtility.Invoke(this, "OverrideUpdateContentZoomer");
             if (result is true) return;
 
             if (minScale != maxScale)

@@ -50,6 +50,7 @@ namespace Emilia.Node.Editor
             {
                 if (string.IsNullOrEmpty(portInfo.displayName) == false) nodeInfo.path += $"：{portInfo.displayName}";
                 CreateNodeInfo createNodeInfo = new CreateNodeInfo(nodeInfo);
+                createNodeInfo.createNodeConnector = new CreateNodeConnector();
 
                 if (portView.info.canMultiConnect == false && portView.edges.Count > 0) createNodeInfo.createNodeConnector.edgeId = portView.edges[0].asset.id;
                 createNodeInfo.createNodeConnector.originalNodeId = portView.master.asset.id;

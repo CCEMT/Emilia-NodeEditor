@@ -39,6 +39,7 @@ namespace Emilia.Node.Editor
 
             orientation_Internals = info.orientation == EditorOrientation.Horizontal ? Orientation.Horizontal : Orientation.Vertical;
             direction_Internals = info.direction == EditorPortDirection.Input ? Direction.Input : Direction.Output;
+
             capacity_Internals = info.canMultiConnect ? Capacity.Multi : Capacity.Single;
             portName = info.displayName;
             portType = info.portType;
@@ -91,6 +92,22 @@ namespace Emilia.Node.Editor
             evt.menu.AppendAction($"Paste Connect To {info.displayName}", (_) => OnPasteConnect(), CanPaste() ? DropdownMenuAction.Status.Normal : DropdownMenuAction.Status.Disabled);
 
             evt.menu.AppendSeparator();
+        }
+
+        public override bool ContainsPoint(Vector2 localPoint)
+        {
+            if (orientation == Orientation.Horizontal) return base.ContainsPoint(localPoint);
+
+            Rect lRect = m_ConnectorBox.layout;
+            Rect thisRect = this.GetRect_Internal();
+
+            Rect boxRect = new(0, -lRect.yMin, thisRect.width - lRect.xMin, thisRect.height);
+            float leftSpace = lRect.xMin - m_ConnectorText.layout.xMax;
+
+            boxRect.xMin -= leftSpace;
+            boxRect.width += leftSpace;
+            
+            return boxRect.Contains(this.ChangeCoordinatesTo(m_ConnectorBox, localPoint));
         }
 
         protected virtual void OnCopyConnect()

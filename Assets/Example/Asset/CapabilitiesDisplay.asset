@@ -1,0 +1,2793 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8901497324083996679
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97ea6614a3484b77981400fed0cfb405, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 6
+      Data: 
+  _id: 0bd36e3e-2c04-4d4e-a38c-eb4080fbf336
+  _outputNodeId: 4fd226d4-a5b1-4a82-b796-6ed210a2c749
+  _inputNodeId: 0e7b4dfc-9141-473a-976e-036d821bd339
+  _outputPortId: bottomStringPortInfo
+  _inputPortId: topStringPortInfo
+  _graphAsset: {fileID: 11400000}
+--- !u!114 &-8891480394134779251
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97ea6614a3484b77981400fed0cfb405, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 6
+      Data: 
+  _id: 93ca6340-fefd-470d-825d-cd502330f4d6
+  _outputNodeId: 2448e030-289e-4e25-87e7-96fad45facac
+  _inputNodeId: ce998cbd-bdc3-49ca-89f8-bf3eec533800
+  _outputPortId: bottomIntPortInfo
+  _inputPortId: topIntPortInfo
+  _graphAsset: {fileID: 11400000}
+--- !u!114 &-8758231218325031721
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97ea6614a3484b77981400fed0cfb405, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 6
+      Data: 
+  _id: b598fb86-c675-4bba-a9af-bc2298000a19
+  _outputNodeId: 73c318d7-0547-464e-b0d8-7b6d3405d345
+  _inputNodeId: 73f4fa91-b2bf-46dc-97df-8166fee8f3dc
+  _outputPortId: rightStringPortInfo
+  _inputPortId: leftStringPortInfo
+  _graphAsset: {fileID: 11400000}
+--- !u!114 &-8732193448724720668
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2325c0a8d3954d64819ef5d8db0d5b4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 6
+      Data: 
+  _id: 0a20e810-d757-4eb6-a8fc-e398213ba789
+  _position:
+    serializedVersion: 2
+    x: 1004.3983
+    y: -227.20001
+    width: 214.40002
+    height: 165.59999
+  _graphAsset: {fileID: 11400000}
+  _displayName: 
+  _isFold: 1
+  leftIntPortValue: 0
+  leftStringPortValue: string
+--- !u!114 &-7788558300624362625
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a56498cf6eaa4b0b8539a4ea58d67b3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 6
+      Data: 
+  _id: 4fd226d4-a5b1-4a82-b796-6ed210a2c749
+  _position:
+    serializedVersion: 2
+    x: 300.80002
+    y: -459.19998
+    width: 214.40002
+    height: 124
+  _graphAsset: {fileID: 11400000}
+  _displayName: 
+  _isFold: 1
+  leftIntPortValue: 0
+  leftStringPortValue: 
+--- !u!114 &-7687679859001626940
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97ea6614a3484b77981400fed0cfb405, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 6
+      Data: 
+  _id: e29da660-315e-4394-b872-4eecb5df185b
+  _outputNodeId: ce998cbd-bdc3-49ca-89f8-bf3eec533800
+  _inputNodeId: 0e7b4dfc-9141-473a-976e-036d821bd339
+  _outputPortId: rightIntPortInfo
+  _inputPortId: leftIntPortInfo
+  _graphAsset: {fileID: 11400000}
+--- !u!114 &-7404902282802584894
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97ea6614a3484b77981400fed0cfb405, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 6
+      Data: 
+  _id: 3b066973-9339-4313-b32a-823b494b3472
+  _outputNodeId: 0e7b4dfc-9141-473a-976e-036d821bd339
+  _inputNodeId: 6df6cfd4-d82c-46b1-a33f-c3ebf1faeee2
+  _outputPortId: rightStringPortInfo
+  _inputPortId: leftStringPortInfo
+  _graphAsset: {fileID: 11400000}
+--- !u!114 &-7309771472878298180
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97ea6614a3484b77981400fed0cfb405, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 6
+      Data: 
+  _id: 0dcaa982-ac60-4bc9-a129-99d15e94bd9c
+  _outputNodeId: f543af0b-0009-4b68-bf78-b258f888a4fd
+  _inputNodeId: 73c318d7-0547-464e-b0d8-7b6d3405d345
+  _outputPortId: rightStringPortInfo
+  _inputPortId: leftStringPortInfo
+  _graphAsset: {fileID: 11400000}
+--- !u!114 &-7183927677155387391
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97ea6614a3484b77981400fed0cfb405, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 6
+      Data: 
+  _id: 42908546-4d84-4f73-b093-87d7ccfe8069
+  _outputNodeId: 73c318d7-0547-464e-b0d8-7b6d3405d345
+  _inputNodeId: 73f4fa91-b2bf-46dc-97df-8166fee8f3dc
+  _outputPortId: rightIntPortInfo
+  _inputPortId: leftIntPortInfo
+  _graphAsset: {fileID: 11400000}
+--- !u!114 &-6043496221509413628
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97ea6614a3484b77981400fed0cfb405, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 6
+      Data: 
+  _id: e51eea8f-0df2-4cce-b2f0-672d0ad3ddef
+  _outputNodeId: 670d8319-88c3-46c8-8f70-4e74a1982aac
+  _inputNodeId: ce998cbd-bdc3-49ca-89f8-bf3eec533800
+  _outputPortId: bottomIntPortInfo
+  _inputPortId: topIntPortInfo
+  _graphAsset: {fileID: 11400000}
+--- !u!114 &-5691028161057863837
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97ea6614a3484b77981400fed0cfb405, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 6
+      Data: 
+  _id: 84bf7822-aaca-4bf1-beb6-258a3bd626b6
+  _outputNodeId: ce998cbd-bdc3-49ca-89f8-bf3eec533800
+  _inputNodeId: f543af0b-0009-4b68-bf78-b258f888a4fd
+  _outputPortId: bottomIntPortInfo
+  _inputPortId: topIntPortInfo
+  _graphAsset: {fileID: 11400000}
+--- !u!114 &-5599442197308201393
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97ea6614a3484b77981400fed0cfb405, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 6
+      Data: 
+  _id: a39092ad-daae-40ad-8ce2-79b3a5186b0f
+  _outputNodeId: f543af0b-0009-4b68-bf78-b258f888a4fd
+  _inputNodeId: 73c318d7-0547-464e-b0d8-7b6d3405d345
+  _outputPortId: rightIntPortInfo
+  _inputPortId: leftIntPortInfo
+  _graphAsset: {fileID: 11400000}
+--- !u!114 &-5593021192689795943
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97ea6614a3484b77981400fed0cfb405, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 6
+      Data: 
+  _id: 4f9277e7-aafe-40b2-bf90-98d14fc72995
+  _outputNodeId: 2448e030-289e-4e25-87e7-96fad45facac
+  _inputNodeId: ce998cbd-bdc3-49ca-89f8-bf3eec533800
+  _outputPortId: bottomStringPortInfo
+  _inputPortId: topStringPortInfo
+  _graphAsset: {fileID: 11400000}
+--- !u!114 &-5531600807849878386
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97ea6614a3484b77981400fed0cfb405, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 6
+      Data: 
+  _id: 305d35ea-d81e-4222-bc10-9227281bbf57
+  _outputNodeId: ce998cbd-bdc3-49ca-89f8-bf3eec533800
+  _inputNodeId: 0e7b4dfc-9141-473a-976e-036d821bd339
+  _outputPortId: rightStringPortInfo
+  _inputPortId: leftStringPortInfo
+  _graphAsset: {fileID: 11400000}
+--- !u!114 &-4846317694664867037
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a56498cf6eaa4b0b8539a4ea58d67b3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 6
+      Data: 
+  _id: 6c5945e8-12ba-4664-bcca-022882678b3c
+  _position:
+    serializedVersion: 2
+    x: -268.8
+    y: -248.80005
+    width: 214.40001
+    height: 128.8
+  _graphAsset: {fileID: 11400000}
+  _displayName: 
+  _isFold: 1
+  leftIntPortValue: 2
+  leftStringPortValue: string
+--- !u!114 &-4759726541771898770
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a56498cf6eaa4b0b8539a4ea58d67b3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 6
+      Data: 
+  _id: 0e7b4dfc-9141-473a-976e-036d821bd339
+  _position:
+    serializedVersion: 2
+    x: 300.79993
+    y: -248.79999
+    width: 214.40002
+    height: 124
+  _graphAsset: {fileID: 11400000}
+  _displayName: 
+  _isFold: 1
+  leftIntPortValue: 0
+  leftStringPortValue: 
+--- !u!114 &-3959855730765844241
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a56498cf6eaa4b0b8539a4ea58d67b3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 6
+      Data: 
+  _id: 2196825c-6f18-4407-a4b1-da7ec306c71b
+  _position:
+    serializedVersion: 2
+    x: 15.200016
+    y: -680.8
+    width: 214.39996
+    height: 128.79999
+  _graphAsset: {fileID: 11400000}
+  _displayName: 
+  _isFold: 1
+  leftIntPortValue: 0
+  leftStringPortValue: 
+--- !u!114 &-3677751301401593754
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97ea6614a3484b77981400fed0cfb405, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 6
+      Data: 
+  _id: 9ac4e978-14b8-4c8a-90d1-1b87eae32fe2
+  _outputNodeId: 670d8319-88c3-46c8-8f70-4e74a1982aac
+  _inputNodeId: 6c5945e8-12ba-4664-bcca-022882678b3c
+  _outputPortId: bottomIntPortInfo
+  _inputPortId: topIntPortInfo
+  _graphAsset: {fileID: 11400000}
+--- !u!114 &-2975212599382200385
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad5e2053efe6468aba0112698b14c82d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 6
+      Data: 
+  _id: 9272dd99-1866-4ff1-8456-63bac101da77
+  _position:
+    serializedVersion: 2
+    x: 654.4
+    y: 10.191237
+    width: 180.79993
+    height: 68
+  _graphAsset: {fileID: 11400000}
+  _displayName: 
+  _isFold: 1
+  _capabilitiesDisplayAsset: {fileID: 8410584222130817346}
+--- !u!114 &-2919790231849425125
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a56498cf6eaa4b0b8539a4ea58d67b3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 6
+      Data: 
+  _id: ce998cbd-bdc3-49ca-89f8-bf3eec533800
+  _position:
+    serializedVersion: 2
+    x: 15.200012
+    y: -248.8001
+    width: 214.39996
+    height: 124
+  _graphAsset: {fileID: 11400000}
+  _displayName: 
+  _isFold: 1
+  leftIntPortValue: 0
+  leftStringPortValue: 
+--- !u!114 &-2606262831388170815
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97ea6614a3484b77981400fed0cfb405, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 6
+      Data: 
+  _id: 52b13d44-fcbf-456f-a316-115e4f949f7c
+  _outputNodeId: 6c5945e8-12ba-4664-bcca-022882678b3c
+  _inputNodeId: f543af0b-0009-4b68-bf78-b258f888a4fd
+  _outputPortId: bottomIntPortInfo
+  _inputPortId: topIntPortInfo
+  _graphAsset: {fileID: 11400000}
+--- !u!114 &-2592705442675358347
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a56498cf6eaa4b0b8539a4ea58d67b3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 6
+      Data: 
+  _id: 670d8319-88c3-46c8-8f70-4e74a1982aac
+  _position:
+    serializedVersion: 2
+    x: -268.8
+    y: -459.19998
+    width: 214.40001
+    height: 128.79999
+  _graphAsset: {fileID: 11400000}
+  _displayName: 
+  _isFold: 1
+  leftIntPortValue: 1
+  leftStringPortValue: string
+--- !u!114 &-794964730234354178
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97ea6614a3484b77981400fed0cfb405, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 6
+      Data: 
+  _id: 489e3b41-cb36-41bf-b297-28f1695198f2
+  _outputNodeId: 0e7b4dfc-9141-473a-976e-036d821bd339
+  _inputNodeId: 73f4fa91-b2bf-46dc-97df-8166fee8f3dc
+  _outputPortId: bottomIntPortInfo
+  _inputPortId: topIntPortInfo
+  _graphAsset: {fileID: 11400000}
+--- !u!114 &-749678740836388263
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97ea6614a3484b77981400fed0cfb405, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 6
+      Data: 
+  _id: e27f6882-bdb4-40fa-9fb1-089adfb82b4b
+  _outputNodeId: 2448e030-289e-4e25-87e7-96fad45facac
+  _inputNodeId: 4fd226d4-a5b1-4a82-b796-6ed210a2c749
+  _outputPortId: rightStringPortInfo
+  _inputPortId: leftStringPortInfo
+  _graphAsset: {fileID: 11400000}
+--- !u!114 &-602026610609850470
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad5e2053efe6468aba0112698b14c82d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 6
+      Data: 
+  _id: 12dd7981-c895-4efb-a20a-be2603fe28ee
+  _position:
+    serializedVersion: 2
+    x: 203.20003
+    y: -221.43004
+    width: 180.79999
+    height: 68
+  _graphAsset: {fileID: 4794869389120513231}
+  _displayName: 
+  _isFold: 1
+  _capabilitiesDisplayAsset: {fileID: 6397969052164475063}
+--- !u!114 &-383451858857789330
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97ea6614a3484b77981400fed0cfb405, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 6
+      Data: 
+  _id: ad2223c3-0645-410c-97b6-471797fa88a4
+  _outputNodeId: ce998cbd-bdc3-49ca-89f8-bf3eec533800
+  _inputNodeId: 73c318d7-0547-464e-b0d8-7b6d3405d345
+  _outputPortId: bottomStringPortInfo
+  _inputPortId: topStringPortInfo
+  _graphAsset: {fileID: 11400000}
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3843aeabb78b4c10b81b3a4dfde550fe, type: 3}
+  m_Name: CapabilitiesDisplay
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects:
+    - {fileID: 8204460622237082950}
+    - {fileID: 5810552351362608072}
+    - {fileID: -2919790231849425125}
+    - {fileID: 3019216788520275560}
+    - {fileID: 4620111338245747946}
+    - {fileID: -7788558300624362625}
+    - {fileID: -4759726541771898770}
+    - {fileID: -2592705442675358347}
+    - {fileID: -4846317694664867037}
+    - {fileID: 1647309643366325311}
+    - {fileID: -8732193448724720668}
+    - {fileID: -2975212599382200385}
+    - {fileID: -3959855730765844241}
+    - {fileID: 1860359994414155345}
+    - {fileID: -383451858857789330}
+    - {fileID: -7687679859001626940}
+    - {fileID: 5255983918800463405}
+    - {fileID: -3677751301401593754}
+    - {fileID: 3540639968408709650}
+    - {fileID: 1655077350164446172}
+    - {fileID: -8901497324083996679}
+    - {fileID: -5593021192689795943}
+    - {fileID: -8891480394134779251}
+    - {fileID: -2606262831388170815}
+    - {fileID: -5599442197308201393}
+    - {fileID: -7309771472878298180}
+    - {fileID: 2363688608434003441}
+    - {fileID: 2245951870541011246}
+    - {fileID: 278626000185543226}
+    - {fileID: 7331100464751528568}
+    - {fileID: 3053712448341329148}
+    - {fileID: -749678740836388263}
+    - {fileID: -5531600807849878386}
+    - {fileID: -794964730234354178}
+    - {fileID: 6487819535244783743}
+    - {fileID: -7183927677155387391}
+    - {fileID: -8758231218325031721}
+    - {fileID: 3539044850041588421}
+    - {fileID: -5691028161057863837}
+    - {fileID: -6043496221509413628}
+    - {fileID: 743723601780180396}
+    - {fileID: 7833063105386985103}
+    - {fileID: -7404902282802584894}
+    - {fileID: 928838790087731062}
+    - {fileID: 8410584222130817346}
+    - {fileID: 5639668003298107180}
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _nodes
+      Entry: 7
+      Data: 0|System.Collections.Generic.List`1[[Emilia.Node.Editor.EditorNodeAsset,
+        Emilia.Node.Editor]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 13
+    - Name: 
+      Entry: 10
+      Data: 0
+    - Name: 
+      Entry: 10
+      Data: 1
+    - Name: 
+      Entry: 10
+      Data: 2
+    - Name: 
+      Entry: 10
+      Data: 3
+    - Name: 
+      Entry: 10
+      Data: 4
+    - Name: 
+      Entry: 10
+      Data: 5
+    - Name: 
+      Entry: 10
+      Data: 6
+    - Name: 
+      Entry: 10
+      Data: 7
+    - Name: 
+      Entry: 10
+      Data: 8
+    - Name: 
+      Entry: 10
+      Data: 9
+    - Name: 
+      Entry: 10
+      Data: 10
+    - Name: 
+      Entry: 10
+      Data: 11
+    - Name: 
+      Entry: 10
+      Data: 12
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: _edges
+      Entry: 7
+      Data: 1|System.Collections.Generic.List`1[[Emilia.Node.Editor.EditorEdgeAsset,
+        Emilia.Node.Editor]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 31
+    - Name: 
+      Entry: 10
+      Data: 13
+    - Name: 
+      Entry: 10
+      Data: 14
+    - Name: 
+      Entry: 10
+      Data: 15
+    - Name: 
+      Entry: 10
+      Data: 16
+    - Name: 
+      Entry: 10
+      Data: 17
+    - Name: 
+      Entry: 10
+      Data: 18
+    - Name: 
+      Entry: 10
+      Data: 19
+    - Name: 
+      Entry: 10
+      Data: 20
+    - Name: 
+      Entry: 10
+      Data: 21
+    - Name: 
+      Entry: 10
+      Data: 22
+    - Name: 
+      Entry: 10
+      Data: 23
+    - Name: 
+      Entry: 10
+      Data: 24
+    - Name: 
+      Entry: 10
+      Data: 25
+    - Name: 
+      Entry: 10
+      Data: 26
+    - Name: 
+      Entry: 10
+      Data: 27
+    - Name: 
+      Entry: 10
+      Data: 28
+    - Name: 
+      Entry: 10
+      Data: 29
+    - Name: 
+      Entry: 10
+      Data: 30
+    - Name: 
+      Entry: 10
+      Data: 31
+    - Name: 
+      Entry: 10
+      Data: 32
+    - Name: 
+      Entry: 10
+      Data: 33
+    - Name: 
+      Entry: 10
+      Data: 34
+    - Name: 
+      Entry: 10
+      Data: 35
+    - Name: 
+      Entry: 10
+      Data: 36
+    - Name: 
+      Entry: 10
+      Data: 37
+    - Name: 
+      Entry: 10
+      Data: 38
+    - Name: 
+      Entry: 10
+      Data: 39
+    - Name: 
+      Entry: 10
+      Data: 40
+    - Name: 
+      Entry: 10
+      Data: 41
+    - Name: 
+      Entry: 10
+      Data: 42
+    - Name: 
+      Entry: 10
+      Data: 43
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: _items
+      Entry: 7
+      Data: 2|System.Collections.Generic.List`1[[Emilia.Node.Editor.EditorItemAsset,
+        Emilia.Node.Editor]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: _nodeMap
+      Entry: 7
+      Data: 3|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[Emilia.Node.Editor.EditorNodeAsset,
+        Emilia.Node.Editor]], mscorlib
+    - Name: comparer
+      Entry: 7
+      Data: 4|System.Collections.Generic.GenericEqualityComparer`1[[System.String,
+        mscorlib]], mscorlib
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 12
+      Data: 13
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 73c318d7-0547-464e-b0d8-7b6d3405d345
+    - Name: $v
+      Entry: 10
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 6df6cfd4-d82c-46b1-a33f-c3ebf1faeee2
+    - Name: $v
+      Entry: 10
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: ce998cbd-bdc3-49ca-89f8-bf3eec533800
+    - Name: $v
+      Entry: 10
+      Data: 2
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 73f4fa91-b2bf-46dc-97df-8166fee8f3dc
+    - Name: $v
+      Entry: 10
+      Data: 3
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 2448e030-289e-4e25-87e7-96fad45facac
+    - Name: $v
+      Entry: 10
+      Data: 4
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 4fd226d4-a5b1-4a82-b796-6ed210a2c749
+    - Name: $v
+      Entry: 10
+      Data: 5
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 0e7b4dfc-9141-473a-976e-036d821bd339
+    - Name: $v
+      Entry: 10
+      Data: 6
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 670d8319-88c3-46c8-8f70-4e74a1982aac
+    - Name: $v
+      Entry: 10
+      Data: 7
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 6c5945e8-12ba-4664-bcca-022882678b3c
+    - Name: $v
+      Entry: 10
+      Data: 8
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: f543af0b-0009-4b68-bf78-b258f888a4fd
+    - Name: $v
+      Entry: 10
+      Data: 9
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 0a20e810-d757-4eb6-a8fc-e398213ba789
+    - Name: $v
+      Entry: 10
+      Data: 10
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 9272dd99-1866-4ff1-8456-63bac101da77
+    - Name: $v
+      Entry: 10
+      Data: 11
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 2196825c-6f18-4407-a4b1-da7ec306c71b
+    - Name: $v
+      Entry: 10
+      Data: 12
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: _edgeMap
+      Entry: 7
+      Data: 5|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[Emilia.Node.Editor.EditorEdgeAsset,
+        Emilia.Node.Editor]], mscorlib
+    - Name: comparer
+      Entry: 9
+      Data: 4
+    - Name: 
+      Entry: 12
+      Data: 31
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 871f692e-4846-4c24-ae0f-b4e68a715ddf
+    - Name: $v
+      Entry: 10
+      Data: 13
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: ad2223c3-0645-410c-97b6-471797fa88a4
+    - Name: $v
+      Entry: 10
+      Data: 14
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 84bf7822-aaca-4bf1-beb6-258a3bd626b6
+    - Name: $v
+      Entry: 10
+      Data: 38
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: e29da660-315e-4394-b872-4eecb5df185b
+    - Name: $v
+      Entry: 10
+      Data: 15
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: dbade8d9-8123-4e66-b3b2-6e5927595a5d
+    - Name: $v
+      Entry: 10
+      Data: 37
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 1d33d554-693b-41b7-99de-f3650f1fc534
+    - Name: $v
+      Entry: 10
+      Data: 16
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 9ac4e978-14b8-4c8a-90d1-1b87eae32fe2
+    - Name: $v
+      Entry: 10
+      Data: 17
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 634ba33b-0476-47c2-b6d8-55bbd5af5efb
+    - Name: $v
+      Entry: 10
+      Data: 18
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 64554971-15df-42fb-86d8-c17d77cd0ad6
+    - Name: $v
+      Entry: 10
+      Data: 19
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 0bd36e3e-2c04-4d4e-a38c-eb4080fbf336
+    - Name: $v
+      Entry: 10
+      Data: 20
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 4f9277e7-aafe-40b2-bf90-98d14fc72995
+    - Name: $v
+      Entry: 10
+      Data: 21
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 93ca6340-fefd-470d-825d-cd502330f4d6
+    - Name: $v
+      Entry: 10
+      Data: 22
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 52b13d44-fcbf-456f-a316-115e4f949f7c
+    - Name: $v
+      Entry: 10
+      Data: 23
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: a39092ad-daae-40ad-8ce2-79b3a5186b0f
+    - Name: $v
+      Entry: 10
+      Data: 24
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 0dcaa982-ac60-4bc9-a129-99d15e94bd9c
+    - Name: $v
+      Entry: 10
+      Data: 25
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: f360254d-b20f-4677-b4a8-539cc3c7bd5f
+    - Name: $v
+      Entry: 10
+      Data: 26
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: c783649c-1c02-4e67-9654-4a46bf6ab497
+    - Name: $v
+      Entry: 10
+      Data: 27
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: dff7a7d8-1e78-4dd6-8a33-f97e2122d794
+    - Name: $v
+      Entry: 10
+      Data: 28
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 6deec39b-e3fe-4fdd-b665-271ffd2c4d38
+    - Name: $v
+      Entry: 10
+      Data: 29
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 98166503-c2ef-4ca5-91bd-e4b459d5c5f2
+    - Name: $v
+      Entry: 10
+      Data: 30
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: e27f6882-bdb4-40fa-9fb1-089adfb82b4b
+    - Name: $v
+      Entry: 10
+      Data: 31
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 305d35ea-d81e-4222-bc10-9227281bbf57
+    - Name: $v
+      Entry: 10
+      Data: 32
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 489e3b41-cb36-41bf-b297-28f1695198f2
+    - Name: $v
+      Entry: 10
+      Data: 33
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: dc28c240-d189-4a71-a87f-fc776a544b94
+    - Name: $v
+      Entry: 10
+      Data: 34
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 42908546-4d84-4f73-b093-87d7ccfe8069
+    - Name: $v
+      Entry: 10
+      Data: 35
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: b598fb86-c675-4bba-a9af-bc2298000a19
+    - Name: $v
+      Entry: 10
+      Data: 36
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: e51eea8f-0df2-4cce-b2f0-672d0ad3ddef
+    - Name: $v
+      Entry: 10
+      Data: 39
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 7a3ba0d5-fb6f-4285-82e9-b336b0b1ae2e
+    - Name: $v
+      Entry: 10
+      Data: 40
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 6bdd4345-5279-4980-b6d6-65c34573ceb5
+    - Name: $v
+      Entry: 10
+      Data: 41
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 3b066973-9339-4313-b32a-823b494b3472
+    - Name: $v
+      Entry: 10
+      Data: 42
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 26627dea-f9a6-42bf-b934-f52bcbd7d0cc
+    - Name: $v
+      Entry: 10
+      Data: 43
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: _itemMap
+      Entry: 7
+      Data: 6|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[Emilia.Node.Editor.EditorItemAsset,
+        Emilia.Node.Editor]], mscorlib
+    - Name: comparer
+      Entry: 9
+      Data: 4
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: _parent
+      Entry: 6
+      Data: 
+    - Name: _children
+      Entry: 7
+      Data: 7|System.Collections.Generic.List`1[[Emilia.Node.Editor.EditorGraphAsset,
+        Emilia.Node.Editor]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 10
+      Data: 44
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: editorParametersManage
+      Entry: 10
+      Data: 45
+  _id: d28de47d-afbf-41d3-a996-87496270c073
+  description: "\u529F\u80FD\u5C55\u793A\u4F8B\u5B50"
+--- !u!114 &278626000185543226
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97ea6614a3484b77981400fed0cfb405, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 6
+      Data: 
+  _id: dff7a7d8-1e78-4dd6-8a33-f97e2122d794
+  _outputNodeId: 670d8319-88c3-46c8-8f70-4e74a1982aac
+  _inputNodeId: 2448e030-289e-4e25-87e7-96fad45facac
+  _outputPortId: rightIntPortInfo
+  _inputPortId: leftIntPortInfo
+  _graphAsset: {fileID: 11400000}
+--- !u!114 &743723601780180396
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97ea6614a3484b77981400fed0cfb405, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 6
+      Data: 
+  _id: 7a3ba0d5-fb6f-4285-82e9-b336b0b1ae2e
+  _outputNodeId: 4fd226d4-a5b1-4a82-b796-6ed210a2c749
+  _inputNodeId: ce998cbd-bdc3-49ca-89f8-bf3eec533800
+  _outputPortId: bottomStringPortInfo
+  _inputPortId: topStringPortInfo
+  _graphAsset: {fileID: 11400000}
+--- !u!114 &928838790087731062
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97ea6614a3484b77981400fed0cfb405, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 6
+      Data: 
+  _id: 26627dea-f9a6-42bf-b934-f52bcbd7d0cc
+  _outputNodeId: 73f4fa91-b2bf-46dc-97df-8166fee8f3dc
+  _inputNodeId: 9272dd99-1866-4ff1-8456-63bac101da77
+  _outputPortId: rightIntPortInfo
+  _inputPortId: leftIntPortInfo
+  _graphAsset: {fileID: 11400000}
+--- !u!114 &1647309643366325311
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a56498cf6eaa4b0b8539a4ea58d67b3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 6
+      Data: 
+  _id: f543af0b-0009-4b68-bf78-b258f888a4fd
+  _position:
+    serializedVersion: 2
+    x: -268.8
+    y: -22.400011
+    width: 214.40001
+    height: 123.99999
+  _graphAsset: {fileID: 11400000}
+  _displayName: 
+  _isFold: 1
+  leftIntPortValue: 3
+  leftStringPortValue: string
+--- !u!114 &1655077350164446172
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97ea6614a3484b77981400fed0cfb405, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 6
+      Data: 
+  _id: 64554971-15df-42fb-86d8-c17d77cd0ad6
+  _outputNodeId: 4fd226d4-a5b1-4a82-b796-6ed210a2c749
+  _inputNodeId: 0e7b4dfc-9141-473a-976e-036d821bd339
+  _outputPortId: bottomIntPortInfo
+  _inputPortId: topIntPortInfo
+  _graphAsset: {fileID: 11400000}
+--- !u!114 &1860359994414155345
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97ea6614a3484b77981400fed0cfb405, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 6
+      Data: 
+  _id: 871f692e-4846-4c24-ae0f-b4e68a715ddf
+  _outputNodeId: ce998cbd-bdc3-49ca-89f8-bf3eec533800
+  _inputNodeId: 73c318d7-0547-464e-b0d8-7b6d3405d345
+  _outputPortId: bottomIntPortInfo
+  _inputPortId: topIntPortInfo
+  _graphAsset: {fileID: 11400000}
+--- !u!114 &2245951870541011246
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97ea6614a3484b77981400fed0cfb405, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 6
+      Data: 
+  _id: c783649c-1c02-4e67-9654-4a46bf6ab497
+  _outputNodeId: 6c5945e8-12ba-4664-bcca-022882678b3c
+  _inputNodeId: ce998cbd-bdc3-49ca-89f8-bf3eec533800
+  _outputPortId: rightStringPortInfo
+  _inputPortId: leftStringPortInfo
+  _graphAsset: {fileID: 11400000}
+--- !u!114 &2363688608434003441
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97ea6614a3484b77981400fed0cfb405, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 6
+      Data: 
+  _id: f360254d-b20f-4677-b4a8-539cc3c7bd5f
+  _outputNodeId: 6c5945e8-12ba-4664-bcca-022882678b3c
+  _inputNodeId: ce998cbd-bdc3-49ca-89f8-bf3eec533800
+  _outputPortId: rightIntPortInfo
+  _inputPortId: leftIntPortInfo
+  _graphAsset: {fileID: 11400000}
+--- !u!114 &3019216788520275560
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a56498cf6eaa4b0b8539a4ea58d67b3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 6
+      Data: 
+  _id: 73f4fa91-b2bf-46dc-97df-8166fee8f3dc
+  _position:
+    serializedVersion: 2
+    x: 300.8
+    y: -22.399998
+    width: 214.40002
+    height: 123.99999
+  _graphAsset: {fileID: 11400000}
+  _displayName: 
+  _isFold: 1
+  leftIntPortValue: 0
+  leftStringPortValue: 
+--- !u!114 &3053712448341329148
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97ea6614a3484b77981400fed0cfb405, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 6
+      Data: 
+  _id: 98166503-c2ef-4ca5-91bd-e4b459d5c5f2
+  _outputNodeId: 2448e030-289e-4e25-87e7-96fad45facac
+  _inputNodeId: 4fd226d4-a5b1-4a82-b796-6ed210a2c749
+  _outputPortId: rightIntPortInfo
+  _inputPortId: leftIntPortInfo
+  _graphAsset: {fileID: 11400000}
+--- !u!114 &3539044850041588421
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97ea6614a3484b77981400fed0cfb405, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 6
+      Data: 
+  _id: dbade8d9-8123-4e66-b3b2-6e5927595a5d
+  _outputNodeId: ce998cbd-bdc3-49ca-89f8-bf3eec533800
+  _inputNodeId: 73f4fa91-b2bf-46dc-97df-8166fee8f3dc
+  _outputPortId: bottomStringPortInfo
+  _inputPortId: topStringPortInfo
+  _graphAsset: {fileID: 11400000}
+--- !u!114 &3540639968408709650
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97ea6614a3484b77981400fed0cfb405, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 6
+      Data: 
+  _id: 634ba33b-0476-47c2-b6d8-55bbd5af5efb
+  _outputNodeId: 6c5945e8-12ba-4664-bcca-022882678b3c
+  _inputNodeId: f543af0b-0009-4b68-bf78-b258f888a4fd
+  _outputPortId: bottomStringPortInfo
+  _inputPortId: topStringPortInfo
+  _graphAsset: {fileID: 11400000}
+--- !u!114 &4620111338245747946
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a56498cf6eaa4b0b8539a4ea58d67b3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 6
+      Data: 
+  _id: 2448e030-289e-4e25-87e7-96fad45facac
+  _position:
+    serializedVersion: 2
+    x: 15.20003
+    y: -459.19998
+    width: 214.39996
+    height: 125.600006
+  _graphAsset: {fileID: 11400000}
+  _displayName: 
+  _isFold: 1
+  leftIntPortValue: 0
+  leftStringPortValue: 
+--- !u!114 &4794869389120513231
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3843aeabb78b4c10b81b3a4dfde550fe, type: 3}
+  m_Name: "\u5B50\u7EA7\u6F14\u793A\u8282\u70B9"
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects:
+    - {fileID: -602026610609850470}
+    - {fileID: 8410584222130817346}
+    - {fileID: 6397969052164475063}
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _nodes
+      Entry: 7
+      Data: 0|System.Collections.Generic.List`1[[Emilia.Node.Editor.EditorNodeAsset,
+        Emilia.Node.Editor]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 10
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: _edges
+      Entry: 7
+      Data: 1|System.Collections.Generic.List`1[[Emilia.Node.Editor.EditorEdgeAsset,
+        Emilia.Node.Editor]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: _items
+      Entry: 7
+      Data: 2|System.Collections.Generic.List`1[[Emilia.Node.Editor.EditorItemAsset,
+        Emilia.Node.Editor]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: _nodeMap
+      Entry: 7
+      Data: 3|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[Emilia.Node.Editor.EditorNodeAsset,
+        Emilia.Node.Editor]], mscorlib
+    - Name: comparer
+      Entry: 7
+      Data: 4|System.Collections.Generic.GenericEqualityComparer`1[[System.String,
+        mscorlib]], mscorlib
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 12dd7981-c895-4efb-a20a-be2603fe28ee
+    - Name: $v
+      Entry: 10
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: _edgeMap
+      Entry: 7
+      Data: 5|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[Emilia.Node.Editor.EditorEdgeAsset,
+        Emilia.Node.Editor]], mscorlib
+    - Name: comparer
+      Entry: 9
+      Data: 4
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: _itemMap
+      Entry: 7
+      Data: 6|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[Emilia.Node.Editor.EditorItemAsset,
+        Emilia.Node.Editor]], mscorlib
+    - Name: comparer
+      Entry: 9
+      Data: 4
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: _parent
+      Entry: 10
+      Data: 1
+    - Name: _children
+      Entry: 7
+      Data: 7|System.Collections.Generic.List`1[[Emilia.Node.Editor.EditorGraphAsset,
+        Emilia.Node.Editor]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 10
+      Data: 2
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: editorParametersManage
+      Entry: 6
+      Data: 
+  _id: 3ac46153-32a8-440b-a055-a52673811d99
+  description: 
+--- !u!114 &5255983918800463405
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97ea6614a3484b77981400fed0cfb405, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 6
+      Data: 
+  _id: 1d33d554-693b-41b7-99de-f3650f1fc534
+  _outputNodeId: 670d8319-88c3-46c8-8f70-4e74a1982aac
+  _inputNodeId: 6c5945e8-12ba-4664-bcca-022882678b3c
+  _outputPortId: bottomStringPortInfo
+  _inputPortId: topStringPortInfo
+  _graphAsset: {fileID: 11400000}
+--- !u!114 &5639668003298107180
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12c7224fffdf4b3d83102379134037a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: parameters
+      Entry: 7
+      Data: 0|System.Collections.Generic.List`1[[Emilia.Variables.Editor.EditorParameter,
+        Emilia.Variable.Editor]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+--- !u!114 &5810552351362608072
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2325c0a8d3954d64819ef5d8db0d5b4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 6
+      Data: 
+  _id: 6df6cfd4-d82c-46b1-a33f-c3ebf1faeee2
+  _position:
+    serializedVersion: 2
+    x: 654.38416
+    y: -227.13785
+    width: 214.40002
+    height: 167.2
+  _graphAsset: {fileID: 11400000}
+  _displayName: 
+  _isFold: 1
+  leftIntPortValue: 0
+  leftStringPortValue: string
+--- !u!114 &6397969052164475063
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3843aeabb78b4c10b81b3a4dfde550fe, type: 3}
+  m_Name: "\u5B50\u7EA7\u6F14\u793A\u8282\u70B9"
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects:
+    - {fileID: 4794869389120513231}
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _nodes
+      Entry: 7
+      Data: 0|System.Collections.Generic.List`1[[Emilia.Node.Editor.EditorNodeAsset,
+        Emilia.Node.Editor]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: _edges
+      Entry: 7
+      Data: 1|System.Collections.Generic.List`1[[Emilia.Node.Editor.EditorEdgeAsset,
+        Emilia.Node.Editor]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: _items
+      Entry: 7
+      Data: 2|System.Collections.Generic.List`1[[Emilia.Node.Editor.EditorItemAsset,
+        Emilia.Node.Editor]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: _nodeMap
+      Entry: 7
+      Data: 3|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[Emilia.Node.Editor.EditorNodeAsset,
+        Emilia.Node.Editor]], mscorlib
+    - Name: comparer
+      Entry: 7
+      Data: 4|System.Collections.Generic.GenericEqualityComparer`1[[System.String,
+        mscorlib]], mscorlib
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: _edgeMap
+      Entry: 7
+      Data: 5|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[Emilia.Node.Editor.EditorEdgeAsset,
+        Emilia.Node.Editor]], mscorlib
+    - Name: comparer
+      Entry: 9
+      Data: 4
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: _itemMap
+      Entry: 7
+      Data: 6|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[Emilia.Node.Editor.EditorItemAsset,
+        Emilia.Node.Editor]], mscorlib
+    - Name: comparer
+      Entry: 9
+      Data: 4
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: _parent
+      Entry: 10
+      Data: 0
+    - Name: _children
+      Entry: 7
+      Data: 7|System.Collections.Generic.List`1[[Emilia.Node.Editor.EditorGraphAsset,
+        Emilia.Node.Editor]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: editorParametersManage
+      Entry: 6
+      Data: 
+  _id: fcba2ef5-0549-4f1a-8262-1850e024cc7d
+  description: 
+--- !u!114 &6487819535244783743
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97ea6614a3484b77981400fed0cfb405, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 6
+      Data: 
+  _id: dc28c240-d189-4a71-a87f-fc776a544b94
+  _outputNodeId: 0e7b4dfc-9141-473a-976e-036d821bd339
+  _inputNodeId: 73f4fa91-b2bf-46dc-97df-8166fee8f3dc
+  _outputPortId: bottomStringPortInfo
+  _inputPortId: topStringPortInfo
+  _graphAsset: {fileID: 11400000}
+--- !u!114 &7331100464751528568
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97ea6614a3484b77981400fed0cfb405, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 6
+      Data: 
+  _id: 6deec39b-e3fe-4fdd-b665-271ffd2c4d38
+  _outputNodeId: 670d8319-88c3-46c8-8f70-4e74a1982aac
+  _inputNodeId: 2448e030-289e-4e25-87e7-96fad45facac
+  _outputPortId: rightStringPortInfo
+  _inputPortId: leftStringPortInfo
+  _graphAsset: {fileID: 11400000}
+--- !u!114 &7386588651508068872
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad5e2053efe6468aba0112698b14c82d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 6
+      Data: 
+  _id: 2a4ea71e-aa1a-42c7-820a-1c8bf27fa8c9
+  _position:
+    serializedVersion: 2
+    x: 355.48798
+    y: -147.06203
+    width: 100
+    height: 100
+  _graphAsset: {fileID: 8410584222130817346}
+  _displayName: 
+  _isFold: 1
+  _capabilitiesDisplayAsset: {fileID: 4794869389120513231}
+--- !u!114 &7833063105386985103
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97ea6614a3484b77981400fed0cfb405, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 6
+      Data: 
+  _id: 6bdd4345-5279-4980-b6d6-65c34573ceb5
+  _outputNodeId: 6df6cfd4-d82c-46b1-a33f-c3ebf1faeee2
+  _inputNodeId: 0a20e810-d757-4eb6-a8fc-e398213ba789
+  _outputPortId: rightIntPortInfo
+  _inputPortId: leftIntPortInfo
+  _graphAsset: {fileID: 11400000}
+--- !u!114 &8204460622237082950
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a56498cf6eaa4b0b8539a4ea58d67b3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 6
+      Data: 
+  _id: 73c318d7-0547-464e-b0d8-7b6d3405d345
+  _position:
+    serializedVersion: 2
+    x: 15.200032
+    y: -22.399984
+    width: 214.39996
+    height: 123.99999
+  _graphAsset: {fileID: 11400000}
+  _displayName: 
+  _isFold: 1
+  leftIntPortValue: 0
+  leftStringPortValue: 
+--- !u!114 &8410584222130817346
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3843aeabb78b4c10b81b3a4dfde550fe, type: 3}
+  m_Name: "\u5B50\u7EA7\u6F14\u793A\u8282\u70B9"
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects:
+    - {fileID: 7386588651508068872}
+    - {fileID: 11400000}
+    - {fileID: 4794869389120513231}
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _nodes
+      Entry: 7
+      Data: 0|System.Collections.Generic.List`1[[Emilia.Node.Editor.EditorNodeAsset,
+        Emilia.Node.Editor]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 10
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: _edges
+      Entry: 7
+      Data: 1|System.Collections.Generic.List`1[[Emilia.Node.Editor.EditorEdgeAsset,
+        Emilia.Node.Editor]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: _items
+      Entry: 7
+      Data: 2|System.Collections.Generic.List`1[[Emilia.Node.Editor.EditorItemAsset,
+        Emilia.Node.Editor]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: _nodeMap
+      Entry: 7
+      Data: 3|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[Emilia.Node.Editor.EditorNodeAsset,
+        Emilia.Node.Editor]], mscorlib
+    - Name: comparer
+      Entry: 7
+      Data: 4|System.Collections.Generic.GenericEqualityComparer`1[[System.String,
+        mscorlib]], mscorlib
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 2a4ea71e-aa1a-42c7-820a-1c8bf27fa8c9
+    - Name: $v
+      Entry: 10
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: _edgeMap
+      Entry: 7
+      Data: 5|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[Emilia.Node.Editor.EditorEdgeAsset,
+        Emilia.Node.Editor]], mscorlib
+    - Name: comparer
+      Entry: 9
+      Data: 4
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: _itemMap
+      Entry: 7
+      Data: 6|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[Emilia.Node.Editor.EditorItemAsset,
+        Emilia.Node.Editor]], mscorlib
+    - Name: comparer
+      Entry: 9
+      Data: 4
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: _parent
+      Entry: 10
+      Data: 1
+    - Name: _children
+      Entry: 7
+      Data: 7|System.Collections.Generic.List`1[[Emilia.Node.Editor.EditorGraphAsset,
+        Emilia.Node.Editor]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 3
+    - Name: 
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 10
+      Data: 2
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: editorParametersManage
+      Entry: 6
+      Data: 
+  _id: 5535aa77-3a0b-4444-8bae-bae8d5d7f458
+  description: 
