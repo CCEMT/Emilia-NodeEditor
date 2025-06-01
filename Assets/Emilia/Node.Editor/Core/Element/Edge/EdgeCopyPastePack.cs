@@ -7,6 +7,9 @@ using Object = UnityEngine.Object;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// Edge拷贝粘贴Pack
+    /// </summary>
     [Serializable]
     public class EdgeCopyPastePack : IEdgeCopyPastePack
     {

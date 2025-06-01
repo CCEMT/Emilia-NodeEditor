@@ -47,7 +47,7 @@ namespace Emilia.Node.Universal.Editor
             this.rightMargin = size;
         }
 
-        public void AddGraphPanel<T>(string displayName)
+        public void AddGraphPanel<T>(string displayName) where T : IGraphPanel
         {
             IGraphPanel graphPanel = ReflectUtility.CreateInstance<T>() as IGraphPanel;
             if (graphPanel == null) return;
@@ -63,9 +63,9 @@ namespace Emilia.Node.Universal.Editor
 
         }
 
-        public void RemoveGraphPanel<T>()
+        public void RemoveGraphPanel<T>() where T : IGraphPanel
         {
-            IGraphPanel graphPanel = ReflectUtility.CreateInstance<T>() as IGraphPanel;
+            IGraphPanel graphPanel = ReflectUtility.CreateInstance<T>();
             if (graphPanel == null) return;
 
             AppendPanelInfo panelInfo = graphPanels.FirstOrDefault(p => p.graphPanel == graphPanel);
@@ -89,7 +89,7 @@ namespace Emilia.Node.Universal.Editor
             if (this.selectedPanel != null)
             {
                 selectedPanel.Dispose();
-                panel.rootView.RemoveFromHierarchy();
+                selectedPanel.rootView.RemoveFromHierarchy();
             }
 
             panel.Initialize(graphView);

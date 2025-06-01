@@ -23,12 +23,66 @@ namespace Emilia.Node.Universal.Editor
         public static void Start(float interval, AlignmentType alignmentType, List<IEditorNodeView> elements)
         {
             Undo.IncrementCurrentGroup();
-            
+
+            var relativePositions = RecordRelativePositions(elements);
+
             if (alignmentType.HasFlag(AlignmentType.Horizontal)) LayoutHorizontal(interval, alignmentType, elements);
             else if (alignmentType.HasFlag(AlignmentType.Vertical)) LayoutVertical(interval, alignmentType, elements);
-            
+
+            RestoreConnectedNodePositions(relativePositions);
+
             Undo.CollapseUndoOperations(Undo.GetCurrentGroup());
             Undo.IncrementCurrentGroup();
+        }
+
+        private static Dictionary<IEditorNodeView, List<(IEditorNodeView connectedNode, Vector2 relativePosition)>> RecordRelativePositions(List<IEditorNodeView> elements)
+        {
+            var relativePositions = new Dictionary<IEditorNodeView, List<(IEditorNodeView, Vector2)>>();
+
+            for (var i = 0; i < elements.Count; i++)
+            {
+                IEditorNodeView element = elements[i];
+
+                List<IEditorNodeView> allConnectedNodes = new List<IEditorNodeView>();
+                allConnectedNodes.AddRange(element.GetAllInputNodeViews());
+                allConnectedNodes.AddRange(element.GetAllOutputNodeViews());
+
+                List<(IEditorNodeView, Vector2)> relativeList = new List<(IEditorNodeView, Vector2)>();
+
+                for (var j = 0; j < allConnectedNodes.Count; j++)
+                {
+                    IEditorNodeView connectedNode = allConnectedNodes[j];
+
+                    if (elements.Contains(connectedNode)) continue;
+
+                    Vector2 relativePosition = connectedNode.asset.position.position - element.asset.position.position;
+
+                    relativeList.Add((connectedNode, relativePosition));
+                }
+
+                if (relativeList.Count > 0) relativePositions[element] = relativeList;
+            }
+
+            return relativePositions;
+        }
+
+        private static void RestoreConnectedNodePositions(Dictionary<IEditorNodeView, List<(IEditorNodeView connectedNode, Vector2 relativePosition)>> relativePositions)
+        {
+            foreach (var kvp in relativePositions)
+            {
+                IEditorNodeView element = kvp.Key;
+                var connections = kvp.Value;
+
+                for (var i = 0; i < connections.Count; i++)
+                {
+                    (IEditorNodeView connectedNode, Vector2 relativePosition) = connections[i];
+                    
+                    Vector2 newPosition = element.asset.position.position + relativePosition;
+                    Rect rect = connectedNode.asset.position;
+                    rect.position = newPosition;
+                    connectedNode.SetPosition(rect);
+                }
+            }
         }
 
         private static void LayoutHorizontal(float interval, AlignmentType alignmentType, List<IEditorNodeView> elements)
@@ -58,11 +112,11 @@ namespace Emilia.Node.Universal.Editor
         private static void LayoutVertical(float interval, AlignmentType alignmentType, List<IEditorNodeView> elements)
         {
             float x = GetX(alignmentType, elements);
-            
+
             elements.Sort((a, b) => a.asset.position.y.CompareTo(b.asset.position.y));
-            
+
             float startY = elements.FirstOrDefault().asset.position.y;
-            
+
             for (int i = 0; i < elements.Count; i++)
             {
                 IEditorNodeView element = elements[i];

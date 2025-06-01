@@ -946,6 +946,9 @@ namespace Emilia.Node.Editor
             }
         }
 
+        /// <summary>
+        /// 根据Asset获取View
+        /// </summary>
         public static EditorGraphView GetGraphView(EditorGraphAsset asset)
         {
             if (asset == null) return null;

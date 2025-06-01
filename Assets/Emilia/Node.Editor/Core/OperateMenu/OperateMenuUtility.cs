@@ -2,6 +2,9 @@
 {
     public static class OperateMenuUtility
     {
+        /// <summary>
+        /// 将路径转换为名称和组别
+        /// </summary>
         public static void PathToNameAndCategory(string path, out string name, out string category)
         {
             if (path == null) path = string.Empty;

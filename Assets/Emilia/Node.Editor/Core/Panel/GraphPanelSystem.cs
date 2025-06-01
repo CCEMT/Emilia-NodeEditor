@@ -47,6 +47,11 @@ namespace Emilia.Node.Editor
         /// </summary>
         public Rect graphLayoutRect { get; set; }
 
+        /// <summary>
+        /// 实际GraphView的Rect发生变化时
+        /// </summary>
+        public event Action<Rect, Rect> onGraphRectChange;
+
         public override int order => 700;
 
         public override void Initialize(EditorGraphView graphView)
@@ -245,6 +250,8 @@ namespace Emilia.Node.Editor
 
             graphRect = rect;
             graphLayoutRect = this.dockLeisureArea.layout;
+
+            onGraphRectChange?.Invoke(graphRect, graphLayoutRect);
         }
 
         private GraphPanelContainer AddFloatPanel(IGraphPanel panel)

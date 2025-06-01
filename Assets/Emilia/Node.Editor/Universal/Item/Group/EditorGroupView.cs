@@ -13,7 +13,6 @@ namespace Emilia.Node.Editor
     [EditorItem(typeof(EditorGroupAsset))]
     public class EditorGroupView : Group, IEditorItemView, IResizedGraphElement
     {
-        private EditorGraphView graphView;
         private EditorGroupAsset groupAsset;
 
         private Dictionary<string, ContextualMenuManipulator> menuManipulators = new Dictionary<string, ContextualMenuManipulator>();
@@ -22,6 +21,7 @@ namespace Emilia.Node.Editor
 
         public EditorItemAsset asset => groupAsset;
         public GraphElement element => this;
+        public EditorGraphView graphView { get; protected set; }
 
         public bool isSelected { get; protected set; }
         public virtual Color groupColor => new Color(0, 0, 0, 0.3f);
@@ -43,7 +43,7 @@ namespace Emilia.Node.Editor
             isUndo = false;
             InitializeInnerNodes();
             isUndo = true;
-            
+
             if (this.groupAsset.innerNodes.Count == 0) SetPositionNoUndo(asset.position);
         }
 
@@ -161,7 +161,7 @@ namespace Emilia.Node.Editor
             RemoveNode();
             AddNode();
 
-            if (isSilent == false)  graphView.graphSave.SetDirty();
+            if (isSilent == false) graphView.graphSave.SetDirty();
 
             this.isUndo = true;
         }

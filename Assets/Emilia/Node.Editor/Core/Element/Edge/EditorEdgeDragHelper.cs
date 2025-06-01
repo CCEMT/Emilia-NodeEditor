@@ -94,8 +94,6 @@ namespace Emilia.Node.Editor
 
             ghostEdge = null;
             edgeCandidate = null;
-
-            graphView = null;
         }
 
         public override bool HandleMouseDown(MouseDownEvent evt)
@@ -207,7 +205,7 @@ namespace Emilia.Node.Editor
 
             if (endPort != null)
             {
-                if (evt.shiftKey)
+                if (evt.shiftKey && this.disconnectPortView == null)
                 {
                     if (preConnectEdgeViews.ContainsKey(endPort) == false)
                     {
@@ -280,19 +278,13 @@ namespace Emilia.Node.Editor
         {
             Vector2 effectiveSpeed = Vector2.zero;
 
-            if (mousePos.x <= PanAreaWidth)
-            {
-                effectiveSpeed.x = -((PanAreaWidth - mousePos.x) / PanAreaWidth + 0.5f) * PanSpeed;
-            }
+            if (mousePos.x <= PanAreaWidth) effectiveSpeed.x = -((PanAreaWidth - mousePos.x) / PanAreaWidth + 0.5f) * PanSpeed;
             else if (mousePos.x >= this.graphView.contentContainer.layout.width - PanAreaWidth)
             {
                 effectiveSpeed.x = ((mousePos.x - (this.graphView.contentContainer.layout.width - PanAreaWidth)) / PanAreaWidth + 0.5f) * PanSpeed;
             }
 
-            if (mousePos.y <= PanAreaWidth)
-            {
-                effectiveSpeed.y = -((PanAreaWidth - mousePos.y) / PanAreaWidth + 0.5f) * PanSpeed;
-            }
+            if (mousePos.y <= PanAreaWidth) effectiveSpeed.y = -((PanAreaWidth - mousePos.y) / PanAreaWidth + 0.5f) * PanSpeed;
             else if (mousePos.y >= graphView.contentContainer.layout.height - PanAreaWidth)
             {
                 effectiveSpeed.y = ((mousePos.y - (this.graphView.contentContainer.layout.height - PanAreaWidth)) / PanAreaWidth + 0.5f) * PanSpeed;

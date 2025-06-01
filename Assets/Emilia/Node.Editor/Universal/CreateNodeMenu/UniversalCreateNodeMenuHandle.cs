@@ -87,7 +87,7 @@ namespace Emilia.Node.Universal.Editor
             SearchWindow_Hook.Open<CreateNodeMenuProvider, SearchWindow_Hook>(searchWindowContext, createNodeMenuProvider);
         }
 
-        public override void CollectAllCreateNodeInfos(EditorGraphView graphView, List<CreateNodeInfo> createNodeInfos, CreateNodeContext createNodeContext)
+        public override void CollectAllCreateNodeInfos(EditorGraphView graphView, List<MenuNodeInfo> createNodeInfos, CreateNodeContext createNodeContext)
         {
             base.CollectAllCreateNodeInfos(graphView, createNodeInfos, createNodeContext);
             int amount = graphView.createNodeMenu.createNodeHandleCacheList.Count;
@@ -96,13 +96,13 @@ namespace Emilia.Node.Universal.Editor
                 ICreateNodeHandle nodeHandle = graphView.createNodeMenu.createNodeHandleCacheList[i];
                 if (nodeHandle.validity == false) continue;
 
-                CreateNodeInfo createNodeInfo = new CreateNodeInfo();
-                createNodeInfo.nodeData = nodeHandle.nodeData;
-                createNodeInfo.editorNodeAssetType = nodeHandle.editorNodeType;
-                createNodeInfo.path = nodeHandle.path;
-                createNodeInfo.priority = nodeHandle.priority;
-                createNodeInfo.icon = nodeHandle.icon;
-                createNodeInfos.Add(createNodeInfo);
+                MenuNodeInfo menuNodeInfo = new MenuNodeInfo();
+                menuNodeInfo.nodeData = nodeHandle.nodeData;
+                menuNodeInfo.editorNodeAssetType = nodeHandle.editorNodeType;
+                menuNodeInfo.path = nodeHandle.path;
+                menuNodeInfo.priority = nodeHandle.priority;
+                menuNodeInfo.icon = nodeHandle.icon;
+                createNodeInfos.Add(menuNodeInfo);
             }
         }
 

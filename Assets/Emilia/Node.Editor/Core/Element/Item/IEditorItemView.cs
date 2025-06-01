@@ -10,7 +10,15 @@ namespace Emilia.Node.Editor
         /// </summary>
         EditorItemAsset asset { get; }
 
+        /// <summary>
+        /// Item元素
+        /// </summary>
         GraphElement element { get; }
+
+        /// <summary>
+        /// 图形视图
+        /// </summary>
+        EditorGraphView graphView { get; }
 
         /// <summary>
         /// 初始化

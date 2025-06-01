@@ -96,6 +96,9 @@ namespace Emilia.Node.Universal.Editor
 
                 if (canConnectInput.Count > 0 && canConnectOutput.Count > 0)
                 {
+                    canConnectInput.Sort(SortPortView);
+                    canConnectOutput.Sort(SortPortView);
+
                     if (ghostEdgeInput == null)
                     {
                         ghostEdgeInput = ReflectUtility.CreateInstance(edgeView.GetType()) as IEditorEdgeView;
@@ -137,6 +140,18 @@ namespace Emilia.Node.Universal.Editor
             targetEdgeView = null;
             inputPortView = null;
             outputPortView = null;
+        }
+
+        private int SortPortView(IEditorPortView a, IEditorPortView b)
+        {
+            UniversalEditorPortInfo aInfo = a.info as UniversalEditorPortInfo;
+            UniversalEditorPortInfo bInfo = b.info as UniversalEditorPortInfo;
+
+            if (aInfo == null && bInfo == null) return b.info.order.CompareTo(a.info.order);
+            if (aInfo == null) return 1;
+            if (bInfo == null) return -1;
+
+            return bInfo.insertOrder.CompareTo(aInfo.insertOrder);
         }
 
         private void OnMouseUpEvent(MouseUpEvent evt)

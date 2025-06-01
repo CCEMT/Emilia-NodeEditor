@@ -164,7 +164,10 @@ namespace Emilia.Node.Universal.Editor
                         string[] pathParts = path.Split('/');
                         string title = pathParts.Length > 0 ? pathParts[pathParts.Length - 1] : path;
 
-                        string groupTitle = path.Substring(0, path.LastIndexOf('/'));
+                        int lastIndex = path.LastIndexOf('/');
+                        string groupTitle = "";
+                        if (lastIndex > 0) groupTitle = path.Substring(0, lastIndex);
+                        
                         if (parent is CreateNodeTitleTreeViewItem titleTreeViewItem)
                         {
                             if (titleTreeViewItem.displayName != groupTitle) continue;

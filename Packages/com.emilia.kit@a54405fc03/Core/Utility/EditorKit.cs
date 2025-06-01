@@ -66,6 +66,12 @@ namespace Emilia.Kit
                 Object.DestroyImmediate(previewGameObject);
             }
         }
+        
+        public static void SetScenePicking(GameObject[] gameObjects, bool isEnable, bool includeDescendants)
+        {
+            if (isEnable) SceneVisibilityManager.instance.EnablePicking(gameObjects, includeDescendants);
+            else SceneVisibilityManager.instance.DisablePicking(gameObjects, includeDescendants);
+        }
 
         [HideMonoScript]
         private class SelectionContainer : TitleAsset

@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 用于创建端口时的信息
+    /// </summary>
     public class EditorPortInfo
     {
         /// <summary>

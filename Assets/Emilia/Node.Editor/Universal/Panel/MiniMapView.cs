@@ -77,18 +77,23 @@ namespace Emilia.Node.Universal.Editor
 
             schedule.Execute(UpdatePosition).ExecuteLater(1);
 
-            graphView.UnregisterCallback<GeometryChangedEvent>(OnGeometryChangedEvent);
-            graphView.RegisterCallback<GeometryChangedEvent>(OnGeometryChangedEvent);
+            graphView.graphPanelSystem.onGraphRectChange -= OnGraphRectChange;
+            graphView.graphPanelSystem.onGraphRectChange += OnGraphRectChange;
         }
 
         public override void Dispose()
         {
             base.Dispose();
-            graphView.UnregisterCallback<GeometryChangedEvent>(OnGeometryChangedEvent);
-            graphView.UnregisterCallback<GeometryChangedEvent>(OnGeometryChangedEvent);
+            graphView.graphPanelSystem.onGraphRectChange -= OnGraphRectChange;
+            graphView.graphPanelSystem.onGraphRectChange -= OnGraphRectChange;
         }
 
         void OnGeometryChangedEvent(GeometryChangedEvent evt)
+        {
+            UpdatePosition();
+        }
+
+        void OnGraphRectChange(Rect graphRect, Rect graphLayerRect)
         {
             UpdatePosition();
         }
@@ -102,7 +107,7 @@ namespace Emilia.Node.Universal.Editor
 
         Vector2 GetViewPosition()
         {
-            Rect graphViewRect = graphView.graphPanelSystem.graphRect;
+            Rect graphViewRect = graphView.graphPanelSystem.graphLayoutRect;
 
             switch (this._viewPosition)
             {

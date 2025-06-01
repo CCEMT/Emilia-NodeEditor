@@ -22,6 +22,9 @@ namespace Emilia.Node.Editor
             handle = EditorHandleUtility.CreateHandle<GraphSaveHandle>(this.graphView.graphAsset.GetType());
         }
 
+        /// <summary>
+        /// 重置副本
+        /// </summary>
         public EditorGraphAsset ResetCopy(EditorGraphAsset source)
         {
             this.sourceGraphAsset = source;
@@ -38,12 +41,18 @@ namespace Emilia.Node.Editor
             return copy;
         }
 
+        /// <summary>
+        /// 设置为脏数据状态
+        /// </summary>
         public void SetDirty()
         {
             if (this.graphView.loadProgress != 1) return;
             this._dirty = true;
         }
 
+        /// <summary>
+        /// 保存
+        /// </summary>
         public void OnSave()
         {
             if (this.graphView == null) return;

@@ -9,6 +9,9 @@ namespace Emilia.Node.Editor
 
         public virtual string id { get; set; }
 
+        /// <summary>
+        /// 功能
+        /// </summary>
         public virtual GraphPanelCapabilities panelCapabilities
         {
             get => _panelCapabilities;

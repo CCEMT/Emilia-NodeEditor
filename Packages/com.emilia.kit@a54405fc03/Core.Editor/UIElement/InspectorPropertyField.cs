@@ -11,7 +11,7 @@ namespace Emilia.Kit.Editor
 {
     public class InspectorPropertyField : VisualElement
     {
-        private static Dictionary<Type, Func<VisualElement>> createFiledElement = new Dictionary<Type, Func<VisualElement>>() {
+        private static Dictionary<Type, Func<VisualElement>> createFiledElement = new Dictionary<Type, Func<VisualElement>> {
             {typeof(int), () => new IntegerField()},
             {typeof(long), () => new IntegerField()},
             {typeof(float), () => new FloatField()},
@@ -111,7 +111,13 @@ namespace Emilia.Kit.Editor
                 FieldInfo info = this.fieldInfos[i];
                 if (info.field == null) continue;
                 info.inspectorProperty.ValueEntry.Update();
-                ReflectUtility.Invoke(info.field, nameof(INotifyValueChanged<object>.SetValueWithoutNotify), new[] {info.inspectorProperty.ValueEntry.WeakSmartValue});
+                
+                ReflectUtility.Invoke(
+                    info.field,
+                    info.field.GetType(),
+                    nameof(INotifyValueChanged<object>.SetValueWithoutNotify),
+                    new object[] {info.inspectorProperty.ValueEntry.WeakSmartValue},
+                    new Type[] {info.inspectorProperty.ValueEntry.TypeOfValue});
             }
         }
 

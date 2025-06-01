@@ -30,6 +30,9 @@ namespace Emilia.Node.Editor
         /// </summary>
         public IReadOnlyDictionary<string, IEditorItemView> itemViewById => this._itemViewById;
 
+        /// <summary>
+        /// 构建缓存
+        /// </summary>
         public void BuildCache(EditorGraphView graphView)
         {
             this.editorGraphView = graphView;
@@ -57,38 +60,72 @@ namespace Emilia.Node.Editor
             }
         }
 
+        /// <summary>
+        /// 设置NodeView缓存
+        /// </summary>
         public void SetNodeViewCache(string id, IEditorNodeView nodeView)
         {
             this._nodeViewById[id] = nodeView;
         }
 
+        /// <summary>
+        /// 设置EdgeView缓存
+        /// </summary>
         public void SetEdgeViewCache(string id, IEditorEdgeView edgeView)
         {
             this._edgeViewById[id] = edgeView;
         }
 
+        /// <summary>
+        /// 设置ItemView缓存
+        /// </summary>
         public void SetItemViewCache(string id, IEditorItemView itemView)
         {
             this._itemViewById[id] = itemView;
         }
 
+        /// <summary>
+        /// 移除NodeView缓存
+        /// </summary>
         public void RemoveNodeViewCache(string id)
         {
             if (this._nodeViewById.ContainsKey(id)) this._nodeViewById.Remove(id);
         }
 
+        /// <summary>
+        /// 移除EdgeView缓存
+        /// </summary>
         public void RemoveEdgeViewCache(string id)
         {
             if (_edgeViewById.ContainsKey(id)) this._edgeViewById.Remove(id);
         }
 
+        /// <summary>
+        /// 移除ItemView缓存
+        /// </summary>
         public void RemoveItemViewCache(string id)
         {
             if (this._itemViewById.ContainsKey(id)) this._itemViewById.Remove(id);
         }
 
+        /// <summary>
+        /// 根据Id获取NodeView
+        /// </summary>
         public IEditorNodeView GetEditorNodeView(string id) => nodeViewById.GetValueOrDefault(id);
 
+        /// <summary>
+        /// 根据Id获取EdgeView
+        /// </summary>
+        public IEditorEdgeView GetEditorEdgeView(string id) => edgeViewById.GetValueOrDefault(id);
+
+        /// <summary>
+        /// 根据Id获取ItemView
+        /// </summary>
+        public IEditorItemView GetEditorItemView(string id) => itemViewById.GetValueOrDefault(id);
+
+        /// <summary>
+        /// 根据端口获取可连接的端口信息
+        /// </summary>
         public List<PortInfo> GetPortInfoTypeByPort(IEditorPortView form)
         {
             List<PortInfo> portInfos = new List<PortInfo>();
@@ -141,30 +178,9 @@ namespace Emilia.Node.Editor
             return null;
         }
 
-        public List<IEditorEdgeView> GetEdgeView(IEditorPortView port)
-        {
-            List<IEditorEdgeView> edges = new List<IEditorEdgeView>();
-
-            int edgeAmount = this.editorGraphView.edgeViews.Count;
-            for (int i = 0; i < edgeAmount; i++)
-            {
-                IEditorEdgeView edge = this.editorGraphView.edgeViews[i];
-
-                bool hasInputNode = edge.inputPortView.master.asset.id == port.master.asset.id;
-                bool hasOutputNode = edge.outputPortView.master.asset.id == port.master.asset.id;
-
-                bool hasInputPort = edge.inputPortView.info.id == port.info.id;
-                bool hasOutputPort = edge.outputPortView.info.id == port.info.id;
-
-                bool hasInput = hasInputNode && hasInputPort;
-                bool hasOutput = hasOutputNode && hasOutputPort;
-
-                if (hasInput || hasOutput) edges.Add(edge);
-            }
-
-            return edges;
-        }
-
+        /// <summary>
+        /// 根据类型获取节点缓存
+        /// </summary>
         public NodeCache? GetNodeCacheByType(Type type)
         {
             int amount = this._nodeViewCache.Count;

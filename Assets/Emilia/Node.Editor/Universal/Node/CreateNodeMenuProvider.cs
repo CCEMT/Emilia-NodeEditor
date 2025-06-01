@@ -35,7 +35,7 @@ namespace Emilia.Node.Universal.Editor
 
         private void CreateItem(List<SearchTreeEntry> tree, CreateNodeMenuItem menuInfo)
         {
-            tree.Add(new SearchTreeEntry(new GUIContent(menuInfo.title, menuInfo.info.icon)) {
+            tree.Add(new SearchTreeEntry(new GUIContent(menuInfo.title, menuInfo.info.menuInfo.icon)) {
                 level = menuInfo.level,
                 userData = menuInfo.info
             });

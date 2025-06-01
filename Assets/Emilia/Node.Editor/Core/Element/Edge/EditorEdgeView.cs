@@ -19,6 +19,9 @@ namespace Emilia.Node.Editor
 
         public new Vector2[] PointsAndTangents => base.PointsAndTangents;
 
+        /// <summary>
+        /// 输入端口视图
+        /// </summary>
         public IEditorPortView inputPortView
         {
             get => this._inputPortView;
@@ -32,6 +35,9 @@ namespace Emilia.Node.Editor
             }
         }
 
+        /// <summary>
+        /// 输出端口视图
+        /// </summary>
         public IEditorPortView outputPortView
         {
             get => this._outputPortView;
@@ -72,7 +78,7 @@ namespace Emilia.Node.Editor
 
                 inputPortView = inputNode.GetPortView(asset.inputPortId);
                 outputPortView = outputNode.GetPortView(asset.outputPortId);
-                
+
                 if (inputPortView == null || outputPortView == null) return;
 
                 input = inputPortView.portElement;
@@ -128,7 +134,7 @@ namespace Emilia.Node.Editor
         public virtual void OnValueChanged(bool isSilent = false)
         {
             schedule.Execute(ForceUpdateEdgeControl).ExecuteLater(1);
-            if (isSilent == false)  graphView.graphSave.SetDirty();
+            if (isSilent == false) graphView.graphSave.SetDirty();
         }
 
         protected override EdgeControl CreateEdgeControl()

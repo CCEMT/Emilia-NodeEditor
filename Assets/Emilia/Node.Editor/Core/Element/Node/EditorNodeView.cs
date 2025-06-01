@@ -152,52 +152,59 @@ namespace Emilia.Node.Editor
             List<EditorPortInfo> portInfos = CollectStaticPortAssets();
             portInfos.Sort((a, b) => a.order.CompareTo(b.order));
 
-            List<EditorPortInfo> input = new List<EditorPortInfo>();
-            List<EditorPortInfo> output = new List<EditorPortInfo>();
-            List<EditorPortInfo> any = new List<EditorPortInfo>();
+            var categorizedPorts = new Dictionary<(EditorPortDirection, EditorOrientation), List<EditorPortInfo>> {
+                {(EditorPortDirection.Input, EditorOrientation.Horizontal), new List<EditorPortInfo>()},
+                {(EditorPortDirection.Input, EditorOrientation.Vertical), new List<EditorPortInfo>()},
+                {(EditorPortDirection.Output, EditorOrientation.Horizontal), new List<EditorPortInfo>()},
+                {(EditorPortDirection.Output, EditorOrientation.Vertical), new List<EditorPortInfo>()},
+                {(EditorPortDirection.Any, EditorOrientation.Horizontal), new List<EditorPortInfo>()},
+                {(EditorPortDirection.Any, EditorOrientation.Vertical), new List<EditorPortInfo>()}
+            };
 
-            int amount = portInfos.Count;
-            for (int i = 0; i < amount; i++)
+            for (var i = 0; i < portInfos.Count; i++)
             {
                 EditorPortInfo info = portInfos[i];
-                if (info.direction == EditorPortDirection.Input) input.Add(info);
-                else if (info.direction == EditorPortDirection.Output) output.Add(info);
-                else any.Add(info);
+                var key = (info.direction, info.orientation);
+                if (categorizedPorts.ContainsKey(key)) categorizedPorts[key].Add(info);
             }
 
-            int inputAmount = input.Count;
-            for (int i = 0; i < inputAmount; i++)
+            foreach (var category in categorizedPorts) AddPortViews(category.Value);
+
+            RemoveUnusedPortViews(portInfos);
+        }
+
+        private void AddPortViews(List<EditorPortInfo> portInfos)
+        {
+            for (int i = 0; i < portInfos.Count; i++)
             {
-                EditorPortInfo info = input[i];
+                EditorPortInfo info = portInfos[i];
                 if (_portViewMap.ContainsKey(info.id) == false) AddPortView(i, info);
-            }
-
-            int outputAmount = output.Count;
-            for (int i = 0; i < outputAmount; i++)
-            {
-                EditorPortInfo info = output[i];
-                if (_portViewMap.ContainsKey(info.id) == false) AddPortView(i, info);
-            }
-
-            int anyAmount = any.Count;
-            for (int i = 0; i < anyAmount; i++)
-            {
-                EditorPortInfo info = any[i];
-                if (_portViewMap.ContainsKey(info.id) == false) AddPortView(i, info);
-            }
-
-            int portAmount = _portViews.Count;
-            for (int i = portAmount - 1; i >= 0; i--)
-            {
-                IEditorPortView portView = _portViews[i];
-                if (portInfos.Find(p => p.id == portView.info.id) == null) RemovePortView(portView);
             }
         }
 
+        private void RemoveUnusedPortViews(List<EditorPortInfo> portInfos)
+        {
+            for (int i = _portViews.Count - 1; i >= 0; i--)
+            {
+                IEditorPortView portView = _portViews[i];
+                if (portInfos.All(p => p.id != portView.info.id)) RemovePortView(portView);
+            }
+        }
+
+        /// <summary>
+        /// 收集静态Port信息
+        /// </summary>
+        /// <returns></returns>
         public abstract List<EditorPortInfo> CollectStaticPortAssets();
 
+        /// <summary>
+        /// 根据Id获取PortView
+        /// </summary>
         public virtual IEditorPortView GetPortView(string portId) => this._portViewMap.GetValueOrDefault(portId);
 
+        /// <summary>
+        /// 添加PortView
+        /// </summary>
         public virtual IEditorPortView AddPortView(int index, EditorPortInfo info)
         {
             IEditorPortView portView = ReflectUtility.CreateInstance(info.nodePortViewType) as IEditorPortView;
@@ -211,6 +218,9 @@ namespace Emilia.Node.Editor
             return portView;
         }
 
+        /// <summary>
+        /// 移除PortView
+        /// </summary>
         public virtual void RemovePortView(IEditorPortView portView)
         {
             if (portView == null) return;
@@ -371,6 +381,9 @@ namespace Emilia.Node.Editor
             asset.position = newPos;
         }
 
+        /// <summary>
+        /// 设置节点主题颜色
+        /// </summary>
         public void SetColor(Color color)
         {
             topicColor = color;

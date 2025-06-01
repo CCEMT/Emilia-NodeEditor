@@ -6,10 +6,24 @@ namespace Emilia.Node.Editor
 {
     public interface IEditorNodeView : IDeleteGraphElement, IRemoveViewElement, IGraphCopyPasteElement, IGraphSelectable
     {
+        /// <summary>
+        /// 所属GraphView
+        /// </summary>
         EditorGraphView graphView { get; }
+
+        /// <summary>
+        /// 节点资产
+        /// </summary>
         EditorNodeAsset asset { get; }
+
+        /// <summary>
+        /// 节点元素
+        /// </summary>
         GraphElement element { get; }
 
+        /// <summary>
+        /// 端口View列表
+        /// </summary>
         IReadOnlyList<IEditorPortView> portViews { get; }
 
         /// <summary>
@@ -30,7 +44,7 @@ namespace Emilia.Node.Editor
         /// <summary>
         /// 添加IEditorPortView
         /// </summary>
-        IEditorPortView AddPortView(int index,EditorPortInfo asset);
+        IEditorPortView AddPortView(int index, EditorPortInfo asset);
 
         /// <summary>
         /// 设置位置

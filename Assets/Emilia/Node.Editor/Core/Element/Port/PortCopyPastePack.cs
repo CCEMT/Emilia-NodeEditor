@@ -10,6 +10,9 @@ using Object = UnityEngine.Object;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// Port拷贝粘贴Pack
+    /// </summary>
     [Serializable]
     public class PortCopyPastePack : IPortCopyPastePack
     {

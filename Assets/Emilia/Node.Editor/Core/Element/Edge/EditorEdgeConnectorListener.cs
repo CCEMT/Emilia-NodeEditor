@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
@@ -42,13 +41,13 @@ namespace Emilia.Node.Editor
                 if (portView == null) return;
 
                 CreateNodeContext createNodeContext = new CreateNodeContext();
-                CreateNodeEdgeCollect createNodeEdgeCollect = new CreateNodeEdgeCollect(graphView, edgeView);
+                CreateNodeEdgeCollect createNodeEdgeCollect = new CreateNodeEdgeCollect(graphView, edgeView, portView);
                 createNodeContext.nodeCollect = createNodeEdgeCollect;
-                CreateNodeConnector createNodeConnector = new CreateNodeConnector();
-                if (portView.info.canMultiConnect == false && portView.edges.Count > 0) createNodeConnector.edgeId = portView.edges[0].asset.id;
-                createNodeConnector.originalNodeId = portView.master.asset.id;
-                createNodeConnector.originalPortId = portView.info.id;
-                createNodeContext.createNodeConnector = createNodeConnector;
+                // CreateNodeConnector createNodeConnector = new CreateNodeConnector();
+                // if (portView.info.canMultiConnect == false && portView.edges.Count > 0) createNodeConnector.edgeId = portView.edges[0].asset.id;
+                // createNodeConnector.originalNodeId = portView.master.asset.id;
+                // createNodeConnector.originalPortId = portView.info.id;
+                // createNodeContext.createNodeConnector = createNodeConnector;
 
                 graphView.graphOperate.OpenCreateNodeMenu(position, createNodeContext);
             }

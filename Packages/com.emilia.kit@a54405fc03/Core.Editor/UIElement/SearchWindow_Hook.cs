@@ -40,7 +40,10 @@ namespace Emilia.Kit.Editor
                     ((EditorWindow) objectsOfTypeAll[0]).Close();
                     return false;
                 }
-                catch (Exception _) { filterWindow_Internal = null; }
+                catch
+                {
+                    filterWindow_Internal = null;
+                }
             }
             if (DateTime.Now.Ticks / 10000L < lastClosedTime_Internal + 50L) return false;
             if (filterWindow_Internal == null)

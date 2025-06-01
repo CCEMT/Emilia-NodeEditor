@@ -54,20 +54,24 @@ namespace Emilia.Kit.Editor
         {
             List<Object> pasteList = new List<Object>();
             List<Object> childAssets = asset.GetChildren();
-            int amount = childAssets.Count;
-            for (int i = 0; i < amount; i++)
+
+            if (childAssets != null)
             {
-                Object child = childAssets[i];
-                if (child == null) continue;
-                Object pasteChild = Object.Instantiate(child);
-                pasteChild.name = child.name;
+                int amount = childAssets.Count;
+                for (int i = 0; i < amount; i++)
+                {
+                    Object child = childAssets[i];
+                    if (child == null) continue;
+                    Object pasteChild = Object.Instantiate(child);
+                    pasteChild.name = child.name;
 
-                Undo.RegisterCreatedObjectUndo(pasteChild, "Paste");
+                    Undo.RegisterCreatedObjectUndo(pasteChild, "Paste");
 
-                IUnityAsset childAsset = pasteChild as IUnityAsset;
-                if (childAsset != null) PasteChild(childAsset);
+                    IUnityAsset childAsset = pasteChild as IUnityAsset;
+                    if (childAsset != null) PasteChild(childAsset);
 
-                pasteList.Add(pasteChild);
+                    pasteList.Add(pasteChild);
+                }
             }
 
             asset.SetChildren(pasteList);

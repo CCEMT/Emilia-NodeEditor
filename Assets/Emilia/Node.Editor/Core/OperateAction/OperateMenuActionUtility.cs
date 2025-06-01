@@ -42,11 +42,17 @@ namespace Emilia.Node.Editor
             }
         }
 
+        /// <summary>
+        /// 获取操作菜单行为信息
+        /// </summary>
         public static OperateMenuActionInfo GetAction<T>()
         {
             return _actionMap[typeof(T)];
         }
 
+        /// <summary>
+        /// 根据Tags获取操作菜单行为信息列表
+        /// </summary>
         public static List<OperateMenuActionInfo> GetAction(params string[] tags)
         {
             List<OperateMenuActionInfo> result = new List<OperateMenuActionInfo>();

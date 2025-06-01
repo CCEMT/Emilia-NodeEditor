@@ -82,12 +82,18 @@ namespace Emilia.Node.Editor
             set => _inputPortId = value;
         }
 
+        /// <summary>
+        /// 自定义数据
+        /// </summary>
         public object userData
         {
             get => _userData;
             set => _userData = value;
         }
 
+        /// <summary>
+        /// 所属GraphAsset
+        /// </summary>
         public EditorGraphAsset graphAsset
         {
             get => _graphAsset;
@@ -95,7 +101,7 @@ namespace Emilia.Node.Editor
         }
 
         /// <summary>
-        /// Odin属性树
+        /// 自身Odin属性树
         /// </summary>
         public PropertyTree propertyTree => _propertyTree;
 

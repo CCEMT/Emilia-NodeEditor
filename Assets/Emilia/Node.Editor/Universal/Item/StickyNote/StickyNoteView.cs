@@ -11,10 +11,10 @@ namespace Emilia.Node.Universal.Editor
     [EditorItem(typeof(StickyNoteAsset))]
     public class StickyNoteView : StickyNote, IEditorItemView
     {
-        private EditorGraphView graphView;
         private StickyNoteAsset stickyAsset;
         public EditorItemAsset asset => stickyAsset;
         public GraphElement element => this;
+        public EditorGraphView graphView { get; protected set; }
         public bool isSelected { get; protected set; }
 
         public void Initialize(EditorGraphView graphView, EditorItemAsset asset)
