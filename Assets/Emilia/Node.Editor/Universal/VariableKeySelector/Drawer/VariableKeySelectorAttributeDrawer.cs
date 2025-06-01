@@ -23,7 +23,7 @@ namespace Emilia.Node.Universal.Editor
             string labelString = key;
             if (string.IsNullOrEmpty(labelString) == false)
             {
-                EditorParameter parameter = universalGraphAsset.editorParametersManage.GetParameter(key);
+                EditorParameter parameter = universalGraphAsset.editorParametersManage?.GetParameter(key);
                 if (parameter != null) labelString = parameter.description;
             }
 
@@ -37,11 +37,14 @@ namespace Emilia.Node.Universal.Editor
 
                 OdinMenu odinMenu = new OdinMenu("选择参数");
 
-                for (var i = 0; i < universalGraphAsset.editorParametersManage.parameters.Count; i++)
+                if (universalGraphAsset.editorParametersManage!=null)
                 {
-                    EditorParameter parameter = universalGraphAsset.editorParametersManage.parameters[i];
-                    if (filterAttribute != null && filterAttribute.type != parameter.value.type) continue;
-                    odinMenu.AddItem(parameter.description, () => Property.ValueEntry.WeakSmartValue = parameter.key);
+                    for (var i = 0; i < universalGraphAsset.editorParametersManage.parameters.Count; i++)
+                    {
+                        EditorParameter parameter = universalGraphAsset.editorParametersManage.parameters[i];
+                        if (filterAttribute != null && filterAttribute.type != parameter.value.type) continue;
+                        odinMenu.AddItem(parameter.description, () => Property.ValueEntry.WeakSmartValue = parameter.key);
+                    }
                 }
 
                 odinMenu.ShowInPopup();

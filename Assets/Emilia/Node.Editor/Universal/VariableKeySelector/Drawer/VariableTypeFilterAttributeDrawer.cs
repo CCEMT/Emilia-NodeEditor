@@ -61,7 +61,7 @@ namespace Emilia.Node.Universal.Editor
             if (keyValueResolver.HasError) return null;
             string key = keyValueResolver.GetValue();
             if (key == null) return null;
-            EditorParameter editorParameter = universalGraphAsset.editorParametersManage.GetParameter(key);
+            EditorParameter editorParameter = universalGraphAsset.editorParametersManage?.GetParameter(key);
             if (editorParameter != null) return editorParameter.value.GetType();
 
             return null;
