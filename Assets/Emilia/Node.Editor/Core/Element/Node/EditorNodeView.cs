@@ -155,10 +155,13 @@ namespace Emilia.Node.Editor
             var categorizedPorts = new Dictionary<(EditorPortDirection, EditorOrientation), List<EditorPortInfo>> {
                 {(EditorPortDirection.Input, EditorOrientation.Horizontal), new List<EditorPortInfo>()},
                 {(EditorPortDirection.Input, EditorOrientation.Vertical), new List<EditorPortInfo>()},
+                {(EditorPortDirection.Input, EditorOrientation.Custom), new List<EditorPortInfo>()},
                 {(EditorPortDirection.Output, EditorOrientation.Horizontal), new List<EditorPortInfo>()},
                 {(EditorPortDirection.Output, EditorOrientation.Vertical), new List<EditorPortInfo>()},
+                {(EditorPortDirection.Output, EditorOrientation.Custom), new List<EditorPortInfo>()},
                 {(EditorPortDirection.Any, EditorOrientation.Horizontal), new List<EditorPortInfo>()},
-                {(EditorPortDirection.Any, EditorOrientation.Vertical), new List<EditorPortInfo>()}
+                {(EditorPortDirection.Any, EditorOrientation.Vertical), new List<EditorPortInfo>()},
+                {(EditorPortDirection.Any, EditorOrientation.Custom), new List<EditorPortInfo>()}
             };
 
             for (var i = 0; i < portInfos.Count; i++)
