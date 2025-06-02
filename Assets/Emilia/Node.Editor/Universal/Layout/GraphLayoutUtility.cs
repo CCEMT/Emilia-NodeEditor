@@ -22,7 +22,29 @@ namespace Emilia.Node.Universal.Editor
 
         public static void Start(float interval, AlignmentType alignmentType, List<IEditorNodeView> elements)
         {
+            int count = elements.Count;
+            if (count == 0) return;
+
             Undo.IncrementCurrentGroup();
+
+            if (elements.Count == 1)
+            {
+                IEditorNodeView element = elements.FirstOrDefault();
+
+                List<IEditorNodeView> inputs = element.GetInputNodeViews();
+                if (inputs.Count > 0)
+                {
+                    IEditorNodeView closestInput = inputs.OrderBy(input => Vector2.Distance(element.asset.position.position, input.asset.position.position)).FirstOrDefault();
+                    if (closestInput != null && elements.Contains(closestInput) == false) elements.Add(closestInput);
+                }
+                
+                List<IEditorNodeView> outputs = element.GetOutputNodeViews();
+                if (outputs.Count > 0)
+                {
+                    IEditorNodeView closestOutput = outputs.OrderBy(output => Vector2.Distance(element.asset.position.position, output.asset.position.position)).FirstOrDefault();
+                    if (closestOutput != null && elements.Contains(closestOutput) == false) elements.Add(closestOutput);
+                }
+            }
 
             var relativePositions = RecordRelativePositions(elements);
 
@@ -76,7 +98,7 @@ namespace Emilia.Node.Universal.Editor
                 for (var i = 0; i < connections.Count; i++)
                 {
                     (IEditorNodeView connectedNode, Vector2 relativePosition) = connections[i];
-                    
+
                     Vector2 newPosition = element.asset.position.position + relativePosition;
                     Rect rect = connectedNode.asset.position;
                     rect.position = newPosition;
