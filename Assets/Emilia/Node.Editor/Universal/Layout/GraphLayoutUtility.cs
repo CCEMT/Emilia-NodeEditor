@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Emilia.Node.Editor;
+using Sirenix.Utilities;
 using UnityEditor;
 using UnityEngine;
 
@@ -22,71 +23,45 @@ namespace Emilia.Node.Universal.Editor
 
         public static void Start(float interval, AlignmentType alignmentType, List<IEditorNodeView> elements)
         {
+            int count = elements.Count;
+            if (count == 0) return;
+
             Undo.IncrementCurrentGroup();
 
-            var relativePositions = RecordRelativePositions(elements);
+            if (elements.Count == 1)
+            {
+                IEditorNodeView element = elements.FirstOrDefault();
 
-            if (alignmentType.HasFlag(AlignmentType.Horizontal)) LayoutHorizontal(interval, alignmentType, elements);
-            else if (alignmentType.HasFlag(AlignmentType.Vertical)) LayoutVertical(interval, alignmentType, elements);
+                List<IEditorNodeView> inputs = element.GetInputNodeViews();
+                if (inputs.Count > 0)
+                {
+                    IEditorNodeView closestInput = inputs.OrderBy(input => Vector2.Distance(element.asset.position.position, input.asset.position.position)).FirstOrDefault();
+                    if (closestInput != null && elements.Contains(closestInput) == false) elements.Add(closestInput);
+                }
 
-            RestoreConnectedNodePositions(relativePositions);
+                List<IEditorNodeView> outputs = element.GetOutputNodeViews();
+                if (outputs.Count > 0)
+                {
+                    IEditorNodeView closestOutput = outputs.OrderBy(output => Vector2.Distance(element.asset.position.position, output.asset.position.position)).FirstOrDefault();
+                    if (closestOutput != null && elements.Contains(closestOutput) == false) elements.Add(closestOutput);
+                }
+            }
+
+            Dictionary<IEditorNodeView, Vector2> nodeLayoutMovePosition = null;
+
+            if (alignmentType.HasFlag(AlignmentType.Horizontal)) nodeLayoutMovePosition = LayoutHorizontal(interval, alignmentType, elements);
+            else if (alignmentType.HasFlag(AlignmentType.Vertical)) nodeLayoutMovePosition = LayoutVertical(interval, alignmentType, elements);
+
+            RestoreNode(nodeLayoutMovePosition);
 
             Undo.CollapseUndoOperations(Undo.GetCurrentGroup());
             Undo.IncrementCurrentGroup();
         }
 
-        private static Dictionary<IEditorNodeView, List<(IEditorNodeView connectedNode, Vector2 relativePosition)>> RecordRelativePositions(List<IEditorNodeView> elements)
+        private static Dictionary<IEditorNodeView, Vector2> LayoutHorizontal(float interval, AlignmentType alignmentType, List<IEditorNodeView> elements)
         {
-            var relativePositions = new Dictionary<IEditorNodeView, List<(IEditorNodeView, Vector2)>>();
+            Dictionary<IEditorNodeView, Vector2> nodeLayoutMovePosition = new Dictionary<IEditorNodeView, Vector2>();
 
-            for (var i = 0; i < elements.Count; i++)
-            {
-                IEditorNodeView element = elements[i];
-
-                List<IEditorNodeView> allConnectedNodes = new List<IEditorNodeView>();
-                allConnectedNodes.AddRange(element.GetAllInputNodeViews());
-                allConnectedNodes.AddRange(element.GetAllOutputNodeViews());
-
-                List<(IEditorNodeView, Vector2)> relativeList = new List<(IEditorNodeView, Vector2)>();
-
-                for (var j = 0; j < allConnectedNodes.Count; j++)
-                {
-                    IEditorNodeView connectedNode = allConnectedNodes[j];
-
-                    if (elements.Contains(connectedNode)) continue;
-
-                    Vector2 relativePosition = connectedNode.asset.position.position - element.asset.position.position;
-
-                    relativeList.Add((connectedNode, relativePosition));
-                }
-
-                if (relativeList.Count > 0) relativePositions[element] = relativeList;
-            }
-
-            return relativePositions;
-        }
-
-        private static void RestoreConnectedNodePositions(Dictionary<IEditorNodeView, List<(IEditorNodeView connectedNode, Vector2 relativePosition)>> relativePositions)
-        {
-            foreach (var kvp in relativePositions)
-            {
-                IEditorNodeView element = kvp.Key;
-                var connections = kvp.Value;
-
-                for (var i = 0; i < connections.Count; i++)
-                {
-                    (IEditorNodeView connectedNode, Vector2 relativePosition) = connections[i];
-                    
-                    Vector2 newPosition = element.asset.position.position + relativePosition;
-                    Rect rect = connectedNode.asset.position;
-                    rect.position = newPosition;
-                    connectedNode.SetPosition(rect);
-                }
-            }
-        }
-
-        private static void LayoutHorizontal(float interval, AlignmentType alignmentType, List<IEditorNodeView> elements)
-        {
             float y = GetY(alignmentType, elements);
 
             elements.Sort((a, b) => a.asset.position.x.CompareTo(b.asset.position.x));
@@ -105,12 +80,19 @@ namespace Emilia.Node.Universal.Editor
                 position.x = currentX;
                 currentX += width + interval;
 
+                Vector3 relativePosition = position.position - element.asset.position.position;
+                nodeLayoutMovePosition[element] = relativePosition;
+
                 element.SetPosition(position);
             }
+
+            return nodeLayoutMovePosition;
         }
 
-        private static void LayoutVertical(float interval, AlignmentType alignmentType, List<IEditorNodeView> elements)
+        private static Dictionary<IEditorNodeView, Vector2> LayoutVertical(float interval, AlignmentType alignmentType, List<IEditorNodeView> elements)
         {
+            Dictionary<IEditorNodeView, Vector2> nodeLayoutMovePosition = new Dictionary<IEditorNodeView, Vector2>();
+
             float x = GetX(alignmentType, elements);
 
             elements.Sort((a, b) => a.asset.position.y.CompareTo(b.asset.position.y));
@@ -125,8 +107,13 @@ namespace Emilia.Node.Universal.Editor
                 position.x = x;
                 position.y = startY + interval * i;
 
+                Vector3 relativePosition = position.position - element.asset.position.position;
+                nodeLayoutMovePosition[element] = relativePosition;
+
                 element.SetPosition(position);
             }
+
+            return nodeLayoutMovePosition;
         }
 
         private static float GetY(AlignmentType alignmentType, List<IEditorNodeView> elements)
@@ -194,6 +181,37 @@ namespace Emilia.Node.Universal.Editor
             }
 
             return 0;
+        }
+
+        private static void RestoreNode(Dictionary<IEditorNodeView, Vector2> nodeLayoutMovePosition)
+        {
+            Queue<IEditorNodeView> queue = new Queue<IEditorNodeView>(nodeLayoutMovePosition.Keys);
+
+            while (queue.Count > 0)
+            {
+                IEditorNodeView node = queue.Dequeue();
+                Vector2 relativePosition = nodeLayoutMovePosition[node];
+                if (relativePosition == Vector2.zero) continue;
+
+                HashSet<IEditorNodeView> connectNodes = new HashSet<IEditorNodeView>();
+                connectNodes.AddRange(node.GetInputNodeViews());
+                connectNodes.AddRange(node.GetOutputNodeViews());
+                
+                foreach (IEditorNodeView connected in connectNodes)
+                {
+                    if (nodeLayoutMovePosition.ContainsKey(connected)) continue;
+
+                    Rect position = connected.asset.position;
+                    position.x += relativePosition.x;
+                    position.y += relativePosition.y;
+
+                    Vector2 newRelativePosition = position.position - connected.asset.position.position;
+                    nodeLayoutMovePosition[connected] = newRelativePosition;
+                    connected.SetPosition(position);
+
+                    queue.Enqueue(connected);
+                }
+            }
         }
     }
 }
