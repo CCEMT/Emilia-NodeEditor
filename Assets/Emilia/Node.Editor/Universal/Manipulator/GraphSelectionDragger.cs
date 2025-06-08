@@ -323,6 +323,7 @@ namespace Emilia.Node.Editor
 
         void ComputeSnappedRect(ref Rect selectedElementProposedGeom, float scale)
         {
+            if (selectedElement == null || selectedElement.parent == null) return;
             // Let the snapper compute a snapped position using the precomputed position relatively to the geometries of all unselected
             // GraphElements in the GraphView.contentViewContainer's space.
             Rect geometryInContentViewContainerSpace = selectedElement.parent.ChangeCoordinatesTo(m_GraphView.contentViewContainer, selectedElementProposedGeom);
