@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Emilia.Kit;
 using Emilia.Node.Attributes;
 using Emilia.Node.Editor;
@@ -143,11 +142,13 @@ namespace Emilia.Node.Universal.Editor
         public void Select()
         {
             isSelected = true;
+            AddToClassList("selected");
         }
 
         public void Unselect()
         {
             isSelected = false;
+            RemoveFromClassList("selected");
         }
 
         public IEnumerable<Object> GetSelectedObjects()
