@@ -118,68 +118,17 @@ namespace Emilia.Node.Universal.Editor
 
         private static float GetY(AlignmentType alignmentType, List<IEditorNodeView> elements)
         {
-            if (alignmentType.HasFlag(AlignmentType.TopOrLeft))
-            {
-                float minY = int.MaxValue;
-                foreach (IEditorNodeView element in elements)
-                {
-                    if (element.asset.position.y < minY) minY = element.asset.position.y;
-                }
-
-                return minY;
-            }
-
-            if (alignmentType.HasFlag(AlignmentType.Center))
-            {
-                float centerY = 0;
-                foreach (IEditorNodeView element in elements) centerY += element.asset.position.y;
-                centerY /= elements.Count;
-                return centerY;
-            }
-
-            if (alignmentType.HasFlag(AlignmentType.BottomOrRight))
-            {
-                float maxY = int.MinValue;
-                foreach (IEditorNodeView element in elements)
-                {
-                    if (element.asset.position.y > maxY) maxY = element.asset.position.y;
-                }
-                return maxY;
-            }
-
+            if (alignmentType.HasFlag(AlignmentType.TopOrLeft)) return elements.Min(e => e.asset.position.y);
+            if (alignmentType.HasFlag(AlignmentType.Center)) return elements.Average(e => e.asset.position.y);
+            if (alignmentType.HasFlag(AlignmentType.BottomOrRight)) return elements.Max(e => e.asset.position.y);
             return 0;
         }
 
         private static float GetX(AlignmentType alignmentType, List<IEditorNodeView> elements)
         {
-            if (alignmentType.HasFlag(AlignmentType.TopOrLeft))
-            {
-                float minX = int.MaxValue;
-                foreach (IEditorNodeView element in elements)
-                {
-                    if (element.asset.position.x < minX) minX = element.asset.position.x;
-                }
-                return minX;
-            }
-
-            if (alignmentType.HasFlag(AlignmentType.Center))
-            {
-                float centerX = 0;
-                foreach (IEditorNodeView element in elements) centerX += element.asset.position.x;
-                centerX /= elements.Count;
-                return centerX;
-            }
-
-            if (alignmentType.HasFlag(AlignmentType.BottomOrRight))
-            {
-                float maxX = int.MinValue;
-                foreach (IEditorNodeView element in elements)
-                {
-                    if (element.asset.position.x > maxX) maxX = element.asset.position.x;
-                }
-                return maxX;
-            }
-
+            if (alignmentType.HasFlag(AlignmentType.TopOrLeft)) return elements.Min(e => e.asset.position.x);
+            if (alignmentType.HasFlag(AlignmentType.Center)) return elements.Average(e => e.asset.position.x);
+            if (alignmentType.HasFlag(AlignmentType.BottomOrRight)) return elements.Max(e => e.asset.position.x);
             return 0;
         }
 
