@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Emilia.Kit;
 using Emilia.Node.Attributes;
 using Emilia.Node.Editor;
@@ -30,6 +31,8 @@ namespace Emilia.Node.Universal.Editor
 
         private IMGUIContainer markdownContainer;
 
+        private VisualElement selectionBorder;
+
         public StickyNoteProView()
         {
             name = nameof(StickyNoteProView);
@@ -52,6 +55,9 @@ namespace Emilia.Node.Universal.Editor
 
             Add(this.markdownContainer);
 
+            selectionBorder = new VisualElement();
+            this.selectionBorder.name = "selection-border";
+
             ResizableElement resizableElement = new ResizableElement();
             Add(resizableElement);
 
@@ -67,7 +73,11 @@ namespace Emilia.Node.Universal.Editor
 
             SetPositionNoUndo(stickyAsset.position);
             RegisterCallback<GeometryChangedEvent>(OnGeometryChangedEvent);
+
+            this.AddManipulator(new ContextualMenuManipulator(this.BuildContextualMenu));
         }
+
+        protected virtual void BuildContextualMenu(ContextualMenuPopulateEvent evt) { }
 
         private void OnGeometryChangedEvent(GeometryChangedEvent evt)
         {
@@ -81,6 +91,29 @@ namespace Emilia.Node.Universal.Editor
 
         private void OnMarkdownGUI()
         {
+            Event evt = Event.current;
+            if (evt.type == EventType.ValidateCommand)
+            {
+                ValidateCommandEvent validateCommandEvent = ValidateCommandEvent.GetPooled(evt.commandName);
+                validateCommandEvent.target = graphView;
+
+                graphView.OnValidateCommand_Internals(validateCommandEvent);
+
+                validateCommandEvent.Dispose();
+                evt.Use();
+            }
+
+            if (evt.type == EventType.ExecuteCommand)
+            {
+                ExecuteCommandEvent executeCommandEvent = ExecuteCommandEvent.GetPooled(evt.commandName);
+                executeCommandEvent.target = graphView;
+
+                graphView.OnExecuteCommand_Internals(executeCommandEvent);
+                executeCommandEvent.Dispose();
+
+                evt.Use();
+            }
+
             if (markdownViewer == null) return;
             markdownViewer.Draw();
         }
