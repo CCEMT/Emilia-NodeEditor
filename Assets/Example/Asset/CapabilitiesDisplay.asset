@@ -858,7 +858,6 @@ MonoBehaviour:
     - {fileID: 7022791245233566243}
     - {fileID: 8322338279420764467}
     - {fileID: 8410584222130817346}
-    - {fileID: 0}
     - {fileID: 5639668003298107180}
     SerializedBytesString: 
     Prefab: {fileID: 0}
@@ -1645,8 +1644,8 @@ MonoBehaviour:
       Entry: 10
       Data: 45
     - Name: 
-      Entry: 10
-      Data: 46
+      Entry: 6
+      Data: 
     - Name: 
       Entry: 13
       Data: 
@@ -1655,7 +1654,7 @@ MonoBehaviour:
       Data: 
     - Name: editorParametersManage
       Entry: 10
-      Data: 47
+      Data: 46
   _id: d28de47d-afbf-41d3-a996-87496270c073
   description: "\u529F\u80FD\u5C55\u793A\u4F8B\u5B50"
 --- !u!114 &278626000185543226

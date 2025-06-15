@@ -14670,7 +14670,6 @@ MonoBehaviour:
     - {fileID: 1787878378148241481}
     - {fileID: -4449013591597068754}
     - {fileID: 2796495445258568859}
-    - {fileID: 0}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -26328,8 +26327,8 @@ MonoBehaviour:
       Entry: 12
       Data: 1
     - Name: 
-      Entry: 10
-      Data: 770
+      Entry: 6
+      Data: 
     - Name: 
       Entry: 13
       Data: 
