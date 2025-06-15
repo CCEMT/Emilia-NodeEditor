@@ -81,6 +81,9 @@ namespace Emilia.Node.Editor
 
                 EditorApplication.update -= Update;
                 EditorApplication.update += Update;
+
+                graphView.onGraphAssetChange -= OnGraphAssetChange;
+                graphView.onGraphAssetChange += OnGraphAssetChange;
             }
 
             if (this._drawer != null && asset != null) this._drawer.Draw(height, width);
@@ -89,6 +92,11 @@ namespace Emilia.Node.Editor
                 InitTipsStyle();
                 GUILayout.Label("当前编辑的对象为空", tipsStyle, GUILayout.Height(height));
             }
+        }
+
+        private void OnGraphAssetChange(EditorGraphAsset graphAsset)
+        {
+            _asset = graphAsset;
         }
 
         private void InitTipsStyle()

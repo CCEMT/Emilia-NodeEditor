@@ -1,12 +1,13 @@
 {
   "dependencies": {
     "com.emilia.kit": {
-      "version": "file:com.emilia.kit@f206962d89",
+      "version": "https://github.com/CCEMT/Emilia-Kit.git?path=Assets/Emilia/Kit",
       "depth": 0,
-      "source": "embedded",
+      "source": "git",
       "dependencies": {
         "com.unity.editorcoroutines": "1.0.0"
-      }
+      },
+      "hash": "857f44afe3edce196f0421cc018a7297fcdee381"
     },
     "com.unity.editorcoroutines": {
       "version": "1.0.0",

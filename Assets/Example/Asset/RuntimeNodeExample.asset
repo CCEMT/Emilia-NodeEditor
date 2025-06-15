@@ -1,0 +1,465 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8339844905724032118
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6278c1b0393b45db96eb2aa3b7a49426, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 7
+      Data: 0|Example.RuntimeNode.Runtime.TestRuntimeNodeAsset, Assembly-CSharp
+    - Name: testFloat
+      Entry: 4
+      Data: 0
+    - Name: testString
+      Entry: 1
+      Data: Hello, World!
+    - Name: testInt
+      Entry: 3
+      Data: 42
+    - Name: 
+      Entry: 8
+      Data: 
+  _id: 2689cfda-7786-40bf-9565-b35af1812f34
+  _position:
+    serializedVersion: 2
+    x: 251
+    y: 261
+    width: 100
+    height: 100
+  _graphAsset: {fileID: 11400000}
+  _displayName: 
+  _isFold: 1
+--- !u!114 &-7750894473447542193
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97ea6614a3484b77981400fed0cfb405, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 6
+      Data: 
+  _id: 847d4bc5-7ef0-4d6f-a99e-c202d07fd177
+  _outputNodeId: 2689cfda-7786-40bf-9565-b35af1812f34
+  _inputNodeId: ce16339c-5bca-4959-9ab9-04cf4b495d08
+  _outputPortId: output
+  _inputPortId: input
+  _graphAsset: {fileID: 11400000}
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13502188316d40958f04469aa3357df6, type: 3}
+  m_Name: RuntimeNodeExample
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects:
+    - {fileID: -8339844905724032118}
+    - {fileID: 469172039600005007}
+    - {fileID: 2222899065659224162}
+    - {fileID: 6807523419530864900}
+    - {fileID: -7750894473447542193}
+    - {fileID: 7645218306837374191}
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _nodes
+      Entry: 7
+      Data: 0|System.Collections.Generic.List`1[[Emilia.Node.Editor.EditorNodeAsset,
+        Emilia.Node.Editor]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 3
+    - Name: 
+      Entry: 10
+      Data: 0
+    - Name: 
+      Entry: 10
+      Data: 1
+    - Name: 
+      Entry: 10
+      Data: 2
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: _edges
+      Entry: 7
+      Data: 1|System.Collections.Generic.List`1[[Emilia.Node.Editor.EditorEdgeAsset,
+        Emilia.Node.Editor]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 10
+      Data: 3
+    - Name: 
+      Entry: 10
+      Data: 4
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: _items
+      Entry: 7
+      Data: 2|System.Collections.Generic.List`1[[Emilia.Node.Editor.EditorItemAsset,
+        Emilia.Node.Editor]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 10
+      Data: 5
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: _nodeMap
+      Entry: 7
+      Data: 3|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[Emilia.Node.Editor.EditorNodeAsset,
+        Emilia.Node.Editor]], mscorlib
+    - Name: comparer
+      Entry: 7
+      Data: 4|System.Collections.Generic.GenericEqualityComparer`1[[System.String,
+        mscorlib]], mscorlib
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 12
+      Data: 3
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 2689cfda-7786-40bf-9565-b35af1812f34
+    - Name: $v
+      Entry: 10
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: f79e6305-c071-48ea-878b-728bb6084966
+    - Name: $v
+      Entry: 10
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: ce16339c-5bca-4959-9ab9-04cf4b495d08
+    - Name: $v
+      Entry: 10
+      Data: 2
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: _edgeMap
+      Entry: 7
+      Data: 5|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[Emilia.Node.Editor.EditorEdgeAsset,
+        Emilia.Node.Editor]], mscorlib
+    - Name: comparer
+      Entry: 9
+      Data: 4
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 4dd765c2-9af3-48c6-b606-403b3093ff0d
+    - Name: $v
+      Entry: 10
+      Data: 3
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 847d4bc5-7ef0-4d6f-a99e-c202d07fd177
+    - Name: $v
+      Entry: 10
+      Data: 4
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: _itemMap
+      Entry: 7
+      Data: 6|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[Emilia.Node.Editor.EditorItemAsset,
+        Emilia.Node.Editor]], mscorlib
+    - Name: comparer
+      Entry: 9
+      Data: 4
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 368db387-ac92-4547-8e5d-f5727fcb88e8
+    - Name: $v
+      Entry: 10
+      Data: 5
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: _parent
+      Entry: 6
+      Data: 
+    - Name: _children
+      Entry: 7
+      Data: 7|System.Collections.Generic.List`1[[Emilia.Node.Editor.EditorGraphAsset,
+        Emilia.Node.Editor]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: editorParametersManage
+      Entry: 6
+      Data: 
+  _id: d6164cb5-16f8-41c2-ad2e-7c2156b4618e
+  description: "\u8FD0\u884C\u65F6\u8282\u70B9\u62D3\u5C55"
+--- !u!114 &469172039600005007
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6278c1b0393b45db96eb2aa3b7a49426, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 7
+      Data: 0|Example.RuntimeNode.Runtime.TestRuntimeNodeAsset, Assembly-CSharp
+    - Name: testFloat
+      Entry: 4
+      Data: 0
+    - Name: testString
+      Entry: 1
+      Data: Hello, World!
+    - Name: testInt
+      Entry: 3
+      Data: 42
+    - Name: 
+      Entry: 8
+      Data: 
+  _id: f79e6305-c071-48ea-878b-728bb6084966
+  _position:
+    serializedVersion: 2
+    x: 468.79477
+    y: 338.9451
+    width: 118
+    height: 68
+  _graphAsset: {fileID: 11400000}
+  _displayName: 
+  _isFold: 1
+--- !u!114 &2222899065659224162
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6278c1b0393b45db96eb2aa3b7a49426, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 7
+      Data: 0|Example.RuntimeNode.Runtime.TestRuntimeNodeAsset, Assembly-CSharp
+    - Name: testFloat
+      Entry: 4
+      Data: 0
+    - Name: testString
+      Entry: 1
+      Data: Hello, World!
+    - Name: testInt
+      Entry: 3
+      Data: 42
+    - Name: 
+      Entry: 8
+      Data: 
+  _id: ce16339c-5bca-4959-9ab9-04cf4b495d08
+  _position:
+    serializedVersion: 2
+    x: 469
+    y: 210
+    width: 118
+    height: 68
+  _graphAsset: {fileID: 11400000}
+  _displayName: 
+  _isFold: 1
+--- !u!114 &6807523419530864900
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97ea6614a3484b77981400fed0cfb405, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 6
+      Data: 
+  _id: 4dd765c2-9af3-48c6-b606-403b3093ff0d
+  _outputNodeId: 2689cfda-7786-40bf-9565-b35af1812f34
+  _inputNodeId: f79e6305-c071-48ea-878b-728bb6084966
+  _outputPortId: output
+  _inputPortId: input
+  _graphAsset: {fileID: 11400000}
+--- !u!114 &7645218306837374191
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3682cc5ca5734db992ba6ec492816146, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  _id: 368db387-ac92-4547-8e5d-f5727fcb88e8
+  _position:
+    serializedVersion: 2
+    x: -11.226229
+    y: -274.84253
+    width: 1046.3152
+    height: 418.14752
+  _graphAsset: {fileID: 11400000}
+  context: "\u521B\u5EFAGraphAsset: [\u4EE3\u7801](/Assets/Example/RuntimeNode/Editor/RuntimeNodeExampleAsset.cs)\n~~~csharp\n\n//            
+    \u6307\u5B9A\u8FD0\u884C\u65F6\u8282\u70B9\u57FA\u7C7B            \u6307\u5B9A\u7F16\u8F91\u5668\u8282\u70B9\u57FA\u7C7B\r\n[NodeToRuntime(typeof(RuntimeNodeAsset),
+    typeof(EditorRuntimeNodeAsset)),\r\nCreateAssetMenu(menuName = \"Emilia/Example/RuntimeNodeExampleAsset\",
+    fileName = \"RuntimeNodeExampleAsset\")]\r\npublic class RuntimeNodeExampleAsset
+    : ExampleAsset\n{\n    ...\n}\n~~~\n\n\u8BA9\u7F16\u8F91\u5668\u8282\u70B9\u5173\u8054\u8FD0\u884C\u65F6\u8282\u70B9:
+    [\u4EE3\u7801](/Assets/Example/RuntimeNode/Editor/RuntimeNodeCreateNodeHandle.cs)\n\n~~~csharp\n\n//\u521B\u5EFA\u7F16\u8F91\u8282\u70B9\u4E0E\u8FD0\u884C\u65F6\u8282\u70B9\u7684\u5173\u8054\r\n[EditorHandle(typeof(RuntimeNodeAsset))]\r\npublic
+    class RuntimeNodeCreateNodeHandle : CreateNodeHandle\n{\n    ...\n}\n~~~"

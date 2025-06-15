@@ -41,8 +41,19 @@ namespace Emilia.Node.Editor
         /// </summary>
         public string id
         {
-            get => _id;
-            set => _id = value;
+            get
+            {
+                if (string.IsNullOrEmpty(this._id)) ResetId();
+                return this._id;
+            }
+
+            set
+            {
+                if (string.IsNullOrEmpty(value)) throw new ArgumentException("Id cannot be null or empty.");
+                
+                this._id = value;
+                AssetDatabase.SaveAssetIfDirty(this);
+            }
         }
 
         /// <summary>
@@ -79,19 +90,23 @@ namespace Emilia.Node.Editor
 
         protected virtual void Reset()
         {
+            ResetId();
+        }
+
+        public virtual void ResetId()
+        {
             _id = Guid.NewGuid().ToString();
             AssetDatabase.SaveAssetIfDirty(this);
         }
 
-        public override string ToString()
-        {
-            return name;
-        }
+        public override string ToString() => name;
 
         protected void OnEnable()
         {
             if (_propertyTree != null) _propertyTree.Dispose();
             _propertyTree = PropertyTree.Create(this);
+
+            if (string.IsNullOrEmpty(this._id)) ResetId();
         }
 
         /// <summary>
