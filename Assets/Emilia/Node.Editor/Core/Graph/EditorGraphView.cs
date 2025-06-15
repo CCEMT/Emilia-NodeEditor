@@ -185,6 +185,11 @@ namespace Emilia.Node.Editor
         /// </summary>
         public event Action<Vector3, Vector3> onLogicTransformChange;
 
+        /// <summary>
+        /// GraphAsset改变事件
+        /// </summary>
+        public event Action<EditorGraphAsset> onGraphAssetChange; 
+
         public void Initialize()
         {
             InitializeModule();
@@ -304,9 +309,11 @@ namespace Emilia.Node.Editor
                 return;
             }
 
+            onGraphAssetChange?.Invoke(asset);
+            
             graphViews[asset] = this;
             loadProgress = 0;
-
+            
             schedule.Execute(OnReload).ExecuteLater(1);
 
             void OnReload()
