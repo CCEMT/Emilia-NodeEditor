@@ -10,12 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 73901c7192434c69b30285784a2a5c39, type: 3}
-  m_Name: ExpandAsset
+  m_Name: 11_ExpandAsset
   m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
     SerializedBytes: 
-    ReferencedUnityObjects: []
+    ReferencedUnityObjects:
+    - {fileID: 4308996877652135568}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -27,6 +28,9 @@ MonoBehaviour:
         Emilia.Node.Editor]], mscorlib
     - Name: 
       Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 10
       Data: 0
     - Name: 
       Entry: 13
@@ -73,7 +77,19 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 48de6931-1cf1-4e7b-a2f3-ad34c248d721
+    - Name: $v
+      Entry: 10
       Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
     - Name: 
       Entry: 13
       Data: 
@@ -131,5 +147,39 @@ MonoBehaviour:
     - Name: editorParametersManage
       Entry: 6
       Data: 
-  _id: 9b2ea93c-e40e-46e8-a6db-ec4b0c50b94e
+  _id: 6b6a96fe-6f9f-401f-bb27-cbf2bae80293
   description: 
+--- !u!114 &4308996877652135568
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c998370b291040a09f833e4a74fabcef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 6
+      Data: 
+  _id: 48de6931-1cf1-4e7b-a2f3-ad34c248d721
+  _position:
+    serializedVersion: 2
+    x: 350
+    y: 285
+    width: 118
+    height: 68
+  _graphAsset: {fileID: 11400000}
+  _displayName: 
+  _isFold: 1
