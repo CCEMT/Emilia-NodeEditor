@@ -14,13 +14,21 @@ namespace Emilia.Node.Editor
             this.handle = EditorHandleUtility.CreateHandle<GraphHotKeysHandle>(graphView.graphAsset.GetType());
             this.handle.Initialize(graphView);
 
-            graphView.UnregisterCallback<KeyDownEvent>(OnKeyDown);
-            graphView.RegisterCallback<KeyDownEvent>(OnKeyDown);
+            graphView.UnregisterCallback<KeyDownEvent>(OnGraphKeyDown);
+            graphView.RegisterCallback<KeyDownEvent>(OnGraphKeyDown);
+
+            graphView.panel.visualTree.UnregisterCallback<KeyDownEvent>(OnTreeKeyDown);
+            graphView.panel.visualTree.RegisterCallback<KeyDownEvent>(OnTreeKeyDown);
         }
 
-        private void OnKeyDown(KeyDownEvent evt)
+        private void OnGraphKeyDown(KeyDownEvent evt)
         {
-            this.handle?.OnKeyDown(this.graphView, evt);
+            this.handle?.OnGraphKeyDown(this.graphView, evt);
+        }
+
+        private void OnTreeKeyDown(KeyDownEvent evt)
+        {
+            this.handle?.OnTreeKeyDown(this.graphView, evt);
         }
 
         public override void Dispose()
@@ -31,7 +39,11 @@ namespace Emilia.Node.Editor
                 this.handle = null;
             }
 
-            if (graphView != null) graphView.UnregisterCallback<KeyDownEvent>(OnKeyDown);
+            if (graphView != null)
+            {
+                graphView.UnregisterCallback<KeyDownEvent>(OnGraphKeyDown);
+                graphView.panel?.visualTree?.UnregisterCallback<KeyDownEvent>(OnTreeKeyDown);
+            }
 
             base.Dispose();
         }

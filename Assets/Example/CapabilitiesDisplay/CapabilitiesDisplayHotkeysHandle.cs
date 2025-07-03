@@ -10,9 +10,9 @@ namespace Example
     [EditorHandle(typeof(CapabilitiesDisplayAsset))]
     public class CapabilitiesDisplayHotkeysHandle : UniversalGraphHotKeysHandle
     {
-        public override void OnKeyDown(EditorGraphView graphView, KeyDownEvent evt)
+        public override void OnGraphKeyDown(EditorGraphView graphView, KeyDownEvent evt)
         {
-            base.OnKeyDown(graphView, evt);
+            base.OnGraphKeyDown(graphView, evt);
             if (evt.ctrlKey && evt.keyCode == KeyCode.Q)
             {
                 const float Interval = 50;

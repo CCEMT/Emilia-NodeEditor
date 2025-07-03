@@ -226,8 +226,6 @@ namespace Emilia.Node.Editor
             RegisterCallback<MouseMoveEvent>((_) => OnFocus());
             RegisterCallback<MouseLeaveEvent>((_) => OnExitFocus());
 
-            Undo.undoRedoPerformed += OnUndoRedoPerformed;
-
             SetupZoom(0.15f, 3f);
             SetViewTransform(Vector3.zero, Vector3.one, 0);
         }
@@ -459,7 +457,6 @@ namespace Emilia.Node.Editor
                 return;
             }
 
-            UpdateSelected();
             loadElementCoroutine = null;
             loadProgress = 1;
 
@@ -734,16 +731,6 @@ namespace Emilia.Node.Editor
             schedule.Execute(UpdateSelected).ExecuteLater(1);
         }
 
-        private void OnUndoRedoPerformed()
-        {
-            if (graphSetting != null && graphSetting.Value.fastUndo == false) Reload(graphAsset);
-            else
-            {
-                graphUndo.OnUndoRedoPerformed();
-                if (focusedGraphView == this) graphSelected.UpdateSelected();
-            }
-        }
-
         /// <summary>
         /// 更新选中
         /// </summary>
@@ -942,8 +929,6 @@ namespace Emilia.Node.Editor
             foreach (GraphViewModule module in this.modules.Values) module.Dispose();
 
             graphElementCache.Clear();
-
-            Undo.undoRedoPerformed -= OnUndoRedoPerformed;
 
             if (focusedGraphView == this) focusedGraphView = null;
             if (this.graphHandle != null)
