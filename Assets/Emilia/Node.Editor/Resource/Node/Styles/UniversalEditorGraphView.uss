@@ -86,3 +86,21 @@
     
     overflow: hidden;
 }
+
+#SearchNodeView{
+    flex-grow: 1;
+
+    margin: 0;
+    padding: 0;
+    border-width: 0;
+}
+
+#SearchNodeView-TreeView{
+    flex-grow: 1;
+
+    margin: 0;
+    padding: 0;
+    border-width: 0;
+
+    overflow: hidden;
+}
