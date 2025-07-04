@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Emilia.Kit.Editor;
 using Emilia.Node.Editor;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Object = UnityEngine.Object;
 
 namespace Emilia.Node.Universal.Editor
 {
@@ -82,12 +85,13 @@ namespace Emilia.Node.Universal.Editor
                 {
                     IEditorPortView portView = nodeView.portViews[i];
 
-                    if (portView.portDirection == EditorPortDirection.Input)
+                    if (portView.portDirection == EditorPortDirection.Input || portView.portDirection == EditorPortDirection.Any)
                     {
                         bool canConnect = nodeView.graphView.connectSystem.CanConnect(portView, edgeView.outputPortView);
                         if (canConnect) canConnectInput.Add(portView);
                     }
-                    else
+
+                    if (portView.portDirection == EditorPortDirection.Output || portView.portDirection == EditorPortDirection.Any)
                     {
                         bool canConnect = nodeView.graphView.connectSystem.CanConnect(edgeView.inputPortView, portView);
                         if (canConnect) canConnectOutput.Add(portView);
@@ -160,11 +164,40 @@ namespace Emilia.Node.Universal.Editor
 
             if (this.targetEdgeView != null)
             {
-                IEditorNodeView nodeView = target as IEditorNodeView;
-                nodeView.graphView.connectSystem.Connect(inputPortView, targetEdgeView.outputPortView);
-                nodeView.graphView.connectSystem.Connect(targetEdgeView.inputPortView, outputPortView);
+                Undo.IncrementCurrentGroup();
 
+                IEdgeCopyPastePack copyPastePack = targetEdgeView.GetPack() as IEdgeCopyPastePack;
+
+                IEditorNodeView nodeView = target as IEditorNodeView;
+
+                EditorEdgeAsset inputPasteAsset = Object.Instantiate(copyPastePack.copyAsset);
+                EditorEdgeAsset outputPasteAsset = Object.Instantiate(copyPastePack.copyAsset);
+
+                inputPasteAsset.name = copyPastePack.copyAsset.name;
+                inputPasteAsset.id = Guid.NewGuid().ToString();
+
+                outputPasteAsset.name = copyPastePack.copyAsset.name;
+                outputPasteAsset.id = Guid.NewGuid().ToString();
+
+                inputPasteAsset.PasteChild();
+                outputPasteAsset.PasteChild();
+
+                inputPasteAsset.inputNodeId = inputPortView.master.asset.id;
+                inputPasteAsset.inputPortId = inputPortView.info.id;
+
+                outputPasteAsset.outputNodeId = outputPortView.master.asset.id;
+                outputPasteAsset.outputPortId = outputPortView.info.id;
+
+                nodeView.graphView.RegisterCompleteObjectUndo("Graph NodeInsert");
+                nodeView.graphView.AddEdge(inputPasteAsset);
+                nodeView.graphView.AddEdge(outputPasteAsset);
+
+                Undo.RegisterCreatedObjectUndo(inputPasteAsset, "Graph NodeInsert");
+                Undo.RegisterCreatedObjectUndo(outputPasteAsset, "Graph NodeInsert");
                 targetEdgeView.Delete();
+
+                Undo.CollapseUndoOperations(Undo.GetCurrentGroup());
+                Undo.IncrementCurrentGroup();
             }
 
             RemoveGhostEdge();
