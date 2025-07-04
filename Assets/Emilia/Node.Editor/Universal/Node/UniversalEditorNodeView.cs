@@ -422,5 +422,36 @@ namespace Emilia.Node.Universal.Editor
                 focusBorder.RemoveFromClassList("enable");
             }
         }
+
+        /// <summary>
+        /// 设置禁用
+        /// </summary>
+        public void SetDisabled(long timeMs = -1)
+        {
+            schedule.Execute(OnSetDim).ExecuteLater(1);
+
+            void OnSetDim()
+            {
+                AddToClassList("disabled");
+                this.pickingMode = PickingMode.Ignore;
+                this.style.opacity = 0.5f;
+                if (timeMs > 0) schedule.Execute(ClearDisabled).ExecuteLater(timeMs);
+            }
+        }
+
+        /// <summary>
+        /// 清除禁用
+        /// </summary>
+        public void ClearDisabled()
+        {
+            schedule.Execute(OnClearDim).ExecuteLater(1);
+
+            void OnClearDim()
+            {
+                RemoveFromClassList("disabled");
+                this.pickingMode = PickingMode.Position;
+                this.style.opacity = 1.0f;
+            }
+        }
     }
 }

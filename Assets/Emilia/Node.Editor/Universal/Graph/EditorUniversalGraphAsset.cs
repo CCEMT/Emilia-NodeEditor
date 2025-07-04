@@ -11,13 +11,15 @@ using Object = UnityEngine.Object;
 
 namespace Emilia.Node.Universal.Editor
 {
-    public abstract class EditorUniversalGraphAsset : EditorGraphAsset
+    public abstract class EditorUniversalGraphAsset : EditorGraphAsset, IObjectDescription
     {
         [LabelText("描述"), TextArea(3, 10)]
         public string description;
 
         [NonSerialized, OdinSerialize, HideInInspector]
         public EditorParametersManage editorParametersManage;
+
+        string IObjectDescription.description => description;
 
         /// <summary>
         /// 操作菜单标签
@@ -30,7 +32,7 @@ namespace Emilia.Node.Universal.Editor
 
             EditorParametersManage parametersManage = childAssets.OfType<EditorParametersManage>().FirstOrDefault();
             if (parametersManage == null) return;
-            
+
             if (this.editorParametersManage != null) DestroyImmediate(this.editorParametersManage);
 
             if (this.editorParametersManage != null) DestroyImmediate(this.editorParametersManage);

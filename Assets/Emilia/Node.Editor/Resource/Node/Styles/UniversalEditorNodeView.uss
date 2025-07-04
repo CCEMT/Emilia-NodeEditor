@@ -100,3 +100,11 @@
 #node-bottom-container{
     background-color: rgba(0,0,0,0.15);
 }
+
+.disabled {
+    transition: opacity 0.2s ease-in-out;
+}
+
+.disabled #title-container {
+    background-color: rgba(128, 128, 128, 0.25);
+}

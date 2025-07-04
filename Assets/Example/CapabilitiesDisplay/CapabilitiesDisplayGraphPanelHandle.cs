@@ -15,7 +15,7 @@ namespace Example
 
             AppendPanel appendPanel = system.OpenDockPanel<AppendPanel>(200, GraphDockPosition.Right);
             appendPanel.AddGraphPanel<CreateNodeView>("创建节点");
-            appendPanel.AddGraphPanel<CreateNodeView>("创建节点");
+            appendPanel.AddGraphPanel<SearchNodeView>("搜索节点");
 
             system.OpenFloatPanel<MiniMapView>();
         }

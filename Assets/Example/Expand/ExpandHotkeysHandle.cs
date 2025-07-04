@@ -11,9 +11,9 @@ namespace Example.Expand
     [EditorHandle(typeof(ExpandAsset))]
     public class ExpandHotkeysHandle : UniversalGraphHotKeysHandle
     {
-        public override void OnKeyDown(EditorGraphView graphView, KeyDownEvent evt)
+        public override void OnGraphKeyDown(EditorGraphView graphView, KeyDownEvent evt)
         {
-            base.OnKeyDown(graphView, evt);
+            base.OnGraphKeyDown(graphView, evt);
 
             //布局快捷键
             if (evt.ctrlKey && evt.keyCode == KeyCode.Q)

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Emilia.Kit;
 using Emilia.Node.Editor;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -6,7 +7,7 @@ using UnityEngine;
 namespace Emilia.Node.Universal.Editor
 {
     [HideMonoScript, OnValueChanged(nameof(OnValueChanged), true)]
-    public class UniversalNodeAsset : EditorNodeAsset
+    public class UniversalNodeAsset : EditorNodeAsset, IObjectDescription
     {
         [SerializeField, HideInInspector]
         private string _displayName;
@@ -49,6 +50,20 @@ namespace Emilia.Node.Universal.Editor
             if (graphView == null) return;
             UniversalEditorNodeView nodeView = graphView.graphElementCache.nodeViewById.GetValueOrDefault(id) as UniversalEditorNodeView;
             if (nodeView != null) nodeView.OnValueChanged();
+        }
+
+        public virtual string description
+        {
+            get
+            {
+                if (userData == null) return title;
+
+                EditorGraphView graphView = EditorGraphView.GetGraphView(graphAsset);
+                if (graphView == null) return title;
+
+                string userDataDescription = ObjectDescriptionUtility.GetDescription(userData, graphView);
+                return title + $"({userDataDescription})";
+            }
         }
     }
 }

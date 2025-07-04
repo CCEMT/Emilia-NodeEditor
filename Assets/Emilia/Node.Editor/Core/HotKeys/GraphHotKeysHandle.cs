@@ -12,9 +12,14 @@ namespace Emilia.Node.Editor
         public virtual void Initialize(EditorGraphView graphView) { }
 
         /// <summary>
-        /// 处理按键点击事件
+        /// Graph处理按键点击事件
         /// </summary>
-        public virtual void OnKeyDown(EditorGraphView graphView, KeyDownEvent evt) { }
+        public virtual void OnGraphKeyDown(EditorGraphView graphView, KeyDownEvent evt) { }
+
+        /// <summary>
+        /// Tree按键点击事件
+        /// </summary>
+        public virtual void OnTreeKeyDown(EditorGraphView graphView, KeyDownEvent evt) { }
 
         /// <summary>
         /// 释放

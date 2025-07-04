@@ -99,7 +99,11 @@ namespace Emilia.Node.Editor
             AssetDatabase.SaveAssetIfDirty(this);
         }
 
-        public override string ToString() => name;
+        public override string ToString()
+        {
+            if (this == null) return "Null";
+            return name;
+        }
 
         protected void OnEnable()
         {

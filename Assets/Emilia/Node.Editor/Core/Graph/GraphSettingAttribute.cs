@@ -8,7 +8,6 @@ namespace Emilia.Node.Attributes
     {
         public GraphSettingStruct settingStruct = new GraphSettingStruct {
             maxLoadTimeMs = 0.0416f,
-            fastUndo = true,
             immediatelySave = true,
             zoomSize = new Vector2(0.15f, 3f)
         };
@@ -20,15 +19,6 @@ namespace Emilia.Node.Attributes
         {
             get => settingStruct.maxLoadTimeMs;
             set => settingStruct.maxLoadTimeMs = value;
-        }
-
-        /// <summary>
-        /// 是否启用快速撤销
-        /// </summary>
-        public bool fastUndo
-        {
-            get => settingStruct.fastUndo;
-            set => settingStruct.fastUndo = value;
         }
 
         /// <summary>
@@ -54,7 +44,6 @@ namespace Emilia.Node.Attributes
     public struct GraphSettingStruct
     {
         public float maxLoadTimeMs;
-        public bool fastUndo;
         public bool immediatelySave;
         public Vector2 zoomSize;
     }
