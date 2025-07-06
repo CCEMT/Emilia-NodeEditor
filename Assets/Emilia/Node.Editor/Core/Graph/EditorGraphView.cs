@@ -218,6 +218,8 @@ namespace Emilia.Node.Editor
             viewTransformChanged = OnViewTransformChanged;
             graphViewChanged = OnGraphViewChanged;
             elementResized = OnElementResized;
+            
+            Undo.undoRedoPerformed += OnUndoRedoPerformed;
 
             RegisterCallback<MouseDownEvent>(OnMouseDown);
             RegisterCallback<MouseUpEvent>(OnMouseUp);
@@ -730,6 +732,16 @@ namespace Emilia.Node.Editor
         {
             schedule.Execute(UpdateSelected).ExecuteLater(1);
         }
+        
+        private void OnUndoRedoPerformed()
+        {
+            if (graphSetting != null && graphSetting.Value.fastUndo == false) Reload(graphAsset);
+            else
+            {
+                graphUndo.OnUndoRedoPerformed();
+                if (focusedGraphView == this) graphSelected.UpdateSelected();
+            }
+        }
 
         /// <summary>
         /// 更新选中
@@ -930,6 +942,8 @@ namespace Emilia.Node.Editor
 
             graphElementCache.Clear();
 
+            Undo.undoRedoPerformed -= OnUndoRedoPerformed;
+            
             if (focusedGraphView == this) focusedGraphView = null;
             if (this.graphHandle != null)
             {
