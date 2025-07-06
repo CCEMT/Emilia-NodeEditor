@@ -22,32 +22,6 @@ namespace Emilia.Node.Universal.Editor
             OnKeyDownShortcut_Hook(graphView, evt);
         }
 
-        public override void OnTreeKeyDown(EditorGraphView graphView, KeyDownEvent evt)
-        {
-            base.OnTreeKeyDown(graphView, evt);
-
-            if (evt.keyCode == KeyCode.Z && evt.ctrlKey)
-            {
-                bool isReload = evt.shiftKey;
-
-                Undo.undoRedoPerformed += OnUndoRedoPerformed;
-                Undo.PerformUndo();
-
-                void OnUndoRedoPerformed()
-                {
-                    Undo.undoRedoPerformed -= OnUndoRedoPerformed;
-                    if (isReload) graphView.Reload(graphView.graphAsset);
-                    else
-                    {
-                        graphView.graphUndo.OnUndoRedoPerformed();
-                        if (EditorGraphView.focusedGraphView == graphView) graphView.graphSelected.UpdateSelected();
-                    }
-                }
-
-                evt.StopPropagation();
-            }
-        }
-
         private void OnKeyDownShortcut_Hook(EditorGraphView graphView, KeyDownEvent evt)
         {
             if (! graphView.isReframable || graphView.panel.GetCapturingElement(PointerId.mousePointerId) != null) return;
