@@ -1,5 +1,6 @@
 ﻿using System;
 using Emilia.Reflection.Editor;
+using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -96,6 +97,8 @@ namespace Emilia.Node.Editor
         {
             EditorGraphView graphView = target as EditorGraphView;
             if (graphView == null) return;
+            if (graphView.loadProgress != 1) return;
+            if (EditorApplication.isCompiling) return;
 
             IPanel panel = (evt.target as VisualElement)?.panel;
             if (panel.GetCapturingElement(PointerId.mousePointerId) != null) return;
