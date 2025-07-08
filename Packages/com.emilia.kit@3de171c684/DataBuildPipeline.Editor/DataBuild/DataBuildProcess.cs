@@ -17,7 +17,7 @@ namespace Emilia.DataBuildPipeline.Editor
 
                 try
                 {
-                    build.Build(container, () => isFinish = true);
+                    build.Build(container, args, () => isFinish = true);
                 }
                 catch (Exception e)
                 {

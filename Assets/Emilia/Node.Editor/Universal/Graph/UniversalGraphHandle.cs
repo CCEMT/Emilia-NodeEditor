@@ -1,5 +1,7 @@
 ﻿using Emilia.Kit;
 using Emilia.Node.Editor;
+using UnityEditor;
+using UnityEditor.Compilation;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -14,6 +16,7 @@ namespace Emilia.Node.Universal.Editor
 
         private EditorGraphView editorGraphView;
         private GraphLoadingContainer loadingContainer;
+        private GraphCompilationContainer currentCompilationContainer;
 
         public override void Initialize(EditorGraphView graphView)
         {
@@ -31,6 +34,9 @@ namespace Emilia.Node.Universal.Editor
 
             graphView.onLogicTransformChange -= OnLogicTransformChange;
             graphView.onLogicTransformChange += OnLogicTransformChange;
+
+            CompilationPipeline.compilationStarted -= OnCompilationStarted;
+            CompilationPipeline.compilationStarted += OnCompilationStarted;
         }
 
         private void OnLogicTransformChange(Vector3 position, Vector3 scale)
@@ -38,6 +44,26 @@ namespace Emilia.Node.Universal.Editor
             UniversalGraphAssetLocalSetting setting = editorGraphView.graphLocalSettingSystem.assetSetting as UniversalGraphAssetLocalSetting;
             setting.position = position;
             setting.scale = scale;
+        }
+
+        private void OnCompilationStarted(object context)
+        {
+            currentCompilationContainer = new GraphCompilationContainer();
+            editorGraphView.Add(currentCompilationContainer);
+            editorGraphView.SetEnabled(false);
+
+            editorGraphView.onUpdate += CheckCompilationFinished;
+        }
+
+        private void CheckCompilationFinished()
+        {
+            if (EditorApplication.isCompiling) return;
+            this.currentCompilationContainer.RemoveFromHierarchy();
+
+            if (this.editorGraphView != null) this.editorGraphView.SetEnabled(true);
+
+            EditorApplication.update -= CheckCompilationFinished;
+            this.currentCompilationContainer = null;
         }
 
         protected virtual void AddManipulator()
@@ -89,7 +115,12 @@ namespace Emilia.Node.Universal.Editor
         public override void Dispose(EditorGraphView graphView)
         {
             graphView.onLogicTransformChange -= OnLogicTransformChange;
+            CompilationPipeline.compilationStarted -= OnCompilationStarted;
+            graphView.onUpdate -= CheckCompilationFinished;
+
+            
             editorGraphView = null;
+            currentCompilationContainer = null;
         }
     }
 }
