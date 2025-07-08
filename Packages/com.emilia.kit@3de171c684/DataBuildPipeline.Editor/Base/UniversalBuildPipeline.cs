@@ -4,7 +4,7 @@ using Unity.EditorCoroutines.Editor;
 
 namespace Emilia.DataBuildPipeline.Editor
 {
-    public abstract class UniversalBuildPipeline : IBuildPipeline
+    public class UniversalBuildPipeline : IBuildPipeline
     {
         protected BuildArgs buildArgs;
         protected IBuildContainer container;
@@ -49,7 +49,7 @@ namespace Emilia.DataBuildPipeline.Editor
             container = CreateContainer();
         }
 
-        protected abstract IBuildContainer CreateContainer();
+        protected virtual IBuildContainer CreateContainer() => BuildContainerManage.instance.CreateBuildContainer(buildArgs);
 
         protected virtual void DataDetection()
         {

@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "com.emilia.kit": {
-      "version": "file:com.emilia.kit@dec61ba32c",
+      "version": "file:com.emilia.kit@3de171c684",
       "depth": 0,
       "source": "embedded",
       "dependencies": {

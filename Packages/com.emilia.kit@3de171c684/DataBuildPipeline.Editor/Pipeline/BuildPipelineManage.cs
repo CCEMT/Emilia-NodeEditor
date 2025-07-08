@@ -27,7 +27,7 @@ namespace Emilia.DataBuildPipeline.Editor
 
         public IBuildPipeline GetPipeline(Type argsType)
         {
-            if (this.pipelines.TryGetValue(argsType, out Type type) == false) return default;
+            if (this.pipelines.TryGetValue(argsType, out Type type) == false) return new UniversalBuildPipeline();
             IBuildPipeline pipeline = Activator.CreateInstance(type) as IBuildPipeline;
             return pipeline;
         }
