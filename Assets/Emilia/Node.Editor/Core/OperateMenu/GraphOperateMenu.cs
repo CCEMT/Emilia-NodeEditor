@@ -43,6 +43,12 @@ namespace Emilia.Node.Editor
                 return;
             }
 
+            if (menuContext.graphView == null || menuContext.evt == null)
+            {
+                Debug.LogError("菜单上下文参数错误");
+                return;
+            }
+
             List<OperateMenuItem> graphMenuItems = new List<OperateMenuItem>();
             handle.CollectMenuItems(this.graphView, graphMenuItems, menuContext);
 

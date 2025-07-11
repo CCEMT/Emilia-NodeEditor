@@ -37,7 +37,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public Type GetEdgeAssetTypeByPort(IEditorPortView portView)
         {
-            if (this.handle == null) return null;
+            if (this.handle == null || portView == null) return null;
             return this.handle.GetEdgeAssetTypeByPort(graphView, portView);
         }
 
@@ -46,6 +46,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public bool CanConnect(IEditorPortView inputPort, IEditorPortView outputPort)
         {
+            if (inputPort == null || outputPort == null || inputPort.master == null || outputPort.master == null) return false;
             if (this.handle == null) return false;
             return this.handle.CanConnect(graphView, inputPort, outputPort);
         }
@@ -55,6 +56,8 @@ namespace Emilia.Node.Editor
         /// </summary>
         public IEditorEdgeView Connect(IEditorPortView input, IEditorPortView output)
         {
+            if (input == null || output == null || input.master == null || output.master == null) return null;
+
             if (handle.CanConnect(graphView, input, output) == false) return null;
             if (handle.BeforeConnect(graphView, input, output)) return null;
 

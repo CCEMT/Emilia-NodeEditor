@@ -294,7 +294,7 @@ namespace Emilia.Node.Editor
 
             VisualElement visualElement = portView.portElement;
 
-            while (visualElement != this)
+            while (visualElement != this && visualElement != null)
             {
                 top += visualElement.layout.y;
                 visualElement = visualElement.parent;

@@ -12,13 +12,13 @@ namespace Emilia.Node.Editor
         {
             base.Initialize(graphView);
             this.handle = EditorHandleUtility.CreateHandle<GraphHotKeysHandle>(graphView.graphAsset.GetType());
-            this.handle.Initialize(graphView);
+            this.handle?.Initialize(graphView);
 
             graphView.UnregisterCallback<KeyDownEvent>(OnGraphKeyDown);
             graphView.RegisterCallback<KeyDownEvent>(OnGraphKeyDown);
 
-            graphView.panel.visualTree.UnregisterCallback<KeyDownEvent>(OnTreeKeyDown);
-            graphView.panel.visualTree.RegisterCallback<KeyDownEvent>(OnTreeKeyDown);
+            graphView.panel?.visualTree?.UnregisterCallback<KeyDownEvent>(OnTreeKeyDown);
+            graphView.panel?.visualTree?.RegisterCallback<KeyDownEvent>(OnTreeKeyDown);
         }
 
         private void OnGraphKeyDown(KeyDownEvent evt)

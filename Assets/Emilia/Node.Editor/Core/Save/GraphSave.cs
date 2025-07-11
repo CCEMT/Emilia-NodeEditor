@@ -27,6 +27,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public EditorGraphAsset ResetCopy(EditorGraphAsset source)
         {
+            if (source == null) return null;
             this.sourceGraphAsset = source;
 
             string path = AssetDatabase.GetAssetPath(source);

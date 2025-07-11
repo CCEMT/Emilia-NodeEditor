@@ -65,6 +65,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void SetNodeViewCache(string id, IEditorNodeView nodeView)
         {
+            if (string.IsNullOrEmpty(id) || nodeView == null) return;
             this._nodeViewById[id] = nodeView;
         }
 
@@ -73,6 +74,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void SetEdgeViewCache(string id, IEditorEdgeView edgeView)
         {
+            if (string.IsNullOrEmpty(id) || edgeView == null) return;
             this._edgeViewById[id] = edgeView;
         }
 
@@ -81,6 +83,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void SetItemViewCache(string id, IEditorItemView itemView)
         {
+            if (string.IsNullOrEmpty(id) || itemView == null) return;
             this._itemViewById[id] = itemView;
         }
 
@@ -111,17 +114,29 @@ namespace Emilia.Node.Editor
         /// <summary>
         /// 根据Id获取NodeView
         /// </summary>
-        public IEditorNodeView GetEditorNodeView(string id) => nodeViewById.GetValueOrDefault(id);
+        public IEditorNodeView GetEditorNodeView(string id)
+        {
+            if (string.IsNullOrEmpty(id)) return null;
+            return nodeViewById.GetValueOrDefault(id);
+        }
 
         /// <summary>
         /// 根据Id获取EdgeView
         /// </summary>
-        public IEditorEdgeView GetEditorEdgeView(string id) => edgeViewById.GetValueOrDefault(id);
+        public IEditorEdgeView GetEditorEdgeView(string id)
+        {
+            if (string.IsNullOrEmpty(id)) return null;
+            return edgeViewById.GetValueOrDefault(id);
+        }
 
         /// <summary>
         /// 根据Id获取ItemView
         /// </summary>
-        public IEditorItemView GetEditorItemView(string id) => itemViewById.GetValueOrDefault(id);
+        public IEditorItemView GetEditorItemView(string id)
+        {
+            if (string.IsNullOrEmpty(id)) return null;
+            return itemViewById.GetValueOrDefault(id);
+        }
 
         /// <summary>
         /// 根据端口获取可连接的端口信息

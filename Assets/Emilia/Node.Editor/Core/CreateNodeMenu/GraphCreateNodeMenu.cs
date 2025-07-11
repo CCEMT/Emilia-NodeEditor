@@ -32,7 +32,7 @@ namespace Emilia.Node.Editor
             nullIcon.Apply();
 
             handle = EditorHandleUtility.CreateHandle<CreateNodeMenuHandle>(graphView.graphAsset.GetType());
-            handle.Initialize(graphView);
+            handle?.Initialize(graphView);
         }
 
         public override void AllModuleInitializeSuccess()
