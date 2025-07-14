@@ -99,13 +99,33 @@ namespace Emilia.Node.Editor
             AssetDatabase.SaveAssetIfDirty(this);
         }
 
+        public void RepetitionId()
+        {
+            EditorGraphAsset[] graphAssets = EditorAssetKit.GetEditorResources<EditorGraphAsset>();
+            int count = graphAssets.Length;
+            for (int i = 0; i < count; i++)
+            {
+                EditorGraphAsset graphAsset = graphAssets[i];
+                if (graphAsset == this) continue;
+                if (graphAsset._id != this._id) continue;
+                ResetId();
+                break;
+            }
+        }
+        
         public override string ToString()
         {
             if (this == null) return "Null";
             return name;
         }
 
-        protected void OnEnable()
+        protected virtual void OnValidate()
+        {
+            if (string.IsNullOrEmpty(this._id)) ResetId();
+            else RepetitionId();
+        }
+
+        protected virtual void OnEnable()
         {
             if (_propertyTree != null) _propertyTree.Dispose();
             _propertyTree = PropertyTree.Create(this);

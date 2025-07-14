@@ -308,10 +308,11 @@ namespace Emilia.Node.Editor
                 Debug.LogError("Reload asset 为空");
                 return;
             }
-
-            onGraphAssetChange?.Invoke(asset);
             
+            asset.RepetitionId();
             graphViews[asset] = this;
+            
+            onGraphAssetChange?.Invoke(asset);
             loadProgress = 0;
             
             schedule.Execute(OnReload).ExecuteLater(1);
@@ -342,6 +343,7 @@ namespace Emilia.Node.Editor
                 return;
             }
 
+            asset.RepetitionId();
             graphAsset = asset;
 
             ReloadHandle();
