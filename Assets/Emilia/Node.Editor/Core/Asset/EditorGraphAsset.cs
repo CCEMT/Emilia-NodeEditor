@@ -106,13 +106,13 @@ namespace Emilia.Node.Editor
             for (int i = 0; i < count; i++)
             {
                 EditorGraphAsset graphAsset = graphAssets[i];
-                if (graphAsset == this) continue;
+                if (graphAsset == this || graphAsset == null) continue;
                 if (graphAsset._id != this._id) continue;
                 ResetId();
                 break;
             }
         }
-        
+
         public override string ToString()
         {
             if (this == null) return "Null";
