@@ -18,7 +18,7 @@ namespace Emilia.Node.Universal.Editor
         {
             base.Initialize(graphView);
             editorGraphView = graphView;
-            bool isUseSelection = graphView.window.GetType() != InspectorWindow_Internals.inspectorWindowType_Internals;
+            bool isUseSelection = graphView.window?.GetType() != InspectorWindow_Internals.inspectorWindowType_Internals;
             if (isUseSelection == false) return;
             Selection.selectionChanged -= OnSelectionChanged;
             Selection.selectionChanged += OnSelectionChanged;
@@ -45,7 +45,7 @@ namespace Emilia.Node.Universal.Editor
 
             foreach (ISelectedHandle selectable in selection) selectedInspectors.AddRange(selectable.GetSelectedObjects());
 
-            bool isUseSelection = graphView.window.GetType() != InspectorWindow_Internals.inspectorWindowType_Internals;
+            bool isUseSelection = graphView.window?.GetType() != InspectorWindow_Internals.inspectorWindowType_Internals;
 
             if (selectedInspectors.Count > 0)
             {
@@ -82,7 +82,7 @@ namespace Emilia.Node.Universal.Editor
 
         public override void Dispose(EditorGraphView graphView)
         {
-            bool isUseSelection = graphView.window.GetType() != InspectorWindow_Internals.inspectorWindowType_Internals;
+            bool isUseSelection = graphView.window?.GetType() != InspectorWindow_Internals.inspectorWindowType_Internals;
             if (isUseSelection) Selection.selectionChanged -= OnSelectionChanged;
 
             Selection.objects = null;

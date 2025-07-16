@@ -28,7 +28,7 @@ namespace Emilia.Node.Editor
         {
             base.Initialize(graphView);
             this.handle = EditorHandleUtility.CreateHandle<GraphSelectedHandle>(graphView.graphAsset.GetType());
-            handle.Initialize(graphView);
+            handle?.Initialize(graphView);
         }
 
         public override void AllModuleInitializeSuccess()
@@ -64,7 +64,7 @@ namespace Emilia.Node.Editor
             UnSelected(this._selected);
 
             this._selected.Clear();
-            this._selected.AddRange(selection);
+            if (selection != null) this._selected.AddRange(selection);
 
             handle?.UpdateSelectedInspector(this.graphView, _selected);
             UpdateSelectedDrawer(_selected);

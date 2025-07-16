@@ -308,10 +308,11 @@ namespace Emilia.Node.Editor
                 Debug.LogError("Reload asset 为空");
                 return;
             }
-
-            onGraphAssetChange?.Invoke(asset);
             
+            asset.RepetitionId();
             graphViews[asset] = this;
+            
+            onGraphAssetChange?.Invoke(asset);
             loadProgress = 0;
             
             schedule.Execute(OnReload).ExecuteLater(1);
@@ -342,6 +343,7 @@ namespace Emilia.Node.Editor
                 return;
             }
 
+            asset.RepetitionId();
             graphAsset = asset;
 
             ReloadHandle();
@@ -373,7 +375,7 @@ namespace Emilia.Node.Editor
         {
             if (this.graphHandle != null) graphHandle.Dispose(this);
             this.graphHandle = EditorHandleUtility.CreateHandle<GraphHandle>(graphAsset.GetType());
-            this.graphHandle.Initialize(this);
+            this.graphHandle?.Initialize(this);
         }
 
         private void ReloadModule()
@@ -385,7 +387,7 @@ namespace Emilia.Node.Editor
 
             foreach (BasicGraphViewModule module in this.modules.Values) module.Initialize(this);
 
-            graphHandle.InitializeCustomModule(this, customModules);
+            graphHandle?.InitializeCustomModule(this, customModules);
 
             foreach (CustomGraphViewModule customModule in this.customModules.Values) customModule.Initialize(this);
 
@@ -600,6 +602,12 @@ namespace Emilia.Node.Editor
             }
 
             IEditorItemView itemView = ReflectUtility.CreateInstance(itemViewType) as IEditorItemView;
+            if (itemView.element == null)
+            {
+                Debug.LogError($"AddItemView {itemViewType.FullName} element 为空");
+                return null;
+            }
+
             itemView.element.RegisterCallback<MouseDownEvent>((_) => UpdateSelected());
             itemView.Initialize(this, asset);
             AddElement(itemView.element);

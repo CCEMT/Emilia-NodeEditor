@@ -50,7 +50,7 @@ namespace Emilia.Node.Editor
             set
             {
                 if (string.IsNullOrEmpty(value)) throw new ArgumentException("Id cannot be null or empty.");
-                
+
                 this._id = value;
                 AssetDatabase.SaveAssetIfDirty(this);
             }
@@ -99,13 +99,33 @@ namespace Emilia.Node.Editor
             AssetDatabase.SaveAssetIfDirty(this);
         }
 
+        public void RepetitionId()
+        {
+            EditorGraphAsset[] graphAssets = EditorAssetKit.GetEditorResources<EditorGraphAsset>();
+            int count = graphAssets.Length;
+            for (int i = 0; i < count; i++)
+            {
+                EditorGraphAsset graphAsset = graphAssets[i];
+                if (graphAsset == this || graphAsset == null) continue;
+                if (graphAsset._id != this._id) continue;
+                ResetId();
+                break;
+            }
+        }
+
         public override string ToString()
         {
             if (this == null) return "Null";
             return name;
         }
 
-        protected void OnEnable()
+        protected virtual void OnValidate()
+        {
+            if (string.IsNullOrEmpty(this._id)) ResetId();
+            else RepetitionId();
+        }
+
+        protected virtual void OnEnable()
         {
             if (_propertyTree != null) _propertyTree.Dispose();
             _propertyTree = PropertyTree.Create(this);
@@ -118,7 +138,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void AddNode(EditorNodeAsset nodeAsset)
         {
-            if (this._nodeMap.ContainsKey(nodeAsset.id)) return;
+            if (nodeAsset == null || this._nodeMap.ContainsKey(nodeAsset.id)) return;
 
             nodeAsset.graphAsset = this;
 
@@ -133,7 +153,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void AddEdge(EditorEdgeAsset edgeAsset)
         {
-            if (this._edgeMap.ContainsKey(edgeAsset.id)) return;
+            if (edgeAsset == null || this._edgeMap.ContainsKey(edgeAsset.id)) return;
 
             edgeAsset.graphAsset = this;
 
@@ -148,7 +168,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void AddItem(EditorItemAsset itemAsset)
         {
-            if (this._itemMap.ContainsKey(itemAsset.id)) return;
+            if (itemAsset == null || this._itemMap.ContainsKey(itemAsset.id)) return;
 
             itemAsset.graphAsset = this;
 
@@ -163,7 +183,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void RemoveNode(EditorNodeAsset nodeAsset)
         {
-            if (this._nodeMap.ContainsKey(nodeAsset.id) == false) return;
+            if (nodeAsset == null || this._nodeMap.ContainsKey(nodeAsset.id) == false) return;
 
             nodeAsset.graphAsset = null;
 
@@ -176,7 +196,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void RemoveEdge(EditorEdgeAsset edgeAsset)
         {
-            if (this._edgeMap.ContainsKey(edgeAsset.id) == false) return;
+            if (edgeAsset == null || this._edgeMap.ContainsKey(edgeAsset.id) == false) return;
 
             edgeAsset.graphAsset = null;
 
@@ -189,7 +209,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void RemoveItem(EditorItemAsset itemAsset)
         {
-            if (this._itemMap.ContainsKey(itemAsset.id) == false) return;
+            if (itemAsset == null || this._itemMap.ContainsKey(itemAsset.id) == false) return;
 
             itemAsset.graphAsset = null;
 

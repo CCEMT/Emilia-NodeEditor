@@ -30,7 +30,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public bool CanPasteSerializedDataCallback(string serializedData)
         {
-            if (this.handle == null) return false;
+            if (this.handle == null || string.IsNullOrEmpty(serializedData)) return false;
             return this.handle.CanPasteSerializedDataCallback(graphView, serializedData);
         }
 

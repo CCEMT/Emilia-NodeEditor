@@ -180,6 +180,7 @@ namespace Emilia.Node.Editor
             if (editorGraphAsset == null) return string.Empty;
             WindowSettingsAttribute settings = editorGraphAsset.GetType().GetAttribute<WindowSettingsAttribute>();
             if (settings == null) return editorGraphAsset.id;
+            editorGraphAsset.RepetitionId();
 
             switch (settings.openMode)
             {
