@@ -167,7 +167,7 @@ namespace Emilia.Node.Universal.Editor
                         int lastIndex = path.LastIndexOf('/');
                         string groupTitle = "";
                         if (lastIndex > 0) groupTitle = path.Substring(0, lastIndex);
-                        
+
                         if (parent is CreateNodeTitleTreeViewItem titleTreeViewItem)
                         {
                             if (titleTreeViewItem.displayName != groupTitle) continue;
@@ -208,6 +208,8 @@ namespace Emilia.Node.Universal.Editor
                 return aItem.priority.CompareTo(bItem.priority);
             });
 
+            List<(CreateNodeEntryTreeViewItem, int)> collects = new();
+
             for (int i = 0; i < nodePaths.Count; i++)
             {
                 string path = nodePaths[i];
@@ -216,7 +218,8 @@ namespace Emilia.Node.Universal.Editor
                 string[] pathParts = path.Split('/');
                 string title = pathParts.Length > 0 ? pathParts[pathParts.Length - 1] : path;
 
-                if (SearchUtility.Search(title, searchString) == false) continue;
+                int score = SearchUtility.Search(title, searchString);
+                if (score == 0) continue;
 
                 CreateNodeEntryTreeViewItem nodeItem = new CreateNodeEntryTreeViewItem(createNodeHandle) {
                     id = path.GetHashCode(),
@@ -224,10 +227,16 @@ namespace Emilia.Node.Universal.Editor
                     displayName = title,
                 };
 
-                root.AddChild(nodeItem);
-
-                treeViewItems.Add(nodeItem);
-                createNodeHandleMap[nodeItem.id] = createNodeHandle;
+                collects.Add((nodeItem, score));
+            }
+            
+            collects.Sort((a, b) => b.Item2.CompareTo(a.Item2));
+            
+            foreach (var pair in collects)
+            {
+                root.AddChild(pair.Item1);
+                treeViewItems.Add(pair.Item1);
+                createNodeHandleMap[pair.Item1.id] = pair.Item1.createNodeHandle;
             }
         }
 

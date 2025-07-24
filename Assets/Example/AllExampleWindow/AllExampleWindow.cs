@@ -26,7 +26,7 @@ namespace Example
         {
             OdinMenuTree tree = new OdinMenuTree();
             tree.Config.DrawSearchToolbar = true;
-            tree.Config.SearchFunction = item => SearchUtility.Search(item.SearchString, tree.Config.SearchTerm);
+            tree.Config.SearchFunction = item => SearchUtility.Matching(item.SearchString, tree.Config.SearchTerm);
 
             ExampleAsset[] editorGuideAsset = EditorAssetKit.GetEditorResources<ExampleAsset>();
 
