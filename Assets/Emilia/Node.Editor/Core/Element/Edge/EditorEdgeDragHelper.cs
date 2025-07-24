@@ -401,6 +401,8 @@ namespace Emilia.Node.Editor
                 float minDistance = int.MaxValue;
                 foreach (IEditorPortView port in ports)
                 {
+                    if (portBonds.ContainsKey(port) == false) continue;
+                    
                     Rect bounds = portBonds[port];
                     bool isContains = bounds.Contains(mousePosition);
                     if (isContains)

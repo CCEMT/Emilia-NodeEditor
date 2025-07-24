@@ -1,0 +1,34 @@
+{
+    "name": "Emilia.Node.Editor.Tests",
+    "rootNamespace": "Emilia.Node.Editor.Tests",
+    "references": [
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner",
+        "Emilia.Node.Editor",
+        "Emilia.Node.Universal.Editor",
+        "Emilia.Node.Attributes",
+        "Emilia.Kit",
+        "Emilia.Kit.Editor"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll",
+        "Sirenix.OdinInspector.Editor.dll",
+        "Sirenix.Serialization.dll",
+        "Emilia.Reflection.Editor.dll",
+        "Sirenix.Serialization.Config.dll",
+        "Sirenix.Utilities.dll",
+        "Sirenix.Utilities.Editor.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

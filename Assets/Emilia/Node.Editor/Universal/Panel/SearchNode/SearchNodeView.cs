@@ -83,7 +83,7 @@ namespace Emilia.Node.Universal.Editor
                 string displayName = ObjectDescriptionUtility.GetDescription(nodeView.asset);
                 if (string.IsNullOrEmpty(displayName)) displayName = nodeView.asset.name;
 
-                if (SearchUtility.Search(displayName, searchNodeTreeView.searchString)) continue;
+                if (SearchUtility.Matching(displayName, searchNodeTreeView.searchString)) continue;
 
                 universalNodeView.SetDisabled();
                 dimNodeViews.Add(universalNodeView);

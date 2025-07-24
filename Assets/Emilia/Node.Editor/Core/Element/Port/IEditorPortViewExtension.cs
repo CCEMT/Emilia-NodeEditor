@@ -32,6 +32,11 @@ namespace Emilia.Node.Editor
             for (int i = 0; i < edgeAmount; i++)
             {
                 IEditorEdgeView edge = graphView.edgeViews[i];
+                
+                bool hsaValidInput = edge.inputPortView?.master?.asset;
+                bool hsaValidOutput = edge.outputPortView?.master?.asset;
+
+                if (hsaValidInput == false || hsaValidOutput == false) continue;
 
                 bool hasInputNode = edge.inputPortView.master.asset.id == port.master.asset.id;
                 bool hasOutputNode = edge.outputPortView.master.asset.id == port.master.asset.id;

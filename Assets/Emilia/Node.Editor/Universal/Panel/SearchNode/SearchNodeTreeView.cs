@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Emilia.Kit;
 using Emilia.Node.Editor;
 using UnityEditor.Experimental.GraphView;
@@ -53,6 +52,8 @@ namespace Emilia.Node.Universal.Editor
 
         private void AddSearchItem(List<TreeViewItem> treeViewItems, TreeViewItem root)
         {
+            List<(TreeViewItem, int)> collects = new List<(TreeViewItem, int)>();
+
             int count = this.graphView.nodeViews.Count;
             for (int i = 0; i < count; i++)
             {
@@ -64,12 +65,19 @@ namespace Emilia.Node.Universal.Editor
                 string displayName = ObjectDescriptionUtility.GetDescription(nodeView.asset);
                 if (string.IsNullOrEmpty(displayName)) displayName = nodeView.asset.name;
 
-                if (SearchUtility.Search(displayName, searchString) == false) continue;
+                int score = SearchUtility.Search(displayName, searchString);
+                if (score == 0) continue;
 
                 TreeViewItem item = new TreeViewItem(id, 0, displayName);
-
-                root.AddChild(item);
-                treeViewItems.Add(item);
+                collects.Add((item,score));
+            }
+            
+            collects.Sort((a, b) => b.Item2.CompareTo(a.Item2));
+            
+            foreach (var collect in collects)
+            {
+                root.AddChild(collect.Item1);
+                treeViewItems.Add(collect.Item1);
             }
         }
 
