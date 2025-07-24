@@ -930,7 +930,7 @@ namespace Emilia.Node.Editor
         /// <summary>
         /// 有效性
         /// </summary>
-        public bool Validate() => hierarchy.parent != null;
+        public bool Validate() => panel != null;
 
         public void Dispose()
         {
