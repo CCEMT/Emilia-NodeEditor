@@ -70,7 +70,7 @@ namespace Emilia.Node.Universal.Editor
 
         protected virtual void AddManipulator()
         {
-            editorGraphView.AddManipulator(new ContentDragger());
+            editorGraphView.AddManipulator(new GraphContentDragger());
             editorGraphView.AddManipulator(new GraphSelectionDragger());
             editorGraphView.AddManipulator(new GraphRectangleSelector());
         }
