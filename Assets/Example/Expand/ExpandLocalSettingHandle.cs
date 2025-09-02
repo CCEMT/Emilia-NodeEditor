@@ -8,7 +8,5 @@ namespace Example.Expand
     [EditorHandle(typeof(ExpandAsset))]
     public class ExpandLocalSettingHandle : GraphLocalSettingHandle
     {
-        //指定AssetSetting的类型
-        public override Type GetAssetSettingType(EditorGraphView graphView) => typeof(ExpandGraphAssetLocalSetting);
     }
 }
