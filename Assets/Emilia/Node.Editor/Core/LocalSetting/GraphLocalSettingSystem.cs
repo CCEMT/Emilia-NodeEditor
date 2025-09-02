@@ -5,7 +5,7 @@ namespace Emilia.Node.Editor
 {
     public class GraphLocalSettingSystem : BasicGraphViewModule
     {
-        private const string GraphLocalSettingSaveKey = "GraphLocalSetting";
+        private const string GraphLocalSettingSaveKey = "GraphLocalSettingKey";
 
         private GraphLocalSettingHandle handle;
 
@@ -34,8 +34,11 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void ReadSetting()
         {
-            if (OdinEditorPrefs.HasValue(typeSaveKey)) this._typeSettingCache = OdinEditorPrefs.GetValue<GraphLocalSettingCache>(typeSaveKey);
-            if (OdinEditorPrefs.HasValue(assetSaveKey)) this._assetSettingCache = OdinEditorPrefs.GetValue<GraphLocalSettingCache>(assetSaveKey);
+            if (OdinEditorPrefs.HasValue(typeSaveKey)) this._typeSettingCache = OdinEditorPrefs.GetValue(typeSaveKey, new GraphLocalSettingCache());
+            if (OdinEditorPrefs.HasValue(assetSaveKey)) this._assetSettingCache = OdinEditorPrefs.GetValue(assetSaveKey, new GraphLocalSettingCache());
+
+            if (_typeSettingCache == null) _typeSettingCache = new GraphLocalSettingCache();
+            if (_assetSettingCache == null) _assetSettingCache = new GraphLocalSettingCache();
 
             this.handle?.OnReadTypeSetting(this._typeSettingCache);
             this.handle?.OnReadAssetSetting(this._assetSettingCache);
@@ -92,6 +95,16 @@ namespace Emilia.Node.Editor
         {
             _assetSettingCache[key] = OdinSerializableUtility.ToByteString(value);
         }
+
+        /// <summary>
+        /// 是否存在类型设置
+        /// </summary>
+        public bool HasTypeSetting(string key) => _typeSettingCache.ContainsKey(key);
+
+        /// <summary>
+        /// 是否存在资源设置
+        /// </summary>
+        public bool HasAssetSetting(string key) => _assetSettingCache.ContainsKey(key);
 
         /// <summary>
         /// 保存类型设置

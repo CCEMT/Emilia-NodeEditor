@@ -110,8 +110,18 @@ namespace Emilia.Node.Universal.Editor
             this.loadingContainer.style.display = DisplayStyle.None;
             graphView.SetEnabled(true);
 
-            Vector3 position = editorGraphView.graphLocalSettingSystem.GetAssetSettingValue<Vector3>(TransformPositionSetting);
-            Vector3 scale = editorGraphView.graphLocalSettingSystem.GetAssetSettingValue<Vector3>(TransformScaleSetting);
+            Vector3 position = graphView.transform.position;
+            if (editorGraphView.graphLocalSettingSystem.HasAssetSetting(TransformPositionSetting))
+            {
+                position = editorGraphView.graphLocalSettingSystem.GetAssetSettingValue<Vector3>(TransformPositionSetting);
+            }
+
+            Vector3 scale = graphView.transform.scale;
+            if (editorGraphView.graphLocalSettingSystem.HasAssetSetting(TransformScaleSetting))
+            {
+                editorGraphView.graphLocalSettingSystem.GetAssetSettingValue<Vector3>(TransformScaleSetting);
+            }
+
             graphView.UpdateViewTransform(position, scale);
         }
 
