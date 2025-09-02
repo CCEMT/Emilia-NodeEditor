@@ -1,19 +1,16 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using Emilia.Kit;
-using Emilia.Kit.Editor;
 
 namespace Emilia.Node.Editor
 {
     public class GraphLocalSettingSystem : BasicGraphViewModule
     {
-        private const string GraphLocalSettingSaveKey = "GraphLocalSetting";
+        private const string GraphLocalSettingSaveKey = "GraphLocalSettingKey";
 
         private GraphLocalSettingHandle handle;
 
-        private IGraphTypeLocalSetting _typeSetting;
-        private IGraphAssetLocalSetting _assetSetting;
-        public IGraphTypeLocalSetting typeSetting => this._typeSetting;
-        public IGraphAssetLocalSetting assetSetting => this._assetSetting;
+        private GraphLocalSettingCache _typeSettingCache;
+        private GraphLocalSettingCache _assetSettingCache;
 
         private string typeSaveKey => GraphLocalSettingSaveKey + this.graphView.graphAsset.GetType().FullName;
         private string assetSaveKey => GraphLocalSettingSaveKey + this.graphView.graphAsset.id;
@@ -37,14 +34,14 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void ReadSetting()
         {
-            if (OdinEditorPrefs.HasValue(typeSaveKey)) this._typeSetting = OdinEditorPrefs.GetValue<IGraphTypeLocalSetting>(typeSaveKey);
-            if (OdinEditorPrefs.HasValue(assetSaveKey)) this._assetSetting = OdinEditorPrefs.GetValue<IGraphAssetLocalSetting>(assetSaveKey);
+            if (OdinEditorPrefs.HasValue(typeSaveKey)) this._typeSettingCache = OdinEditorPrefs.GetValue(typeSaveKey, new GraphLocalSettingCache());
+            if (OdinEditorPrefs.HasValue(assetSaveKey)) this._assetSettingCache = OdinEditorPrefs.GetValue(assetSaveKey, new GraphLocalSettingCache());
 
-            if (this._typeSetting == null) ResetTypeSetting();
-            if (this._assetSetting == null) ResetAssetSetting();
+            if (_typeSettingCache == null) _typeSettingCache = new GraphLocalSettingCache();
+            if (_assetSettingCache == null) _assetSettingCache = new GraphLocalSettingCache();
 
-            if (this._typeSetting != null) this.handle?.OnReadTypeSetting(this._typeSetting);
-            if (this._assetSetting != null) this.handle?.OnReadAssetSetting(this._assetSetting);
+            this.handle?.OnReadTypeSetting(this._typeSettingCache);
+            this.handle?.OnReadAssetSetting(this._assetSettingCache);
         }
 
         /// <summary>
@@ -52,8 +49,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void ResetTypeSetting()
         {
-            Type createSettingType = this.handle?.GetTypeSettingType(this.graphView);
-            if (typeof(IGraphTypeLocalSetting).IsAssignableFrom(createSettingType)) this._typeSetting = ReflectUtility.CreateInstance(createSettingType) as IGraphTypeLocalSetting;
+            _typeSettingCache.Clear();
         }
 
         /// <summary>
@@ -61,16 +57,61 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void ResetAssetSetting()
         {
-            Type createSettingType = this.handle?.GetAssetSettingType(this.graphView);
-            if (typeof(IGraphAssetLocalSetting).IsAssignableFrom(createSettingType)) this._assetSetting = ReflectUtility.CreateInstance(createSettingType) as IGraphAssetLocalSetting;
+            _assetSettingCache.Clear();
         }
+
+        /// <summary>
+        /// 获取类型设置
+        /// </summary>
+        public T GetTypeSettingValue<T>(string key, T defaultValue = default)
+        {
+            string byteString = _typeSettingCache.GetValueOrDefault(key);
+            if (string.IsNullOrEmpty(byteString)) return defaultValue;
+            return OdinSerializableUtility.FromByteString<T>(byteString);
+        }
+
+        /// <summary>
+        /// 设置类型设置
+        /// </summary>
+        public void SetTypeSettingValue<T>(string key, T value)
+        {
+            _typeSettingCache[key] = OdinSerializableUtility.ToByteString(value);
+        }
+
+        /// <summary>
+        /// 获取资源设置
+        /// </summary>
+        public T GetAssetSettingValue<T>(string key, T defaultValue = default)
+        {
+            string byteString = _assetSettingCache.GetValueOrDefault(key);
+            if (string.IsNullOrEmpty(byteString)) return defaultValue;
+            return OdinSerializableUtility.FromByteString<T>(byteString);
+        }
+
+        /// <summary>
+        /// 设置资源设置
+        /// </summary>
+        public void SetAssetSettingValue<T>(string key, T value)
+        {
+            _assetSettingCache[key] = OdinSerializableUtility.ToByteString(value);
+        }
+
+        /// <summary>
+        /// 是否存在类型设置
+        /// </summary>
+        public bool HasTypeSetting(string key) => _typeSettingCache.ContainsKey(key);
+
+        /// <summary>
+        /// 是否存在资源设置
+        /// </summary>
+        public bool HasAssetSetting(string key) => _assetSettingCache.ContainsKey(key);
 
         /// <summary>
         /// 保存类型设置
         /// </summary>
         public void SaveTypeSetting()
         {
-            OdinEditorPrefs.SetValue(typeSaveKey, this._typeSetting);
+            OdinEditorPrefs.SetValue(typeSaveKey, this._typeSettingCache);
         }
 
         /// <summary>
@@ -78,7 +119,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void SaveAssetSetting()
         {
-            OdinEditorPrefs.SetValue(assetSaveKey, this._assetSetting);
+            OdinEditorPrefs.SetValue(assetSaveKey, this._assetSettingCache);
         }
 
         /// <summary>
@@ -86,16 +127,16 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void SaveAll()
         {
-            OdinEditorPrefs.SetValue(typeSaveKey, this._typeSetting);
-            OdinEditorPrefs.SetValue(assetSaveKey, this._assetSetting);
+            OdinEditorPrefs.SetValue(typeSaveKey, this._typeSettingCache);
+            OdinEditorPrefs.SetValue(assetSaveKey, this._assetSettingCache);
         }
 
         public override void Dispose()
         {
             this.handle = null;
 
-            _typeSetting = null;
-            _assetSetting = null;
+            _typeSettingCache = null;
+            _assetSettingCache = null;
 
             base.Dispose();
         }

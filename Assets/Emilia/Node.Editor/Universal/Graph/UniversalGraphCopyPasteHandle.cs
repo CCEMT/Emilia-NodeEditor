@@ -21,18 +21,18 @@ namespace Emilia.Node.Universal.Editor
                 graph.AddPack(copyPasteElement.GetPack());
             }
 
-            return JsonSerializableUtility.ToJson(graph);
+            return OdinSerializablePackUtility.ToJson(graph);
         }
 
         public override bool CanPasteSerializedDataCallback(EditorGraphView graphView, string serializedData)
         {
-            try { return JsonSerializableUtility.FromJson<CopyPasteGraph>(serializedData) != null; }
+            try { return OdinSerializablePackUtility.FromJson<CopyPasteGraph>(serializedData) != null; }
             catch { return false; }
         }
 
         public override IEnumerable<GraphElement> UnserializeAndPasteCallback(EditorGraphView graphView, string operationName, string serializedData, GraphCopyPasteContext copyPasteContext)
         {
-            CopyPasteGraph graph = JsonSerializableUtility.FromJson<CopyPasteGraph>(serializedData);
+            CopyPasteGraph graph = OdinSerializablePackUtility.FromJson<CopyPasteGraph>(serializedData);
             List<object> pasteContent = graph.StartPaste(copyPasteContext);
             return pasteContent.OfType<GraphElement>();
         }
@@ -41,7 +41,7 @@ namespace Emilia.Node.Universal.Editor
         {
             try
             {
-                CopyPasteGraph graph = JsonSerializableUtility.FromJson<CopyPasteGraph>(serializedData);
+                CopyPasteGraph graph = OdinSerializablePackUtility.FromJson<CopyPasteGraph>(serializedData);
                 if (graph == null) return null;
 
                 List<GraphElement> graphElements = new List<GraphElement>();

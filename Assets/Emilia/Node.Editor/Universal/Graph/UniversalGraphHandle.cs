@@ -11,6 +11,9 @@ namespace Emilia.Node.Universal.Editor
     [EditorHandle(typeof(EditorUniversalGraphAsset))]
     public class UniversalGraphHandle : GraphHandle
     {
+        private const string TransformPositionSetting = "TransformPositionKey";
+        private const string TransformScaleSetting = "TransformScaleKey";
+
         public const string GridBackgroundStyleFilePath = "Node/Styles/GridBackground.uss";
         public const string GraphViewStyleFilePath = "Node/Styles/UniversalEditorGraphView.uss";
 
@@ -41,9 +44,8 @@ namespace Emilia.Node.Universal.Editor
 
         private void OnLogicTransformChange(Vector3 position, Vector3 scale)
         {
-            UniversalGraphAssetLocalSetting setting = editorGraphView.graphLocalSettingSystem.assetSetting as UniversalGraphAssetLocalSetting;
-            setting.position = position;
-            setting.scale = scale;
+            editorGraphView.graphLocalSettingSystem.SetAssetSettingValue(TransformPositionSetting, position);
+            editorGraphView.graphLocalSettingSystem.SetAssetSettingValue(TransformScaleSetting, scale);
         }
 
         private void OnCompilationStarted(object context)
@@ -108,8 +110,19 @@ namespace Emilia.Node.Universal.Editor
             this.loadingContainer.style.display = DisplayStyle.None;
             graphView.SetEnabled(true);
 
-            UniversalGraphAssetLocalSetting universalSetting = graphView.graphLocalSettingSystem.assetSetting as UniversalGraphAssetLocalSetting;
-            graphView.UpdateViewTransform(universalSetting.position, universalSetting.scale);
+            Vector3 position = graphView.transform.position;
+            if (editorGraphView.graphLocalSettingSystem.HasAssetSetting(TransformPositionSetting))
+            {
+                position = editorGraphView.graphLocalSettingSystem.GetAssetSettingValue<Vector3>(TransformPositionSetting);
+            }
+
+            Vector3 scale = graphView.transform.scale;
+            if (editorGraphView.graphLocalSettingSystem.HasAssetSetting(TransformScaleSetting))
+            {
+                editorGraphView.graphLocalSettingSystem.GetAssetSettingValue<Vector3>(TransformScaleSetting);
+            }
+
+            graphView.UpdateViewTransform(position, scale);
         }
 
         public override void Dispose(EditorGraphView graphView)
@@ -118,7 +131,6 @@ namespace Emilia.Node.Universal.Editor
             CompilationPipeline.compilationStarted -= OnCompilationStarted;
             graphView.onUpdate -= CheckCompilationFinished;
 
-            
             editorGraphView = null;
             currentCompilationContainer = null;
         }
