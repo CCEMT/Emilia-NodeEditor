@@ -14,8 +14,16 @@ namespace Emilia.Kit
         {
             if (this.headerStyle == null) InitStyle();
             TitleAsset titleAsset = target as TitleAsset;
+            
+            GUILayout.BeginVertical();
+            
             GUILayout.Box(new GUIContent(titleAsset.title), headerStyle, GUILayout.ExpandWidth(true), GUILayout.Height(60));
             GUILayout.Space(5);
+            
+            GUILayout.EndVertical();
+
+            Rect rect = GUILayoutUtility.GetLastRect();
+            titleAsset.OnCustomGUI(rect);
         }
 
         protected void InitStyle()

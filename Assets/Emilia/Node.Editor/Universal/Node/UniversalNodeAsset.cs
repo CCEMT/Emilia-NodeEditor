@@ -2,6 +2,7 @@
 using Emilia.Kit;
 using Emilia.Node.Editor;
 using Sirenix.OdinInspector;
+using Sirenix.OdinInspector.Editor;
 using UnityEngine;
 
 namespace Emilia.Node.Universal.Editor
@@ -63,6 +64,33 @@ namespace Emilia.Node.Universal.Editor
 
                 string userDataDescription = ObjectDescriptionUtility.GetDescription(userData, graphView);
                 return title + $"({userDataDescription})";
+            }
+        }
+
+        public override void OnCustomGUI(Rect rect)
+        {
+            base.OnCustomGUI(rect);
+
+            bool tipsDisplay = string.IsNullOrEmpty(tips) == false;
+
+            if (tipsDisplay == false) return;
+
+            const int Width = 20;
+            const int Height = 20;
+
+            Rect button = new Rect(rect.x + rect.width - Width * 2, rect.y + rect.height / 2f - Height / 2f, Width, Height);
+
+            SdfIcons.DrawIcon(button, SdfIconType.InfoCircleFill, Color.white);
+
+            Event evt = Event.current;
+            if (evt.type == EventType.MouseDown && button.Contains(evt.mousePosition))
+            {
+                const float MaxWidth = 350;
+
+                OdinCustomGUI customGUI = OdinCustomGUI.CreateTextGUI(tips, MaxWidth);
+                float width = GUI.skin.label.CalcSize(new GUIContent(tips)).x;
+                if (width > MaxWidth) width = MaxWidth;
+                OdinEditorWindow.InspectObjectInDropDown(customGUI, width + 10);
             }
         }
     }

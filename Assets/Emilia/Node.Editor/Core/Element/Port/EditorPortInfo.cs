@@ -17,6 +17,11 @@ namespace Emilia.Node.Editor
         /// 端口显示名称
         /// </summary>
         public string displayName { get; set; }
+        
+        /// <summary>
+        /// 端口Tips
+        /// </summary>
+        public string tips { get; set; }
 
         /// <summary>
         /// IEditorPortView的Type

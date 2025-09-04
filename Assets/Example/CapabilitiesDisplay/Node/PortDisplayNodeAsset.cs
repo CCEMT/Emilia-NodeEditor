@@ -24,6 +24,7 @@ namespace Example
         {
             base.Initialize(graphView, asset);
             SetColor(new Color(0, 1f, 0, 1));
+            SetTooltip("这是一个端口演示节点。");
         }
 
         public override List<EditorPortInfo> CollectStaticPortAssets()
@@ -33,6 +34,7 @@ namespace Example
             UniversalEditorPortInfo leftIntPortInfo = new UniversalEditorPortInfo();
             leftIntPortInfo.id = "leftIntPortInfo";
             leftIntPortInfo.displayName = "左端口(int)";
+            leftIntPortInfo.tips = "这个一个测试端口int";
             leftIntPortInfo.portType = typeof(int);
             leftIntPortInfo.direction = EditorPortDirection.Input;
             leftIntPortInfo.orientation = EditorOrientation.Horizontal;
@@ -46,6 +48,7 @@ namespace Example
             UniversalEditorPortInfo leftStringPortInfo = new UniversalEditorPortInfo();
             leftStringPortInfo.id = "leftStringPortInfo";
             leftStringPortInfo.displayName = "左端口(string)";
+            leftStringPortInfo.tips = "这个一个测试端口string";
             leftStringPortInfo.portType = typeof(string);
             leftStringPortInfo.direction = EditorPortDirection.Input;
             leftStringPortInfo.orientation = EditorOrientation.Horizontal;

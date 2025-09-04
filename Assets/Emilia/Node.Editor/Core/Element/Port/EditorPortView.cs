@@ -66,6 +66,7 @@ namespace Emilia.Node.Editor
             if (info.orientation == EditorOrientation.Vertical) AddToClassList("Vertical");
 
             portColor = info.color;
+            tooltip = info.tips;
 
             capabilities |= Capabilities.Copiable;
 
@@ -109,7 +110,7 @@ namespace Emilia.Node.Editor
             
             return boxRect.Contains(this.ChangeCoordinatesTo(m_ConnectorBox, localPoint));
         }
-
+    
         protected virtual void OnCopyConnect()
         {
             graphView.ClearSelection();

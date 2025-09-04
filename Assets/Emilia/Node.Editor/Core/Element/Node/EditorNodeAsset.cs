@@ -69,6 +69,11 @@ namespace Emilia.Node.Editor
         /// </summary>
         public PropertyTree propertyTree => _propertyTree;
 
+        /// <summary>
+        /// 节点Tips
+        /// </summary>
+        public string tips { get; set; }
+
         protected virtual void OnEnable()
         {
             if (_propertyTree != null) _propertyTree.Dispose();
