@@ -7,6 +7,8 @@ namespace Emilia.Node.Universal.Editor
     [EditorHandle(typeof(EditorUniversalGraphAsset))]
     public class UniversalConnectSystemHandle : ConnectSystemHandle
     {
+        public override Type GetConnectorListenerType(EditorGraphView graphView) => typeof(UniversalEdgeConnectorListener);
+        
         public override Type GetEdgeAssetTypeByPort(EditorGraphView graphView, IEditorPortView portView) => typeof(UniversalEditorEdgeAsset);
 
         public override bool CanConnect(EditorGraphView graphView, IEditorPortView inputPort, IEditorPortView outputPort)

@@ -1,6 +1,6 @@
 ﻿namespace Emilia.Node.Editor
 {
-    public struct NodeCache
+    public class NodeCache
     {
         /// <summary>
         /// 节点数据

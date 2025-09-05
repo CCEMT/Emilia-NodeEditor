@@ -25,7 +25,7 @@ namespace Example
         {
             List<EditorPortInfo> portInfos = new List<EditorPortInfo>();
 
-            UniversalEditorPortInfo leftIntPortInfo = new UniversalEditorPortInfo();
+            EditorPortInfo leftIntPortInfo = new EditorPortInfo();
             leftIntPortInfo.id = "leftInt1PortInfo";
             leftIntPortInfo.displayName = "左端口1(int)";
             leftIntPortInfo.portType = typeof(int);
@@ -36,7 +36,7 @@ namespace Example
 
             portInfos.Add(leftIntPortInfo);
 
-            UniversalEditorPortInfo leftStringPortInfo = new UniversalEditorPortInfo();
+            EditorPortInfo leftStringPortInfo = new EditorPortInfo();
             leftStringPortInfo.id = "leftInt2PortInfo";
             leftStringPortInfo.displayName = "左端口2(int)";
             leftStringPortInfo.portType = typeof(int);
@@ -44,11 +44,11 @@ namespace Example
             leftStringPortInfo.orientation = EditorOrientation.Horizontal;
             leftStringPortInfo.color = Color.blue;
             leftStringPortInfo.canMultiConnect = true;
-            leftStringPortInfo.insertOrder = 100;
+            leftStringPortInfo.priority = 100;
 
             portInfos.Add(leftStringPortInfo);
 
-            UniversalEditorPortInfo rightIntPortInfo = new UniversalEditorPortInfo();
+            EditorPortInfo rightIntPortInfo = new EditorPortInfo();
             rightIntPortInfo.id = "rightInt1PortInfo";
             rightIntPortInfo.displayName = "右端口1(int)";
             rightIntPortInfo.portType = typeof(int);
@@ -59,7 +59,7 @@ namespace Example
 
             portInfos.Add(rightIntPortInfo);
 
-            UniversalEditorPortInfo rightStringPortInfo = new UniversalEditorPortInfo();
+            EditorPortInfo rightStringPortInfo = new EditorPortInfo();
             rightStringPortInfo.id = "rightInt2PortInfo";
             rightStringPortInfo.displayName = "右端口2(int)";
             rightStringPortInfo.portType = typeof(int);
@@ -67,7 +67,7 @@ namespace Example
             rightStringPortInfo.orientation = EditorOrientation.Horizontal;
             rightStringPortInfo.color = Color.gray;
             rightStringPortInfo.canMultiConnect = true;
-            rightStringPortInfo.insertOrder = 100;
+            rightStringPortInfo.priority = 100;
 
             portInfos.Add(rightStringPortInfo);
 

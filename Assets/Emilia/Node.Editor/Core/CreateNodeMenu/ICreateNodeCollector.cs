@@ -2,7 +2,7 @@
 
 namespace Emilia.Node.Editor
 {
-    public interface ICreateNodeCollect
+    public interface ICreateNodeCollector
     {
         /// <summary>
         /// 收集节点信息

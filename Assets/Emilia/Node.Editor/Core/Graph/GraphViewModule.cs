@@ -9,7 +9,7 @@
         protected EditorGraphView graphView;
 
         /// <summary>
-        /// 优先级
+        /// 顺序
         /// </summary>
         public virtual int order => 0;
 

@@ -15,7 +15,7 @@ namespace Example.Expand.Node
         {
             List<EditorPortInfo> portInfos = new List<EditorPortInfo>();
 
-            UniversalEditorPortInfo input = new UniversalEditorPortInfo();
+            EditorPortInfo input = new EditorPortInfo();
             input.id = "input";
             input.displayName = "输入";
             input.direction = EditorPortDirection.Input;
@@ -24,7 +24,7 @@ namespace Example.Expand.Node
 
             portInfos.Add(input);
 
-            UniversalEditorPortInfo output = new UniversalEditorPortInfo();
+            EditorPortInfo output = new EditorPortInfo();
             output.id = "output";
             output.displayName = "输出";
             output.direction = EditorPortDirection.Output;

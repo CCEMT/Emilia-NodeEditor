@@ -31,7 +31,7 @@ namespace Example
         {
             List<EditorPortInfo> portInfos = new List<EditorPortInfo>();
 
-            UniversalEditorPortInfo leftIntPortInfo = new UniversalEditorPortInfo();
+            EditorPortInfo leftIntPortInfo = new EditorPortInfo();
             leftIntPortInfo.id = "leftIntPortInfo";
             leftIntPortInfo.displayName = "左端口(int)";
             leftIntPortInfo.tips = "这个一个测试端口int";
@@ -45,7 +45,7 @@ namespace Example
 
             this.inputEditInfos.Add("leftIntPortInfo", new EditorNodeInputPortEditInfo("leftIntPortInfo", "leftIntPortValue"));
 
-            UniversalEditorPortInfo leftStringPortInfo = new UniversalEditorPortInfo();
+            EditorPortInfo leftStringPortInfo = new EditorPortInfo();
             leftStringPortInfo.id = "leftStringPortInfo";
             leftStringPortInfo.displayName = "左端口(string)";
             leftStringPortInfo.tips = "这个一个测试端口string";
@@ -59,7 +59,7 @@ namespace Example
 
             this.inputEditInfos.Add("leftStringPortInfo", new EditorNodeInputPortEditInfo("leftStringPortInfo", "leftStringPortValue"));
 
-            UniversalEditorPortInfo rightIntPortInfo = new UniversalEditorPortInfo();
+            EditorPortInfo rightIntPortInfo = new EditorPortInfo();
             rightIntPortInfo.id = "rightIntPortInfo";
             rightIntPortInfo.displayName = "右端口(int)";
             rightIntPortInfo.portType = typeof(int);
@@ -70,7 +70,7 @@ namespace Example
 
             portInfos.Add(rightIntPortInfo);
 
-            UniversalEditorPortInfo rightStringPortInfo = new UniversalEditorPortInfo();
+            EditorPortInfo rightStringPortInfo = new EditorPortInfo();
             rightStringPortInfo.id = "rightStringPortInfo";
             rightStringPortInfo.displayName = "右端口(string)";
             rightStringPortInfo.portType = typeof(string);
@@ -81,7 +81,7 @@ namespace Example
 
             portInfos.Add(rightStringPortInfo);
 
-            UniversalEditorPortInfo topIntPortInfo = new UniversalEditorPortInfo();
+            EditorPortInfo topIntPortInfo = new EditorPortInfo();
             topIntPortInfo.id = "topIntPortInfo";
             topIntPortInfo.displayName = "上端口(int)";
             topIntPortInfo.portType = typeof(int);
@@ -92,7 +92,7 @@ namespace Example
 
             portInfos.Add(topIntPortInfo);
 
-            UniversalEditorPortInfo topStringPortInfo = new UniversalEditorPortInfo();
+            EditorPortInfo topStringPortInfo = new EditorPortInfo();
             topStringPortInfo.id = "topStringPortInfo";
             topStringPortInfo.displayName = "上端口(string)";
             topStringPortInfo.portType = typeof(string);
@@ -103,7 +103,7 @@ namespace Example
 
             portInfos.Add(topStringPortInfo);
 
-            UniversalEditorPortInfo bottomIntPortInfo = new UniversalEditorPortInfo();
+            EditorPortInfo bottomIntPortInfo = new EditorPortInfo();
             bottomIntPortInfo.id = "bottomIntPortInfo";
             bottomIntPortInfo.displayName = "下端口(int)";
             bottomIntPortInfo.portType = typeof(int);
@@ -114,7 +114,7 @@ namespace Example
 
             portInfos.Add(bottomIntPortInfo);
 
-            UniversalEditorPortInfo bottomStringPortInfo = new UniversalEditorPortInfo();
+            EditorPortInfo bottomStringPortInfo = new EditorPortInfo();
             bottomStringPortInfo.id = "bottomStringPortInfo";
             bottomStringPortInfo.displayName = "下端口(string)";
             bottomStringPortInfo.portType = typeof(string);

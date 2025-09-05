@@ -17,7 +17,7 @@ namespace Emilia.Node.Editor
         /// 端口显示名称
         /// </summary>
         public string displayName { get; set; }
-        
+
         /// <summary>
         /// 端口Tips
         /// </summary>
@@ -54,9 +54,14 @@ namespace Emilia.Node.Editor
         public bool canMultiConnect { get; set; }
 
         /// <summary>
-        /// 优先级
+        /// 顺序
         /// </summary>
         public float order { get; set; }
+
+        /// <summary>
+        /// 优先级
+        /// </summary>
+        public int priority { get; set; }
 
         /// <summary>
         /// 端口颜色

@@ -15,8 +15,8 @@ namespace Emilia.Node.Editor
         public GraphCreateNodeMenu nodeMenu;
 
         /// <summary>
-        /// 收集创建的节点（从所有节点中过滤）
+        /// 收集创建的节点
         /// </summary>
-        public ICreateNodeCollect nodeCollect;
+        public ICreateNodeCollector nodeCollector;
     }
 }

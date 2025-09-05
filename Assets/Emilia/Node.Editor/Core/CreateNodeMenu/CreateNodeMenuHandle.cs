@@ -7,11 +7,6 @@ namespace Emilia.Node.Editor
     public abstract class CreateNodeMenuHandle
     {
         /// <summary>
-        /// 获取菜单标题
-        /// </summary>
-        public virtual string GetTitle(EditorGraphView graphView) => "Create Node";
-
-        /// <summary>
         /// 初始化时
         /// </summary>
         public virtual void Initialize(EditorGraphView graphView) { }
@@ -22,14 +17,14 @@ namespace Emilia.Node.Editor
         public virtual void InitializeCache(EditorGraphView graphView, List<ICreateNodeHandle> createNodeHandles) { }
 
         /// <summary>
+        /// 获取默认过滤器
+        /// </summary>
+        public virtual ICreateNodeCollector GetDefaultFilter(EditorGraphView graphView) => null;
+
+        /// <summary>
         /// 显示创建节点菜单
         /// </summary>
         public virtual void ShowCreateNodeMenu(EditorGraphView graphView, CreateNodeContext createNodeContext) { }
-
-        /// <summary>
-        /// 收集所有创建节点信息
-        /// </summary>
-        public virtual void CollectAllCreateNodeInfos(EditorGraphView graphView, List<MenuNodeInfo> createNodeInfos, CreateNodeContext createNodeContext) { }
 
         /// <summary>
         /// 释放时

@@ -77,32 +77,8 @@ namespace Emilia.Node.Universal.Editor
             {
                 IEditorEdgeView edgeView = edgeViews.FirstOrDefault();
 
-                List<IEditorPortView> canConnectInput = new List<IEditorPortView>();
-                List<IEditorPortView> canConnectOutput = new List<IEditorPortView>();
-
-                int portAmount = nodeView.portViews.Count;
-                for (int i = 0; i < portAmount; i++)
+                if (nodeView.GetCanConnectPort(edgeView, out List<IEditorPortView> canConnectInput, out List<IEditorPortView> canConnectOutput))
                 {
-                    IEditorPortView portView = nodeView.portViews[i];
-
-                    if (portView.portDirection == EditorPortDirection.Input || portView.portDirection == EditorPortDirection.Any)
-                    {
-                        bool canConnect = nodeView.graphView.connectSystem.CanConnect(portView, edgeView.outputPortView);
-                        if (canConnect) canConnectInput.Add(portView);
-                    }
-
-                    if (portView.portDirection == EditorPortDirection.Output || portView.portDirection == EditorPortDirection.Any)
-                    {
-                        bool canConnect = nodeView.graphView.connectSystem.CanConnect(edgeView.inputPortView, portView);
-                        if (canConnect) canConnectOutput.Add(portView);
-                    }
-                }
-
-                if (canConnectInput.Count > 0 && canConnectOutput.Count > 0)
-                {
-                    canConnectInput.Sort(SortPortView);
-                    canConnectOutput.Sort(SortPortView);
-
                     if (ghostEdgeInput == null)
                     {
                         ghostEdgeInput = ReflectUtility.CreateInstance(edgeView.GetType()) as IEditorEdgeView;
@@ -144,18 +120,6 @@ namespace Emilia.Node.Universal.Editor
             targetEdgeView = null;
             inputPortView = null;
             outputPortView = null;
-        }
-
-        private int SortPortView(IEditorPortView a, IEditorPortView b)
-        {
-            UniversalEditorPortInfo aInfo = a.info as UniversalEditorPortInfo;
-            UniversalEditorPortInfo bInfo = b.info as UniversalEditorPortInfo;
-
-            if (aInfo == null && bInfo == null) return b.info.order.CompareTo(a.info.order);
-            if (aInfo == null) return 1;
-            if (bInfo == null) return -1;
-
-            return bInfo.insertOrder.CompareTo(aInfo.insertOrder);
         }
 
         private void OnMouseUpEvent(MouseUpEvent evt)

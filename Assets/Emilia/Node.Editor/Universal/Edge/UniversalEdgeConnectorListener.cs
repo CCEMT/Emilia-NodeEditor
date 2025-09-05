@@ -4,16 +4,9 @@ using UnityEngine;
 
 namespace Emilia.Node.Editor
 {
-    public class EditorEdgeConnectorListener : IEdgeConnectorListener
+    public class UniversalEdgeConnectorListener : GraphEdgeConnectorListener
     {
-        public EditorGraphView graphView { get; private set; }
-
-        public void Initialize(EditorGraphView graphView)
-        {
-            this.graphView = graphView;
-        }
-
-        public virtual void OnDropOutsidePort(Edge edge, Vector2 position)
+        public override void OnDropOutsidePort(Edge edge, Vector2 position)
         {
             IEditorEdgeView edgeView = edge as IEditorEdgeView;
             if (edgeView == null)
@@ -41,19 +34,14 @@ namespace Emilia.Node.Editor
                 if (portView == null) return;
 
                 CreateNodeContext createNodeContext = new CreateNodeContext();
-                CreateNodeEdgeCollect createNodeEdgeCollect = new CreateNodeEdgeCollect(graphView, edgeView, portView);
-                createNodeContext.nodeCollect = createNodeEdgeCollect;
-                // CreateNodeConnector createNodeConnector = new CreateNodeConnector();
-                // if (portView.info.canMultiConnect == false && portView.edges.Count > 0) createNodeConnector.edgeId = portView.edges[0].asset.id;
-                // createNodeConnector.originalNodeId = portView.master.asset.id;
-                // createNodeConnector.originalPortId = portView.info.id;
-                // createNodeContext.createNodeConnector = createNodeConnector;
+                CreateNodeByPortCollector createNodePortCollector = new CreateNodeByPortCollector(graphView, portView);
+                createNodeContext.nodeCollector = createNodePortCollector;
 
                 graphView.graphOperate.OpenCreateNodeMenu(position, createNodeContext);
             }
         }
 
-        public virtual void OnDrop(GraphView graphView, Edge edge)
+        public override void OnDrop(GraphView graphView, Edge edge)
         {
             EditorGraphView editorGraphView = graphView as EditorGraphView;
 

@@ -49,7 +49,7 @@ namespace Emilia.Node.Editor
             Type edgeAssetType = graphView.connectSystem.GetEdgeAssetTypeByPort(this);
             Type edgeViewType = GraphTypeCache.GetEdgeViewType(edgeAssetType);
 
-            EditorEdgeConnectorListener connectorListener = graphView.connectSystem.connectorListener;
+            GraphEdgeConnectorListener connectorListener = graphView.connectSystem.connectorListener;
 
             EditorEdgeConnector connector = ReflectUtility.CreateInstance(info.edgeConnectorType) as EditorEdgeConnector;
             connector.Initialize(edgeViewType, connectorListener);

@@ -7,23 +7,22 @@ namespace Emilia.Node.Universal.Editor
 {
     public class CreateNodeMenuProvider : ScriptableObject, ISearchWindowProvider
     {
-        private CreateNodeContext _createNodeContext;
         private EditorGraphView editorGraphView;
-        public CreateNodeContext createNodeContext => _createNodeContext;
+        private CreateNodeContext createNodeContext;
+        private IUniversalCreateNodeMenuInfoProvider infoProvider;
 
-        public void Initialize(EditorGraphView graphView, CreateNodeContext createNodeContext)
+        public void Initialize(EditorGraphView graphView, CreateNodeContext createNodeContext, IUniversalCreateNodeMenuInfoProvider createNodeMenuInfoProvider)
         {
-            editorGraphView = graphView;
-            _createNodeContext = createNodeContext;
+            this.editorGraphView = graphView;
+            this.createNodeContext = createNodeContext;
+            this.infoProvider = createNodeMenuInfoProvider;
         }
 
         public List<SearchTreeEntry> CreateSearchTree(SearchWindowContext context)
         {
-            if (this._createNodeContext.nodeMenu == null) return new List<SearchTreeEntry> {new SearchTreeGroupEntry(new GUIContent("Error"))};
-
             List<SearchTreeEntry> tree = new List<SearchTreeEntry>();
-            tree.Add(new SearchTreeGroupEntry(new GUIContent(_createNodeContext.nodeMenu.GetTitle())));
-            _createNodeContext.nodeMenu.CreateNodeTree(createNodeContext, (info) => CreateGroup(tree, info), (menuInfo) => CreateItem(tree, menuInfo));
+            tree.Add(new SearchTreeGroupEntry(new GUIContent(infoProvider.GetTitle())));
+            infoProvider.CreateNodeTree(createNodeContext, (info) => CreateGroup(tree, info), (menuInfo) => CreateItem(tree, menuInfo));
 
             return tree;
         }
@@ -44,7 +43,7 @@ namespace Emilia.Node.Universal.Editor
         public bool OnSelectEntry(SearchTreeEntry SearchTreeEntry, SearchWindowContext context)
         {
             CreateNodeInfo createNodeInfo = (CreateNodeInfo) SearchTreeEntry.userData;
-            return this.editorGraphView.createNodeMenu.CreateNode(createNodeInfo, createNodeContext);
+            return infoProvider.CreateNode(createNodeInfo, createNodeContext);
         }
     }
 }
