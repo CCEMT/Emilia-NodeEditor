@@ -60,7 +60,7 @@ namespace Emilia.Node.Universal.Editor
         private void CheckCompilationFinished()
         {
             if (EditorApplication.isCompiling) return;
-            this.currentCompilationContainer.RemoveFromHierarchy();
+            if (currentCompilationContainer != null) this.currentCompilationContainer.RemoveFromHierarchy();
 
             if (this.editorGraphView != null) this.editorGraphView.SetEnabled(true);
 
