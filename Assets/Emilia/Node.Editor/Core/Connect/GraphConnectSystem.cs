@@ -11,7 +11,7 @@ namespace Emilia.Node.Editor
     public class GraphConnectSystem : BasicGraphViewModule
     {
         private ConnectSystemHandle handle;
-        public EditorEdgeConnectorListener connectorListener { get; private set; }
+        public GraphEdgeConnectorListener connectorListener { get; private set; }
         public override int order => 1000;
 
         public override void Initialize(EditorGraphView graphView)
@@ -28,7 +28,7 @@ namespace Emilia.Node.Editor
             Type type = handle.GetConnectorListenerType(this.graphView);
             if (type == null) return;
 
-            connectorListener = ReflectUtility.CreateInstance(type) as EditorEdgeConnectorListener;
+            connectorListener = ReflectUtility.CreateInstance(type) as GraphEdgeConnectorListener;
             connectorListener.Initialize(this.graphView);
         }
 

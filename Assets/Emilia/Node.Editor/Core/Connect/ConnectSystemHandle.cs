@@ -9,7 +9,7 @@ namespace Emilia.Node.Editor
         /// <summary>
         /// 获取连接器监听器类型（重写此函数对EdgeConnectorListener进行设置）
         /// </summary>
-        public virtual Type GetConnectorListenerType(EditorGraphView graphView) => typeof(EditorEdgeConnectorListener);
+        public virtual Type GetConnectorListenerType(EditorGraphView graphView) => typeof(GraphEdgeConnectorListener);
 
         /// <summary>
         /// 根据端口获取EdgeAsset类型

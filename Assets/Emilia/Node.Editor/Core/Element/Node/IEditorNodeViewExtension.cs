@@ -91,7 +91,7 @@ namespace Emilia.Node.Editor
 
             return outputNodeViews;
         }
-        
+
         /// <summary>
         /// 获取所有Input节点
         /// </summary>
@@ -135,7 +135,7 @@ namespace Emilia.Node.Editor
 
             return inputEdgeViews;
         }
-        
+
         /// <summary>
         /// 获取所有Output EdgeViews
         /// </summary>
@@ -153,6 +153,77 @@ namespace Emilia.Node.Editor
             }
 
             return outputEdgeViews;
+        }
+
+        public static bool GetCanConnectPort(this IEditorNodeView editorNodeView, IEditorEdgeView edgeView, out List<IEditorPortView> canConnectInput, out List<IEditorPortView> canConnectOutput)
+        {
+            canConnectInput = new List<IEditorPortView>();
+            canConnectOutput = new List<IEditorPortView>();
+
+            int portAmount = editorNodeView.portViews.Count;
+            for (int i = 0; i < portAmount; i++)
+            {
+                IEditorPortView portView = editorNodeView.portViews[i];
+
+                if (portView.portDirection == EditorPortDirection.Input || portView.portDirection == EditorPortDirection.Any)
+                {
+                    bool canConnect = editorNodeView.graphView.connectSystem.CanConnect(portView, edgeView.outputPortView);
+                    if (canConnect) canConnectInput.Add(portView);
+                }
+
+                if (portView.portDirection == EditorPortDirection.Output || portView.portDirection == EditorPortDirection.Any)
+                {
+                    bool canConnect = editorNodeView.graphView.connectSystem.CanConnect(edgeView.inputPortView, portView);
+                    if (canConnect) canConnectOutput.Add(portView);
+                }
+            }
+
+            canConnectInput.Sort(SortPortView);
+            canConnectOutput.Sort(SortPortView);
+
+            return canConnectInput.Count > 0 && canConnectOutput.Count > 0;
+        }
+
+        public static List<IEditorPortView> GetCanConnectPort(this IEditorNodeView editorNodeView, IEditorPortView portView)
+        {
+            List<IEditorPortView> canConnectList = new List<IEditorPortView>();
+
+            EditorPortDirection direction = portView.portDirection;
+
+            int portAmount = editorNodeView.portViews.Count;
+            for (int i = 0; i < portAmount; i++)
+            {
+                IEditorPortView port = editorNodeView.portViews[i];
+
+                bool canConnect = false;
+
+                switch (direction)
+                {
+                    case EditorPortDirection.Input:
+                        canConnect = editorNodeView.graphView.connectSystem.CanConnect(port, portView);
+                        break;
+                    case EditorPortDirection.Output:
+                        canConnect = editorNodeView.graphView.connectSystem.CanConnect(portView, port);
+                        break;
+                    case EditorPortDirection.Any:
+                        canConnect = editorNodeView.graphView.connectSystem.CanConnect(port, portView)
+                                     || editorNodeView.graphView.connectSystem.CanConnect(portView, port);
+                        break;
+                }
+
+                if (canConnect) canConnectList.Add(port);
+            }
+
+            return canConnectList;
+        }
+
+        private static int SortPortView(IEditorPortView a, IEditorPortView b)
+        {
+            if (a == null && b == null) return b.info.order.CompareTo(a.info.order);
+            if (a == null) return 1;
+            if (b == null) return -1;
+
+            return b.info.priority.CompareTo(a.info.priority);
         }
     }
 }

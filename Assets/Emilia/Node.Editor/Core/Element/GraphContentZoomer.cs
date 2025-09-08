@@ -97,6 +97,10 @@ namespace Emilia.Node.Editor
         {
             EditorGraphView graphView = target as EditorGraphView;
             if (graphView == null) return;
+            
+            Rect rect = graphView.graphPanelSystem.graphRect;
+            if (rect.Contains(evt.mousePosition) == false) return;
+            
             if (graphView.loadProgress != 1) return;
             if (EditorApplication.isCompiling) return;
 

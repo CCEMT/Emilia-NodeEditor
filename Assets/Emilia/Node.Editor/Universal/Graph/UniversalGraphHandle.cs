@@ -60,7 +60,7 @@ namespace Emilia.Node.Universal.Editor
         private void CheckCompilationFinished()
         {
             if (EditorApplication.isCompiling) return;
-            this.currentCompilationContainer.RemoveFromHierarchy();
+            if (currentCompilationContainer != null) this.currentCompilationContainer.RemoveFromHierarchy();
 
             if (this.editorGraphView != null) this.editorGraphView.SetEnabled(true);
 
@@ -70,7 +70,7 @@ namespace Emilia.Node.Universal.Editor
 
         protected virtual void AddManipulator()
         {
-            editorGraphView.AddManipulator(new ContentDragger());
+            editorGraphView.AddManipulator(new GraphContentDragger());
             editorGraphView.AddManipulator(new GraphSelectionDragger());
             editorGraphView.AddManipulator(new GraphRectangleSelector());
         }

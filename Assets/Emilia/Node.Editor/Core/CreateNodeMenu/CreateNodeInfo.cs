@@ -1,6 +1,6 @@
 ﻿namespace Emilia.Node.Editor
 {
-    public class CreateNodeInfo
+    public struct CreateNodeInfo
     {
         /// <summary>
         /// 节点信息
@@ -8,13 +8,14 @@
         public MenuNodeInfo menuInfo;
 
         /// <summary>
-        /// 创建节点时的连接器（用于在创建节点后连接目标节点）
+        /// 创建节点后处理
         /// </summary>
-        public CreateNodeConnector createNodeConnector;
+        public ICreateNodePostprocess postprocess;
 
-        public CreateNodeInfo(MenuNodeInfo menuInfo)
+        public CreateNodeInfo(MenuNodeInfo menuInfo, ICreateNodePostprocess createNodePostprocess = null)
         {
             this.menuInfo = menuInfo;
+            postprocess = createNodePostprocess;
         }
     }
 }

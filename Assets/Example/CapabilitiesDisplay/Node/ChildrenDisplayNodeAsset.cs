@@ -63,7 +63,7 @@ namespace Example
         {
             List<EditorPortInfo> portInfos = new List<EditorPortInfo>();
 
-            UniversalEditorPortInfo leftIntPortInfo = new UniversalEditorPortInfo();
+            EditorPortInfo leftIntPortInfo = new EditorPortInfo();
             leftIntPortInfo.id = "leftIntPortInfo";
             leftIntPortInfo.displayName = "左端口(int)";
             leftIntPortInfo.portType = typeof(int);
@@ -74,7 +74,7 @@ namespace Example
 
             portInfos.Add(leftIntPortInfo);
 
-            UniversalEditorPortInfo rightIntPortInfo = new UniversalEditorPortInfo();
+            EditorPortInfo rightIntPortInfo = new EditorPortInfo();
             rightIntPortInfo.id = "rightIntPortInfo";
             rightIntPortInfo.displayName = "右端口(int)";
             rightIntPortInfo.portType = typeof(int);

@@ -2,16 +2,14 @@
 
 namespace Emilia.Node.Editor
 {
-    public class CreateNodeEdgeCollect : ICreateNodeCollect
+    public class CreateNodeByPortCollector : ICreateNodeCollector
     {
         private EditorGraphView graphView;
-        private IEditorEdgeView edgeView;
         private IEditorPortView portView;
 
-        public CreateNodeEdgeCollect(EditorGraphView graphView, IEditorEdgeView edgeView, IEditorPortView portView)
+        public CreateNodeByPortCollector(EditorGraphView graphView, IEditorPortView portView)
         {
             this.graphView = graphView;
-            this.edgeView = edgeView;
             this.portView = portView;
         }
 
@@ -49,13 +47,24 @@ namespace Emilia.Node.Editor
             void AddCreateNodeInfo(PortInfo portInfo, MenuNodeInfo nodeInfo)
             {
                 if (string.IsNullOrEmpty(portInfo.displayName) == false) nodeInfo.path += $"：{portInfo.displayName}";
-                CreateNodeInfo createNodeInfo = new CreateNodeInfo(nodeInfo);
-                createNodeInfo.createNodeConnector = new CreateNodeConnector();
 
-                if (portView.info.canMultiConnect == false && portView.edges.Count > 0) createNodeInfo.createNodeConnector.edgeId = portView.edges[0].asset.id;
-                createNodeInfo.createNodeConnector.originalNodeId = portView.master.asset.id;
-                createNodeInfo.createNodeConnector.originalPortId = portView.info.id;
-                createNodeInfo.createNodeConnector.targetPortId = portInfo.portId;
+                string originalNodeId = portView.master.asset.id;
+                string originalPortId = portView.info.id;
+                string targetPortId = portInfo.portId;
+
+                ICreateNodePostprocess createNodePostprocess;
+
+                if (portView.info.canMultiConnect == false && portView.edges.Count > 0)
+                {
+                    string edgeId = portView.edges[0].asset.id;
+                    createNodePostprocess = new RedirectionEdgeCreateNodePostprocess(originalNodeId, targetPortId, edgeId);
+                }
+                else
+                {
+                    createNodePostprocess = new ConnectCreateNodePostprocess(originalNodeId, originalPortId, targetPortId);
+                }
+
+                CreateNodeInfo createNodeInfo = new CreateNodeInfo(nodeInfo, createNodePostprocess);
 
                 createNodeInfos.Add(createNodeInfo);
             }

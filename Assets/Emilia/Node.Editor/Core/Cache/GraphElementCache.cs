@@ -196,13 +196,35 @@ namespace Emilia.Node.Editor
         /// <summary>
         /// 根据类型获取节点缓存
         /// </summary>
-        public NodeCache? GetNodeCacheByType(Type type)
+        public NodeCache GetNodeCacheByEditorNodeType(Type editorNodeType)
         {
             int amount = this._nodeViewCache.Count;
             for (int i = 0; i < amount; i++)
             {
                 NodeCache nodeCache = this._nodeViewCache[i];
-                if (nodeCache.nodeView.asset.GetType() == type) return nodeCache;
+                if (nodeCache.nodeView.asset.GetType() == editorNodeType) return nodeCache;
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// 根据数据获取节点缓存
+        /// </summary>
+        public NodeCache GetNodeCache(object nodeData, Type editorNodeType)
+        {
+            int amount = this._nodeViewCache.Count;
+            for (int i = 0; i < amount; i++)
+            {
+                NodeCache nodeCache = this._nodeViewCache[i];
+
+                bool typeEqual = nodeCache.nodeView.asset.GetType() == editorNodeType;
+
+                bool dataEqual = false;
+                if (nodeCache.nodeData == null && nodeData == null) dataEqual = true;
+                else if (nodeCache.nodeData != null && nodeData != null) dataEqual = nodeCache.nodeData.GetType() == nodeData.GetType();
+
+                if (typeEqual && dataEqual) return nodeCache;
             }
 
             return null;

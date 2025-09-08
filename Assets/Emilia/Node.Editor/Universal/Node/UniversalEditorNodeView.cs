@@ -91,6 +91,14 @@ namespace Emilia.Node.Universal.Editor
             SetColor(new Color(flowNodeColor.r, flowNodeColor.g, flowNodeColor.b));
         }
 
+        protected void SetNodeTips(object nodeAsset)
+        {
+            if (nodeAsset == null) return;
+            NodeTipsAttribute tipsAttribute = nodeAsset.GetType().GetCustomAttribute<NodeTipsAttribute>(true);
+            if (tipsAttribute == null) return;
+            SetTooltip(tipsAttribute.tips);
+        }
+
         private void InitializeExpandButton()
         {
             if (canExpanded) return;

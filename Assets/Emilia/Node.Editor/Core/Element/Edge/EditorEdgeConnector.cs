@@ -20,7 +20,7 @@ namespace Emilia.Node.Editor
 
         public override EdgeDragHelper edgeDragHelper => _edgeDragHelper;
 
-        public virtual void Initialize(Type edgeViewType, EditorEdgeConnectorListener edgeConnectorListener)
+        public virtual void Initialize(Type edgeViewType, GraphEdgeConnectorListener edgeConnectorListener)
         {
             this.edgeViewType = edgeViewType;
             this._edgeDragHelper = new EditorEdgeDragHelper(edgeViewType, edgeConnectorListener);

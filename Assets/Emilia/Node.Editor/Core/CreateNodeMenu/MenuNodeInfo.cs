@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Emilia.Node.Editor
 {
-    public class MenuNodeInfo
+    public struct MenuNodeInfo
     {
         /// <summary>
         /// 编辑器节点资源类型

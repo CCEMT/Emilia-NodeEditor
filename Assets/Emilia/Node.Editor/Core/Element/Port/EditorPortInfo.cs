@@ -19,6 +19,11 @@ namespace Emilia.Node.Editor
         public string displayName { get; set; }
 
         /// <summary>
+        /// 端口Tips
+        /// </summary>
+        public string tips { get; set; }
+
+        /// <summary>
         /// IEditorPortView的Type
         /// </summary>
         public Type nodePortViewType { get; set; } = typeof(EditorPortView);
@@ -49,9 +54,14 @@ namespace Emilia.Node.Editor
         public bool canMultiConnect { get; set; }
 
         /// <summary>
-        /// 优先级
+        /// 顺序
         /// </summary>
         public float order { get; set; }
+
+        /// <summary>
+        /// 优先级
+        /// </summary>
+        public int priority { get; set; }
 
         /// <summary>
         /// 端口颜色

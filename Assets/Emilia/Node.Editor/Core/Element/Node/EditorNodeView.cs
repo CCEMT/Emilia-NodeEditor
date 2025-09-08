@@ -396,6 +396,15 @@ namespace Emilia.Node.Editor
             titleContainer.style.backgroundColor = titleContainerColor;
         }
 
+        /// <summary>
+        /// 设置节点Tips
+        /// </summary>
+        public void SetTooltip(string tooltip)
+        {
+            asset.tips = tooltip;
+            titleLabel.tooltip = tooltip;
+        }
+
         public override void BuildContextualMenu(ContextualMenuPopulateEvent evt) { }
 
         public virtual void Delete()

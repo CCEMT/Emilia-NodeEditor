@@ -561,9 +561,9 @@ MonoBehaviour:
   _id: 9272dd99-1866-4ff1-8456-63bac101da77
   _position:
     serializedVersion: 2
-    x: 654.4
-    y: 10.191237
-    width: 180.79993
+    x: 654
+    y: 10
+    width: 182
     height: 68
   _graphAsset: {fileID: 11400000}
   _displayName: 

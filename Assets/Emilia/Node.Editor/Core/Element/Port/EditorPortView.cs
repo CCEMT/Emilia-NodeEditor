@@ -49,7 +49,7 @@ namespace Emilia.Node.Editor
             Type edgeAssetType = graphView.connectSystem.GetEdgeAssetTypeByPort(this);
             Type edgeViewType = GraphTypeCache.GetEdgeViewType(edgeAssetType);
 
-            EditorEdgeConnectorListener connectorListener = graphView.connectSystem.connectorListener;
+            GraphEdgeConnectorListener connectorListener = graphView.connectSystem.connectorListener;
 
             EditorEdgeConnector connector = ReflectUtility.CreateInstance(info.edgeConnectorType) as EditorEdgeConnector;
             connector.Initialize(edgeViewType, connectorListener);
@@ -66,6 +66,7 @@ namespace Emilia.Node.Editor
             if (info.orientation == EditorOrientation.Vertical) AddToClassList("Vertical");
 
             portColor = info.color;
+            tooltip = info.tips;
 
             capabilities |= Capabilities.Copiable;
 
@@ -109,7 +110,7 @@ namespace Emilia.Node.Editor
             
             return boxRect.Contains(this.ChangeCoordinatesTo(m_ConnectorBox, localPoint));
         }
-
+    
         protected virtual void OnCopyConnect()
         {
             graphView.ClearSelection();

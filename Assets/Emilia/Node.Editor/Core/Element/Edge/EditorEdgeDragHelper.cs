@@ -27,7 +27,7 @@ namespace Emilia.Node.Editor
 
         protected IEditorEdgeView ghostEdge;
         protected EditorGraphView graphView;
-        protected EditorEdgeConnectorListener listener;
+        protected GraphEdgeConnectorListener listener;
 
         protected IVisualElementScheduledItem panScheduled;
         protected Vector3 panDiff;
@@ -52,7 +52,7 @@ namespace Emilia.Node.Editor
             set => draggedPortView = value as IEditorPortView;
         }
 
-        public EditorEdgeDragHelper(Type edgeViewType, EditorEdgeConnectorListener edgeConnectorListener)
+        public EditorEdgeDragHelper(Type edgeViewType, GraphEdgeConnectorListener edgeConnectorListener)
         {
             this.edgeViewType = edgeViewType;
             listener = edgeConnectorListener;

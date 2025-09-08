@@ -294,26 +294,30 @@ namespace Emilia.Node.Editor
         private Vector2 m_MouseDiff = Vector2.zero;
         float m_XScale;
 
-        internal Vector2 GetEffectivePanSpeed(Vector2 mousePos)
+        internal Vector2 GetEffectivePanSpeed(Vector2 mousePos, Rect graphRect)
         {
             Vector2 effectiveSpeed = Vector2.zero;
 
-            if (mousePos.x <= k_PanAreaWidth)
+            if (mousePos.x <= graphRect.xMin + k_PanAreaWidth)
             {
-                effectiveSpeed.x = -((k_PanAreaWidth - mousePos.x) / k_PanAreaWidth + 0.5f) * k_PanSpeed;
+                float dist = graphRect.xMin + k_PanAreaWidth - mousePos.x;
+                effectiveSpeed.x = -(dist / k_PanAreaWidth + 0.5f) * k_PanSpeed;
             }
-            else if (mousePos.x >= m_GraphView.contentContainer.layout.width - k_PanAreaWidth)
+            else if (mousePos.x >= graphRect.xMax - k_PanAreaWidth)
             {
-                effectiveSpeed.x = ((mousePos.x - (this.m_GraphView.contentContainer.layout.width - k_PanAreaWidth)) / k_PanAreaWidth + 0.5f) * k_PanSpeed;
+                float dist = mousePos.x - (graphRect.xMax - k_PanAreaWidth);
+                effectiveSpeed.x = (dist / k_PanAreaWidth + 0.5f) * k_PanSpeed;
             }
 
-            if (mousePos.y <= k_PanAreaWidth)
+            if (mousePos.y <= graphRect.yMin + k_PanAreaWidth)
             {
-                effectiveSpeed.y = -((k_PanAreaWidth - mousePos.y) / k_PanAreaWidth + 0.5f) * k_PanSpeed;
+                float dist = graphRect.yMin + k_PanAreaWidth - mousePos.y;
+                effectiveSpeed.y = -(dist / k_PanAreaWidth + 0.5f) * k_PanSpeed;
             }
-            else if (mousePos.y >= m_GraphView.contentContainer.layout.height - k_PanAreaWidth)
+            else if (mousePos.y >= graphRect.yMax - k_PanAreaWidth)
             {
-                effectiveSpeed.y = ((mousePos.y - (this.m_GraphView.contentContainer.layout.height - k_PanAreaWidth)) / k_PanAreaWidth + 0.5f) * k_PanSpeed;
+                float dist = mousePos.y - (graphRect.yMax - k_PanAreaWidth);
+                effectiveSpeed.y = (dist / k_PanAreaWidth + 0.5f) * k_PanSpeed;
             }
 
             effectiveSpeed = Vector2.ClampMagnitude(effectiveSpeed, k_MaxPanSpeed);
@@ -341,7 +345,7 @@ namespace Emilia.Node.Editor
 
             var ve = (VisualElement) e.target;
             Vector2 gvMousePos = ve.ChangeCoordinatesTo(m_GraphView.contentContainer, e.localMousePosition);
-            m_PanDiff = GetEffectivePanSpeed(gvMousePos);
+            m_PanDiff = GetEffectivePanSpeed(gvMousePos, m_GraphView.graphPanelSystem.graphLayoutRect);
 
             if (m_PanDiff != Vector3.zero) m_PanSchedule.Resume();
             else m_PanSchedule.Pause();

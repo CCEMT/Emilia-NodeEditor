@@ -2,7 +2,7 @@
 
 namespace Emilia.Node.Editor
 {
-    public class PortInfo
+    public struct PortInfo
     {
         /// <summary>
         /// 节点编辑器资产类型
