@@ -34,98 +34,111 @@ namespace Emilia.Node.Universal.Editor
 
         private void AddNormalItem(List<TreeViewItem> treeViewItems, TreeViewItem root)
         {
-            Dictionary<string, List<ICreateNodeHandle>> titleAndPriority = new Dictionary<string, List<ICreateNodeHandle>>();
+            Dictionary<string, List<ICreateNodeHandle>> titleToHandles = new Dictionary<string, List<ICreateNodeHandle>>();
             Dictionary<string, ICreateNodeHandle> nodeMap = new Dictionary<string, ICreateNodeHandle>();
 
-            int itemCount = graphView.createNodeMenu.createNodeHandleCacheList.Count;
-            for (int i = 0; i < itemCount; i++)
+            BuildMaps();
+            
+            List<string> titlePaths = SortTitlePaths();
+            List<string> nodePaths = SortNodePaths();
+            Dictionary<int, List<string>> groupLayerMap = BuildLayerMap(titlePaths);
+            Dictionary<int, List<string>> nodeLayerMap = BuildLayerMap(nodePaths);
+
+            AddTreeItems(root, 0);
+
+            void BuildMaps()
             {
-                ICreateNodeHandle createNodeHandle = graphView.createNodeMenu.createNodeHandleCacheList[i];
-                string path = createNodeHandle.path;
-
-                string[] pathParts = path.Split('/');
-
-                if (pathParts.Length > 1)
+                int itemCount = graphView.createNodeMenu.createNodeHandleCacheList.Count;
+                for (int i = 0; i < itemCount; i++)
                 {
-                    string fullTitle = "";
-                    int partAmount = pathParts.Length;
-                    for (int j = 0; j < partAmount - 1; j++)
+                    ICreateNodeHandle createNodeHandle = graphView.createNodeMenu.createNodeHandleCacheList[i];
+                    string path = createNodeHandle.path;
+
+                    string[] pathParts = path.Split('/');
+
+                    if (pathParts.Length > 1)
                     {
-                        string title = pathParts[j];
+                        string fullTitle = "";
+                        int partAmount = pathParts.Length;
+                        for (int j = 0; j < partAmount - 1; j++)
+                        {
+                            string title = pathParts[j];
 
-                        if (string.IsNullOrEmpty(fullTitle)) fullTitle = title;
-                        else fullTitle += $"/{title}";
+                            if (string.IsNullOrEmpty(fullTitle)) fullTitle = title;
+                            else fullTitle += $"/{title}";
 
-                        if (titleAndPriority.ContainsKey(fullTitle) == false) titleAndPriority[fullTitle] = new List<ICreateNodeHandle>();
+                            if (titleToHandles.ContainsKey(fullTitle) == false) titleToHandles[fullTitle] = new List<ICreateNodeHandle>();
 
-                        titleAndPriority[fullTitle].Add(createNodeHandle);
+                            titleToHandles[fullTitle].Add(createNodeHandle);
+                        }
                     }
-                }
 
-                nodeMap[path] = createNodeHandle;
+                    nodeMap[path] = createNodeHandle;
+                }
             }
 
-            List<string> titlePaths = new List<string>();
-            titlePaths.AddRange(titleAndPriority.Keys);
-
-            titlePaths.Sort((a, b) => {
-
-                List<ICreateNodeHandle> aItems = titleAndPriority[a];
-                List<ICreateNodeHandle> bItems = titleAndPriority[b];
-
-                int aMaxPriority = int.MinValue;
-                int bMaxPriority = int.MinValue;
-
-                for (var i = 0; i < aItems.Count; i++)
-                {
-                    ICreateNodeHandle item = aItems[i];
-                    if (item.priority > aMaxPriority) aMaxPriority = item.priority;
-                }
-
-                for (var i = 0; i < bItems.Count; i++)
-                {
-                    ICreateNodeHandle item = bItems[i];
-                    if (item.priority > bMaxPriority) bMaxPriority = item.priority;
-                }
-
-                return aMaxPriority.CompareTo(bMaxPriority);
-            });
-
-            List<string> nodePaths = new List<string>();
-            nodePaths.AddRange(nodeMap.Keys);
-
-            nodePaths.Sort((a, b) => {
-                ICreateNodeHandle aItem = nodeMap[a];
-                ICreateNodeHandle bItem = nodeMap[b];
-                return aItem.priority.CompareTo(bItem.priority);
-            });
-
-            Dictionary<int, List<string>> groupLayerMap = new Dictionary<int, List<string>>();
-            Dictionary<int, List<string>> nodeLayerMap = new Dictionary<int, List<string>>();
-
-            for (int i = 0; i < titlePaths.Count; i++)
+            List<string> SortTitlePaths()
             {
-                string title = titlePaths[i];
-                string[] pathParts = title.Split('/');
-                int layer = pathParts.Length - 1;
+                List<string> resultTitlePaths = new List<string>();
+                resultTitlePaths.AddRange(titleToHandles.Keys);
 
-                if (groupLayerMap.ContainsKey(layer) == false) groupLayerMap[layer] = new List<string>();
-                groupLayerMap[layer].Add(title);
+                resultTitlePaths.Sort((a, b) => {
+                    List<ICreateNodeHandle> aItems = titleToHandles[a];
+                    List<ICreateNodeHandle> bItems = titleToHandles[b];
+
+                    int aMaxPriority = int.MinValue;
+                    int bMaxPriority = int.MinValue;
+
+                    for (var i = 0; i < aItems.Count; i++)
+                    {
+                        ICreateNodeHandle item = aItems[i];
+                        if (item.priority > aMaxPriority) aMaxPriority = item.priority;
+                    }
+
+                    for (var i = 0; i < bItems.Count; i++)
+                    {
+                        ICreateNodeHandle item = bItems[i];
+                        if (item.priority > bMaxPriority) bMaxPriority = item.priority;
+                    }
+
+                    return aMaxPriority.CompareTo(bMaxPriority);
+                });
+
+                return resultTitlePaths;
             }
 
-            for (int i = 0; i < nodePaths.Count; i++)
+            List<string> SortNodePaths()
             {
-                string title = nodePaths[i];
-                string[] pathParts = title.Split('/');
-                int layer = pathParts.Length - 1;
+                List<string> resultNodePaths = new List<string>();
+                resultNodePaths.AddRange(nodeMap.Keys);
 
-                if (nodeLayerMap.ContainsKey(layer) == false) nodeLayerMap[layer] = new List<string>();
-                nodeLayerMap[layer].Add(title);
+                resultNodePaths.Sort((a, b) => {
+                    ICreateNodeHandle aItem = nodeMap[a];
+                    ICreateNodeHandle bItem = nodeMap[b];
+                    return aItem.priority.CompareTo(bItem.priority);
+                });
+
+                return resultNodePaths;
             }
 
-            AddTreeItem(root, 0);
+            Dictionary<int, List<string>> BuildLayerMap(List<string> paths)
+            {
+                Dictionary<int, List<string>> layerMap = new Dictionary<int, List<string>>();
 
-            void AddTreeItem(TreeViewItem parent, int layer)
+                for (int i = 0; i < paths.Count; i++)
+                {
+                    string title = paths[i];
+                    string[] pathParts = title.Split('/');
+                    int layer = pathParts.Length - 1;
+
+                    if (layerMap.ContainsKey(layer) == false) layerMap[layer] = new List<string>();
+                    layerMap[layer].Add(title);
+                }
+
+                return layerMap;
+            }
+
+            void AddTreeItems(TreeViewItem parent, int layer)
             {
                 if (groupLayerMap.TryGetValue(layer, out List<string> currentLayerTitle))
                 {
@@ -134,6 +147,19 @@ namespace Emilia.Node.Universal.Editor
                     for (int i = 0; i < currentLayerTitle.Count; i++)
                     {
                         string path = currentLayerTitle[i];
+
+                        int lastIndex = path.LastIndexOf('/');
+                        string parentPath = "";
+                        if (lastIndex > 0) parentPath = path.Substring(0, lastIndex);
+
+                        if (parent is CreateNodeTitleTreeViewItem parentTitleItem)
+                        {
+                            if (parentTitleItem.id != parentPath.GetHashCode()) continue;
+                        }
+                        else
+                        {
+                            if (string.IsNullOrEmpty(parentPath) == false) continue;
+                        }
 
                         string[] pathParts = path.Split('/');
                         string title = pathParts.Length > 0 ? pathParts[pathParts.Length - 1] : path;
@@ -150,7 +176,7 @@ namespace Emilia.Node.Universal.Editor
 
                         treeViewItems.Add(titleItem);
 
-                        AddTreeItem(titleItem, nextLayer);
+                        AddTreeItems(titleItem, nextLayer);
                     }
                 }
 
@@ -170,7 +196,7 @@ namespace Emilia.Node.Universal.Editor
 
                         if (parent is CreateNodeTitleTreeViewItem titleTreeViewItem)
                         {
-                            if (titleTreeViewItem.displayName != groupTitle) continue;
+                            if (titleTreeViewItem.id != groupTitle.GetHashCode()) continue;
                         }
 
                         CreateNodeEntryTreeViewItem nodeItem = new CreateNodeEntryTreeViewItem(createNodeHandle) {
@@ -229,9 +255,9 @@ namespace Emilia.Node.Universal.Editor
 
                 collects.Add((nodeItem, score));
             }
-            
+
             collects.Sort((a, b) => b.Item2.CompareTo(a.Item2));
-            
+
             foreach (var pair in collects)
             {
                 root.AddChild(pair.Item1);
