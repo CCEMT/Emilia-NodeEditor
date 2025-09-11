@@ -10,12 +10,21 @@ namespace Emilia.Node.Universal.Editor
     public class CreateNodeTreeView : TreeView
     {
         private EditorGraphView graphView;
+        private CreateNodeViewState createNodeViewState;
         private Dictionary<int, ICreateNodeHandle> createNodeHandleMap = new Dictionary<int, ICreateNodeHandle>();
 
-        public CreateNodeTreeView(EditorGraphView graphView, TreeViewState state) : base(state)
+        private bool isExpandAll = false;
+
+        public CreateNodeTreeView(EditorGraphView graphView, CreateNodeViewState createNodeViewState, TreeViewState state) : base(state)
         {
             baseIndent = 10;
             this.graphView = graphView;
+            this.createNodeViewState = createNodeViewState;
+        }
+
+        public void SetExpandAll()
+        {
+            isExpandAll = true;
         }
 
         protected override TreeViewItem BuildRoot() => new() {id = 0, depth = -1, displayName = "Root"};
@@ -38,13 +47,15 @@ namespace Emilia.Node.Universal.Editor
             Dictionary<string, ICreateNodeHandle> nodeMap = new Dictionary<string, ICreateNodeHandle>();
 
             BuildMaps();
-            
+
             List<string> titlePaths = SortTitlePaths();
             List<string> nodePaths = SortNodePaths();
             Dictionary<int, List<string>> groupLayerMap = BuildLayerMap(titlePaths);
             Dictionary<int, List<string>> nodeLayerMap = BuildLayerMap(nodePaths);
 
             AddTreeItems(root, 0);
+
+            isExpandAll = false;
 
             void BuildMaps()
             {
@@ -170,13 +181,15 @@ namespace Emilia.Node.Universal.Editor
                             displayName = title,
                         };
 
-                        SetExpanded(titleItem.id, true);
-
                         parent.AddChild(titleItem);
-
                         treeViewItems.Add(titleItem);
 
-                        AddTreeItems(titleItem, nextLayer);
+                        if (isExpandAll) SetExpanded(titleItem.id, true);
+
+                        bool isExpanded = IsExpanded(titleItem.id);
+
+                        if (isExpanded) AddTreeItems(titleItem, nextLayer);
+                        else titleItem.children = CreateChildListForCollapsedParent();
                     }
                 }
 
@@ -201,7 +214,7 @@ namespace Emilia.Node.Universal.Editor
 
                         CreateNodeEntryTreeViewItem nodeItem = new CreateNodeEntryTreeViewItem(createNodeHandle) {
                             id = path.GetHashCode(),
-                            depth = layer + 1,
+                            depth = layer,
                             displayName = title,
                         };
 
@@ -280,5 +293,11 @@ namespace Emilia.Node.Universal.Editor
         }
 
         protected override DragAndDropVisualMode HandleDragAndDrop(DragAndDropArgs args) => DragAndDropVisualMode.Move;
+
+        protected override void ExpandedStateChanged()
+        {
+            this.createNodeViewState.SetExpandedIDs(state.expandedIDs);
+            this.createNodeViewState.Save(this.graphView);
+        }
     }
 }

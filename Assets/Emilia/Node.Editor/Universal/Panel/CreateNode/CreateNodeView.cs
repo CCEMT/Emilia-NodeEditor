@@ -8,6 +8,7 @@ namespace Emilia.Node.Universal.Editor
     public class CreateNodeView : GraphPanel
     {
         private SearchField searchField;
+        private CreateNodeViewState createNodeViewState;
         private TreeViewState treeViewState;
         private CreateNodeTreeView createNodeTreeView;
 
@@ -26,12 +27,22 @@ namespace Emilia.Node.Universal.Editor
             base.Initialize(graphView);
 
             searchField = new SearchField();
+            schedule.Execute(OnInitialize).ExecuteLater(1);
+        }
 
-            schedule.Execute(() => {
-                treeViewState = new TreeViewState();
-                createNodeTreeView = new CreateNodeTreeView(graphView, treeViewState);
-                createNodeTreeView.Reload();
-            }).ExecuteLater(1);
+        private void OnInitialize()
+        {
+            createNodeViewState = CreateNodeViewState.Get(graphView);
+            treeViewState = new TreeViewState();
+            
+            treeViewState.expandedIDs.AddRange(createNodeViewState.expandedIDs);
+
+            createNodeTreeView = new CreateNodeTreeView(graphView, createNodeViewState, treeViewState);
+
+            string saveKey = CreateNodeViewState.CreateNodeViewStateSaveKey;
+            if (graphView.graphLocalSettingSystem.HasTypeSetting(saveKey) == false) createNodeTreeView.SetExpandAll();
+
+            createNodeTreeView.Reload();
         }
 
         public override void Dispose()
