@@ -17,7 +17,7 @@ namespace Emilia.Node.Universal.Editor
         public string description;
 
         [NonSerialized, OdinSerialize, HideInInspector]
-        public EditorParametersManage editorParametersManage;
+        public EditorParametersManager editorParametersManage;
 
         string IObjectDescription.description => description;
 
@@ -30,7 +30,7 @@ namespace Emilia.Node.Universal.Editor
         {
             base.SetChildren(childAssets);
 
-            EditorParametersManage parametersManage = childAssets.OfType<EditorParametersManage>().FirstOrDefault();
+            EditorParametersManager parametersManage = childAssets.OfType<EditorParametersManager>().FirstOrDefault();
             if (parametersManage == null) return;
 
             if (this.editorParametersManage != null) DestroyImmediate(this.editorParametersManage);

@@ -16,6 +16,12 @@ namespace Example
             EditorImGUIKit.OpenWindow<AllExampleWindow>("所有例子", 1200, 900);
         }
 
+        [MenuItem("Emilia/清除EditorPrefs")]
+        public static void ClearEditorPrefs()
+        {
+            EditorPrefs.DeleteAll();
+        }
+
         protected override void OnEnable()
         {
             base.OnEnable();
