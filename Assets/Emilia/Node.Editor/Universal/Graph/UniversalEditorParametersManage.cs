@@ -7,7 +7,7 @@ using Emilia.Variables.Editor;
 namespace Emilia.Node.Universal.Editor
 {
     [SelectedClear]
-    public class UniversalEditorParametersManage : EditorParametersManage
+    public class UniversalEditorParametersManage : EditorParametersManager
     {
         public override IList<Type> filterTypes => new List<Type>() {
             typeof(VariableSingle),

@@ -19,10 +19,10 @@ namespace Example
         protected virtual void OnEditorParameter()
         {
             CapabilitiesDisplayAsset displayAsset = graphView.graphAsset as CapabilitiesDisplayAsset;
-            EditorParametersManage editorParametersManage = displayAsset.editorParametersManage;
+            EditorParametersManager editorParametersManage = displayAsset.editorParametersManage;
             if (editorParametersManage == null)
             {
-                editorParametersManage = displayAsset.editorParametersManage = ScriptableObject.CreateInstance<EditorParametersManage>();
+                editorParametersManage = displayAsset.editorParametersManage = ScriptableObject.CreateInstance<EditorParametersManager>();
                 EditorAssetKit.SaveAssetIntoObject(editorParametersManage, displayAsset);
             }
 
