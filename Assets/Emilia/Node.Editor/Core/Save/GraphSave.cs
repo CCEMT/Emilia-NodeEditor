@@ -47,7 +47,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void SetDirty()
         {
-            if (this.graphView.loadProgress != 1) return;
+            if (this.graphView.isInitialized == false) return;
             this._dirty = true;
         }
 

@@ -166,6 +166,11 @@ namespace Emilia.Node.Editor
         public float loadProgress { get; private set; }
 
         /// <summary>
+        /// 初始化完成
+        /// </summary>
+        public bool isInitialized { get; private set; }
+
+        /// <summary>
         /// 是否聚焦
         /// </summary>
         public bool isFocus { get; private set; }
@@ -188,7 +193,7 @@ namespace Emilia.Node.Editor
         /// <summary>
         /// GraphAsset改变事件
         /// </summary>
-        public event Action<EditorGraphAsset> onGraphAssetChange; 
+        public event Action<EditorGraphAsset> onGraphAssetChange;
 
         public void Initialize()
         {
@@ -218,7 +223,7 @@ namespace Emilia.Node.Editor
             viewTransformChanged = OnViewTransformChanged;
             graphViewChanged = OnGraphViewChanged;
             elementResized = OnElementResized;
-            
+
             Undo.undoRedoPerformed += OnUndoRedoPerformed;
 
             RegisterCallback<MouseDownEvent>(OnMouseDown);
@@ -265,7 +270,7 @@ namespace Emilia.Node.Editor
 
         public void OnEnterFocus()
         {
-            if (loadProgress != 1) return;
+            if (isInitialized == false) return;
 
             if (isFocus) return;
             isFocus = true;
@@ -276,14 +281,14 @@ namespace Emilia.Node.Editor
 
         public void OnFocus()
         {
-            if (loadProgress != 1) return;
+            if (isInitialized == false) return;
             if (focusedGraphView != this) focusedGraphView = this;
             this.graphHandle?.OnFocus(this);
         }
 
         public void OnExitFocus()
         {
-            if (loadProgress != 1) return;
+            if (isInitialized == false) return;
 
             if (isFocus == false) return;
             isFocus = false;
@@ -308,13 +313,14 @@ namespace Emilia.Node.Editor
                 Debug.LogError("Reload asset 为空");
                 return;
             }
-            
+
             asset.RepetitionId();
             graphViews[asset] = this;
-            
+
             onGraphAssetChange?.Invoke(asset);
             loadProgress = 0;
-            
+            isInitialized = false;
+
             schedule.Execute(OnReload).ExecuteLater(1);
 
             void OnReload()
@@ -352,6 +358,7 @@ namespace Emilia.Node.Editor
 
             graphElementCache.BuildCache(this);
             loadProgress = 1;
+            isInitialized = true;
         }
 
         private void SyncSetting()
@@ -463,6 +470,7 @@ namespace Emilia.Node.Editor
 
             loadElementCoroutine = null;
             loadProgress = 1;
+            isInitialized = true;
 
             this.graphHandle?.OnLoadAfter(this);
         }
@@ -740,7 +748,7 @@ namespace Emilia.Node.Editor
         {
             schedule.Execute(UpdateSelected).ExecuteLater(1);
         }
-        
+
         private void OnUndoRedoPerformed()
         {
             if (graphSetting != null && graphSetting.Value.fastUndo == false) Reload(graphAsset);
@@ -951,7 +959,7 @@ namespace Emilia.Node.Editor
             graphElementCache.Clear();
 
             Undo.undoRedoPerformed -= OnUndoRedoPerformed;
-            
+
             if (focusedGraphView == this) focusedGraphView = null;
             if (this.graphHandle != null)
             {

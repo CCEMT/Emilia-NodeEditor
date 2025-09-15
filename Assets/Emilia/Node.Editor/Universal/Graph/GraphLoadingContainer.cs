@@ -28,7 +28,7 @@ namespace Emilia.Node.Universal.Editor
 
         public void DisplayLoading()
         {
-            label.schedule.Execute(() => label.text = $"Loading:{graphView.loadProgress * 100:0.00}%").Until(() => graphView.loadProgress == 1);
+            label.schedule.Execute(() => label.text = $"Loading:{graphView.loadProgress * 100:0.00}%").Until(() => graphView.isInitialized);
         }
     }
 }
