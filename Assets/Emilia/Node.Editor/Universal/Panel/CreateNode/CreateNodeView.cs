@@ -7,6 +7,8 @@ namespace Emilia.Node.Universal.Editor
 {
     public class CreateNodeView : GraphPanel
     {
+        private const float SearchFieldHeight = 20;
+        
         private SearchField searchField;
         private CreateNodeViewState createNodeViewState;
         private TreeViewState treeViewState;
@@ -61,12 +63,13 @@ namespace Emilia.Node.Universal.Editor
             if (createNodeTreeView != null)
             {
                 Rect searchRect = rect;
-                searchRect.height = 20;
+                searchRect.height = SearchFieldHeight;
 
                 createNodeTreeView.searchString = searchField.OnToolbarGUI(searchRect, createNodeTreeView.searchString);
 
                 Rect treeRect = rect;
-                treeRect.y += 20;
+                treeRect.y += SearchFieldHeight;
+                treeRect.height -= SearchFieldHeight;
 
                 createNodeTreeView.OnGUI(treeRect);
             }
