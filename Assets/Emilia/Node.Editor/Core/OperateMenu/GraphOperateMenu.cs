@@ -37,6 +37,8 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void BuildMenu(OperateMenuContext menuContext)
         {
+            if (this.graphView == null || this.graphView.isInitialized == false) return;
+
             if (handle == null)
             {
                 Debug.LogError("未找到操作菜单处理器，请创建并继承OperateMenuHandle<>");

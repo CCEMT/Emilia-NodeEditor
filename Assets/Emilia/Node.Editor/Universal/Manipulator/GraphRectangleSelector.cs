@@ -174,9 +174,10 @@ namespace Emilia.Node.Editor
                 // Avoid drawing useless information
                 if (start == end) return;
 
-                // Apply offset
-                screenStart += t.layout.position;
-                screenEnd += t.layout.position;
+                // Apply offset 
+                // 计算偏移会导致GraphView不为Window大小时导致位置异常
+                // screenStart += t.layout.position;
+                // screenEnd += t.layout.position;
 
                 var r = new Rect {
                     min = new Vector2(Math.Min(screenStart.x, screenEnd.x), Math.Min(screenStart.y, screenEnd.y)),
