@@ -6,7 +6,7 @@ namespace Emilia.Node.Attributes
     [AttributeUsage(AttributeTargets.Class)]
     public class GraphSettingAttribute : Attribute
     {
-        public GraphSettingStruct settingStruct = new GraphSettingStruct {
+        public GraphSettingStruct settingStruct = new() {
             maxLoadTimeMs = 0.0416f,
             fastUndo = true,
             immediatelySave = true,
@@ -21,7 +21,7 @@ namespace Emilia.Node.Attributes
             get => settingStruct.maxLoadTimeMs;
             set => settingStruct.maxLoadTimeMs = value;
         }
-        
+
         /// <summary>
         /// 是否启用快速撤销
         /// </summary>

@@ -2,6 +2,6 @@
 {
     public interface ICreateNodePostprocess
     {
-        void Postprocess(EditorGraphView graphView,IEditorNodeView nodeView, CreateNodeContext createNodeContext);
+        void Postprocess(EditorGraphView graphView, IEditorNodeView nodeView, CreateNodeContext createNodeContext);
     }
 }

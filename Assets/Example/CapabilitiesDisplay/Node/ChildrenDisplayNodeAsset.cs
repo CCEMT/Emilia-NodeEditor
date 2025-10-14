@@ -37,7 +37,7 @@ namespace Example
 
         public override List<Object> GetChildren()
         {
-            List<Object> list = new List<Object>();
+            List<Object> list = new();
             list.Add(this._capabilitiesDisplayAsset);
             return list;
         }
@@ -61,9 +61,9 @@ namespace Example
 
         public override List<EditorPortInfo> CollectStaticPortAssets()
         {
-            List<EditorPortInfo> portInfos = new List<EditorPortInfo>();
+            List<EditorPortInfo> portInfos = new();
 
-            EditorPortInfo leftIntPortInfo = new EditorPortInfo();
+            EditorPortInfo leftIntPortInfo = new();
             leftIntPortInfo.id = "leftIntPortInfo";
             leftIntPortInfo.displayName = "左端口(int)";
             leftIntPortInfo.portType = typeof(int);
@@ -74,7 +74,7 @@ namespace Example
 
             portInfos.Add(leftIntPortInfo);
 
-            EditorPortInfo rightIntPortInfo = new EditorPortInfo();
+            EditorPortInfo rightIntPortInfo = new();
             rightIntPortInfo.id = "rightIntPortInfo";
             rightIntPortInfo.displayName = "右端口(int)";
             rightIntPortInfo.portType = typeof(int);

@@ -25,7 +25,7 @@ namespace Emilia.Node.Universal.Editor
         public float rightMargin = 5f;
 
         private IGraphPanel selectedPanel;
-        private List<AppendPanelInfo> graphPanels = new List<AppendPanelInfo>();
+        private List<AppendPanelInfo> graphPanels = new();
 
         private IMGUIContainer toggleContainer;
 
@@ -52,7 +52,7 @@ namespace Emilia.Node.Universal.Editor
             IGraphPanel graphPanel = ReflectUtility.CreateInstance<T>() as IGraphPanel;
             if (graphPanel == null) return;
 
-            AppendPanelInfo panelInfo = new AppendPanelInfo {
+            AppendPanelInfo panelInfo = new() {
                 graphPanel = graphPanel,
                 displayName = displayName
             };

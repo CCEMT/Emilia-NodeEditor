@@ -4,10 +4,7 @@
     {
         public virtual bool isOn => false;
 
-        public virtual OperateMenuActionValidity GetValidity(OperateMenuContext context)
-        {
-            return OperateMenuActionValidity.Valid;
-        }
+        public virtual OperateMenuActionValidity GetValidity(OperateMenuContext context) => OperateMenuActionValidity.Valid;
 
         public abstract void Execute(OperateMenuActionContext context);
     }

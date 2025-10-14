@@ -11,7 +11,7 @@ namespace Emilia.Node.Universal.Editor
     {
         private EditorGraphView graphView;
         private CreateNodeViewState createNodeViewState;
-        private Dictionary<int, ICreateNodeHandle> createNodeHandleMap = new Dictionary<int, ICreateNodeHandle>();
+        private Dictionary<int, ICreateNodeHandle> createNodeHandleMap = new();
 
         private bool isExpandAll = false;
 
@@ -31,7 +31,7 @@ namespace Emilia.Node.Universal.Editor
 
         protected override IList<TreeViewItem> BuildRows(TreeViewItem root)
         {
-            List<TreeViewItem> treeViewItems = new List<TreeViewItem>();
+            List<TreeViewItem> treeViewItems = new();
 
             createNodeHandleMap.Clear();
 
@@ -43,8 +43,8 @@ namespace Emilia.Node.Universal.Editor
 
         private void AddNormalItem(List<TreeViewItem> treeViewItems, TreeViewItem root)
         {
-            Dictionary<string, List<ICreateNodeHandle>> titleToHandles = new Dictionary<string, List<ICreateNodeHandle>>();
-            Dictionary<string, ICreateNodeHandle> nodeMap = new Dictionary<string, ICreateNodeHandle>();
+            Dictionary<string, List<ICreateNodeHandle>> titleToHandles = new();
+            Dictionary<string, ICreateNodeHandle> nodeMap = new();
 
             BuildMaps();
 
@@ -90,7 +90,7 @@ namespace Emilia.Node.Universal.Editor
 
             List<string> SortTitlePaths()
             {
-                List<string> resultTitlePaths = new List<string>();
+                List<string> resultTitlePaths = new();
                 resultTitlePaths.AddRange(titleToHandles.Keys);
 
                 resultTitlePaths.Sort((a, b) => {
@@ -120,7 +120,7 @@ namespace Emilia.Node.Universal.Editor
 
             List<string> SortNodePaths()
             {
-                List<string> resultNodePaths = new List<string>();
+                List<string> resultNodePaths = new();
                 resultNodePaths.AddRange(nodeMap.Keys);
 
                 resultNodePaths.Sort((a, b) => {
@@ -134,7 +134,7 @@ namespace Emilia.Node.Universal.Editor
 
             Dictionary<int, List<string>> BuildLayerMap(List<string> paths)
             {
-                Dictionary<int, List<string>> layerMap = new Dictionary<int, List<string>>();
+                Dictionary<int, List<string>> layerMap = new();
 
                 for (int i = 0; i < paths.Count; i++)
                 {
@@ -175,7 +175,7 @@ namespace Emilia.Node.Universal.Editor
                         string[] pathParts = path.Split('/');
                         string title = pathParts.Length > 0 ? pathParts[pathParts.Length - 1] : path;
 
-                        CreateNodeTitleTreeViewItem titleItem = new CreateNodeTitleTreeViewItem {
+                        CreateNodeTitleTreeViewItem titleItem = new() {
                             id = path.GetHashCode(),
                             depth = layer,
                             displayName = title,
@@ -212,7 +212,7 @@ namespace Emilia.Node.Universal.Editor
                             if (titleTreeViewItem.id != groupTitle.GetHashCode()) continue;
                         }
 
-                        CreateNodeEntryTreeViewItem nodeItem = new CreateNodeEntryTreeViewItem(createNodeHandle) {
+                        CreateNodeEntryTreeViewItem nodeItem = new(createNodeHandle) {
                             id = path.GetHashCode(),
                             depth = layer,
                             displayName = title,
@@ -229,7 +229,7 @@ namespace Emilia.Node.Universal.Editor
 
         void AddSearchItem(List<TreeViewItem> treeViewItems, TreeViewItem root)
         {
-            Dictionary<string, ICreateNodeHandle> nodeMap = new Dictionary<string, ICreateNodeHandle>();
+            Dictionary<string, ICreateNodeHandle> nodeMap = new();
             int itemCount = graphView.createNodeMenu.createNodeHandleCacheList.Count;
             for (int i = 0; i < itemCount; i++)
             {
@@ -238,7 +238,7 @@ namespace Emilia.Node.Universal.Editor
                 nodeMap[path] = createNodeHandle;
             }
 
-            List<string> nodePaths = new List<string>();
+            List<string> nodePaths = new();
             nodePaths.AddRange(nodeMap.Keys);
 
             nodePaths.Sort((a, b) => {
@@ -260,7 +260,7 @@ namespace Emilia.Node.Universal.Editor
                 int score = SearchUtility.Search(title, searchString);
                 if (score == 0) continue;
 
-                CreateNodeEntryTreeViewItem nodeItem = new CreateNodeEntryTreeViewItem(createNodeHandle) {
+                CreateNodeEntryTreeViewItem nodeItem = new(createNodeHandle) {
                     id = path.GetHashCode(),
                     depth = 0,
                     displayName = title,

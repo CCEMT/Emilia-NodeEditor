@@ -12,7 +12,7 @@ namespace Emilia.Node.Editor
         private EditorGraphAsset _parent;
 
         [NonSerialized, OdinSerialize, HideInInspector]
-        private List<EditorGraphAsset> _children = new List<EditorGraphAsset>();
+        private List<EditorGraphAsset> _children = new();
 
         /// <summary>
         /// 父级

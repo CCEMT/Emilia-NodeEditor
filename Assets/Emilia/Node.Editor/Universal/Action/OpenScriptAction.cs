@@ -16,10 +16,8 @@ namespace Emilia.Node.Universal.Editor
     [Action("OpenScript", 8100, OperateMenuTagDefine.UniversalActionTag)]
     public class OpenScriptAction : OperateMenuAction
     {
-        public override OperateMenuActionValidity GetValidity(OperateMenuContext context)
-        {
-            return context.graphView.selection.Count > 0 ? OperateMenuActionValidity.Valid : OperateMenuActionValidity.Invalid;
-        }
+        public override OperateMenuActionValidity GetValidity(OperateMenuContext context) =>
+            context.graphView.selection.Count > 0 ? OperateMenuActionValidity.Valid : OperateMenuActionValidity.Invalid;
 
         public override void Execute(OperateMenuActionContext context)
         {

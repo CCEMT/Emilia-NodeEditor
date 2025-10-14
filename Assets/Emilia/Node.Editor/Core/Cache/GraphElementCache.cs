@@ -9,11 +9,11 @@ namespace Emilia.Node.Editor
     {
         private EditorGraphView editorGraphView;
 
-        private Dictionary<string, IEditorNodeView> _nodeViewById = new Dictionary<string, IEditorNodeView>();
-        private Dictionary<string, IEditorEdgeView> _edgeViewById = new Dictionary<string, IEditorEdgeView>();
-        private Dictionary<string, IEditorItemView> _itemViewById = new Dictionary<string, IEditorItemView>();
+        private Dictionary<string, IEditorNodeView> _nodeViewById = new();
+        private Dictionary<string, IEditorEdgeView> _edgeViewById = new();
+        private Dictionary<string, IEditorItemView> _itemViewById = new();
 
-        private List<NodeCache> _nodeViewCache = new List<NodeCache>();
+        private List<NodeCache> _nodeViewCache = new();
 
         /// <summary>
         /// 根据id获取IEditorNodeView
@@ -55,7 +55,7 @@ namespace Emilia.Node.Editor
                 IEditorNodeView nodeView = ReflectUtility.CreateInstance(nodeViewType) as IEditorNodeView;
                 nodeView.Initialize(this.editorGraphView, nodeAsset);
 
-                NodeCache nodeCache = new NodeCache(nodeData, nodeView);
+                NodeCache nodeCache = new(nodeData, nodeView);
                 this._nodeViewCache.Add(nodeCache);
             }
         }
@@ -143,7 +143,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public List<PortInfo> GetPortInfoTypeByPort(IEditorPortView form)
         {
-            List<PortInfo> portInfos = new List<PortInfo>();
+            List<PortInfo> portInfos = new();
 
             int nodeViewAmount = this._nodeViewCache.Count;
             for (int i = 0; i < nodeViewAmount; i++)
@@ -156,7 +156,7 @@ namespace Emilia.Node.Editor
                     IEditorPortView portView = nodeCache.nodeView.portViews[j];
                     bool canConnect = this.editorGraphView.connectSystem.CanConnect(form, portView);
                     if (canConnect == false) continue;
-                    PortInfo portInfo = new PortInfo();
+                    PortInfo portInfo = new();
                     portInfo.nodeAssetType = nodeCache.nodeView.asset.GetType();
                     portInfo.nodeData = nodeCache.nodeData;
                     portInfo.portId = portView.info.id;

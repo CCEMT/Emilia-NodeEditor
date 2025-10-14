@@ -40,7 +40,7 @@ namespace Emilia.Node.Editor
         public IEnumerable<GraphElement> UnserializeAndPasteCallback(string operationName, string serializedData, Vector2? mousePosition = null)
         {
             if (this.handle == null) return null;
-            GraphCopyPasteContext graphCopyPasteContext = new GraphCopyPasteContext();
+            GraphCopyPasteContext graphCopyPasteContext = new();
             graphCopyPasteContext.graphView = this.graphView;
             graphCopyPasteContext.createPosition = mousePosition;
 

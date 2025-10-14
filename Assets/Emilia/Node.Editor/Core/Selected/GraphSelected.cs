@@ -9,8 +9,8 @@ namespace Emilia.Node.Editor
     {
         private GraphSelectedHandle handle;
 
-        private List<ISelectedHandle> _selected = new List<ISelectedHandle>();
-        private List<IGraphSelectedDrawer> selectedDrawers = new List<IGraphSelectedDrawer>();
+        private List<ISelectedHandle> _selected = new();
+        private List<IGraphSelectedDrawer> selectedDrawers = new();
 
         public override int order => 600;
 

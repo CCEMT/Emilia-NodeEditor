@@ -2,8 +2,5 @@
 
 namespace Emilia.Node.Universal.Editor
 {
-    public class CreateNodeTreeViewItem : TreeViewItem
-    {
-        
-    }
+    public class CreateNodeTreeViewItem : TreeViewItem { }
 }

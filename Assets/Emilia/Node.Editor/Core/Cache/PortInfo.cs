@@ -18,7 +18,7 @@ namespace Emilia.Node.Editor
         /// 端口Id
         /// </summary>
         public string portId;
-        
+
         /// <summary>
         /// 端口名称
         /// </summary>

@@ -78,7 +78,7 @@ namespace Emilia.Node.Universal.Editor
             const int Width = 20;
             const int Height = 20;
 
-            Rect button = new Rect(rect.x + rect.width - Width * 2, rect.y + rect.height / 2f - Height / 2f, Width, Height);
+            Rect button = new(rect.x + rect.width - Width * 2, rect.y + rect.height / 2f - Height / 2f, Width, Height);
 
             SdfIcons.DrawIcon(button, SdfIconType.InfoCircleFill, Color.white);
 

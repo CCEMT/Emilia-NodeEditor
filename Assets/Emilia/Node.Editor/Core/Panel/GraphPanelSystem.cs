@@ -15,14 +15,14 @@ namespace Emilia.Node.Editor
 
         private GraphPanelHandle handle;
 
-        private List<IGraphPanel> _openPanels = new List<IGraphPanel>();
-        private Dictionary<Type, IGraphPanel> openPanelMap = new Dictionary<Type, IGraphPanel>();
+        private List<IGraphPanel> _openPanels = new();
+        private Dictionary<Type, IGraphPanel> openPanelMap = new();
 
         private GraphPanelContainer floatRootContainer;
-        private Dictionary<IGraphPanel, GraphPanelContainer> floatPanelMap = new Dictionary<IGraphPanel, GraphPanelContainer>();
+        private Dictionary<IGraphPanel, GraphPanelContainer> floatPanelMap = new();
 
         private GraphPanelContainer _dockRootContainer;
-        private List<IGraphPanel> dockPanels = new List<IGraphPanel>();
+        private List<IGraphPanel> dockPanels = new();
 
         private VisualElement dockLeisureArea;
         private Rect dockAreaOffset;
@@ -256,7 +256,7 @@ namespace Emilia.Node.Editor
 
         private GraphPanelContainer AddFloatPanel(IGraphPanel panel)
         {
-            GraphPanelContainer container = new GraphPanelContainer();
+            GraphPanelContainer container = new();
 
             container.Add(panel.rootView);
             this.floatRootContainer.Add(container);
@@ -280,10 +280,10 @@ namespace Emilia.Node.Editor
             }
 
             int index = isInverted ? 1 : 0;
-            GraphTwoPaneSplitView splitView = new GraphTwoPaneSplitView(index, size, orientation);
+            GraphTwoPaneSplitView splitView = new(index, size, orientation);
             splitView.pickingMode = PickingMode.Ignore;
 
-            VisualElement placeholder = new VisualElement();
+            VisualElement placeholder = new();
             placeholder.name = SplitViewPlaceholderName;
             placeholder.pickingMode = PickingMode.Ignore;
 

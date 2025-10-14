@@ -15,7 +15,7 @@ namespace Emilia.Node.Editor
         /// <summary>
         /// 缓存操作菜单信息
         /// </summary>
-        public List<OperateMenuActionInfo> actionInfoCache { get; private set; } = new List<OperateMenuActionInfo>();
+        public List<OperateMenuActionInfo> actionInfoCache { get; private set; } = new();
 
         public override int order => 1100;
 
@@ -51,7 +51,7 @@ namespace Emilia.Node.Editor
                 return;
             }
 
-            List<OperateMenuItem> graphMenuItems = new List<OperateMenuItem>();
+            List<OperateMenuItem> graphMenuItems = new();
             handle.CollectMenuItems(this.graphView, graphMenuItems, menuContext);
 
             var sortedItems = graphMenuItems

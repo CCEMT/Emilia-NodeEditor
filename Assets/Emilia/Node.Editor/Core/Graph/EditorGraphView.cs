@@ -17,7 +17,7 @@ namespace Emilia.Node.Editor
 {
     public class EditorGraphView : GraphView_Hook
     {
-        private static Dictionary<EditorGraphAsset, EditorGraphView> graphViews = new Dictionary<EditorGraphAsset, EditorGraphView>();
+        private static Dictionary<EditorGraphAsset, EditorGraphView> graphViews = new();
 
         /// <summary>
         /// 聚焦的GraphView
@@ -25,12 +25,12 @@ namespace Emilia.Node.Editor
         public static EditorGraphView focusedGraphView { get; private set; }
 
         private GraphHandle graphHandle;
-        private Dictionary<Type, BasicGraphViewModule> modules = new Dictionary<Type, BasicGraphViewModule>();
-        private Dictionary<Type, CustomGraphViewModule> customModules = new Dictionary<Type, CustomGraphViewModule>();
+        private Dictionary<Type, BasicGraphViewModule> modules = new();
+        private Dictionary<Type, CustomGraphViewModule> customModules = new();
 
-        private List<IEditorNodeView> _nodeViews = new List<IEditorNodeView>();
-        private List<IEditorEdgeView> _edgeViews = new List<IEditorEdgeView>();
-        private List<IEditorItemView> _itemViews = new List<IEditorItemView>();
+        private List<IEditorNodeView> _nodeViews = new();
+        private List<IEditorEdgeView> _edgeViews = new();
+        private List<IEditorItemView> _itemViews = new();
 
         private GraphContentZoomer graphZoomer;
         private EditorCoroutine loadElementCoroutine;
@@ -242,7 +242,7 @@ namespace Emilia.Node.Editor
             modules.Clear();
 
             IList<Type> types = TypeCache.GetTypesDerivedFrom<BasicGraphViewModule>();
-            List<BasicGraphViewModule> moduleList = new List<BasicGraphViewModule>();
+            List<BasicGraphViewModule> moduleList = new();
 
             foreach (Type type in types)
             {
@@ -642,7 +642,7 @@ namespace Emilia.Node.Editor
 
         public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
         {
-            OperateMenuContext menuContext = new OperateMenuContext();
+            OperateMenuContext menuContext = new();
             menuContext.evt = evt;
             menuContext.graphView = this;
 
@@ -651,7 +651,7 @@ namespace Emilia.Node.Editor
 
         public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
         {
-            List<Port> compatiblePorts = new List<Port>();
+            List<Port> compatiblePorts = new();
 
             IEditorPortView startPortView = startPort as IEditorPortView;
             if (startPortView == null) return compatiblePorts;

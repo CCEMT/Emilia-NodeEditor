@@ -15,7 +15,7 @@ namespace Emilia.Node.Editor
 
         bool m_ShiftClicked = false;
         bool m_Dragging = false;
-        Snapper_Internals m_Snapper = new Snapper_Internals();
+        Snapper_Internals m_Snapper = new();
         internal bool snapEnabled { get; set; }
 
         // selectedElement is used to store a unique selection candidate for cases where user clicks on an item not to
@@ -25,7 +25,7 @@ namespace Emilia.Node.Editor
 
         private GraphViewChange m_GraphViewChange;
         private List<GraphElement> m_MovedElements;
-        private List<VisualElement> m_DropTargetPickList = new List<VisualElement>();
+        private List<VisualElement> m_DropTargetPickList = new();
 
         IDropTarget GetDropTargetAt(Vector2 mousePosition, IEnumerable<VisualElement> exclusionList)
         {
@@ -155,7 +155,7 @@ namespace Emilia.Node.Editor
 
             m_OriginalPos = new Dictionary<GraphElement, OriginalPos>();
 
-            HashSet<IEditorNodeView> elementsToMove = new HashSet<IEditorNodeView>(m_GraphView.selection.OfType<IEditorNodeView>());
+            HashSet<IEditorNodeView> elementsToMove = new(m_GraphView.selection.OfType<IEditorNodeView>());
 
             foreach (IEditorNodeView nodeView in elementsToMove)
             {
@@ -232,7 +232,7 @@ namespace Emilia.Node.Editor
 
                 m_OriginalPos = new Dictionary<GraphElement, OriginalPos>();
 
-                HashSet<GraphElement> elementsToMove = new HashSet<GraphElement>(m_GraphView.selection.OfType<GraphElement>());
+                HashSet<GraphElement> elementsToMove = new(m_GraphView.selection.OfType<GraphElement>());
 
                 var selectedPlacemats = new HashSet<Placemat>(elementsToMove.OfType<Placemat>());
                 foreach (var placemat in selectedPlacemats) placemat.GetElementsToMove_Internals(e.shiftKey, elementsToMove);
@@ -478,7 +478,7 @@ namespace Emilia.Node.Editor
             Matrix4x4 g = element.worldTransform;
             var scale = new Vector3(g.m00, g.m11, g.m22);
 
-            Rect newPos = new Rect(0, 0, originalPos.width, originalPos.height);
+            Rect newPos = new(0, 0, originalPos.width, originalPos.height);
 
             // Compute the new position of the selected element using the mouse delta position and panning info
             newPos.x = originalPos.x - (m_MouseDiff.x - m_ItemPanDiff.x) * panSpeed.x / scale.x * element.transform.scale.x;

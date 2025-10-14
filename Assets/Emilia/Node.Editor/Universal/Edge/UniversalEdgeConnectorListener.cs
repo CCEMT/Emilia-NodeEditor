@@ -33,8 +33,8 @@ namespace Emilia.Node.Editor
                 IEditorPortView portView = port as IEditorPortView;
                 if (portView == null) return;
 
-                CreateNodeContext createNodeContext = new CreateNodeContext();
-                CreateNodeByPortCollector createNodePortCollector = new CreateNodeByPortCollector(graphView, portView);
+                CreateNodeContext createNodeContext = new();
+                CreateNodeByPortCollector createNodePortCollector = new(graphView, portView);
                 createNodeContext.nodeCollector = createNodePortCollector;
 
                 graphView.graphOperate.OpenCreateNodeMenu(position, createNodeContext);

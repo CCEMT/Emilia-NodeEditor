@@ -50,7 +50,7 @@ namespace Emilia.Node.Editor
             }
         }
 
-        protected List<Vector2> lastLocalControlPoints = new List<Vector2>();
+        protected List<Vector2> lastLocalControlPoints = new();
 
         protected override void UpdateRenderPoints()
         {
@@ -195,7 +195,7 @@ namespace Emilia.Node.Editor
         protected EdgeCornerSweepValues GetCornerSweepValues(
             Vector2 p1, Vector2 cornerPoint, Vector2 p2, float diameter, Direction closestPortDirection)
         {
-            EdgeCornerSweepValues corner = new EdgeCornerSweepValues();
+            EdgeCornerSweepValues corner = new();
 
             corner.radius = diameter / 2;
 
@@ -296,9 +296,6 @@ namespace Emilia.Node.Editor
             }
         }
 
-        protected static bool Approximately(Vector2 v1, Vector2 v2)
-        {
-            return Mathf.Approximately(v1.x, v2.x) && Mathf.Approximately(v1.y, v2.y);
-        }
+        protected static bool Approximately(Vector2 v1, Vector2 v2) => Mathf.Approximately(v1.x, v2.x) && Mathf.Approximately(v1.y, v2.y);
     }
 }

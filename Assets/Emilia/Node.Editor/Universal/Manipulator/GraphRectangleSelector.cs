@@ -111,7 +111,7 @@ namespace Emilia.Node.Editor
 
             m_Rectangle.end = e.localMousePosition;
 
-            var selectionRect = new Rect() {
+            var selectionRect = new Rect {
                 min = new Vector2(Math.Min(m_Rectangle.start.x, m_Rectangle.end.x), Math.Min(m_Rectangle.start.y, m_Rectangle.end.y)),
                 max = new Vector2(Math.Max(m_Rectangle.start.x, m_Rectangle.end.x), Math.Max(m_Rectangle.start.y, m_Rectangle.end.y))
             };
@@ -125,7 +125,7 @@ namespace Emilia.Node.Editor
             if (! hasStackChild)
             {
                 // a copy is necessary because Add To selection might cause a SendElementToFront which will change the order.
-                List<ISelectable> newSelection = new List<ISelectable>();
+                List<ISelectable> newSelection = new();
                 graphView.graphElements.ForEach(child => {
                     var localSelRect = graphView.contentViewContainer.ChangeCoordinatesTo(child, selectionRect);
                     if (child.IsSelectable() && child.Overlaps(localSelRect) && ! child.IsStackable()) // Exclude StackNode children
@@ -188,10 +188,10 @@ namespace Emilia.Node.Editor
                 var segmentSize = 5f;
 
                 Vector3[] points = {
-                    new Vector3(r.xMin, r.yMin, 0.0f),
-                    new Vector3(r.xMax, r.yMin, 0.0f),
-                    new Vector3(r.xMax, r.yMax, 0.0f),
-                    new Vector3(r.xMin, r.yMax, 0.0f)
+                    new(r.xMin, r.yMin, 0.0f),
+                    new(r.xMax, r.yMin, 0.0f),
+                    new(r.xMax, r.yMax, 0.0f),
+                    new(r.xMin, r.yMax, 0.0f)
                 };
 
                 DrawDottedLine(points[0], points[1], segmentSize, lineColor);

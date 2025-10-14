@@ -30,7 +30,7 @@ namespace Emilia.Node.Editor
 
                 IOperateMenuAction action = (IOperateMenuAction) ReflectUtility.CreateInstance(type);
 
-                OperateMenuActionInfo actionInfo = new OperateMenuActionInfo();
+                OperateMenuActionInfo actionInfo = new();
                 actionInfo.action = action;
                 actionInfo.name = actionAttribute.name;
                 actionInfo.category = actionAttribute.category;
@@ -45,17 +45,14 @@ namespace Emilia.Node.Editor
         /// <summary>
         /// 获取操作菜单行为信息
         /// </summary>
-        public static OperateMenuActionInfo GetAction<T>()
-        {
-            return _actionMap[typeof(T)];
-        }
+        public static OperateMenuActionInfo GetAction<T>() => _actionMap[typeof(T)];
 
         /// <summary>
         /// 根据Tags获取操作菜单行为信息列表
         /// </summary>
         public static List<OperateMenuActionInfo> GetAction(params string[] tags)
         {
-            List<OperateMenuActionInfo> result = new List<OperateMenuActionInfo>();
+            List<OperateMenuActionInfo> result = new();
             for (var i = 0; i < _actions.Count; i++)
             {
                 OperateMenuActionInfo actionInfo = _actions[i];

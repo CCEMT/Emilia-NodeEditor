@@ -12,7 +12,7 @@ namespace Emilia.Node.Universal.Editor
     {
         public override string SerializeGraphElementsCallback(EditorGraphView graphView, IEnumerable<GraphElement> elements)
         {
-            CopyPasteGraph graph = new CopyPasteGraph();
+            CopyPasteGraph graph = new();
 
             foreach (GraphElement element in elements)
             {
@@ -26,8 +26,14 @@ namespace Emilia.Node.Universal.Editor
 
         public override bool CanPasteSerializedDataCallback(EditorGraphView graphView, string serializedData)
         {
-            try { return OdinSerializablePackUtility.FromJson<CopyPasteGraph>(serializedData) != null; }
-            catch { return false; }
+            try
+            {
+                return OdinSerializablePackUtility.FromJson<CopyPasteGraph>(serializedData) != null;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         public override IEnumerable<GraphElement> UnserializeAndPasteCallback(EditorGraphView graphView, string operationName, string serializedData, GraphCopyPasteContext copyPasteContext)
@@ -44,7 +50,7 @@ namespace Emilia.Node.Universal.Editor
                 CopyPasteGraph graph = OdinSerializablePackUtility.FromJson<CopyPasteGraph>(serializedData);
                 if (graph == null) return null;
 
-                List<GraphElement> graphElements = new List<GraphElement>();
+                List<GraphElement> graphElements = new();
                 List<ICopyPastePack> copyPastePacks = graph.GetAllPacks();
 
                 int amount = copyPastePacks.Count;
@@ -88,7 +94,10 @@ namespace Emilia.Node.Universal.Editor
 
                 return graphElements;
             }
-            catch { return null; }
+            catch
+            {
+                return null;
+            }
         }
 
         public override object CreateCopy(EditorGraphView graphView, object value) => SerializationUtility.CreateCopy(value);

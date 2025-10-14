@@ -9,7 +9,7 @@ namespace Emilia.Node.Editor
         /// 保存前的处理
         /// </summary>
         public virtual void OnSaveBefore(EditorGraphView graphView) { }
-        
+
         /// <summary>
         /// 保存后的处理
         /// </summary>

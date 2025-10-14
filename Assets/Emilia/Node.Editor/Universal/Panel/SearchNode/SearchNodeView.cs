@@ -14,13 +14,13 @@ namespace Emilia.Node.Universal.Editor
         private TreeViewState treeViewState;
         private SearchNodeTreeView searchNodeTreeView;
 
-        private List<UniversalEditorNodeView> dimNodeViews = new List<UniversalEditorNodeView>();
+        private List<UniversalEditorNodeView> dimNodeViews = new();
 
         public SearchNodeView()
         {
             name = nameof(SearchNodeView);
 
-            IMGUIContainer container = new IMGUIContainer(OnTreeGUI);
+            IMGUIContainer container = new(OnTreeGUI);
             container.name = $"{nameof(SearchNodeView)}-TreeView";
 
             Add(container);
@@ -51,7 +51,7 @@ namespace Emilia.Node.Universal.Editor
         {
             if (float.IsNaN(layout.width) || float.IsNaN(layout.height)) return;
 
-            Rect rect = new Rect(0.0f, 0.0f, layout.width, layout.height);
+            Rect rect = new(0.0f, 0.0f, layout.width, layout.height);
 
             if (searchNodeTreeView != null)
             {

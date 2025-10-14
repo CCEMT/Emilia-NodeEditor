@@ -60,7 +60,7 @@ namespace Emilia.Node.Universal.Editor
 
         private static Dictionary<IEditorNodeView, Vector2> LayoutHorizontal(float interval, AlignmentType alignmentType, List<IEditorNodeView> elements)
         {
-            Dictionary<IEditorNodeView, Vector2> nodeLayoutMovePosition = new Dictionary<IEditorNodeView, Vector2>();
+            Dictionary<IEditorNodeView, Vector2> nodeLayoutMovePosition = new();
 
             float y = GetY(alignmentType, elements);
 
@@ -91,7 +91,7 @@ namespace Emilia.Node.Universal.Editor
 
         private static Dictionary<IEditorNodeView, Vector2> LayoutVertical(float interval, AlignmentType alignmentType, List<IEditorNodeView> elements)
         {
-            Dictionary<IEditorNodeView, Vector2> nodeLayoutMovePosition = new Dictionary<IEditorNodeView, Vector2>();
+            Dictionary<IEditorNodeView, Vector2> nodeLayoutMovePosition = new();
 
             float x = GetX(alignmentType, elements);
 
@@ -134,7 +134,7 @@ namespace Emilia.Node.Universal.Editor
 
         private static void RestoreNode(Dictionary<IEditorNodeView, Vector2> nodeLayoutMovePosition)
         {
-            Queue<IEditorNodeView> queue = new Queue<IEditorNodeView>(nodeLayoutMovePosition.Keys);
+            Queue<IEditorNodeView> queue = new(nodeLayoutMovePosition.Keys);
 
             while (queue.Count > 0)
             {
@@ -142,10 +142,10 @@ namespace Emilia.Node.Universal.Editor
                 Vector2 relativePosition = nodeLayoutMovePosition[node];
                 if (relativePosition == Vector2.zero) continue;
 
-                HashSet<IEditorNodeView> connectNodes = new HashSet<IEditorNodeView>();
+                HashSet<IEditorNodeView> connectNodes = new();
                 connectNodes.AddRange(node.GetInputNodeViews());
                 connectNodes.AddRange(node.GetOutputNodeViews());
-                
+
                 foreach (IEditorNodeView connected in connectNodes)
                 {
                     if (nodeLayoutMovePosition.ContainsKey(connected)) continue;

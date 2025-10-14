@@ -8,7 +8,7 @@ namespace Emilia.Node.Editor
     {
         private CreateNodeMenuHandle handle;
 
-        private List<ICreateNodeHandle> _createNodeHandleCacheList = new List<ICreateNodeHandle>();
+        private List<ICreateNodeHandle> _createNodeHandleCacheList = new();
 
         /// <summary>
         /// 缓存的创建节点Handle
@@ -36,7 +36,7 @@ namespace Emilia.Node.Editor
 
         private void OnNodeCreationRequest(NodeCreationContext nodeCreationContext)
         {
-            CreateNodeContext createNodeContext = new CreateNodeContext();
+            CreateNodeContext createNodeContext = new();
             createNodeContext.screenMousePosition = nodeCreationContext.screenMousePosition;
             ShowCreateNodeMenu(createNodeContext);
         }

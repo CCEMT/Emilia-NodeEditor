@@ -24,7 +24,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public static List<IEditorNodeView> GetOutputNodeViews(this IEditorNodeView editorNodeView)
         {
-            List<IEditorNodeView> outputNodeViews = new List<IEditorNodeView>();
+            List<IEditorNodeView> outputNodeViews = new();
 
             for (var i = 0; i < editorNodeView.graphView.edgeViews.Count; i++)
             {
@@ -48,7 +48,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public static List<IEditorNodeView> GetInputNodeViews(this IEditorNodeView editorNodeView)
         {
-            List<IEditorNodeView> inputNodeViews = new List<IEditorNodeView>();
+            List<IEditorNodeView> inputNodeViews = new();
 
             for (var i = 0; i < editorNodeView.graphView.edgeViews.Count; i++)
             {
@@ -72,7 +72,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public static List<IEditorNodeView> GetAllOutputNodeViews(this IEditorNodeView editorNodeView)
         {
-            List<IEditorNodeView> outputNodeViews = new List<IEditorNodeView>();
+            List<IEditorNodeView> outputNodeViews = new();
 
             for (var i = 0; i < editorNodeView.graphView.edgeViews.Count; i++)
             {
@@ -97,7 +97,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public static List<IEditorNodeView> GetAllInputNodeViews(this IEditorNodeView editorNodeView)
         {
-            List<IEditorNodeView> inputNodeViews = new List<IEditorNodeView>();
+            List<IEditorNodeView> inputNodeViews = new();
 
             for (var i = 0; i < editorNodeView.graphView.edgeViews.Count; i++)
             {
@@ -122,7 +122,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public static List<IEditorEdgeView> GetInputEdgeViews(this IEditorNodeView editorNodeView)
         {
-            List<IEditorEdgeView> inputEdgeViews = new List<IEditorEdgeView>();
+            List<IEditorEdgeView> inputEdgeViews = new();
 
             for (var i = 0; i < editorNodeView.graphView.edgeViews.Count; i++)
             {
@@ -141,7 +141,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public static List<IEditorEdgeView> GetOutputEdgeViews(this IEditorNodeView editorNodeView)
         {
-            List<IEditorEdgeView> outputEdgeViews = new List<IEditorEdgeView>();
+            List<IEditorEdgeView> outputEdgeViews = new();
 
             for (var i = 0; i < editorNodeView.graphView.edgeViews.Count; i++)
             {
@@ -186,7 +186,7 @@ namespace Emilia.Node.Editor
 
         public static List<IEditorPortView> GetCanConnectPort(this IEditorNodeView editorNodeView, IEditorPortView portView)
         {
-            List<IEditorPortView> canConnectList = new List<IEditorPortView>();
+            List<IEditorPortView> canConnectList = new();
 
             EditorPortDirection direction = portView.portDirection;
 

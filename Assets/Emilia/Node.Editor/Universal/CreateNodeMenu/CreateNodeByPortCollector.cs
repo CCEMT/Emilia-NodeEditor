@@ -15,7 +15,7 @@ namespace Emilia.Node.Editor
 
         public List<CreateNodeInfo> Collect(List<MenuNodeInfo> allNodeInfos)
         {
-            List<CreateNodeInfo> createNodeInfos = new List<CreateNodeInfo>();
+            List<CreateNodeInfo> createNodeInfos = new();
 
             if (portView == null) return createNodeInfos;
 
@@ -64,7 +64,7 @@ namespace Emilia.Node.Editor
                     createNodePostprocess = new ConnectCreateNodePostprocess(originalNodeId, originalPortId, targetPortId);
                 }
 
-                CreateNodeInfo createNodeInfo = new CreateNodeInfo(nodeInfo, createNodePostprocess);
+                CreateNodeInfo createNodeInfo = new(nodeInfo, createNodePostprocess);
 
                 createNodeInfos.Add(createNodeInfo);
             }

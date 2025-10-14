@@ -29,7 +29,7 @@ namespace Emilia.Node.Universal.Editor
                 Action<bool> setMethod = Delegate.CreateDelegate(typeof(Action<bool>), propertyInfo.SetMethod) as Action<bool>;
                 if (setMethod == null) return;
 
-                ToggleToolbarViewControl toggleToolbarViewControl = new ToggleToolbarViewControl(toggleToolbarAttribute.displayName, getMethod, setMethod);
+                ToggleToolbarViewControl toggleToolbarViewControl = new(toggleToolbarAttribute.displayName, getMethod, setMethod);
                 toolbarView.AddControl(toggleToolbarViewControl, toggleToolbarAttribute.position);
             }
         }

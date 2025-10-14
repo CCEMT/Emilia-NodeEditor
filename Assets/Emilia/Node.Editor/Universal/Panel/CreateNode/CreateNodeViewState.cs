@@ -9,7 +9,7 @@ namespace Emilia.Node.Universal.Editor
     {
         public const string CreateNodeViewStateSaveKey = "CreateNodeViewStateSaveKey";
 
-        public List<int> expandedIDs = new List<int>();
+        public List<int> expandedIDs = new();
 
         public void SetExpandedIDs(IEnumerable<int> newExpandedIDs)
         {

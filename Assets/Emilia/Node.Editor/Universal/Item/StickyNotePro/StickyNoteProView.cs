@@ -57,7 +57,7 @@ namespace Emilia.Node.Universal.Editor
             selectionBorder = new VisualElement();
             this.selectionBorder.name = "selection-border";
 
-            ResizableElement resizableElement = new ResizableElement();
+            ResizableElement resizableElement = new();
             Add(resizableElement);
 
             skinLight = ResourceUtility.LoadResource<GUISkin>("Node/GUISkin/MarkdownSkinLight.guiskin");

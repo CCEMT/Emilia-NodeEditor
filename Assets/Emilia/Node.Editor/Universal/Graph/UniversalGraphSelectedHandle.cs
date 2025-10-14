@@ -26,7 +26,7 @@ namespace Emilia.Node.Universal.Editor
 
         private void OnSelectionChanged()
         {
-            List<Object> selectedInspectors = new List<Object>();
+            List<Object> selectedInspectors = new();
 
             foreach (ISelectable selectable in editorGraphView.selection)
             {
@@ -41,7 +41,7 @@ namespace Emilia.Node.Universal.Editor
 
         public override void UpdateSelectedInspector(EditorGraphView graphView, List<ISelectedHandle> selection)
         {
-            List<Object> selectedInspectors = new List<Object>();
+            List<Object> selectedInspectors = new();
 
             foreach (ISelectedHandle selectable in selection) selectedInspectors.AddRange(selectable.GetSelectedObjects());
 

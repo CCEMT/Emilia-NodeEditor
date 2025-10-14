@@ -19,7 +19,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public List<CreateItemMenuInfo> CollectItemMenus()
         {
-            List<CreateItemMenuInfo> types = new List<CreateItemMenuInfo>();
+            List<CreateItemMenuInfo> types = new();
             handle.CollectItemMenus(this.graphView, types);
             return types;
         }

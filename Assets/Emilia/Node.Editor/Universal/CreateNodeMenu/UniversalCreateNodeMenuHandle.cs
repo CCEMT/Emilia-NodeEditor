@@ -60,7 +60,7 @@ namespace Emilia.Node.Universal.Editor
                 Type type = types[i];
                 if (type.IsAbstract || type.IsInterface || type.IsGenericType) continue;
 
-                CreateNodeHandleContext createNodeHandleContext = new CreateNodeHandleContext();
+                CreateNodeHandleContext createNodeHandleContext = new();
                 createNodeHandleContext.nodeType = type;
                 createNodeHandleContext.defaultEditorNodeType = attribute.baseEditorNodeType;
 
@@ -88,7 +88,7 @@ namespace Emilia.Node.Universal.Editor
                 NodeMenuAttribute nodeMenuAttribute = type.GetCustomAttribute<NodeMenuAttribute>();
                 if (nodeMenuAttribute == null) continue;
 
-                CreateNodeHandle createNodeHandle = new CreateNodeHandle();
+                CreateNodeHandle createNodeHandle = new();
                 createNodeHandle.path = nodeMenuAttribute.path;
                 createNodeHandle.priority = nodeMenuAttribute.priority;
                 createNodeHandle.editorNodeType = type;
@@ -112,7 +112,7 @@ namespace Emilia.Node.Universal.Editor
             if (createNodeContext.nodeMenu == null) return;
 
             createNodeMenuProvider.Initialize(graphView, createNodeContext, this);
-            SearchWindowContext searchWindowContext = new SearchWindowContext(createNodeContext.screenMousePosition);
+            SearchWindowContext searchWindowContext = new(createNodeContext.screenMousePosition);
             SearchWindow_Hook.Open<CreateNodeMenuProvider, SearchWindow_Hook>(searchWindowContext, createNodeMenuProvider);
         }
 
@@ -121,10 +121,10 @@ namespace Emilia.Node.Universal.Editor
         /// </summary>
         public virtual void CreateNodeTree(CreateNodeContext createNodeContext, Action<CreateNodeMenuItem> groupCreate, Action<CreateNodeMenuItem> itemCreate)
         {
-            Dictionary<string, List<CreateNodeMenuItem>> groupItemsByPath = new Dictionary<string, List<CreateNodeMenuItem>>();
-            Dictionary<string, CreateNodeMenuItem> nodeItemByFullPath = new Dictionary<string, CreateNodeMenuItem>();
+            Dictionary<string, List<CreateNodeMenuItem>> groupItemsByPath = new();
+            Dictionary<string, CreateNodeMenuItem> nodeItemByFullPath = new();
 
-            List<MenuNodeInfo> allNodeInfos = new List<MenuNodeInfo>();
+            List<MenuNodeInfo> allNodeInfos = new();
             CollectAllCreateNodeInfos(this.editorGraphView, allNodeInfos, createNodeContext);
 
             List<CreateNodeInfo> createNodeInfos = createNodeContext.nodeCollector != null
@@ -139,14 +139,14 @@ namespace Emilia.Node.Universal.Editor
                 string fullPath = createNodeInfo.menuInfo.path;
                 int nodeLevel = BuildGroupHierarchy(fullPath, createNodeInfo);
 
-                CreateNodeMenuItem nodeMenuItem = new CreateNodeMenuItem();
+                CreateNodeMenuItem nodeMenuItem = new();
                 nodeMenuItem.info = createNodeInfo;
                 nodeMenuItem.level = nodeLevel;
 
                 nodeItemByFullPath[fullPath] = nodeMenuItem;
             }
 
-            List<string> groupPaths = new List<string>();
+            List<string> groupPaths = new();
             groupPaths.AddRange(groupItemsByPath.Keys);
 
             groupPaths.Sort((a, b) => {
@@ -155,7 +155,7 @@ namespace Emilia.Node.Universal.Editor
                 return aMaxPriority.CompareTo(bMaxPriority);
             });
 
-            List<string> nodePaths = new List<string>();
+            List<string> nodePaths = new();
             nodePaths.AddRange(nodeItemByFullPath.Keys);
 
             nodePaths.Sort((a, b) => {
@@ -164,7 +164,7 @@ namespace Emilia.Node.Universal.Editor
                 return aItem.info.menuInfo.priority.CompareTo(bItem.info.menuInfo.priority);
             });
 
-            List<string> createdNodePaths = new List<string>();
+            List<string> createdNodePaths = new();
 
             for (int i = 0; i < groupPaths.Count; i++)
             {
@@ -205,7 +205,7 @@ namespace Emilia.Node.Universal.Editor
 
                     if (groupItemsByPath.ContainsKey(runningPath) == false) groupItemsByPath[runningPath] = new List<CreateNodeMenuItem>();
 
-                    CreateNodeMenuItem menuItem = new CreateNodeMenuItem();
+                    CreateNodeMenuItem menuItem = new();
                     menuItem.info = info;
                     menuItem.level = level;
                     menuItem.title = title;
@@ -239,7 +239,7 @@ namespace Emilia.Node.Universal.Editor
                 string[] parts = nodePath.Split('/');
                 if (parts.Length > 1) nodeName = parts[parts.Length - 1];
 
-                CreateNodeMenuItem itemMenu = new CreateNodeMenuItem(menuItem.info, nodeName, menuItem.level + 1);
+                CreateNodeMenuItem itemMenu = new(menuItem.info, nodeName, menuItem.level + 1);
                 itemMenu.info.menuInfo.icon = icon;
 
                 itemCreate?.Invoke(itemMenu);
@@ -259,7 +259,7 @@ namespace Emilia.Node.Universal.Editor
                 ICreateNodeHandle nodeHandle = graphView.createNodeMenu.createNodeHandleCacheList[i];
                 if (nodeHandle.validity == false) continue;
 
-                MenuNodeInfo menuNodeInfo = new MenuNodeInfo();
+                MenuNodeInfo menuNodeInfo = new();
                 menuNodeInfo.nodeData = nodeHandle.nodeData;
                 menuNodeInfo.editorNodeAssetType = nodeHandle.editorNodeType;
                 menuNodeInfo.path = nodeHandle.path;

@@ -30,9 +30,9 @@ namespace Emilia.Node.Universal.Editor
 
         private NodeMessageButtonElement messageButtonElement;
         private NodeMessageContainer messageContainer;
-        private List<NodeMessageElement> messageElements = new List<NodeMessageElement>();
+        private List<NodeMessageElement> messageElements = new();
 
-        private Dictionary<string, NodeTipsElement> tipsElements = new Dictionary<string, NodeTipsElement>();
+        private Dictionary<string, NodeTipsElement> tipsElements = new();
 
         protected NodeDuplicateDragger duplicateDragger;
         protected NodeInsertDragger insertDragger;
@@ -111,7 +111,7 @@ namespace Emilia.Node.Universal.Editor
         {
             if (string.IsNullOrEmpty(iconPath)) return;
             Texture2D icon = ResourceUtility.LoadResource<Texture2D>(styleFilePath);
-            VisualElement iconElement = new VisualElement();
+            VisualElement iconElement = new();
             iconElement.style.backgroundImage = icon;
             titleContainer.Insert(0, iconElement);
         }
@@ -234,7 +234,7 @@ namespace Emilia.Node.Universal.Editor
 
         private void CreateHorizontalContainer()
         {
-            NodeHorizontalContainer nodeHorizontalContainer = new NodeHorizontalContainer();
+            NodeHorizontalContainer nodeHorizontalContainer = new();
             this.horizontalContainer = nodeHorizontalContainer;
             this.horizontalInputContainer = nodeHorizontalContainer.inputContainer;
             this.horizontalOutputContainer = nodeHorizontalContainer.outputContainer;
@@ -243,11 +243,11 @@ namespace Emilia.Node.Universal.Editor
 
         private void CreateVerticalContainer()
         {
-            NodeVerticalContainer inputVerticalContainer = new NodeVerticalContainer();
+            NodeVerticalContainer inputVerticalContainer = new();
             this.verticalInputContainer = inputVerticalContainer;
             nodeTopContainer.Add(inputVerticalContainer);
 
-            NodeVerticalContainer outputVerticalContainer = new NodeVerticalContainer();
+            NodeVerticalContainer outputVerticalContainer = new();
             this.verticalOutputContainer = outputVerticalContainer;
             nodeBottomContainer.Add(outputVerticalContainer);
         }
@@ -267,7 +267,7 @@ namespace Emilia.Node.Universal.Editor
         /// </summary>
         public NodeMessageElement AddMessage(string message, NodeMessageLevel level)
         {
-            NodeMessageElement nodeMessageElement = new NodeMessageElement();
+            NodeMessageElement nodeMessageElement = new();
             nodeMessageElement.Init(message, level);
 
             nodeMessageElement.onRemove += () => RemoveMessage(nodeMessageElement);
@@ -322,7 +322,7 @@ namespace Emilia.Node.Universal.Editor
         {
             if (tipsElements.ContainsKey(text)) return;
 
-            NodeTipsElement nodeTipsElement = new NodeTipsElement();
+            NodeTipsElement nodeTipsElement = new();
             nodeTipsElement.text = text;
 
             tipsElements[text] = nodeTipsElement;

@@ -10,19 +10,19 @@ namespace Emilia.Node.Universal.Editor
         public override void CollectItemMenus(EditorGraphView graphView, List<CreateItemMenuInfo> itemTypes)
         {
             base.CollectItemMenus(graphView, itemTypes);
-            CreateItemMenuInfo group = new CreateItemMenuInfo();
+            CreateItemMenuInfo group = new();
             group.itemAssetType = typeof(EditorGroupAsset);
             group.path = "Group";
 
             itemTypes.Add(group);
-            
-            CreateItemMenuInfo sticky = new CreateItemMenuInfo();
+
+            CreateItemMenuInfo sticky = new();
             sticky.itemAssetType = typeof(StickyNoteAsset);
             sticky.path = "Sticky Note";
-            
+
             itemTypes.Add(sticky);
 
-            CreateItemMenuInfo stickyPro = new CreateItemMenuInfo();
+            CreateItemMenuInfo stickyPro = new();
             stickyPro.itemAssetType = typeof(StickyNoteProAsset);
             stickyPro.path = "Sticky Note Pro";
 

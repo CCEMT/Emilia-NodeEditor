@@ -12,26 +12,26 @@ namespace Emilia.Node.Editor
     [Serializable]
     public partial class EditorGraphAsset : SerializedScriptableObject
     {
-        [SerializeField, HideInInspector]
+        [SerializeField, ReadOnly]
         private string _id;
 
         [NonSerialized, OdinSerialize, HideInInspector]
-        private List<EditorNodeAsset> _nodes = new List<EditorNodeAsset>();
+        private List<EditorNodeAsset> _nodes = new();
 
         [NonSerialized, OdinSerialize, HideInInspector]
-        private List<EditorEdgeAsset> _edges = new List<EditorEdgeAsset>();
+        private List<EditorEdgeAsset> _edges = new();
 
         [NonSerialized, OdinSerialize, HideInInspector]
-        private List<EditorItemAsset> _items = new List<EditorItemAsset>();
+        private List<EditorItemAsset> _items = new();
 
         [NonSerialized, OdinSerialize, HideInInspector]
-        private Dictionary<string, EditorNodeAsset> _nodeMap = new Dictionary<string, EditorNodeAsset>();
+        private Dictionary<string, EditorNodeAsset> _nodeMap = new();
 
         [NonSerialized, OdinSerialize, HideInInspector]
-        private Dictionary<string, EditorEdgeAsset> _edgeMap = new Dictionary<string, EditorEdgeAsset>();
+        private Dictionary<string, EditorEdgeAsset> _edgeMap = new();
 
         [NonSerialized, OdinSerialize, HideInInspector]
-        private Dictionary<string, EditorItemAsset> _itemMap = new Dictionary<string, EditorItemAsset>();
+        private Dictionary<string, EditorItemAsset> _itemMap = new();
 
         [NonSerialized]
         private PropertyTree _propertyTree;

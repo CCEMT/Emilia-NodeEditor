@@ -20,7 +20,7 @@ namespace Emilia.Node.Universal.Editor
 
         public List<SearchTreeEntry> CreateSearchTree(SearchWindowContext context)
         {
-            List<SearchTreeEntry> tree = new List<SearchTreeEntry>();
+            List<SearchTreeEntry> tree = new();
             tree.Add(new SearchTreeGroupEntry(new GUIContent(infoProvider.GetTitle())));
             infoProvider.CreateNodeTree(createNodeContext, (info) => CreateGroup(tree, info), (menuInfo) => CreateItem(tree, menuInfo));
 

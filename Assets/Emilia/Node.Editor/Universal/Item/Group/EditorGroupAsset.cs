@@ -15,7 +15,7 @@ namespace Emilia.Node.Editor
         public Vector2 size;
 
         [HideInInspector]
-        public List<string> innerNodes = new List<string>();
+        public List<string> innerNodes = new();
 
         public override string title => groupTitle;
 

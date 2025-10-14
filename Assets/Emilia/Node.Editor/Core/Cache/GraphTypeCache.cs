@@ -8,9 +8,9 @@ namespace Emilia.Node.Editor
 {
     public static class GraphTypeCache
     {
-        private static Dictionary<Type, Type> nodeViewTypeCache = new Dictionary<Type, Type>();
-        private static Dictionary<Type, Type> edgeViewTypeCache = new Dictionary<Type, Type>();
-        private static Dictionary<Type, Type> itemViewTypeCache = new Dictionary<Type, Type>();
+        private static Dictionary<Type, Type> nodeViewTypeCache = new();
+        private static Dictionary<Type, Type> edgeViewTypeCache = new();
+        private static Dictionary<Type, Type> itemViewTypeCache = new();
 
         static GraphTypeCache()
         {

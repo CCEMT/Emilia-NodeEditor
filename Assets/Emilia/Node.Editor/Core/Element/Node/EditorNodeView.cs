@@ -15,12 +15,12 @@ namespace Emilia.Node.Editor
 {
     public abstract class EditorNodeView : NodeView, IEditorNodeView
     {
-        protected List<IEditorPortView> _portViews = new List<IEditorPortView>();
-        protected Dictionary<string, IEditorPortView> _portViewMap = new Dictionary<string, IEditorPortView>();
+        protected List<IEditorPortView> _portViews = new();
+        protected Dictionary<string, IEditorPortView> _portViewMap = new();
 
-        protected Dictionary<string, EditorNodeInputPortEditInfo> inputEditInfos = new Dictionary<string, EditorNodeInputPortEditInfo>();
-        protected Dictionary<string, VisualElement> inputEditElements = new Dictionary<string, VisualElement>();
-        protected Dictionary<string, InspectorPropertyField> inputFields = new Dictionary<string, InspectorPropertyField>();
+        protected Dictionary<string, EditorNodeInputPortEditInfo> inputEditInfos = new();
+        protected Dictionary<string, VisualElement> inputEditElements = new();
+        protected Dictionary<string, InspectorPropertyField> inputFields = new();
 
         public EditorNodeAsset asset { get; private set; }
 
@@ -131,7 +131,7 @@ namespace Emilia.Node.Editor
 
             if (editInNode)
             {
-                IMGUIContainer assetContainer = new IMGUIContainer(() => asset.propertyTree?.Draw());
+                IMGUIContainer assetContainer = new(() => asset.propertyTree?.Draw());
                 topLayerContainer.Add(assetContainer);
             }
 
@@ -305,11 +305,11 @@ namespace Emilia.Node.Editor
 
         protected void AddInputEditContainer(string portName, string fieldPath, bool forceImGUIDraw = false)
         {
-            VisualElement editContainer = new VisualElement();
+            VisualElement editContainer = new();
             editContainer.name = "edit-container";
 
             InspectorProperty inspectorProperty = asset.propertyTree.GetPropertyAtPath(fieldPath);
-            InspectorPropertyField inspectorPropertyField = new InspectorPropertyField(inspectorProperty, forceImGUIDraw, false);
+            InspectorPropertyField inspectorPropertyField = new(inspectorProperty, forceImGUIDraw, false);
             inspectorPropertyField.AddToClassList("port-input-element");
             editContainer.Add(inspectorPropertyField);
 
@@ -331,7 +331,7 @@ namespace Emilia.Node.Editor
 
         protected void AddEmptyInputEditContainer(string portName)
         {
-            VisualElement editContainer = new VisualElement();
+            VisualElement editContainer = new();
             editContainer.name = "edit-container";
             editContainer.AddToClassList("empty");
 

@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Emilia.Kit;
 using Emilia.Node.Attributes;
 using Emilia.Node.Editor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using UnityEngine.UIElements;
 using Object = UnityEngine.Object;
 
 namespace Emilia.Node.Universal.Editor
@@ -35,10 +33,10 @@ namespace Emilia.Node.Universal.Editor
                 stickyAsset.content = contents;
                 stickyAsset.fontSize = fontSize;
                 stickyAsset.theme = theme;
-                
+
                 Rect position = GetPosition();
                 stickyAsset.position = new Rect(position.x, position.y, style.width.value.value, style.height.value.value);
-                
+
                 this.graphView.RegisterCompleteObjectUndo("Graph StickyNoteChange");
             });
         }

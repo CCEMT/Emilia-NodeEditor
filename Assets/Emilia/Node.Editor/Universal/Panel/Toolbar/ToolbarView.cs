@@ -13,7 +13,7 @@ namespace Emilia.Node.Universal.Editor
         private float _leftMargin = 5;
         private float _rightMargin = 5f;
 
-        private Dictionary<ToolbarViewControlPosition, List<IToolbarViewControl>> controls = new Dictionary<ToolbarViewControlPosition, List<IToolbarViewControl>>();
+        private Dictionary<ToolbarViewControlPosition, List<IToolbarViewControl>> controls = new();
         public ToolbarViewOrientation orientation { get; set; } = ToolbarViewOrientation.Horizontal;
 
         public float leftMargin => _leftMargin;
@@ -33,7 +33,7 @@ namespace Emilia.Node.Universal.Editor
             InitAttributeControls();
 
             if (parentView != null) parentView.canResizable = false;
-            
+
             EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
             EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
         }

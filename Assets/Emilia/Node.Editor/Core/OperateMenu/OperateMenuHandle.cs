@@ -10,7 +10,7 @@ namespace Emilia.Node.Editor
         /// 初始化缓存
         /// </summary>
         public virtual void InitializeCache(EditorGraphView graphView, List<OperateMenuActionInfo> actionInfos) { }
-        
+
         /// <summary>
         /// 收集操作菜单项
         /// </summary>

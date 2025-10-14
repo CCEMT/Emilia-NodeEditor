@@ -15,7 +15,7 @@ namespace Emilia.Node.Editor
     {
         private EditorGroupAsset groupAsset;
 
-        private Dictionary<string, ContextualMenuManipulator> menuManipulators = new Dictionary<string, ContextualMenuManipulator>();
+        private Dictionary<string, ContextualMenuManipulator> menuManipulators = new();
 
         private bool isUndo;
 
@@ -24,7 +24,7 @@ namespace Emilia.Node.Editor
         public EditorGraphView graphView { get; protected set; }
 
         public bool isSelected { get; protected set; }
-        public virtual Color groupColor => new Color(0, 0, 0, 0.3f);
+        public virtual Color groupColor => new(0, 0, 0, 0.3f);
 
         public virtual void Initialize(EditorGraphView graphView, EditorItemAsset asset)
         {
@@ -103,7 +103,7 @@ namespace Emilia.Node.Editor
                 EditorNodeView nodeView = graphElement as EditorNodeView;
                 if (nodeView == null) continue;
 
-                ContextualMenuManipulator manipulator = new ContextualMenuManipulator(GroupMenu);
+                ContextualMenuManipulator manipulator = new(GroupMenu);
                 nodeView.AddManipulator(manipulator);
                 menuManipulators[nodeView.asset.id] = manipulator;
 

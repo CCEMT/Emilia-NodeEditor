@@ -30,7 +30,7 @@ namespace Emilia.Node.Universal.Editor
         {
             GUILayout.BeginHorizontal(EditorStyles.toolbar);
 
-            Stack<IHierarchyAsset> hierarchyAssets = new Stack<IHierarchyAsset>();
+            Stack<IHierarchyAsset> hierarchyAssets = new();
 
             IHierarchyAsset current = graphView.graphAsset;
             while (current != null)
@@ -48,7 +48,7 @@ namespace Emilia.Node.Universal.Editor
                 GUIStyle style2 = i == 0 ? BreadCrumbLeftBg : BreadCrumbMidBg;
 
                 string label = hierarchyAsset.ToString();
-                GUIContent guiContent = new GUIContent(label);
+                GUIContent guiContent = new(label);
                 Rect rect = GetLayoutRect(guiContent, style1);
                 if (Event.current.type == EventType.Repaint) style2.Draw(rect, GUIContent.none, 0);
 

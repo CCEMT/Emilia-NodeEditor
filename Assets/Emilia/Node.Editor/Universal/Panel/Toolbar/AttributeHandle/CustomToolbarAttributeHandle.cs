@@ -20,7 +20,7 @@ namespace Emilia.Node.Universal.Editor
                 if (customToolbarAttribute == null) continue;
                 Action action = Delegate.CreateDelegate(typeof(Action), methodInfo) as Action;
                 if (action == null) return;
-                CustomToolbarViewControl customToolbarViewControl = new CustomToolbarViewControl(action);
+                CustomToolbarViewControl customToolbarViewControl = new(action);
                 toolbarView.AddControl(customToolbarViewControl, customToolbarAttribute.position);
             }
         }

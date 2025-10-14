@@ -21,7 +21,7 @@ namespace Emilia.Node.Universal.Editor
 
         protected override IList<TreeViewItem> BuildRows(TreeViewItem root)
         {
-            List<TreeViewItem> treeViewItems = new List<TreeViewItem>();
+            List<TreeViewItem> treeViewItems = new();
 
             nodeViews.Clear();
 
@@ -43,7 +43,7 @@ namespace Emilia.Node.Universal.Editor
                 string displayName = ObjectDescriptionUtility.GetDescription(nodeView.asset);
                 if (string.IsNullOrEmpty(displayName)) displayName = nodeView.asset.name;
 
-                TreeViewItem item = new TreeViewItem(id, 0, displayName);
+                TreeViewItem item = new(id, 0, displayName);
 
                 root.AddChild(item);
                 treeViewItems.Add(item);
@@ -52,7 +52,7 @@ namespace Emilia.Node.Universal.Editor
 
         private void AddSearchItem(List<TreeViewItem> treeViewItems, TreeViewItem root)
         {
-            List<(TreeViewItem, int)> collects = new List<(TreeViewItem, int)>();
+            List<(TreeViewItem, int)> collects = new();
 
             int count = this.graphView.nodeViews.Count;
             for (int i = 0; i < count; i++)
@@ -68,12 +68,12 @@ namespace Emilia.Node.Universal.Editor
                 int score = SearchUtility.Search(displayName, searchString);
                 if (score == 0) continue;
 
-                TreeViewItem item = new TreeViewItem(id, 0, displayName);
-                collects.Add((item,score));
+                TreeViewItem item = new(id, 0, displayName);
+                collects.Add((item, score));
             }
-            
+
             collects.Sort((a, b) => b.Item2.CompareTo(a.Item2));
-            
+
             foreach (var collect in collects)
             {
                 root.AddChild(collect.Item1);

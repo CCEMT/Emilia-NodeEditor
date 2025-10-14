@@ -8,7 +8,7 @@ namespace Emilia.Node.Editor
         /// 拷贝的资源
         /// </summary>
         EditorItemAsset copyAsset { get; }
-        
+
         /// <summary>
         /// 粘贴的资源
         /// </summary>

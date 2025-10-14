@@ -77,7 +77,7 @@ namespace Emilia.Node.Universal.Editor
 
         protected void AddGridBackground()
         {
-            GridBackground background = new GridBackground();
+            GridBackground background = new();
             StyleSheet styleSheet = ResourceUtility.LoadResource<StyleSheet>(GridBackgroundStyleFilePath);
             background.styleSheets.Add(styleSheet);
 

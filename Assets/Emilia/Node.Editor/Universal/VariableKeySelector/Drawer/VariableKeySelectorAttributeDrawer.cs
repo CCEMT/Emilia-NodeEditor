@@ -35,9 +35,9 @@ namespace Emilia.Node.Universal.Editor
             {
                 VariableKeyTypeFilterAttribute filterAttribute = Property.GetAttribute<VariableKeyTypeFilterAttribute>();
 
-                OdinMenu odinMenu = new OdinMenu("选择参数");
+                OdinMenu odinMenu = new("选择参数");
 
-                if (universalGraphAsset.editorParametersManage!=null)
+                if (universalGraphAsset.editorParametersManage != null)
                 {
                     for (var i = 0; i < universalGraphAsset.editorParametersManage.parameters.Count; i++)
                     {

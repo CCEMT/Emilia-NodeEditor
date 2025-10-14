@@ -27,7 +27,7 @@ namespace Emilia.Node.Universal.Editor
             Texture icon = NodeMessageLevelUtility.GetIcon(level);
             Color color = NodeMessageLevelUtility.GetColor(level);
 
-            Image image = new Image();
+            Image image = new();
             image.name = "icon";
             image.image = icon;
             image.style.width = 16;
@@ -35,7 +35,7 @@ namespace Emilia.Node.Universal.Editor
 
             Add(image);
 
-            Label messageLabel = new Label();
+            Label messageLabel = new();
             messageLabel.name = "message";
             messageLabel.text = message;
             messageLabel.style.color = color;

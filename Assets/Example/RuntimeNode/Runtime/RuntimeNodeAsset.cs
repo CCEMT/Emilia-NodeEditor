@@ -3,8 +3,5 @@
 namespace Example.RuntimeNode.Runtime
 {
     [Serializable]
-    public class RuntimeNodeAsset
-    {
-        
-    }
+    public class RuntimeNodeAsset { }
 }

@@ -30,7 +30,7 @@ namespace Example
 
         protected override OdinMenuTree BuildMenuTree()
         {
-            OdinMenuTree tree = new OdinMenuTree();
+            OdinMenuTree tree = new();
             tree.Config.DrawSearchToolbar = true;
             tree.Config.SearchFunction = item => SearchUtility.Matching(item.SearchString, tree.Config.SearchTerm);
 
@@ -40,7 +40,7 @@ namespace Example
             for (int i = 0; i < amount; i++)
             {
                 ExampleAsset asset = editorGuideAsset[i];
-                ExampleTreeItem treeItem = new ExampleTreeItem(asset);
+                ExampleTreeItem treeItem = new(asset);
 
                 string itemName = asset.name;
                 if (string.IsNullOrEmpty(asset.description) == false) itemName += $"({asset.description})";

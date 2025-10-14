@@ -47,10 +47,7 @@ namespace Emilia.Node.Editor
             this._connectionPacks = connectionPacks;
         }
 
-        public bool CanDependency(ICopyPastePack pack)
-        {
-            return false;
-        }
+        public bool CanDependency(ICopyPastePack pack) => false;
 
         public void Paste(CopyPasteContext copyPasteContext)
         {

@@ -9,7 +9,7 @@ namespace Emilia.Node.Universal.Editor
     [SelectedClear]
     public class UniversalEditorParametersManage : EditorParametersManager
     {
-        public override IList<Type> filterTypes => new List<Type>() {
+        public override IList<Type> filterTypes => new List<Type> {
             typeof(VariableSingle),
             typeof(VariableInt32),
             typeof(VariableString),

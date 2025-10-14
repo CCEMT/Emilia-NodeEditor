@@ -9,12 +9,12 @@ namespace Emilia.Node.Universal.Editor
             name = nameof(GraphLoadingContainer);
             pickingMode = PickingMode.Ignore;
             style.display = DisplayStyle.Flex;
-            
+
             this.StretchToParentSize();
 
-            Label label = new Label("Compilation...");
+            Label label = new("Compilation...");
             label.style.position = Position.Absolute;
-            
+
             label.style.left = 10;
             label.style.bottom = 10;
 

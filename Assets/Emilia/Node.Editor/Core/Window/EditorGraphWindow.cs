@@ -74,7 +74,7 @@ namespace Emilia.Node.Editor
 
         private void OnEnable()
         {
-            IMGUIContainer container = new IMGUIContainer(Draw);
+            IMGUIContainer container = new(Draw);
             container.style.flexGrow = 1;
             rootVisualElement.Add(container);
         }

@@ -13,7 +13,7 @@ namespace Emilia.Node.Editor
 {
     public class EditorPortView : Port_Internals, IEditorPortView, ICollectibleElement
     {
-        private List<IEditorEdgeView> _edges = new List<IEditorEdgeView>();
+        private List<IEditorEdgeView> _edges = new();
 
         public EditorPortInfo info { get; private set; }
         public IEditorNodeView master { get; private set; }
@@ -70,7 +70,7 @@ namespace Emilia.Node.Editor
 
             capabilities |= Capabilities.Copiable;
 
-            ContextualMenuManipulator contextualMenuManipulator = new ContextualMenuManipulator(OnContextualMenuManipulator);
+            ContextualMenuManipulator contextualMenuManipulator = new(OnContextualMenuManipulator);
             this.AddManipulator(contextualMenuManipulator);
 
             if (graphView.isInitialized) schedule.Execute(RefreshEdge).ExecuteLater(1);
@@ -107,10 +107,10 @@ namespace Emilia.Node.Editor
 
             boxRect.xMin -= leftSpace;
             boxRect.width += leftSpace;
-            
+
             return boxRect.Contains(this.ChangeCoordinatesTo(m_ConnectorBox, localPoint));
         }
-    
+
         protected virtual void OnCopyConnect()
         {
             graphView.ClearSelection();
@@ -206,7 +206,7 @@ namespace Emilia.Node.Editor
         {
             List<IEditorEdgeView> edgeViews = this.GetEdges();
 
-            List<IEdgeCopyPastePack> packs = new List<IEdgeCopyPastePack>(edgeViews.Count);
+            List<IEdgeCopyPastePack> packs = new(edgeViews.Count);
             for (int i = 0; i < edgeViews.Count; i++)
             {
                 IEditorEdgeView edgeView = edgeViews[i];
@@ -214,7 +214,7 @@ namespace Emilia.Node.Editor
                 packs.Add(edgePack);
             }
 
-            PortCopyPastePack pack = new PortCopyPastePack(master.asset.id, info.id, info.portType, info.direction, packs);
+            PortCopyPastePack pack = new(master.asset.id, info.id, info.portType, info.direction, packs);
             return pack;
         }
 

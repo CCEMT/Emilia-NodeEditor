@@ -16,7 +16,7 @@ namespace Emilia.Node.Universal.Editor
 
         public List<CreateNodeInfo> Collect(List<MenuNodeInfo> allNodeInfos)
         {
-            List<CreateNodeInfo> result = new List<CreateNodeInfo>();
+            List<CreateNodeInfo> result = new();
 
             int count = allNodeInfos.Count;
             for (int i = 0; i < count; i++)
@@ -28,8 +28,8 @@ namespace Emilia.Node.Universal.Editor
 
                 if (nodeCache.nodeView.GetCanConnectPort(edgeView, out _, out _))
                 {
-                    InsertCreateNodePostprocess insertPostprocess = new InsertCreateNodePostprocess(edgeView.asset.id);
-                    CreateNodeInfo createNodeInfo = new CreateNodeInfo(menuNodeInfo, insertPostprocess);
+                    InsertCreateNodePostprocess insertPostprocess = new(edgeView.asset.id);
+                    CreateNodeInfo createNodeInfo = new(menuNodeInfo, insertPostprocess);
                     result.Add(createNodeInfo);
                 }
             }

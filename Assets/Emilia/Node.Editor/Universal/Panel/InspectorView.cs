@@ -30,7 +30,7 @@ namespace Emilia.Node.Universal.Editor
             graphView.UnregisterCallback<GeometryChangedEvent>(OnGeometryChangedEvent);
             graphView.RegisterCallback<GeometryChangedEvent>(OnGeometryChangedEvent);
         }
-        
+
         /// <summary>
         /// 设置显示的对象
         /// </summary>
@@ -49,7 +49,10 @@ namespace Emilia.Node.Universal.Editor
 
                 if (ReferenceEquals(target, null)) return;
 
-                if (i == 0) { targetType = target.GetType(); }
+                if (i == 0)
+                {
+                    targetType = target.GetType();
+                }
                 else if (targetType != (otherType = target.GetType()))
                 {
                     if (targetType.IsAssignableFrom(otherType)) continue;
@@ -101,10 +104,10 @@ namespace Emilia.Node.Universal.Editor
         public override void Dispose()
         {
             base.Dispose();
-            
+
             graphView.UnregisterCallback<GeometryChangedEvent>(OnGeometryChangedEvent);
             graphView.UnregisterCallback<GeometryChangedEvent>(OnGeometryChangedEvent);
-            
+
             if (propertyTree != null)
             {
                 propertyTree.Dispose();

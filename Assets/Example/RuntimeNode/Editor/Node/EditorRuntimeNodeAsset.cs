@@ -21,9 +21,9 @@ namespace Example.RuntimeNode.Editor
     {
         public override List<EditorPortInfo> CollectStaticPortAssets()
         {
-            List<EditorPortInfo> portInfos = new List<EditorPortInfo>();
+            List<EditorPortInfo> portInfos = new();
 
-            EditorPortInfo input = new EditorPortInfo();
+            EditorPortInfo input = new();
             input.id = "input";
             input.displayName = "输入";
             input.direction = EditorPortDirection.Input;
@@ -32,7 +32,7 @@ namespace Example.RuntimeNode.Editor
 
             portInfos.Add(input);
 
-            EditorPortInfo output = new EditorPortInfo();
+            EditorPortInfo output = new();
             output.id = "output";
             output.displayName = "输出";
             output.direction = EditorPortDirection.Output;

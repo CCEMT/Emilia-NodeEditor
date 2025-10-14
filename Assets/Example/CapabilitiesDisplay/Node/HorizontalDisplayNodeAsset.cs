@@ -23,9 +23,9 @@ namespace Example
 
         public override List<EditorPortInfo> CollectStaticPortAssets()
         {
-            List<EditorPortInfo> portInfos = new List<EditorPortInfo>();
+            List<EditorPortInfo> portInfos = new();
 
-            EditorPortInfo leftIntPortInfo = new EditorPortInfo();
+            EditorPortInfo leftIntPortInfo = new();
             leftIntPortInfo.id = "leftInt1PortInfo";
             leftIntPortInfo.displayName = "左端口1(int)";
             leftIntPortInfo.portType = typeof(int);
@@ -36,7 +36,7 @@ namespace Example
 
             portInfos.Add(leftIntPortInfo);
 
-            EditorPortInfo leftStringPortInfo = new EditorPortInfo();
+            EditorPortInfo leftStringPortInfo = new();
             leftStringPortInfo.id = "leftInt2PortInfo";
             leftStringPortInfo.displayName = "左端口2(int)";
             leftStringPortInfo.portType = typeof(int);
@@ -48,7 +48,7 @@ namespace Example
 
             portInfos.Add(leftStringPortInfo);
 
-            EditorPortInfo rightIntPortInfo = new EditorPortInfo();
+            EditorPortInfo rightIntPortInfo = new();
             rightIntPortInfo.id = "rightInt1PortInfo";
             rightIntPortInfo.displayName = "右端口1(int)";
             rightIntPortInfo.portType = typeof(int);
@@ -59,7 +59,7 @@ namespace Example
 
             portInfos.Add(rightIntPortInfo);
 
-            EditorPortInfo rightStringPortInfo = new EditorPortInfo();
+            EditorPortInfo rightStringPortInfo = new();
             rightStringPortInfo.id = "rightInt2PortInfo";
             rightStringPortInfo.displayName = "右端口2(int)";
             rightStringPortInfo.portType = typeof(int);

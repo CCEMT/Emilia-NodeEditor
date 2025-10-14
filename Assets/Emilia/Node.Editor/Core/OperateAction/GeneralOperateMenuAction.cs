@@ -10,10 +10,7 @@ namespace Emilia.Node.Editor
 
         public override bool isOn => this.isOnCallback?.Invoke() ?? base.isOn;
 
-        public override OperateMenuActionValidity GetValidity(OperateMenuContext context)
-        {
-            return this.validityCallback?.Invoke(context) ?? base.GetValidity(context);
-        }
+        public override OperateMenuActionValidity GetValidity(OperateMenuContext context) => this.validityCallback?.Invoke(context) ?? base.GetValidity(context);
 
         public override void Execute(OperateMenuActionContext context)
         {
@@ -22,7 +19,7 @@ namespace Emilia.Node.Editor
 
         public OperateMenuActionInfo ToActionInfo(string name, string category, int priority)
         {
-            OperateMenuActionInfo actionInfo = new OperateMenuActionInfo();
+            OperateMenuActionInfo actionInfo = new();
             actionInfo.name = name;
             actionInfo.category = category;
             actionInfo.action = this;

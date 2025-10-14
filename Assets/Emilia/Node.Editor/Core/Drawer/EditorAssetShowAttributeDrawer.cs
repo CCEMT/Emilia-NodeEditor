@@ -30,7 +30,7 @@ namespace Emilia.Node.Editor
                 if (asset != null) this._graphRoot.SetAsset(asset);
                 return;
             }
-            
+
             if (_graphRoot == null || _graphRoot.window == null) return;
 
             this._graphRoot.OnImGUI(attribute.height, attribute.width);
@@ -43,7 +43,7 @@ namespace Emilia.Node.Editor
                 if (_graphRoot.asset != null) this._graphRoot.asset.SaveAll();
                 this._graphRoot.Dispose();
             }
-            
+
             this._graphRoot = null;
         }
     }
