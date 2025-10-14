@@ -314,7 +314,6 @@ namespace Emilia.Node.Editor
                 return;
             }
 
-            asset.RepetitionId();
             graphViews[asset] = this;
 
             onGraphAssetChange?.Invoke(asset);
@@ -349,7 +348,6 @@ namespace Emilia.Node.Editor
                 return;
             }
 
-            asset.RepetitionId();
             graphAsset = asset;
 
             ReloadHandle();

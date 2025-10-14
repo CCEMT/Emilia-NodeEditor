@@ -99,20 +99,6 @@ namespace Emilia.Node.Editor
             AssetDatabase.SaveAssetIfDirty(this);
         }
 
-        public void RepetitionId()
-        {
-            EditorGraphAsset[] graphAssets = EditorAssetKit.GetEditorResources<EditorGraphAsset>();
-            int count = graphAssets.Length;
-            for (int i = 0; i < count; i++)
-            {
-                EditorGraphAsset graphAsset = graphAssets[i];
-                if (graphAsset == this || graphAsset == null) continue;
-                if (graphAsset._id != this._id) continue;
-                ResetId();
-                break;
-            }
-        }
-
         public override string ToString()
         {
             if (this == null) return "Null";
@@ -122,7 +108,6 @@ namespace Emilia.Node.Editor
         protected virtual void OnValidate()
         {
             if (string.IsNullOrEmpty(this._id)) ResetId();
-            else RepetitionId();
         }
 
         protected virtual void OnEnable()
