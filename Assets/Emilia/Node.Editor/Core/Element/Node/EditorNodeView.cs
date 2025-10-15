@@ -387,7 +387,7 @@ namespace Emilia.Node.Editor
         /// <summary>
         /// 设置节点主题颜色
         /// </summary>
-        public void SetColor(Color color)
+        public virtual void SetColor(Color color)
         {
             topicColor = color;
 
