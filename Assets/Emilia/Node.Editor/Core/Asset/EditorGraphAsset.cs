@@ -86,7 +86,14 @@ namespace Emilia.Node.Editor
         /// </summary>
         public IReadOnlyDictionary<string, EditorItemAsset> itemMap => _itemMap;
 
-        public PropertyTree propertyTree => _propertyTree;
+        public PropertyTree propertyTree
+        {
+            get
+            {
+                if (_propertyTree == null) _propertyTree = PropertyTree.Create(this);
+                return _propertyTree;
+            }
+        }
 
         protected virtual void Reset()
         {
@@ -112,9 +119,6 @@ namespace Emilia.Node.Editor
 
         protected virtual void OnEnable()
         {
-            if (_propertyTree != null) _propertyTree.Dispose();
-            _propertyTree = PropertyTree.Create(this);
-
             if (string.IsNullOrEmpty(this._id)) ResetId();
         }
 
