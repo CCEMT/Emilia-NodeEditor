@@ -65,6 +65,8 @@ namespace Emilia.Node.Universal.Editor
                     ICreateNodeHandle createNodeHandle = graphView.createNodeMenu.createNodeHandleCacheList[i];
                     string path = createNodeHandle.path;
 
+                    if (string.IsNullOrEmpty(path)) continue;
+
                     string[] pathParts = path.Split('/');
 
                     if (pathParts.Length > 1)
