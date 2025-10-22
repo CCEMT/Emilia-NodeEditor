@@ -201,7 +201,7 @@ namespace Emilia.Node.Universal.Editor
         /// <summary>
         /// 更新标题
         /// </summary>
-        public void UpdateTitle()
+        public virtual void UpdateTitle()
         {
             title = this._universalNodeAsset.title;
         }
