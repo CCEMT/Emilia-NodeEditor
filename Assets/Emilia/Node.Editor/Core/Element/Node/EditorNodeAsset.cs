@@ -67,18 +67,21 @@ namespace Emilia.Node.Editor
         /// <summary>
         /// 自身Odin属性树
         /// </summary>
-        public PropertyTree propertyTree => _propertyTree;
+        public PropertyTree propertyTree
+        {
+            get
+            {
+                if (_propertyTree == null) _propertyTree = PropertyTree.Create(this);
+                return _propertyTree;
+            }
+        }
 
         /// <summary>
         /// 节点Tips
         /// </summary>
         public string tips { get; set; }
 
-        protected virtual void OnEnable()
-        {
-            if (_propertyTree != null) _propertyTree.Dispose();
-            _propertyTree = PropertyTree.Create(this);
-        }
+        protected virtual void OnEnable() { }
 
         public virtual void SetChildren(List<Object> childAssets) { }
         public virtual List<Object> GetChildren() => null;
