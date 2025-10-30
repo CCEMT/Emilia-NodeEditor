@@ -9,8 +9,10 @@ namespace Emilia.Node.Universal.Editor
     {
         private const float SearchFieldHeight = 20;
 
-        private SearchField searchField;
+        private NodeCollectionSetting collectionSetting;
         private CreateNodeViewState createNodeViewState;
+
+        private SearchField searchField;
         private TreeViewState treeViewState;
         private CreateNodeTreeView createNodeTreeView;
 
@@ -28,28 +30,41 @@ namespace Emilia.Node.Universal.Editor
         {
             base.Initialize(graphView);
 
+            graphView.graphLocalSettingSystem.onTypeSettingChanged += OnReadSetting;
+
             searchField = new SearchField();
             schedule.Execute(OnInitialize).ExecuteLater(1);
         }
 
         private void OnInitialize()
         {
+            collectionSetting = NodeCollectionSetting.Get(graphView);
             createNodeViewState = CreateNodeViewState.Get(graphView);
+
             treeViewState = new TreeViewState();
 
             treeViewState.expandedIDs.AddRange(createNodeViewState.expandedIDs);
 
-            createNodeTreeView = new CreateNodeTreeView(graphView, createNodeViewState, treeViewState);
+            createNodeTreeView = new CreateNodeTreeView(graphView, treeViewState);
 
             string saveKey = CreateNodeViewState.CreateNodeViewStateSaveKey;
             if (graphView.graphLocalSettingSystem.HasTypeSetting(saveKey) == false) createNodeTreeView.SetExpandAll();
 
-            createNodeTreeView.Reload();
+            createNodeTreeView.ReloadSetting(createNodeViewState, this.collectionSetting);
+        }
+
+        private void OnReadSetting()
+        {
+            collectionSetting = NodeCollectionSetting.Get(graphView);
+            createNodeViewState = CreateNodeViewState.Get(graphView);
+            createNodeTreeView.ReloadSetting(createNodeViewState, this.collectionSetting);
         }
 
         public override void Dispose()
         {
             base.Dispose();
+            graphView.graphLocalSettingSystem.onTypeSettingChanged -= OnReadSetting;
+
             treeViewState = null;
             createNodeTreeView = null;
         }

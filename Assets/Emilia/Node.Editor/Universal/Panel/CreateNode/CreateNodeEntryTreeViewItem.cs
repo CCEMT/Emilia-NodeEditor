@@ -4,14 +4,14 @@ namespace Emilia.Node.Universal.Editor
 {
     public class CreateNodeEntryTreeViewItem : CreateNodeTreeViewItem
     {
-        private ICreateNodeHandle _createNodeHandle;
+        public ICreateNodeHandle createNodeHandle { get; }
+        public bool isCollection { get; private set; }
 
-        public ICreateNodeHandle createNodeHandle => _createNodeHandle;
-
-        public CreateNodeEntryTreeViewItem(ICreateNodeHandle createNodeHandle)
+        public CreateNodeEntryTreeViewItem(ICreateNodeHandle createNodeHandle, bool isCollection = false)
         {
-            _createNodeHandle = createNodeHandle;
+            this.createNodeHandle = createNodeHandle;
             icon = createNodeHandle.icon;
+            this.isCollection = isCollection;
         }
     }
 }

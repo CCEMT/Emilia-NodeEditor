@@ -4,6 +4,7 @@ using Emilia.Kit;
 using Emilia.Node.Editor;
 using UnityEditor;
 using UnityEditor.IMGUI.Controls;
+using UnityEngine;
 
 namespace Emilia.Node.Universal.Editor
 {
@@ -11,15 +12,23 @@ namespace Emilia.Node.Universal.Editor
     {
         private EditorGraphView graphView;
         private CreateNodeViewState createNodeViewState;
+        private NodeCollectionSetting collectionSetting;
         private Dictionary<int, ICreateNodeHandle> createNodeHandleMap = new();
 
         private bool isExpandAll = false;
 
-        public CreateNodeTreeView(EditorGraphView graphView, CreateNodeViewState createNodeViewState, TreeViewState state) : base(state)
+        public CreateNodeTreeView(EditorGraphView graphView, TreeViewState state) : base(state)
         {
             baseIndent = 10;
             this.graphView = graphView;
+        }
+
+        public void ReloadSetting(CreateNodeViewState createNodeViewState, NodeCollectionSetting collectionSetting)
+        {
             this.createNodeViewState = createNodeViewState;
+            this.collectionSetting = collectionSetting;
+
+            Reload();
         }
 
         public void SetExpandAll()
@@ -43,6 +52,8 @@ namespace Emilia.Node.Universal.Editor
 
         private void AddNormalItem(List<TreeViewItem> treeViewItems, TreeViewItem root)
         {
+            AddCollectionItem(treeViewItems, root);
+
             Dictionary<string, List<ICreateNodeHandle>> titleToHandles = new();
             Dictionary<string, ICreateNodeHandle> nodeMap = new();
 
@@ -229,6 +240,57 @@ namespace Emilia.Node.Universal.Editor
             }
         }
 
+        void AddCollectionItem(List<TreeViewItem> treeViewItems, TreeViewItem root)
+        {
+            if (collectionSetting == null || collectionSetting.createNodePath.Count == 0) return;
+
+            string displayName = "收藏节点";
+
+            CreateNodeTitleTreeViewItem titleItem = new() {
+                id = displayName.GetHashCode(),
+                depth = 0,
+                displayName = displayName,
+            };
+
+            root.AddChild(titleItem);
+            treeViewItems.Add(titleItem);
+
+            if (isExpandAll) SetExpanded(titleItem.id, true);
+
+            bool isExpanded = IsExpanded(titleItem.id);
+            if (isExpanded == false) titleItem.children = CreateChildListForCollapsedParent();
+            else
+            {
+                Dictionary<string, ICreateNodeHandle> nodeMap = new();
+                int itemCount = this.graphView.createNodeMenu.createNodeHandleCacheList.Count;
+                for (int i = 0; i < itemCount; i++)
+                {
+                    ICreateNodeHandle createNodeHandle = this.graphView.createNodeMenu.createNodeHandleCacheList[i];
+                    string path = createNodeHandle.path;
+                    nodeMap[path] = createNodeHandle;
+                }
+
+                foreach (NodeCollectionInfo collectionInfo in this.collectionSetting.createNodeInfos)
+                {
+                    ICreateNodeHandle createNodeHandle = nodeMap.GetValueOrDefault(collectionInfo.nodePath);
+                    if (createNodeHandle == null) continue;
+
+                    string path = $"{displayName}/{collectionInfo.nodeName}";
+
+                    CreateNodeEntryTreeViewItem nodeItem = new(createNodeHandle, true) {
+                        id = path.GetHashCode(),
+                        depth = 1,
+                        displayName = collectionInfo.nodeName,
+                    };
+
+                    titleItem.AddChild(nodeItem);
+                    treeViewItems.Add(nodeItem);
+
+                    this.createNodeHandleMap[nodeItem.id] = createNodeHandle;
+                }
+            }
+        }
+
         void AddSearchItem(List<TreeViewItem> treeViewItems, TreeViewItem root)
         {
             Dictionary<string, ICreateNodeHandle> nodeMap = new();
@@ -298,8 +360,53 @@ namespace Emilia.Node.Universal.Editor
 
         protected override void ExpandedStateChanged()
         {
+            if (createNodeViewState == null) return;
+
             this.createNodeViewState.SetExpandedIDs(state.expandedIDs);
             this.createNodeViewState.Save(this.graphView);
+        }
+
+        protected override void RowGUI(RowGUIArgs args)
+        {
+            base.RowGUI(args);
+            if (args.selected && args.item is CreateNodeEntryTreeViewItem item)
+            {
+                Rect rect = args.rowRect;
+                rect.width = 16;
+                rect.height = 16;
+
+                string path = item.createNodeHandle.path;
+
+                if (item.isCollection)
+                {
+                    GUI.color = Color.yellow;
+
+                    if (GUI.Button(rect, "★", GUI.skin.label))
+                    {
+                        collectionSetting.Remove(path);
+                        collectionSetting.Save(graphView);
+                    }
+
+                    GUI.color = Color.white;
+                }
+                else
+                {
+                    bool isCollection = collectionSetting.createNodePath.Contains(path);
+
+                    if (isCollection == false)
+                    {
+                        GUI.color = Color.yellow;
+
+                        if (GUI.Button(rect, "☆", GUI.skin.label))
+                        {
+                            collectionSetting.Add(path);
+                            collectionSetting.Save(graphView);
+                        }
+
+                        GUI.color = Color.white;
+                    }
+                }
+            }
         }
     }
 }
