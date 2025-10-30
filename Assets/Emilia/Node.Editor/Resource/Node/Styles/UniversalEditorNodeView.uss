@@ -55,6 +55,14 @@
 
 #title-button-container {
     align-items: center;
+    align-content: center;
+}
+
+#collapse-button
+{
+    width: 16px;
+    height: 16px;
+    margin: 4px;
 }
 
 #message-button {

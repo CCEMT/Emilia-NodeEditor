@@ -47,7 +47,10 @@ namespace Emilia.Variables
             bool isSet = this._variablesManager.SetValue(key, value);
             if (isSet == false) return;
             this.fireEvents.Add(key);
+            OnSet(key, value);
         }
+
+        protected virtual void OnSet<T>(string key, T value) { }
 
         /// <summary>
         /// 获取变量
@@ -64,7 +67,10 @@ namespace Emilia.Variables
             EventInfo eventInfo = new EventInfo(key, action);
             if (this.addEvents.Contains(eventInfo)) return;
             addEvents.Add(eventInfo);
+            OnSubscribe(key, action);
         }
+        
+        protected virtual void OnSubscribe(string key, Action action) { }
 
         /// <summary>
         /// 取消订阅事件
@@ -74,7 +80,10 @@ namespace Emilia.Variables
             EventInfo eventInfo = new EventInfo(key, action);
             if (this.removeEvents.Contains(eventInfo)) return;
             removeEvents.Add(eventInfo);
+            OnUnsubscribe(key, action);
         }
+        
+        protected virtual void OnUnsubscribe(string key, Action action) { }
 
         /// <summary>
         /// 更新
@@ -84,7 +93,11 @@ namespace Emilia.Variables
             RemoveEvent();
             AddEvent();
             FireEvent();
+
+            OnTick();
         }
+        
+        protected virtual void OnTick() { }
 
         void AddEvent()
         {

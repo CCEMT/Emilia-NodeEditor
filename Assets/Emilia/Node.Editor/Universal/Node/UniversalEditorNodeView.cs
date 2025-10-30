@@ -39,17 +39,6 @@ namespace Emilia.Node.Universal.Editor
 
         public virtual bool canExpanded => true;
 
-        public override bool expanded
-        {
-            get => this._universalNodeAsset == null || this._universalNodeAsset.isFold;
-            set
-            {
-                base.expanded = value;
-                _universalNodeAsset.isFold = value;
-                UpdateFoldState();
-            }
-        }
-
         protected virtual bool canRename => false;
         protected virtual string iconPath => null;
         protected override string styleFilePath => "Node/Styles/UniversalEditorNodeView.uss";
@@ -62,7 +51,6 @@ namespace Emilia.Node.Universal.Editor
             if ((capabilities & Capabilities.Renamable) != 0) InitializeRenamableTitle();
 
             UpdateTitle();
-            UpdateFoldState();
 
             duplicateDragger = new NodeDuplicateDragger();
             this.insertDragger = new NodeInsertDragger();
@@ -256,11 +244,6 @@ namespace Emilia.Node.Universal.Editor
         /// 添加自定义端口视图
         /// </summary>
         protected virtual void AddCustomPortView(int index, IEditorPortView portView, EditorPortInfo info) { }
-
-        /// <summary>
-        /// 更新折叠状态
-        /// </summary>
-        public virtual void UpdateFoldState() { }
 
         /// <summary>
         /// 添加消息

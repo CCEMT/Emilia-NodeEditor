@@ -18,7 +18,8 @@ namespace Emilia.Kit
                 if (_instance != null) return _instance;
 
                 if (OdinEditorPrefs.HasValue(key)) _instance = OdinEditorPrefs.GetValue<T>(key);
-                else
+                
+                if (_instance == null)
                 {
                     _instance = new T();
                     OdinEditorPrefs.SetValue(key, _instance);

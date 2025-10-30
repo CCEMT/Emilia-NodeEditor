@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Microsoft.International.Converters.PinYinConverter;
 using NPinyin;
@@ -10,7 +11,8 @@ namespace Emilia.Kit
 {
     public static class PinYinConverterUtility
     {
-        private static readonly Dictionary<string, string> _pinyinCache = new Dictionary<string, string>();
+        private static readonly Dictionary<string, string> _pinyinCache = new();
+        private static readonly Dictionary<char, bool> _isChineseChar = new();
 
         public static string ConvertToAllSpell(string strChinese)
         {
@@ -19,7 +21,7 @@ namespace Emilia.Kit
 
             try
             {
-                StringBuilder fullSpell = new StringBuilder();
+                StringBuilder fullSpell = new();
                 for (int i = 0; i < strChinese.Length; i++)
                 {
                     var chr = strChinese[i];
@@ -40,32 +42,24 @@ namespace Emilia.Kit
 
         public static bool ContainsChinese(string str)
         {
-            bool isContains = false;
-            for (int i = 0; i < str.Length; i++)
-            {
-                var chr = str[i];
-                bool isChineseChar = ChineseChar.IsValidChar(chr);
-                if (isChineseChar == false) continue;
-                isContains = true;
-                break;
-            }
-
-            return isContains;
+            if (string.IsNullOrEmpty(str)) return false;
+            return str.Any(IsChineseCharacter);
         }
 
         public static bool AllChinese(string str)
         {
-            bool isAllChinese = true;
-            for (int i = 0; i < str.Length; i++)
-            {
-                var chr = str[i];
-                bool isChineseChar = ChineseChar.IsValidChar(chr);
-                if (isChineseChar) continue;
-                isAllChinese = false;
-                break;
-            }
+            if (string.IsNullOrEmpty(str)) return false;
+            return str.All(IsChineseCharacter);
 
-            return isAllChinese;
+        }
+
+        private static bool IsChineseCharacter(char chr)
+        {
+            if (_isChineseChar.TryGetValue(chr, out bool isChinese)) return isChinese;
+
+            isChinese = ChineseChar.IsValidChar(chr);
+            _isChineseChar[chr] = isChinese;
+            return isChinese;
         }
 
         private static string GetSpell(char chr)
@@ -73,16 +67,13 @@ namespace Emilia.Kit
             string converter = Pinyin.GetPinyin(chr);
 
             bool isChinese = ChineseChar.IsValidChar(converter[0]);
-            if (isChinese)
+            if (isChinese == false) return converter;
+
+            ChineseChar chineseChar = new(converter[0]);
+            for (var i = 0; i < chineseChar.Pinyins.Count; i++)
             {
-                ChineseChar chineseChar = new ChineseChar(converter[0]);
-                foreach (string value in chineseChar.Pinyins)
-                {
-                    if (! string.IsNullOrEmpty(value))
-                    {
-                        return value.Remove(value.Length - 1, 1);
-                    }
-                }
+                string value = chineseChar.Pinyins[i];
+                if (string.IsNullOrEmpty(value) == false) return value.Remove(value.Length - 1, 1);
             }
 
             return converter;

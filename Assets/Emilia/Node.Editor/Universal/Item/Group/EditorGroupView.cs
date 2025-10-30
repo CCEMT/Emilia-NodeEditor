@@ -54,7 +54,7 @@ namespace Emilia.Node.Editor
             {
                 string nodeId = this.groupAsset.innerNodes[i];
 
-                EditorNodeView nodeView = this.graphView.graphElementCache.nodeViewById.GetValueOrDefault(nodeId) as EditorNodeView;
+                IEditorNodeView nodeView = this.graphView.graphElementCache.nodeViewById.GetValueOrDefault(nodeId);
                 if (nodeView == null)
                 {
                     groupAsset.innerNodes.RemoveAt(i);
@@ -62,7 +62,7 @@ namespace Emilia.Node.Editor
                     continue;
                 }
 
-                AddElement(nodeView);
+                AddElement(nodeView.element);
             }
         }
 
@@ -79,15 +79,15 @@ namespace Emilia.Node.Editor
             for (var i = 0; i < amount; i++)
             {
                 ISelectable selectable = this.graphView.selection[i];
-                EditorNodeView editorNodeView = selectable as EditorNodeView;
+                IEditorNodeView editorNodeView = selectable as IEditorNodeView;
                 if (editorNodeView == null) continue;
                 string id = editorNodeView.asset.id;
                 if (this.groupAsset.innerNodes.Contains(id) == false) continue;
 
-                RemoveElement(editorNodeView);
+                RemoveElement(editorNodeView.element);
 
                 ContextualMenuManipulator contextualMenuManipulator = menuManipulators.GetValueOrDefault(id);
-                if (contextualMenuManipulator != null) editorNodeView.RemoveManipulator(contextualMenuManipulator);
+                if (contextualMenuManipulator != null) editorNodeView.element.RemoveManipulator(contextualMenuManipulator);
             }
 
             Undo.CollapseUndoOperations(Undo.GetCurrentGroup());
@@ -100,11 +100,11 @@ namespace Emilia.Node.Editor
 
             foreach (GraphElement graphElement in elements)
             {
-                EditorNodeView nodeView = graphElement as EditorNodeView;
+                IEditorNodeView nodeView = graphElement as IEditorNodeView;
                 if (nodeView == null) continue;
 
                 ContextualMenuManipulator manipulator = new(GroupMenu);
-                nodeView.AddManipulator(manipulator);
+                nodeView.element.AddManipulator(manipulator);
                 menuManipulators[nodeView.asset.id] = manipulator;
 
                 if (this.groupAsset.innerNodes.Contains(nodeView.asset.id)) continue;
@@ -122,7 +122,7 @@ namespace Emilia.Node.Editor
 
             foreach (GraphElement graphElement in elements)
             {
-                EditorNodeView nodeView = graphElement as EditorNodeView;
+                IEditorNodeView nodeView = graphElement as IEditorNodeView;
                 if (nodeView == null) continue;
 
                 string id = nodeView.asset.id;
@@ -131,7 +131,7 @@ namespace Emilia.Node.Editor
                 this.groupAsset.innerNodes.Remove(id);
 
                 ContextualMenuManipulator contextualMenuManipulator = this.menuManipulators.GetValueOrDefault(id);
-                if (contextualMenuManipulator != null) nodeView.RemoveManipulator(contextualMenuManipulator);
+                if (contextualMenuManipulator != null) nodeView.element.RemoveManipulator(contextualMenuManipulator);
             }
         }
 
@@ -170,12 +170,12 @@ namespace Emilia.Node.Editor
         {
             foreach (GraphElement graphElement in containedElements.ToList())
             {
-                EditorNodeView nodeView = graphElement as EditorNodeView;
+                IEditorNodeView nodeView = graphElement as IEditorNodeView;
                 if (nodeView == null) continue;
 
                 bool contains = this.groupAsset.innerNodes.Contains(nodeView.asset.id);
                 if (contains) continue;
-                RemoveElement(nodeView);
+                RemoveElement(nodeView.element);
             }
         }
 
@@ -183,12 +183,12 @@ namespace Emilia.Node.Editor
         {
             foreach (string nodeId in this.groupAsset.innerNodes.ToList())
             {
-                EditorNodeView nodeView = this.graphView.graphElementCache.nodeViewById.GetValueOrDefault(nodeId) as EditorNodeView;
+                IEditorNodeView nodeView = this.graphView.graphElementCache.nodeViewById.GetValueOrDefault(nodeId);
                 if (nodeView == null) continue;
 
-                bool contains = containedElements.Contains(nodeView);
+                bool contains = containedElements.Contains(nodeView.element);
                 if (contains) continue;
-                AddElement(nodeView);
+                AddElement(nodeView.element);
             }
         }
 

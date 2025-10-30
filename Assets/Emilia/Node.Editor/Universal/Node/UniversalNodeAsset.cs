@@ -25,15 +25,6 @@ namespace Emilia.Node.Universal.Editor
             set => _displayName = value;
         }
 
-        /// <summary>
-        /// 是否折叠
-        /// </summary>
-        public bool isFold
-        {
-            get => _isFold;
-            set => _isFold = value;
-        }
-
         public override string title
         {
             get

@@ -1,4 +1,5 @@
-﻿using UnityEngine.UIElements;
+﻿using Emilia.Reflection.Editor;
+using UnityEngine.UIElements;
 
 namespace Emilia.Node.Universal.Editor
 {
@@ -15,10 +16,13 @@ namespace Emilia.Node.Universal.Editor
 
         private void OnAttachToPanel(AttachToPanelEvent evt)
         {
-            foreach (var child in Children())
-            {
-                child.style.flexGrow = 1;
-            }
+            foreach (VisualElement child in Children()) child.style.flexGrow = 1;
+            this.AddHierarchyChangedCallback_Internal(OnAddHierarchyChangedCallback);
+        }
+
+        private void OnAddHierarchyChangedCallback(VisualElement visualElement, HierarchyChangeType_Internals hierarchyChangeTypeInternals)
+        {
+            foreach (VisualElement child in Children()) child.style.flexGrow = 1;
         }
     }
 }

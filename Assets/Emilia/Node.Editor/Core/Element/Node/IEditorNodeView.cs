@@ -22,6 +22,11 @@ namespace Emilia.Node.Editor
         GraphElement element { get; }
 
         /// <summary>
+        /// 是否展开
+        /// </summary>
+        bool expanded { get; set; }
+
+        /// <summary>
         /// 端口View列表
         /// </summary>
         IReadOnlyList<IEditorPortView> portViews { get; }
@@ -56,6 +61,11 @@ namespace Emilia.Node.Editor
         /// </summary>
         void SetPositionNoUndo(Rect position);
 
+        /// <summary>
+        /// 设置是否展开，不记录撤销
+        /// </summary>
+        void SetExpandedNoUndo(bool expanded, bool isRebuild = false);
+        
         /// <summary>
         /// 值改变
         /// </summary>

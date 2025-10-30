@@ -18,6 +18,9 @@ namespace Emilia.Node.Editor
         private Rect _position;
 
         [SerializeField, HideInInspector]
+        private bool _isExpanded = false;
+
+        [SerializeField, HideInInspector]
         private object _userData;
 
         [SerializeField, HideInInspector]
@@ -44,6 +47,15 @@ namespace Emilia.Node.Editor
         {
             get => _position;
             set => _position = value;
+        }
+
+        /// <summary>
+        /// 节点是否展开
+        /// </summary>
+        public bool isExpanded
+        {
+            get => this._isExpanded;
+            set => this._isExpanded = value;
         }
 
         /// <summary>
