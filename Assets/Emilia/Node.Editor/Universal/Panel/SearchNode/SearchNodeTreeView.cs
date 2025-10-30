@@ -42,6 +42,8 @@ namespace Emilia.Node.Universal.Editor
 
                 string displayName = ObjectDescriptionUtility.GetDescription(nodeView.asset);
                 if (string.IsNullOrEmpty(displayName)) displayName = nodeView.asset.name;
+                
+                displayName = RemoveRichTextLabel(displayName);
 
                 TreeViewItem item = new(id, 0, displayName);
 
@@ -64,6 +66,8 @@ namespace Emilia.Node.Universal.Editor
 
                 string displayName = ObjectDescriptionUtility.GetDescription(nodeView.asset);
                 if (string.IsNullOrEmpty(displayName)) displayName = nodeView.asset.name;
+                
+                displayName = RemoveRichTextLabel(displayName);
 
                 int score = SearchUtility.Search(displayName, searchString);
                 if (score == 0) continue;
@@ -79,6 +83,22 @@ namespace Emilia.Node.Universal.Editor
                 root.AddChild(collect.Item1);
                 treeViewItems.Add(collect.Item1);
             }
+        }
+
+        protected string RemoveRichTextLabel(string text)
+        {
+            if (string.IsNullOrEmpty(text)) return text;
+
+            int startIndex = 0;
+            while ((startIndex = text.IndexOf('<', startIndex)) != -1)
+            {
+                int endIndex = text.IndexOf('>', startIndex);
+                if (endIndex == -1) break;
+
+                text = text.Remove(startIndex, endIndex - startIndex + 1);
+            }
+
+            return text;
         }
 
         protected override void SingleClickedItem(int id)
