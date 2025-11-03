@@ -13,9 +13,6 @@ namespace Emilia.Node.Universal.Editor
         [SerializeField, HideInInspector]
         private string _displayName;
 
-        [SerializeField, HideInInspector]
-        private bool _isFold = true;
-
         /// <summary>
         /// 节点名称
         /// </summary>
