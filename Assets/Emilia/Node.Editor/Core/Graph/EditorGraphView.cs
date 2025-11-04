@@ -685,7 +685,7 @@ namespace Emilia.Node.Editor
 
         private void OnUnserializeAndPaste(string operationName, string data)
         {
-            var pasteObjects = graphCopyPaste.UnserializeAndPasteCallback(operationName, data);
+            GraphElement[] pasteObjects = graphCopyPaste.UnserializeAndPasteCallback(operationName, data).ToArray();
 
             SetSelection(pasteObjects.OfType<ISelectable>().ToList());
             UpdateSelected();
@@ -995,7 +995,7 @@ namespace Emilia.Node.Editor
 
         public void Dispose()
         {
-            if (graphAsset != null && graphViews.ContainsKey(graphAsset)) graphViews.Remove(graphAsset);
+            if (graphAsset != null) graphViews.Remove(graphAsset);
 
             Save(false);
 
@@ -1004,10 +1004,10 @@ namespace Emilia.Node.Editor
 
             RemoveAllElement();
 
-            foreach (GraphViewModule customModule in this.customModules.Values) customModule.Dispose();
+            foreach (CustomGraphViewModule customModule in this.customModules.Values) customModule.Dispose();
             this.customModules.Clear();
 
-            foreach (GraphViewModule module in this.modules.Values) module.Dispose();
+            foreach (BasicGraphViewModule module in this.modules.Values) module.Dispose();
 
             graphElementCache.Clear();
             customData.Clear();

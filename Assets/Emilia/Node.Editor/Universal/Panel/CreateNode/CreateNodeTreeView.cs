@@ -356,7 +356,7 @@ namespace Emilia.Node.Universal.Editor
             }
         }
 
-        protected override DragAndDropVisualMode HandleDragAndDrop(DragAndDropArgs args) => DragAndDropVisualMode.Move;
+        protected override DragAndDropVisualMode HandleDragAndDrop(DragAndDropArgs args) => DragAndDropVisualMode.Rejected;
 
         protected override void ExpandedStateChanged()
         {
