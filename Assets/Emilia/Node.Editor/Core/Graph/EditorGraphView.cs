@@ -27,6 +27,7 @@ namespace Emilia.Node.Editor
         private GraphHandle graphHandle;
         private Dictionary<Type, BasicGraphViewModule> modules = new();
         private Dictionary<Type, CustomGraphViewModule> customModules = new();
+        private Dictionary<string, object> customData = new();
 
         private List<IEditorNodeView> _nodeViews = new();
         private List<IEditorEdgeView> _edgeViews = new();
@@ -332,6 +333,8 @@ namespace Emilia.Node.Editor
                 if (settingStruct != null) graphSetting = settingStruct;
                 SyncSetting();
 
+                customData.Clear();
+
                 if (allReload) AllReload();
                 else ElementReload();
             }
@@ -349,6 +352,8 @@ namespace Emilia.Node.Editor
             }
 
             graphAsset = asset;
+
+            customData.Clear();
 
             ReloadHandle();
             ReloadModule();
@@ -491,7 +496,7 @@ namespace Emilia.Node.Editor
             Type nodeViewType = GraphTypeCache.GetNodeViewType(nodeAsset.GetType());
             if (nodeViewType == null)
             {
-                Debug.LogError($"AddNodeView {nodeViewType.FullName}找不到IEditorNodeView，请在找不到IEditorNodeView使用EditorNodeAttribute指定{nodeViewType.FullName}");
+                Debug.LogError($"AddNodeView {nodeAsset.GetType()}找不到IEditorNodeView，请在找不到IEditorNodeView使用EditorNodeAttribute指定");
                 return null;
             }
 
@@ -550,7 +555,7 @@ namespace Emilia.Node.Editor
             Type edgeViewType = GraphTypeCache.GetEdgeViewType(asset.GetType());
             if (edgeViewType == null)
             {
-                Debug.LogError($"AddEdgeView时 {edgeViewType.FullName}找不到IEditorEdgeView，请在找不到IEditorEdgeView使用EditorEdgeAttribute指定{edgeViewType.FullName}");
+                Debug.LogError($"AddEdgeView时 {asset.GetType()}找不到IEditorEdgeView，请在找不到IEditorEdgeView使用EditorEdgeAttribute指定");
                 return null;
             }
 
@@ -603,7 +608,7 @@ namespace Emilia.Node.Editor
             Type itemViewType = GraphTypeCache.GetItemViewType(asset.GetType());
             if (itemViewType == null)
             {
-                Debug.LogError($"AddNodeView {itemViewType.FullName}找不到IEditorItemView，请在找不到IEditorItemView使用EditorItemAttribute指定{itemViewType.FullName}");
+                Debug.LogError($"AddNodeView {asset.GetType()}找不到IEditorItemView，请在找不到IEditorItemView使用EditorItemAttribute指定");
                 return null;
             }
 
@@ -817,6 +822,56 @@ namespace Emilia.Node.Editor
             graphSave.SetDirty();
         }
 
+        /// <summary>
+        /// 获取自定义数据
+        /// </summary>
+        public T GetCustomData<T>(string key, T defaultValue = default)
+        {
+            if (this.customData.TryGetValue(key, out object value)) return (T) value;
+            return defaultValue;
+        }
+
+        /// <summary>
+        /// 获取自定义数据
+        /// </summary>
+        public T GetCustomData<T>(T defaultValue = default)
+        {
+            if (this.customData.TryGetValue(typeof(T).FullName, out object value)) return (T) value;
+            return defaultValue;
+        }
+
+        /// <summary>
+        /// 设置自定义数据
+        /// </summary>
+        public void SetCustomData<T>(string key, T value)
+        {
+            customData[key] = value;
+        }
+
+        /// <summary>
+        /// 设置自定义数据
+        /// </summary>
+        public void SetCustomData<T>(T value)
+        {
+            customData[typeof(T).FullName] = value;
+        }
+
+        /// <summary>
+        /// 移除自定义数据
+        /// </summary>
+        public void RemoveCustomData(string key)
+        {
+            customData.Remove(key);
+        }
+
+        /// <summary>
+        /// 移除自定义数据
+        /// </summary>
+        public void RemoveCustomData<T>()
+        {
+            customData.Remove(typeof(T).FullName);
+        }
+
         private void RemoveAllElement()
         {
             foreach (GraphElement graphElement in graphElements)
@@ -955,6 +1010,7 @@ namespace Emilia.Node.Editor
             foreach (GraphViewModule module in this.modules.Values) module.Dispose();
 
             graphElementCache.Clear();
+            customData.Clear();
 
             Undo.undoRedoPerformed -= OnUndoRedoPerformed;
 
