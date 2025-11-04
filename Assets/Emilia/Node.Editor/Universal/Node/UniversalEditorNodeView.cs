@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using Emilia.Kit;
 using Emilia.Node.Attributes;
 using Emilia.Node.Editor;
 using Sirenix.Utilities;
@@ -40,7 +39,7 @@ namespace Emilia.Node.Universal.Editor
         public virtual bool canExpanded => true;
 
         protected virtual bool canRename => false;
-        protected virtual string iconPath => null;
+        protected virtual Texture2D icon => null;
         protected override string styleFilePath => "Node/Styles/UniversalEditorNodeView.uss";
 
         public override void Initialize(EditorGraphView graphView, EditorNodeAsset asset)
@@ -97,9 +96,10 @@ namespace Emilia.Node.Universal.Editor
 
         private void InitializeIcon()
         {
-            if (string.IsNullOrEmpty(iconPath)) return;
-            Texture2D icon = ResourceUtility.LoadResource<Texture2D>(styleFilePath);
+            if (icon == null) return;
             VisualElement iconElement = new();
+            iconElement.name = "title-icon";
+
             iconElement.style.backgroundImage = icon;
             titleContainer.Insert(0, iconElement);
         }

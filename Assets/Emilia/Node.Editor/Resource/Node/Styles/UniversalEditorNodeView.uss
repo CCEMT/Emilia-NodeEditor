@@ -34,6 +34,13 @@
     padding: 0;
 }
 
+#title-icon{
+    width: 16px;
+    height: 16px;
+
+    align-self: center;
+}
+
 #title-label {
     -unity-text-align: middle-center;
 }
