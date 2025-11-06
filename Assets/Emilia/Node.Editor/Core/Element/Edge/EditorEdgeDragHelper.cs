@@ -92,6 +92,9 @@ namespace Emilia.Node.Editor
 
             if (edgeCandidate != null) edgeCandidate.SetEnabled(true);
 
+            foreach (var itemPair in preConnectEdgeViews) itemPair.Value.edgeElement.RemoveFromHierarchy();
+            preConnectEdgeViews.Clear();
+
             ghostEdge = null;
             edgeCandidate = null;
         }

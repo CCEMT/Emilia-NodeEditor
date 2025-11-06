@@ -1,5 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
 using Emilia.Kit;
+using Emilia.Kit.Editor;
+using Emilia.Reflection.Editor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -7,10 +11,13 @@ using Object = UnityEngine.Object;
 
 namespace Emilia.Node.Editor
 {
-    public abstract class EditorEdgeView : Edge, IEditorEdgeView
+    public abstract class EditorEdgeView : Edge_Hook, IEditorEdgeView
     {
         protected IEditorPortView _inputPortView;
         protected IEditorPortView _outputPortView;
+
+        protected EditorEdgeManipulator editorEdgeManipulator;
+        protected ContextualMenuManipulator contextualMenuManipulator;
 
         public EditorEdgeAsset asset { get; private set; }
         public EditorGraphView graphView { get; private set; }
@@ -65,6 +72,34 @@ namespace Emilia.Node.Editor
         public Edge edgeElement => this;
         public bool isSelected { get; protected set; }
         protected virtual string styleFilePath => "Node/Styles/UniversalEditorEdgeView.uss";
+
+        private static MethodBase graphElementCtor;
+
+        protected override bool OverrideCtor()
+        {
+            if (graphElementCtor == null) graphElementCtor = typeof(GraphElement).GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic, null, new Type[] { }, null);
+            graphElementCtor.Invoke(this, null);
+
+            ClearClassList();
+            AddToClassList("edge");
+            style.position = Position.Absolute;
+
+            Add(edgeControl);
+
+            capabilities |= Capabilities.Selectable | Capabilities.Deletable;
+
+            this.editorEdgeManipulator = new EditorEdgeManipulator();
+            this.AddManipulator(editorEdgeManipulator);
+
+            this.contextualMenuManipulator = new ContextualMenuManipulator(null);
+            this.AddManipulator(contextualMenuManipulator);
+
+            RegisterCallback<AttachToPanelEvent>(OnEdgeAttach_Internal);
+            RegisterCallback<GeometryChangedEvent>(OnGeometryChanged_Internal);
+            this.AddStyleSheetPath_Internal("StyleSheets/GraphView/Edge.uss");
+
+            return true;
+        }
 
         public virtual void Initialize(EditorGraphView graphView, EditorEdgeAsset asset)
         {

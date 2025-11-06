@@ -1,4 +1,5 @@
 ﻿#if UNITY_EDITOR
+using System;
 using Sirenix.OdinInspector.Editor;
 using UnityEditor;
 using UnityEngine;
@@ -14,12 +15,23 @@ namespace Emilia.Kit
         {
             if (this.headerStyle == null) InitStyle();
             TitleAsset titleAsset = target as TitleAsset;
-            
+
             GUILayout.BeginVertical();
-            
-            GUILayout.Box(new GUIContent(titleAsset.title), headerStyle, GUILayout.ExpandWidth(true), GUILayout.Height(60));
+
+            string title = string.Empty;
+
+            try
+            {
+                title = titleAsset.title;
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e.ToUnityLogString());
+            }
+
+            GUILayout.Box(new GUIContent(title), headerStyle, GUILayout.ExpandWidth(true), GUILayout.Height(60));
             GUILayout.Space(5);
-            
+
             GUILayout.EndVertical();
 
             Rect rect = GUILayoutUtility.GetLastRect();

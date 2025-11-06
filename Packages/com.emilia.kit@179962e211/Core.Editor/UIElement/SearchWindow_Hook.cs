@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using Emilia.Reflection.Editor;
 using MonoHook;
 using UnityEditor;
@@ -17,17 +18,19 @@ namespace Emilia.Kit.Editor
         static void InstallationHook()
         {
             Type searchWindowViewType = typeof(SearchWindow);
-            HookRebuildSearch(searchWindowViewType);
+            Type graphViewHookType = typeof(SearchWindow_Hook);
+
+            HookRebuildSearch(searchWindowViewType, graphViewHookType);
         }
 
-        private static void HookRebuildSearch(Type searchWindowViewType)
+        private static void HookRebuildSearch(Type searchWindowViewType, Type graphViewHookType)
         {
             MethodInfo methodInfo = searchWindowViewType.GetMethod("RebuildSearch", BindingFlags.Instance | BindingFlags.NonPublic);
 
-            Type graphViewHookType = typeof(SearchWindow_Hook);
             MethodInfo hookInfo = graphViewHookType.GetMethod(nameof(RebuildSearch_Hook), BindingFlags.Instance | BindingFlags.NonPublic);
+            MethodInfo proxyInfo = graphViewHookType.GetMethod(nameof(RebuildSearch_Proxy), BindingFlags.Instance | BindingFlags.NonPublic);
 
-            MethodHook hook = new MethodHook(methodInfo, hookInfo, null);
+            MethodHook hook = new(methodInfo, hookInfo, proxyInfo);
             hook.Install();
         }
 
@@ -61,14 +64,19 @@ namespace Emilia.Kit.Editor
 
         private void RebuildSearch_Hook()
         {
-            object result = ReflectUtility.Invoke(this, nameof(CanSearchPro));
-            if (result is true) RebuildSearchPro();
-            else BaseRebuildSearch();
+            if (CanSearchPro()) OverrideRebuildSearch();
+            else RebuildSearch_Proxy();
         }
 
-        private void RebuildSearchPro()
+        [MethodImpl(MethodImplOptions.NoOptimization)]
+        private void RebuildSearch_Proxy()
         {
-            if (! hasSearch_Internals)
+            Debug.Log(nameof(RebuildSearch_Proxy));
+        }
+
+        protected virtual void OverrideRebuildSearch()
+        {
+            if (hasSearch_Internals == false)
             {
                 searchResultTree_Internals = null;
                 if (selectionStack_Internals[selectionStack_Internals.Count - 1].name == "Search")
@@ -93,65 +101,9 @@ namespace Emilia.Kit.Editor
 
                 collection.Sort((a, b) => b.Item2.CompareTo(a.Item2));
 
-                List<SearchTreeEntry> searchTreeEntryList = new List<SearchTreeEntry>();
+                List<SearchTreeEntry> searchTreeEntryList = new();
                 searchTreeEntryList.Add(new SearchTreeGroupEntry(new GUIContent("Search")));
                 searchTreeEntryList.AddRange(collection.Select((i) => i.Item1));
-                searchResultTree_Internals = searchTreeEntryList.ToArray();
-                selectionStack_Internals.Clear();
-                selectionStack_Internals.Add(searchResultTree_Internals[0] as SearchTreeGroupEntry);
-                if (GetChildren_Internals(activeTree_Internals, activeParent_Internals).Count >= 1) activeParent_Internals.SetSelectedIndex(0);
-                else activeParent_Internals.SetSelectedIndex(-1);
-            }
-        }
-
-        private void BaseRebuildSearch()
-        {
-            if (! hasSearch_Internals)
-            {
-                searchResultTree_Internals = null;
-                if (selectionStack_Internals[selectionStack_Internals.Count - 1].name == "Search")
-                {
-                    selectionStack_Internals.Clear();
-                    selectionStack_Internals.Add(tree_Internals[0] as SearchTreeGroupEntry);
-                }
-                animTarget_Internals = 1;
-                lastTime_Internals = DateTime.Now.Ticks;
-            }
-            else
-            {
-                string[] strArray = search_Internals.ToLower().Split(' ');
-                List<SearchTreeEntry> collection1 = new List<SearchTreeEntry>();
-                List<SearchTreeEntry> collection2 = new List<SearchTreeEntry>();
-                foreach (SearchTreeEntry searchTreeEntry in tree_Internals)
-                {
-                    if (searchTreeEntry is SearchTreeGroupEntry) continue;
-                    string str1 = searchTreeEntry.name.ToLower().Replace(" ", "");
-                    bool flag1 = true;
-                    bool flag2 = false;
-                    for (int index = 0; index < strArray.Length; ++index)
-                    {
-                        string str2 = strArray[index];
-                        if (str1.Contains(str2))
-                        {
-                            if (index == 0 && str1.StartsWith(str2)) flag2 = true;
-                        }
-                        else
-                        {
-                            flag1 = false;
-                            break;
-                        }
-                    }
-
-                    if (! flag1) continue;
-                    if (flag2) collection1.Add(searchTreeEntry);
-                    else collection2.Add(searchTreeEntry);
-                }
-                collection1.Sort();
-                collection2.Sort();
-                List<SearchTreeEntry> searchTreeEntryList = new List<SearchTreeEntry>();
-                searchTreeEntryList.Add(new SearchTreeGroupEntry(new GUIContent("Search")));
-                searchTreeEntryList.AddRange(collection1);
-                searchTreeEntryList.AddRange(collection2);
                 searchResultTree_Internals = searchTreeEntryList.ToArray();
                 selectionStack_Internals.Clear();
                 selectionStack_Internals.Add(searchResultTree_Internals[0] as SearchTreeGroupEntry);

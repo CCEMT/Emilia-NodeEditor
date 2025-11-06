@@ -3,12 +3,13 @@ using System;
 using System.Collections.Generic;
 using Sirenix.Utilities;
 using UnityEditor;
+using UnityEngine;
 
 namespace Emilia.Kit
 {
     public static class ObjectDescriptionUtility
     {
-        private static Dictionary<Type, IObjectDescriptionGetter> descriptionGetterMap = new Dictionary<Type, IObjectDescriptionGetter>();
+        private static Dictionary<Type, IObjectDescriptionGetter> descriptionGetterMap = new();
 
         static ObjectDescriptionUtility()
         {
@@ -23,7 +24,17 @@ namespace Emilia.Kit
                 ObjectDescriptionAttribute attribute = type.GetCustomAttribute<ObjectDescriptionAttribute>();
                 if (attribute == null) continue;
 
-                IObjectDescriptionGetter getter = (IObjectDescriptionGetter) Activator.CreateInstance(type);
+                IObjectDescriptionGetter getter = null;
+
+                try
+                {
+                    getter = (IObjectDescriptionGetter) Activator.CreateInstance(type);
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError(e.ToUnityLogString());
+                }
+
                 if (getter == null) continue;
 
                 descriptionGetterMap.Add(attribute.objectType, getter);
@@ -45,12 +56,36 @@ namespace Emilia.Kit
             IObjectDescriptionGetter getter = descriptionGetterMap.GetValueOrDefault(objType);
             if (getter != null)
             {
-                string description = getter.GetDescription(obj, owner, userData);
+                string description = string.Empty;
+
+                try
+                {
+                    description = getter.GetDescription(obj, owner, userData);
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError(e.ToUnityLogString());
+                }
+
                 if (string.IsNullOrEmpty(description) == false) return description;
             }
 
             IObjectDescription objectDescription = obj as IObjectDescription;
-            if (objectDescription != null) return objectDescription.description;
+            if (objectDescription != null)
+            {
+                string description = string.Empty;
+
+                try
+                {
+                    description = objectDescription.description;
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError(e.ToUnityLogString());
+                }
+
+                return description;
+            }
 
             TextAttribute textAttribute = objType.GetCustomAttribute<TextAttribute>();
             if (textAttribute != null) return textAttribute.text;
