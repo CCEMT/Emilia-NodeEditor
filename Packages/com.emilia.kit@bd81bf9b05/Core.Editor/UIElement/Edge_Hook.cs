@@ -44,5 +44,27 @@ namespace Emilia.Kit.Editor
         }
 
         protected virtual bool OverrideCtor() => false;
+
+        private static MethodBase graphElementCtor;
+
+        protected void BaseCtor()
+        {
+            SetDefaultValue();
+            BaseCtorMethod();
+        }
+
+        protected void SetDefaultValue()
+        {
+            m_EdgeWidth_Internal = s_DefaultEdgeWidth_Internal;
+            m_SelectedColor_Internal = s_DefaultSelectedColor_Internal;
+            m_DefaultColor_Internal = s_DefaultColor_Internal;
+            m_GhostColor_Internal = s_DefaultGhostColor_Internal;
+        }
+
+        protected void BaseCtorMethod()
+        {
+            if (graphElementCtor == null) graphElementCtor = typeof(GraphElement).GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic, null, new Type[] { }, null);
+            graphElementCtor.Invoke(this, null);
+        }
     }
 }

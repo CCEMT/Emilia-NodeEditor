@@ -77,8 +77,7 @@ namespace Emilia.Node.Editor
 
         protected override bool OverrideCtor()
         {
-            if (graphElementCtor == null) graphElementCtor = typeof(GraphElement).GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic, null, new Type[] { }, null);
-            graphElementCtor.Invoke(this, null);
+            BaseCtor();
 
             ClearClassList();
             AddToClassList("edge");
