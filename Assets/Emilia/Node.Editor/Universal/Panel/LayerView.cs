@@ -7,6 +7,9 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 层级面板
+    /// </summary>
     public class LayerView : GraphPanel
     {
         public static readonly GUIStyle BreadCrumbLeft = "GUIEditor.BreadcrumbLeft";

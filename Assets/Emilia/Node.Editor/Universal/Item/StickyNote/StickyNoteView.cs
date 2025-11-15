@@ -9,6 +9,9 @@ using Object = UnityEngine.Object;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 便利贴节点表现元素
+    /// </summary>
     [EditorItem(typeof(StickyNoteAsset))]
     public class StickyNoteView : StickyNote, IEditorItemView
     {

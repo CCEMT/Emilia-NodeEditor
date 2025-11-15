@@ -2,6 +2,9 @@
 
 namespace Emilia.Node.Attributes
 {
+    /// <summary>
+    /// 工具栏按钮特性（在EditorGraphAsset中使用）
+    /// </summary>
     [AttributeUsage(AttributeTargets.Method)]
     public class ButtonToolbarAttribute : ToolbarAttribute
     {

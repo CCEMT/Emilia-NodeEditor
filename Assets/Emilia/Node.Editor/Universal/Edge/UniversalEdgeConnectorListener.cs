@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 通用IEdgeConnectorListener实现
+    /// </summary>
     public class UniversalEdgeConnectorListener : GraphEdgeConnectorListener
     {
         public override void OnDropOutsidePort(Edge edge, Vector2 position)

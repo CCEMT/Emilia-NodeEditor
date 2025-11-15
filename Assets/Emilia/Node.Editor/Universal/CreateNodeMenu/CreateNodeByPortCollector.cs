@@ -2,6 +2,9 @@
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 根据端口收集可创建的节点
+    /// </summary>
     public class CreateNodeByPortCollector : ICreateNodeCollector
     {
         private EditorGraphView graphView;

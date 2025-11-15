@@ -8,6 +8,9 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 搜索节点目标
+    /// </summary>
     public class SearchNodeView : GraphPanel
     {
         private SearchField searchField;

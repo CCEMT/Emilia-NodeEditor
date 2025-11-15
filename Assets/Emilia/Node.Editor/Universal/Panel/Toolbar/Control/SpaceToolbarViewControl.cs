@@ -2,6 +2,9 @@
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 工具栏间隔控件
+    /// </summary>
     public class SpaceToolbarViewControl : ToolbarViewControl
     {
         private float size;

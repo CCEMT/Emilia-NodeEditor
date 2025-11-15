@@ -1,5 +1,8 @@
 ﻿namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 节点收藏信息
+    /// </summary>
     public class NodeCollectionInfo
     {
         public string nodeName { get; private set; }

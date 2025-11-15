@@ -2,6 +2,9 @@
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 组拷贝粘贴
+    /// </summary>
     public class GroupCopyPastePack : ItemCopyPastePack
     {
         public GroupCopyPastePack(EditorItemAsset asset) : base(asset) { }

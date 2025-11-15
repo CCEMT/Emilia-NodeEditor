@@ -3,6 +3,9 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 通用EditorEdgeView实现
+    /// </summary>
     [EditorEdge(typeof(UniversalEditorEdgeAsset))]
     public class UniversalEditorEdgeView : EditorEdgeView
     {

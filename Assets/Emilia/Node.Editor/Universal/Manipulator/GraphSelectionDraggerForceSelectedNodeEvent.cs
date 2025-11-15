@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// GraphSelectionDragger的强制选中事件
+    /// </summary>
     public class GraphSelectionDraggerForceSelectedNodeEvent : GraphEvent<GraphSelectionDraggerForceSelectedNodeEvent>
     {
         public GraphElement select;

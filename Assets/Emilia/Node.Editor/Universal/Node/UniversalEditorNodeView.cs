@@ -10,6 +10,9 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 通用节点表现元素实现
+    /// </summary>
     [EditorNode(typeof(UniversalNodeAsset))]
     public class UniversalEditorNodeView : EditorNodeView
     {

@@ -11,6 +11,9 @@ using Object = UnityEngine.Object;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 通用EditorGraphAsset实现
+    /// </summary>
     public abstract class EditorUniversalGraphAsset : EditorGraphAsset, IObjectDescription
     {
         [LabelText("描述"), TextArea(3, 10)]

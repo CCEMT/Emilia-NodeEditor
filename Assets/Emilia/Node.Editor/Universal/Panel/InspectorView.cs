@@ -10,6 +10,9 @@ using Object = UnityEngine.Object;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 内置Inspector面板
+    /// </summary>
     public class InspectorView : GraphPanel
     {
         private PropertyTree propertyTree;

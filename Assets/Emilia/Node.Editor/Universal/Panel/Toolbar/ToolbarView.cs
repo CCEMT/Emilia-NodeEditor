@@ -8,6 +8,9 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 工具栏面板
+    /// </summary>
     public class ToolbarView : GraphPanel
     {
         private float _leftMargin = 5;

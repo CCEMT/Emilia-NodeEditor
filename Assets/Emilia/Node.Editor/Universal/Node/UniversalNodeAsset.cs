@@ -7,6 +7,9 @@ using UnityEngine;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 通用节点资产实现
+    /// </summary>
     [HideMonoScript, OnValueChanged(nameof(OnValueChanged), true)]
     public class UniversalNodeAsset : EditorNodeAsset, IObjectDescription
     {

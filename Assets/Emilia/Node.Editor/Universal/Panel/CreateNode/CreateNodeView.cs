@@ -5,6 +5,9 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 创建节点面板
+    /// </summary>
     public class CreateNodeView : GraphPanel
     {
         private NodeCollectionSetting collectionSetting;

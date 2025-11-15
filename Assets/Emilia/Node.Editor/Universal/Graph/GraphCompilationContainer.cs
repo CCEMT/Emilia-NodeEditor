@@ -2,6 +2,9 @@
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 编译中提示
+    /// </summary>
     public class GraphCompilationContainer : VisualElement
     {
         public GraphCompilationContainer()

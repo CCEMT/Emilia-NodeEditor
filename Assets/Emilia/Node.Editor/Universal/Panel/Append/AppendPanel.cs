@@ -9,6 +9,9 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 可附加面板
+    /// </summary>
     public class AppendPanel : GraphPanel
     {
         struct AppendPanelInfo : IEquatable<AppendPanelInfo>

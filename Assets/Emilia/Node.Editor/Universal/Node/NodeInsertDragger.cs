@@ -10,6 +10,9 @@ using Object = UnityEngine.Object;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 节点插入
+    /// </summary>
     public class NodeInsertDragger : MouseManipulator
     {
         private bool isActive;

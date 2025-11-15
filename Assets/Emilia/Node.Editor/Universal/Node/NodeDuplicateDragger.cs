@@ -6,6 +6,9 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 节点拖拽复制
+    /// </summary>
     public class NodeDuplicateDragger : MouseManipulator
     {
         protected override void RegisterCallbacksOnTarget()

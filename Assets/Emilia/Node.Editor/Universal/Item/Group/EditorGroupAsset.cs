@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 组节点资产
+    /// </summary>
     [HideMonoScript]
     public class EditorGroupAsset : UniversalItemAsset
     {

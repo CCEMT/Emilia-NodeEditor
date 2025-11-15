@@ -2,6 +2,9 @@
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 节点Horizontal容器
+    /// </summary>
     public class NodeHorizontalContainer : VisualElement
     {
         public VisualElement inputContainer { get; private set; }

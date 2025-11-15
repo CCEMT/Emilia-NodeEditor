@@ -5,6 +5,9 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 节点消息按钮
+    /// </summary>
     public class NodeMessageButtonElement : VisualElement
     {
         private NodeMessageLevel level;

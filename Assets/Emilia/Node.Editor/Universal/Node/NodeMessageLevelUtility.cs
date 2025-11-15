@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 节点消息级别工具
+    /// </summary>
     public static class NodeMessageLevelUtility
     {
         public static Texture GetIcon(NodeMessageLevel level)

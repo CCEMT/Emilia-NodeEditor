@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 工具栏按钮控件
+    /// </summary>
     public class ButtonToolbarViewControl : ToolbarViewControl
     {
         protected GUIContent content;

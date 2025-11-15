@@ -4,6 +4,9 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 节点消息元素
+    /// </summary>
     public class NodeMessageElement : VisualElement
     {
         private string _message;

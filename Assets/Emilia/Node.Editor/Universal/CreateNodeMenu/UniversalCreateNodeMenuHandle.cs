@@ -13,6 +13,9 @@ using Object = UnityEngine.Object;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 通用创建节点菜单信息提供者
+    /// </summary>
     public interface IUniversalCreateNodeMenuInfoProvider
     {
         string GetTitle();
@@ -20,6 +23,9 @@ namespace Emilia.Node.Universal.Editor
         bool CreateNode(CreateNodeInfo createNodeInfo, CreateNodeContext createNodeContext);
     }
 
+    /// <summary>
+    /// 通用创建节点菜单处理器
+    /// </summary>
     [EditorHandle(typeof(EditorUniversalGraphAsset))]
     public class UniversalCreateNodeMenuHandle : CreateNodeMenuHandle, IUniversalCreateNodeMenuInfoProvider
     {

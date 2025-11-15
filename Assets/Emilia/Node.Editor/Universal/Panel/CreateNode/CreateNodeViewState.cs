@@ -4,6 +4,9 @@ using Emilia.Node.Editor;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 创建节点面板状态（持久化保存）
+    /// </summary>
     [Serializable]
     public class CreateNodeViewState
     {

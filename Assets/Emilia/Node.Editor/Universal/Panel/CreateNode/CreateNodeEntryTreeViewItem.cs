@@ -2,6 +2,9 @@
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 创建节点面板TreeViewItem的创建节点Item实现
+    /// </summary>
     public class CreateNodeEntryTreeViewItem : CreateNodeTreeViewItem
     {
         public ICreateNodeHandle createNodeHandle { get; }

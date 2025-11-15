@@ -7,6 +7,9 @@ using UnityEditor.Experimental.GraphView;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 通用拷贝粘贴处理
+    /// </summary>
     [EditorHandle(typeof(EditorUniversalGraphAsset))]
     public class UniversalGraphCopyPasteHandle : GraphCopyPasteHandle
     {

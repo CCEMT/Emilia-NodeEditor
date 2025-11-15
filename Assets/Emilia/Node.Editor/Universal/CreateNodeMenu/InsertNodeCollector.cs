@@ -3,6 +3,9 @@ using Emilia.Node.Editor;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 根据Edge收集创建的节点
+    /// </summary>
     public class InsertNodeCollector : ICreateNodeCollector
     {
         private EditorGraphView graphView;

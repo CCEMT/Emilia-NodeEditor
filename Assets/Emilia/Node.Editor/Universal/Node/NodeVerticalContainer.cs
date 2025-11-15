@@ -3,6 +3,9 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 节点Vertical容器
+    /// </summary>
     public class NodeVerticalContainer : VisualElement
     {
         public NodeVerticalContainer()

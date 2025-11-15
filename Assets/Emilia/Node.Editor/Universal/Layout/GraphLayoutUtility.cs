@@ -8,19 +8,46 @@ using UnityEngine;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 布局工具类
+    /// </summary>
     public static class GraphLayoutUtility
     {
+        /// <summary>
+        /// 方向
+        /// </summary>
         [Flags]
         public enum AlignmentType
         {
+            /// <summary>
+            /// 横向
+            /// </summary>
             Horizontal = 1,
+
+            /// <summary>
+            /// 垂直
+            /// </summary>
             Vertical = 2,
 
+            /// <summary>
+            /// 位置-顶部/左边
+            /// </summary>
             TopOrLeft = 4,
+
+            /// <summary>
+            /// 位置-中心
+            /// </summary>
             Center = 8,
+
+            /// <summary>
+            /// 位置-底部/右边
+            /// </summary>
             BottomOrRight = 16,
         }
 
+        /// <summary>
+        /// 开始布局
+        /// </summary>
         public static void Start(float interval, AlignmentType alignmentType, List<IEditorNodeView> elements)
         {
             int count = elements.Count;

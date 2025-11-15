@@ -9,6 +9,9 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 重写SelectionDragger
+    /// </summary>
     public class GraphSelectionDragger : Dragger
     {
         IDropTarget m_PrevDropTarget;

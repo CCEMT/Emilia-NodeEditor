@@ -3,6 +3,9 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 加载中提示
+    /// </summary>
     public class GraphLoadingContainer : VisualElement
     {
         private EditorGraphView graphView;

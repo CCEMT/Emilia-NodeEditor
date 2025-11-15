@@ -8,6 +8,9 @@ using UnityEngine;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 创建节点面板TreeView实现
+    /// </summary>
     public class CreateNodeTreeView : TreeView
     {
         private EditorGraphView graphView;

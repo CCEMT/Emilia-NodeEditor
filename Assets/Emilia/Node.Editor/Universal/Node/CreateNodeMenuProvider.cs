@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 创建节点菜单（ISearchWindowProvider）
+    /// </summary>
     public class CreateNodeMenuProvider : ScriptableObject, ISearchWindowProvider
     {
         private EditorGraphView editorGraphView;

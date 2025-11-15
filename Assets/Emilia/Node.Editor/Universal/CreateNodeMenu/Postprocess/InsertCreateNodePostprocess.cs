@@ -7,6 +7,9 @@ using Object = UnityEngine.Object;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 创建节点后插入处理器
+    /// </summary>
     public class InsertCreateNodePostprocess : ICreateNodePostprocess
     {
         public string insertEdgeId;

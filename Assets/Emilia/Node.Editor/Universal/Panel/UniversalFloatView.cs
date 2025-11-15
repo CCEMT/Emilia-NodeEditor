@@ -4,6 +4,9 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 通用浮动面板实现
+    /// </summary>
     public class UniversalFloatView : GraphPanel
     {
         private VisualElement floatContainer;

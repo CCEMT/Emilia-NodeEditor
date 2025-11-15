@@ -6,6 +6,9 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 重写ContentDragger
+    /// </summary>
     public class GraphContentDragger : MouseManipulator
     {
         private Vector2 m_Start;

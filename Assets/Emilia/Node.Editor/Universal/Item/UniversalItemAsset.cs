@@ -4,6 +4,9 @@ using Sirenix.OdinInspector;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 通用Item资产实现
+    /// </summary>
     [HideMonoScript, OnValueChanged(nameof(OnValueChanged), true)]
     public abstract class UniversalItemAsset : EditorItemAsset
     {

@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 工具栏下拉按钮控件
+    /// </summary>
     public class DropdownButtonToolbarViewControl : ToolbarViewControl
     {
         private GUIContent content;

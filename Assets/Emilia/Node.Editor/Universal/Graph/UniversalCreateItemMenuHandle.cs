@@ -4,6 +4,9 @@ using Emilia.Node.Editor;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 通用创建Item菜单处理
+    /// </summary>
     [EditorHandle(typeof(EditorUniversalGraphAsset))]
     public class UniversalCreateItemMenuHandle : CreateItemMenuHandle
     {

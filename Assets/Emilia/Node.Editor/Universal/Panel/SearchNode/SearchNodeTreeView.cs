@@ -6,6 +6,9 @@ using UnityEditor.IMGUI.Controls;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 搜索节点面板TreeView实现
+    /// </summary>
     public class SearchNodeTreeView : TreeView
     {
         private EditorGraphView graphView;

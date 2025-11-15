@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 节点收藏设置
+    /// </summary>
     [Serializable]
     public class NodeCollectionSetting
     {

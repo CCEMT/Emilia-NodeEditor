@@ -3,6 +3,9 @@ using Emilia.Node.Editor;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 操作菜单特性（在EditorGraphAsset中的函数使用）
+    /// </summary>
     [AttributeUsage(AttributeTargets.Method)]
     public class MenuAttribute : Attribute
     {

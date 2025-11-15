@@ -2,6 +2,9 @@
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 创建节点后重定向Edge处理器
+    /// </summary>
     public class RedirectionEdgeCreateNodePostprocess : ICreateNodePostprocess
     {
         public string originalNodeId;

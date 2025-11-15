@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 工具栏Toggle控件
+    /// </summary>
     public class ToggleToolbarViewControl : ToolbarViewControl
     {
         private GUIContent content;

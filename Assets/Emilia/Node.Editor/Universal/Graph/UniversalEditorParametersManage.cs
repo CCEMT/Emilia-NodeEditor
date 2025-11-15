@@ -6,6 +6,9 @@ using Emilia.Variables.Editor;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 通用菜单面板
+    /// </summary>
     [SelectedClear]
     public class UniversalEditorParametersManage : EditorParametersManager
     {

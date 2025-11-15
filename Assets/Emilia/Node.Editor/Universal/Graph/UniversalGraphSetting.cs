@@ -2,6 +2,9 @@
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 通用Graph设置
+    /// </summary>
     [Serializable]
     public struct UniversalGraphSetting
     {

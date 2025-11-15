@@ -10,6 +10,9 @@ using Object = UnityEngine.Object;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 组节点表现元素
+    /// </summary>
     [EditorItem(typeof(EditorGroupAsset))]
     public class EditorGroupView : Group, IEditorItemView, IResizedGraphElement
     {

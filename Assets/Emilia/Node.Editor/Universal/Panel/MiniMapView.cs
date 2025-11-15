@@ -17,6 +17,10 @@ namespace Emilia.Node.Universal.Editor
         BottomRight
     }
 
+    /// <summary>
+    /// 小地图面板
+    /// 重写MiniMap
+    /// </summary>
     public class MiniMapView : GraphPanel
     {
         public float maxHeight { get; set; }

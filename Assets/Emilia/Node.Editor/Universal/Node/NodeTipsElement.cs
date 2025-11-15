@@ -4,6 +4,9 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 节点Tips元素
+    /// </summary>
     public class NodeTipsElement : Label
     {
         private double lastTime;

@@ -7,6 +7,9 @@ using UnityEngine;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 变量Key选择器绘制
+    /// </summary>
     public class VariableKeySelectorAttributeDrawer : OdinAttributeDrawer<VariableKeySelectorAttribute>
     {
         protected override void DrawPropertyLayout(GUIContent label)

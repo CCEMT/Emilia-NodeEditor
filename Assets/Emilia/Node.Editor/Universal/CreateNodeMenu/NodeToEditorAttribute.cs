@@ -2,6 +2,9 @@
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 指定节点类型为Editor特性（在EditorGraphAsset中使用）
+    /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
     public class NodeToEditorAttribute : Attribute
     {

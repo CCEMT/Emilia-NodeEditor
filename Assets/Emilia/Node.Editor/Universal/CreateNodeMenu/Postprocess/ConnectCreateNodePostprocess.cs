@@ -3,6 +3,9 @@ using System.Linq;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 创建节点后连接处理器
+    /// </summary>
     public class ConnectCreateNodePostprocess : ICreateNodePostprocess
     {
         public string originalNodeId;

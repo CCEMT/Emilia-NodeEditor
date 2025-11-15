@@ -8,6 +8,9 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 重写RectangleSelector
+    /// </summary>
     public class GraphRectangleSelector : MouseManipulator
     {
         private readonly RectangleSelect m_Rectangle;
