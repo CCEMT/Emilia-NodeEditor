@@ -40,11 +40,18 @@ namespace Emilia.Node.Editor
                 this.graphView.RegisterCompleteObjectUndo("Graph GroupTitleChange");
             });
 
+            RegisterCallback<MouseDownEvent>(OnMouseDown);
+
             isUndo = false;
             InitializeInnerNodes();
             isUndo = true;
 
             if (this.groupAsset.innerNodes.Count == 0) SetPositionNoUndo(asset.position);
+        }
+
+        protected virtual void OnMouseDown(MouseDownEvent evt)
+        {
+            graphView?.UpdateSelected();
         }
 
         private void InitializeInnerNodes()

@@ -4,6 +4,7 @@ using Emilia.Node.Attributes;
 using Emilia.Node.Editor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.UIElements;
 using Object = UnityEngine.Object;
 
 namespace Emilia.Node.Universal.Editor
@@ -39,6 +40,13 @@ namespace Emilia.Node.Universal.Editor
 
                 this.graphView.RegisterCompleteObjectUndo("Graph StickyNoteChange");
             });
+
+            RegisterCallback<MouseDownEvent>(OnMouseDown);
+        }
+
+        protected virtual void OnMouseDown(MouseDownEvent evt)
+        {
+            graphView?.UpdateSelected();
         }
 
         public virtual void OnValueChanged(bool isSilent = false)

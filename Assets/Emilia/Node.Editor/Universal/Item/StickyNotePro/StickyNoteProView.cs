@@ -42,7 +42,7 @@ namespace Emilia.Node.Universal.Editor
             this.graphView = graphView;
             this.stickyAsset = asset as StickyNoteProAsset;
 
-            this.capabilities = Capabilities.Selectable | Capabilities.Movable | Capabilities.Deletable | Capabilities.Ascendable | Capabilities.Copiable;
+            capabilities = Capabilities.Selectable | Capabilities.Movable | Capabilities.Deletable | Capabilities.Ascendable | Capabilities.Copiable;
 
             StyleSheet styleSheet = ResourceUtility.LoadResource<StyleSheet>("Node/Styles/UniversalEditorItemView.uss");
             styleSheets.Add(styleSheet);
@@ -72,8 +72,9 @@ namespace Emilia.Node.Universal.Editor
 
             SetPositionNoUndo(stickyAsset.position);
             RegisterCallback<GeometryChangedEvent>(OnGeometryChangedEvent);
+            RegisterCallback<MouseDownEvent>(OnMouseDown);
 
-            this.AddManipulator(new ContextualMenuManipulator(this.BuildContextualMenu));
+            this.AddManipulator(new ContextualMenuManipulator(BuildContextualMenu));
         }
 
         protected virtual void BuildContextualMenu(ContextualMenuPopulateEvent evt) { }
@@ -88,6 +89,11 @@ namespace Emilia.Node.Universal.Editor
             markdownContainer.style.top = -layout.height / 2f;
         }
 
+        protected virtual void OnMouseDown(MouseDownEvent evt)
+        {
+            graphView?.UpdateSelected();
+        }
+        
         private void OnMarkdownGUI()
         {
             Event evt = Event.current;

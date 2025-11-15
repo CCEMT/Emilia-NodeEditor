@@ -500,8 +500,19 @@ namespace Emilia.Node.Editor
                 return null;
             }
 
-            IEditorNodeView nodeView = ReflectUtility.CreateInstance(nodeViewType) as IEditorNodeView;
-            nodeView.Initialize(this, nodeAsset);
+            IEditorNodeView nodeView = null;
+
+            try
+            {
+                nodeView = ReflectUtility.CreateInstance(nodeViewType) as IEditorNodeView;
+                nodeView.Initialize(this, nodeAsset);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"AddNodeView {nodeViewType.FullName} 创建失败 {e}");
+                return null;
+            }
+
             AddElement(nodeView.element);
 
             this._nodeViews.Add(nodeView);
@@ -522,8 +533,16 @@ namespace Emilia.Node.Editor
 
             if (nodeView.asset != null) graphElementCache.RemoveNodeViewCache(nodeView.asset.id);
 
-            nodeView.Dispose();
-            RemoveElement(nodeView.element);
+            try
+            {
+                nodeView.Dispose();
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"RemoveNodeView nodeView 异常 {e}");
+            }
+
+            if (nodeView.element != null) RemoveElement(nodeView.element);
             this._nodeViews.Remove(nodeView);
         }
 
@@ -559,9 +578,19 @@ namespace Emilia.Node.Editor
                 return null;
             }
 
-            IEditorEdgeView edgeView = ReflectUtility.CreateInstance(edgeViewType) as IEditorEdgeView;
-            edgeView.edgeElement.RegisterCallback<MouseDownEvent>((_) => UpdateSelected());
-            edgeView.Initialize(this, asset);
+            IEditorEdgeView edgeView;
+
+            try
+            {
+                edgeView = ReflectUtility.CreateInstance(edgeViewType) as IEditorEdgeView;
+                edgeView.Initialize(this, asset);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"AddEdgeView {edgeViewType.FullName} 创建失败 {e}");
+                return null;
+            }
+
             AddElement(edgeView.edgeElement);
 
             this._edgeViews.Add(edgeView);
@@ -582,11 +611,22 @@ namespace Emilia.Node.Editor
 
             if (edge.asset != null) graphElementCache.RemoveEdgeViewCache(edge.asset.id);
 
-            edge.Dispose();
-            RemoveElement(edge.edgeElement);
+            try
+            {
+                edge.Dispose();
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"RemoveEdgeView edge 异常 {e}");
+            }
 
-            edge.inputPortView?.portElement.Disconnect(edge.edgeElement);
-            edge.outputPortView?.portElement.Disconnect(edge.edgeElement);
+            if (edge.edgeElement != null)
+            {
+                RemoveElement(edge.edgeElement);
+                edge.inputPortView?.portElement.Disconnect(edge.edgeElement);
+                edge.outputPortView?.portElement.Disconnect(edge.edgeElement);
+            }
+
             this._edgeViews.Remove(edge);
         }
 
@@ -612,15 +652,24 @@ namespace Emilia.Node.Editor
                 return null;
             }
 
-            IEditorItemView itemView = ReflectUtility.CreateInstance(itemViewType) as IEditorItemView;
+            IEditorItemView itemView;
+            try
+            {
+                itemView = ReflectUtility.CreateInstance(itemViewType) as IEditorItemView;
+                itemView.Initialize(this, asset);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"AddItemView {itemViewType.FullName} 创建失败 {e}");
+                return null;
+            }
+
             if (itemView.element == null)
             {
                 Debug.LogError($"AddItemView {itemViewType.FullName} element 为空");
                 return null;
             }
 
-            itemView.element.RegisterCallback<MouseDownEvent>((_) => UpdateSelected());
-            itemView.Initialize(this, asset);
             AddElement(itemView.element);
 
             this._itemViews.Add(itemView);
@@ -640,8 +689,16 @@ namespace Emilia.Node.Editor
             }
             if (item.asset != null) graphElementCache.RemoveItemViewCache(item.asset.id);
 
-            item.Dispose();
-            RemoveElement(item.element);
+            try
+            {
+                item.Dispose();
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"RemoveItemView item 异常 {e}");
+            }
+
+            if (item.element != null) RemoveElement(item.element);
             this._itemViews.Remove(item);
         }
 
