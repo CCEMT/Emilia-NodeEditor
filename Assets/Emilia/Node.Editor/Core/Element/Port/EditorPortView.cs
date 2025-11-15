@@ -22,15 +22,34 @@ namespace Emilia.Node.Editor
         public IEditorNodeView master { get; private set; }
         public EditorGraphView graphView => master?.graphView;
 
+        /// <summary>
+        /// 端口方向
+        /// </summary>
         public virtual EditorPortDirection portDirection => info.direction;
+
+        /// <summary>
+        /// 方向
+        /// </summary>
         public virtual EditorOrientation editorOrientation => info.orientation;
+
         public Port portElement => this;
         public bool isSelected { get; protected set; }
+
+        /// <summary>
+        /// 连接的Edge
+        /// </summary>
         public IReadOnlyList<IEditorEdgeView> edges => _edges;
 
         protected virtual string portStyleFilePath => "Node/Styles/UniversalEditorPortView.uss";
 
+        /// <summary>
+        /// 连接事件
+        /// </summary>
         public event Action<IEditorPortView, IEditorEdgeView> onConnected;
+
+        /// <summary>
+        /// 断开连接事件
+        /// </summary>
         public event Action<IEditorPortView, IEditorEdgeView> OnDisconnected;
 
         public EditorPortView() : base(default, default, default, null) { }

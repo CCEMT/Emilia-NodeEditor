@@ -8,7 +8,14 @@ namespace Emilia.Node.Attributes
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
     public class EditorAssetShowAttribute : Attribute
     {
+        /// <summary>
+        /// 高度
+        /// </summary>
         public float height = 300;
+
+        /// <summary>
+        /// 宽度(-1为自适应)
+        /// </summary>
         public float width = -1f;
     }
 }

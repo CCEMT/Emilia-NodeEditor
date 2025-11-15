@@ -31,6 +31,9 @@ namespace Emilia.Node.Editor
         protected EditorOrientation _inputEditorOrientation;
         protected EditorOrientation _outputEditorOrientation;
 
+        /// <summary>
+        /// 输入方向
+        /// </summary>
         public virtual EditorOrientation inputEditorOrientation
         {
             get => this._inputEditorOrientation;
@@ -42,6 +45,9 @@ namespace Emilia.Node.Editor
             }
         }
 
+        /// <summary>
+        /// 输出方向
+        /// </summary>
         public virtual EditorOrientation outputEditorOrientation
         {
             get => this._outputEditorOrientation;

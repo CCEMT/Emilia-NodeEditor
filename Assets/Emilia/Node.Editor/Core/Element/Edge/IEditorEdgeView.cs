@@ -32,6 +32,9 @@ namespace Emilia.Node.Editor
         /// </summary>
         bool isDrag { get; set; }
 
+        /// <summary>
+        /// 元素
+        /// </summary>
         Edge edgeElement { get; }
 
         /// <summary>

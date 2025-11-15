@@ -61,18 +61,27 @@ namespace Emilia.Node.Editor
             }
         }
 
+        /// <summary>
+        /// 获取节点表现类型
+        /// </summary>
         public static Type GetNodeViewType(Type nodeType)
         {
             if (nodeType == null) return null;
             return nodeViewTypeCache.GetValueOrDefault(nodeType);
         }
 
+        /// <summary>
+        /// 获取Edge表现类型
+        /// </summary>
         public static Type GetEdgeViewType(Type edgeType)
         {
             if (edgeType == null) return null;
             return edgeViewTypeCache.GetValueOrDefault(edgeType);
         }
 
+        /// <summary>
+        /// 获取Item表现类型
+        /// </summary>
         public static Type GetItemViewType(Type itemType)
         {
             if (itemType == null) return null;

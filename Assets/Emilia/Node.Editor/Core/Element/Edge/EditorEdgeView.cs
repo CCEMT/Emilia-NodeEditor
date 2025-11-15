@@ -24,9 +24,12 @@ namespace Emilia.Node.Editor
         public EditorEdgeAsset asset { get; private set; }
         public EditorGraphView graphView { get; private set; }
 
+        /// <summary>
+        /// 拖拽状态
+        /// </summary>
         public bool isDrag { get; set; }
 
-        public new Vector2[] PointsAndTangents => base.PointsAndTangents;
+        public Vector2[] PointsAndTangents_Internals => base.PointsAndTangents;
 
         /// <summary>
         /// 输入端口视图
@@ -136,7 +139,7 @@ namespace Emilia.Node.Editor
         public Vector2 GetPointByRate(float rate)
         {
             float length = 0;
-            Vector2[] points = PointsAndTangents;
+            Vector2[] points = PointsAndTangents_Internals;
 
             int amount = points.Length;
             if (amount == 0) return Vector2.zero;

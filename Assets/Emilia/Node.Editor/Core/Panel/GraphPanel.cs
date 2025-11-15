@@ -10,6 +10,9 @@ namespace Emilia.Node.Editor
     {
         protected GraphPanelCapabilities _panelCapabilities;
 
+        /// <summary>
+        /// 面板ID
+        /// </summary>
         public virtual string id { get; set; }
 
         /// <summary>
@@ -21,6 +24,9 @@ namespace Emilia.Node.Editor
             set => _panelCapabilities = value;
         }
 
+        /// <summary>
+        /// 父视图
+        /// </summary>
         public GraphTwoPaneSplitView parentView { get; set; }
         public VisualElement rootView => this;
         protected EditorGraphView graphView { get; private set; }

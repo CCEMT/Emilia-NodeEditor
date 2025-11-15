@@ -29,8 +29,14 @@ namespace Emilia.Node.Editor
         /// </summary>
         EditorOrientation editorOrientation { get; }
 
+        /// <summary>
+        /// 表现元素
+        /// </summary>
         Port portElement { get; }
 
+        /// <summary>
+        /// 连接的Edge
+        /// </summary>
         IReadOnlyList<IEditorEdgeView> edges { get; }
 
         /// <summary>

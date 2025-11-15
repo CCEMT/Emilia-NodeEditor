@@ -233,6 +233,9 @@ namespace Emilia.Node.Editor
             return null;
         }
 
+        /// <summary>
+        /// 清空缓存
+        /// </summary>
         public void Clear()
         {
             this.editorGraphView = null;

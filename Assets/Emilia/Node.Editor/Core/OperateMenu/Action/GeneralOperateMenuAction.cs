@@ -7,8 +7,19 @@ namespace Emilia.Node.Editor
     /// </summary>
     public class GeneralOperateMenuAction : OperateMenuAction
     {
+        /// <summary>
+        /// 选中状态获取回调
+        /// </summary>
         public Func<bool> isOnCallback;
+
+        /// <summary>
+        /// 验证状态获取回调
+        /// </summary>
         public Func<OperateMenuContext, OperateMenuActionValidity> validityCallback;
+
+        /// <summary>
+        /// 执行回调
+        /// </summary>
         public Action<OperateMenuActionContext> executeCallback;
 
         public override bool isOn => this.isOnCallback?.Invoke() ?? base.isOn;
@@ -20,6 +31,9 @@ namespace Emilia.Node.Editor
             this.executeCallback?.Invoke(context);
         }
 
+        /// <summary>
+        /// 转OperateMenuActionInfo结构
+        /// </summary>
         public OperateMenuActionInfo ToActionInfo(string name, string category, int priority)
         {
             OperateMenuActionInfo actionInfo = new();

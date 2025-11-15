@@ -19,6 +19,7 @@ namespace Emilia.Node.Editor
         private EditorEdgeAsset _copyAsset;
         private EditorEdgeAsset _pasteAsset;
 
+
         public EditorEdgeAsset copyAsset
         {
             get

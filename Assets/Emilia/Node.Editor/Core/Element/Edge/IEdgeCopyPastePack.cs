@@ -7,7 +7,14 @@ namespace Emilia.Node.Editor
     /// </summary>
     public interface IEdgeCopyPastePack : ICopyPastePack
     {
+        /// <summary>
+        /// 拷贝的Edge资产
+        /// </summary>
         EditorEdgeAsset copyAsset { get; }
+        
+        /// <summary>
+        /// 粘贴的Edge资产
+        /// </summary>
         EditorEdgeAsset pasteAsset { get; }
     }
 }

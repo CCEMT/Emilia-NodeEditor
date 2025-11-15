@@ -1,7 +1,7 @@
 ﻿namespace Emilia.Node.Editor
 {
     /// <summary>
-    /// Port方向
+    /// 方向
     /// </summary>
     public enum EditorOrientation
     {

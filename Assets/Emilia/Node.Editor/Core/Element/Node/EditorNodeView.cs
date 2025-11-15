@@ -29,22 +29,64 @@ namespace Emilia.Node.Editor
 
         public EditorGraphView graphView { get; private set; }
 
+        /// <summary>
+        /// 底层容器
+        /// </summary>
         public VisualElement bottomLayerContainer { get; protected set; }
+
+        /// <summary>
+        /// 顶层容器
+        /// </summary>
         public VisualElement topLayerContainer { get; protected set; }
 
+        /// <summary>
+        /// 顶部节点容器
+        /// </summary>
         public VisualElement nodeTopContainer { get; protected set; }
+
+        /// <summary>
+        /// 底部节点容器
+        /// </summary>
         public VisualElement nodeBottomContainer { get; protected set; }
 
+        /// <summary>
+        /// 底部端口容器
+        /// </summary>
         public VisualElement portBottomContainer { get; protected set; }
+
+        /// <summary>
+        /// 顶部端口容器
+        /// </summary>
         public VisualElement portTopContainer { get; protected set; }
+
+        /// <summary>
+        /// 底部节点端口容器
+        /// </summary>
         public VisualElement portNodeBottomContainer { get; protected set; }
+
+        /// <summary>
+        /// 顶部节点端口容器
+        /// </summary>
         public VisualElement portNodeTopContainer { get; protected set; }
 
+        /// <summary>
+        /// Input端口编辑控件容器
+        /// </summary>
         public VisualElement inputEditContainer { get; protected set; }
+
+        /// <summary>
+        /// 资源Inspector容器
+        /// </summary>
         public VisualElement assetContainer { get; protected set; }
 
+        /// <summary>
+        /// 标题
+        /// </summary>
         public Label titleLabel { get; protected set; }
 
+        /// <summary>
+        /// 主题颜色
+        /// </summary>
         public virtual Color topicColor { get; protected set; } = Color.black;
 
         public virtual GraphElement element => this;
@@ -400,6 +442,9 @@ namespace Emilia.Node.Editor
             }
         }
 
+        /// <summary>
+        /// 设置位置
+        /// </summary>
         public override void SetPosition(Rect newPos)
         {
             if (capabilities.HasFlag(Capabilities.Movable) == false) return;
@@ -408,6 +453,9 @@ namespace Emilia.Node.Editor
             asset.position = newPos;
         }
 
+        /// <summary>
+        /// 设置位置（无撤销）
+        /// </summary>
         public void SetPositionNoUndo(Rect newPos)
         {
             if (capabilities.HasFlag(Capabilities.Movable) == false) return;
@@ -415,6 +463,9 @@ namespace Emilia.Node.Editor
             asset.position = newPos;
         }
 
+        /// <summary>
+        /// 设置展开（无撤销）
+        /// </summary>
         public void SetExpandedNoUndo(bool expanded, bool isRebuild = false)
         {
             if (capabilities.HasFlag(Capabilities.Collapsible) == false) return;
@@ -427,6 +478,9 @@ namespace Emilia.Node.Editor
             if (isRebuild && isChanged) RebuildPortView();
         }
 
+        /// <summary>
+        /// 设置资源Inspector的显示状态
+        /// </summary>
         public virtual void SetEditInNodeDisplay(bool display)
         {
             if (assetContainer != null)

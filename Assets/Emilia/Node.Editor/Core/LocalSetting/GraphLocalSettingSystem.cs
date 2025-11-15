@@ -21,8 +21,19 @@ namespace Emilia.Node.Editor
 
         public override int order => 100;
 
+        /// <summary>
+        /// 类型设置改变事件
+        /// </summary>
         public event Action onTypeSettingChanged;
+
+        /// <summary>
+        /// 资源设置改变事件
+        /// </summary>
         public event Action onAssetSettingChanged;
+
+        /// <summary>
+        /// 设置改变事件
+        /// </summary>
         public event Action onSettingChanged;
 
         public override void Initialize(EditorGraphView graphView)

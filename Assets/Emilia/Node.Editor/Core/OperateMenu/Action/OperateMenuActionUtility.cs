@@ -15,7 +15,14 @@ namespace Emilia.Node.Editor
         private static List<OperateMenuActionInfo> _actions;
         private static Dictionary<Type, OperateMenuActionInfo> _actionMap;
 
+        /// <summary>
+        /// 所有Action List
+        /// </summary>
         public static IReadOnlyList<OperateMenuActionInfo> actions => _actions;
+
+        /// <summary>
+        /// 所有Action Map key=IOperateMenuAction Type
+        /// </summary>
         public static IReadOnlyDictionary<Type, OperateMenuActionInfo> actionMap => _actionMap;
 
         static OperateMenuActionUtility()

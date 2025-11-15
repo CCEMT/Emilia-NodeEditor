@@ -158,6 +158,9 @@ namespace Emilia.Node.Editor
             return outputEdgeViews;
         }
 
+        /// <summary>
+        /// 获取可连接的IEditorPortView
+        /// </summary>
         public static bool GetCanConnectPort(this IEditorNodeView editorNodeView, IEditorEdgeView edgeView, out List<IEditorPortView> canConnectInput, out List<IEditorPortView> canConnectOutput)
         {
             canConnectInput = new List<IEditorPortView>();
@@ -187,6 +190,9 @@ namespace Emilia.Node.Editor
             return canConnectInput.Count > 0 && canConnectOutput.Count > 0;
         }
 
+        /// <summary>
+        /// 获取可连接的IEditorPortView
+        /// </summary>
         public static List<IEditorPortView> GetCanConnectPort(this IEditorNodeView editorNodeView, IEditorPortView portView)
         {
             List<IEditorPortView> canConnectList = new();

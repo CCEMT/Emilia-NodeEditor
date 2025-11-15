@@ -50,6 +50,9 @@ namespace Emilia.Node.Editor
             return this.handle.UnserializeAndPasteCallback(graphView, operationName, serializedData, graphCopyPasteContext);
         }
 
+        /// <summary>
+        /// 获取拷贝元素
+        /// </summary>
         public IEnumerable<GraphElement> GetCopyGraphElements(string serializedData)
         {
             if (this.handle == null) return null;
