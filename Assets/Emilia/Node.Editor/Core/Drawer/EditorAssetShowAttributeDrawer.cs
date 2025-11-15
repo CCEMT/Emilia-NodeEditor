@@ -9,42 +9,42 @@ namespace Emilia.Node.Editor
 {
     public class EditorAssetShowAttributeDrawer : OdinAttributeDrawer<EditorAssetShowAttribute>, IDisposable
     {
-        private EditorGraphRoot _graphRoot;
+        private EditorGraphImGUIRoot _graphImGUIRoot;
 
         protected override void DrawPropertyLayout(GUIContent label)
         {
             EditorAssetShowAttribute attribute = Attribute;
 
-            if (this._graphRoot == null) this._graphRoot = new EditorGraphRoot();
+            if (this._graphImGUIRoot == null) this._graphImGUIRoot = new EditorGraphImGUIRoot();
 
-            if (this._graphRoot.window == null)
+            if (this._graphImGUIRoot.window == null)
             {
                 EditorWindow window = EditorImGUIKit.GetImGUIWindow();
-                this._graphRoot.Initialize(window);
+                this._graphImGUIRoot.Initialize(window);
             }
 
-            if (this._graphRoot.asset == null)
+            if (this._graphImGUIRoot.asset == null)
             {
                 CallNextDrawer(label);
                 EditorGraphAsset asset = Property.ValueEntry.WeakSmartValue as EditorGraphAsset;
-                if (asset != null) this._graphRoot.SetAsset(asset);
+                if (asset != null) this._graphImGUIRoot.SetAsset(asset);
                 return;
             }
 
-            if (_graphRoot == null || _graphRoot.window == null) return;
+            if (this._graphImGUIRoot == null || this._graphImGUIRoot.window == null) return;
 
-            this._graphRoot.OnImGUI(attribute.height, attribute.width);
+            this._graphImGUIRoot.OnImGUI(attribute.height, attribute.width);
         }
 
         public void Dispose()
         {
-            if (_graphRoot != null)
+            if (this._graphImGUIRoot != null)
             {
-                if (_graphRoot.asset != null) this._graphRoot.asset.SaveAll();
-                this._graphRoot.Dispose();
+                if (this._graphImGUIRoot.asset != null) this._graphImGUIRoot.asset.SaveAll();
+                this._graphImGUIRoot.Dispose();
             }
 
-            this._graphRoot = null;
+            this._graphImGUIRoot = null;
         }
     }
 }

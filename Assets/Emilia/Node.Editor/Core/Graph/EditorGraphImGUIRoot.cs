@@ -8,7 +8,7 @@ using UnityEngine;
 namespace Emilia.Node.Editor
 {
     [Serializable]
-    public class EditorGraphRoot
+    public class EditorGraphImGUIRoot
     {
         [SerializeField]
         private EditorWindow _window;
