@@ -5,6 +5,9 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// UIElement控制器
+    /// </summary>
     [Serializable]
     public class EditorGraphViewRoot
     {

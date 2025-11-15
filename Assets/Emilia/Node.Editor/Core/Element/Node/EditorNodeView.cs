@@ -13,6 +13,9 @@ using Object = UnityEngine.Object;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// Node表现元素
+    /// </summary>
     public abstract class EditorNodeView : NodeView, IEditorNodeView
     {
         protected List<IEditorPortView> _portViews = new();

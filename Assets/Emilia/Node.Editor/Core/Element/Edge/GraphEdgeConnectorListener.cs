@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// Edge连接监听器
+    /// </summary>
     public class GraphEdgeConnectorListener : IEdgeConnectorListener
     {
         public EditorGraphView graphView { get; private set; }

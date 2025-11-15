@@ -7,6 +7,9 @@ using UnityEngine;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 将EditorGraphAsset序列化绘制为GraphView
+    /// </summary>
     public class EditorAssetShowAttributeDrawer : OdinAttributeDrawer<EditorAssetShowAttribute>, IDisposable
     {
         private EditorGraphImGUIRoot _graphImGUIRoot;

@@ -8,6 +8,9 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// Graph面板系统
+    /// </summary>
     public class GraphPanelSystem : BasicGraphViewModule
     {
         private const string SplitViewPlaceholderName = "splitView-placeholder";

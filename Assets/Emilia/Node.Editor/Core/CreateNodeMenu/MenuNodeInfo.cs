@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 创建节点菜单信息
+    /// </summary>
     public struct MenuNodeInfo
     {
         /// <summary>

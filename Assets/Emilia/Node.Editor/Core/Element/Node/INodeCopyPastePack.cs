@@ -2,6 +2,9 @@
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// Node拷贝粘贴Pack接口
+    /// </summary>
     public interface INodeCopyPastePack : ICopyPastePack
     {
         /// <summary>

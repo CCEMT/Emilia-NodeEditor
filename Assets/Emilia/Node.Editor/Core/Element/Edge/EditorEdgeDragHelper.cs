@@ -9,6 +9,9 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 重写EdgeDragHelper
+    /// </summary>
     public class EditorEdgeDragHelper : EdgeDragHelper
     {
         public const int PanInterval = 10;
@@ -397,16 +400,15 @@ namespace Emilia.Node.Editor
                 IEditorPortView nearestPort = GetNearestPort(pair.Value);
                 if (nearestPort != null) endPort = nearestPort;
             }
-
-            IEditorPortView GetNearestPort(List<IEditorPortView> ports)
+            
+            IEditorPortView GetNearestPort(List<IEditorPortView> ports)//获取最近的端口
             {
                 IEditorPortView nearestPort = null;
                 float minDistance = int.MaxValue;
                 foreach (IEditorPortView port in ports)
                 {
-                    if (portBonds.ContainsKey(port) == false) continue;
+                    if (portBonds.TryGetValue(port, out Rect bounds) == false) continue;
 
-                    Rect bounds = portBonds[port];
                     bool isContains = bounds.Contains(mousePosition);
                     if (isContains)
                     {

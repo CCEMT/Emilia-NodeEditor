@@ -7,6 +7,9 @@ using UnityEditor;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 操作菜单行为工具类
+    /// </summary>
     public static class OperateMenuActionUtility
     {
         private static List<OperateMenuActionInfo> _actions;

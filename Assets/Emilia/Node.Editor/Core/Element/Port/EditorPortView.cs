@@ -11,6 +11,9 @@ using Object = UnityEngine.Object;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// Port表现元素
+    /// </summary>
     public class EditorPortView : Port_Internals, IEditorPortView, ICollectibleElement
     {
         private List<IEditorEdgeView> _edges = new();

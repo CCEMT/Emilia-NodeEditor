@@ -2,6 +2,9 @@
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 操作菜单行为标记特性
+    /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
     public class ActionAttribute : Attribute
     {

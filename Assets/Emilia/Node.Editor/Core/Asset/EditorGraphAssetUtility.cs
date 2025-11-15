@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 编辑器Graph资产的实用函数
+    /// </summary>
     public static class EditorGraphAssetUtility
     {
         /// <summary>

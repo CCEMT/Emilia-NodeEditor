@@ -4,6 +4,9 @@ using Emilia.Kit;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 本地设置系统
+    /// </summary>
     public class GraphLocalSettingSystem : BasicGraphViewModule
     {
         private const string GraphLocalSettingSaveKey = "GraphLocalSettingKey";

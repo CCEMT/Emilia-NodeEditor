@@ -7,6 +7,9 @@ using UnityEngine;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// ImGUI控制器
+    /// </summary>
     [Serializable]
     public class EditorGraphImGUIRoot
     {

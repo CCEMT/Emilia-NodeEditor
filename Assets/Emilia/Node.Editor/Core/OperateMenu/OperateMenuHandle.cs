@@ -3,6 +3,9 @@ using Emilia.Kit;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 操作菜单自定义处理器
+    /// </summary>
     [EditorHandleGenerate]
     public abstract class OperateMenuHandle
     {

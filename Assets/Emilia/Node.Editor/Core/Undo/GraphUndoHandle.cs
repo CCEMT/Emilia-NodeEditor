@@ -2,6 +2,9 @@
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 撤销自定义处理器
+    /// </summary>
     [EditorHandleGenerate]
     public class GraphUndoHandle
     {

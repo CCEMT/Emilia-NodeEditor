@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Emilia.Node
 {
+    /// <summary>
+    /// 打开模式
+    /// </summary>
     public enum OpenWindowMode
     {
         /// <summary>

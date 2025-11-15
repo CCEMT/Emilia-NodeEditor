@@ -2,6 +2,9 @@
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 面板自定义处理器
+    /// </summary>
     [EditorHandleGenerate]
     public abstract class GraphPanelHandle
     {

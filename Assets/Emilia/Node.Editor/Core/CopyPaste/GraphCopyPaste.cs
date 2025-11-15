@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// Graph拷贝粘贴系统（序列化系统）
+    /// </summary>
     public class GraphCopyPaste : BasicGraphViewModule
     {
         private GraphCopyPasteHandle handle;

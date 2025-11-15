@@ -2,6 +2,9 @@
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// Node表现元素拓展实用函数
+    /// </summary>
     public static class IEditorNodeViewExtension
     {
         /// <summary>

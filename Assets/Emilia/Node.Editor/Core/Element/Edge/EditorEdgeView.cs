@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Reflection;
 using Emilia.Kit;
 using Emilia.Kit.Editor;
@@ -11,6 +10,9 @@ using Object = UnityEngine.Object;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// Edge表现元素
+    /// </summary>
     public abstract class EditorEdgeView : Edge_Hook, IEditorEdgeView
     {
         protected IEditorPortView _inputPortView;

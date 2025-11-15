@@ -1,5 +1,8 @@
 ﻿namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 操作菜单行为接口
+    /// </summary>
     public interface IOperateMenuAction
     {
         /// <summary>

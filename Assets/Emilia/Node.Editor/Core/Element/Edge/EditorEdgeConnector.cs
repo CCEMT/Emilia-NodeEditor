@@ -6,6 +6,9 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 重写EdgeConnector
+    /// </summary>
     public class EditorEdgeConnector : EdgeConnector
     {
         public const float ConnectionDistanceTreshold = 10f;

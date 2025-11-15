@@ -8,6 +8,9 @@ using Object = UnityEngine.Object;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 编辑器Edge资源
+    /// </summary>
     [Serializable, SelectedClear]
     public class EditorEdgeAsset : TitleAsset, IUnityAsset
     {

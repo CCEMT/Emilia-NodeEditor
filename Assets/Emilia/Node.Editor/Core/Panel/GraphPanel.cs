@@ -3,6 +3,9 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 通用面板
+    /// </summary>
     public class GraphPanel : GraphElement, IGraphPanel
     {
         protected GraphPanelCapabilities _panelCapabilities;

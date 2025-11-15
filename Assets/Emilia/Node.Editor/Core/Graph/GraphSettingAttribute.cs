@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Emilia.Node.Attributes
 {
+    /// <summary>
+    /// Graph设置属性
+    /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
     public class GraphSettingAttribute : Attribute
     {
@@ -50,6 +53,9 @@ namespace Emilia.Node.Attributes
         }
     }
 
+    /// <summary>
+    /// Graph设置
+    /// </summary>
     [Serializable]
     public struct GraphSettingStruct
     {

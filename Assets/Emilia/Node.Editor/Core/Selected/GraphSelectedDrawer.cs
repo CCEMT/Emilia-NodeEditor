@@ -3,6 +3,9 @@ using Emilia.Kit;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 选中绘制
+    /// </summary>
     public abstract class GraphSelectedDrawer : IGraphSelectedDrawer
     {
         protected EditorGraphView graphView { get; private set; }

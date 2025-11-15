@@ -2,6 +2,9 @@
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 可以拷贝粘贴的元素接口
+    /// </summary>
     public interface IGraphCopyPasteElement
     {
         /// <summary>

@@ -8,6 +8,9 @@ using Object = UnityEngine.Object;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// Item系统
+    /// </summary>
     public class GraphItemSystem : BasicGraphViewModule
     {
         private ItemSystemHandle handle;

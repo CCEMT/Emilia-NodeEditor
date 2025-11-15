@@ -2,6 +2,9 @@
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 撤销系统
+    /// </summary>
     public class GraphUndo : BasicGraphViewModule
     {
         private GraphUndoHandle handle;

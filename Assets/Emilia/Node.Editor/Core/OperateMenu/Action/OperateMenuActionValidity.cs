@@ -1,5 +1,8 @@
 ﻿namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 操作菜单行为有效性类型
+    /// </summary>
     public enum OperateMenuActionValidity
     {
         /// <summary>

@@ -9,6 +9,9 @@ using UnityEngine;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// Graph编辑器资产
+    /// </summary>
     [Serializable]
     public partial class EditorGraphAsset : SerializedScriptableObject
     {

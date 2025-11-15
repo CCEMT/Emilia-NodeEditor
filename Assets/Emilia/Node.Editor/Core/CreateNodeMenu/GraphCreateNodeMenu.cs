@@ -4,6 +4,9 @@ using UnityEditor.Experimental.GraphView;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 创建节点菜单系统
+    /// </summary>
     public class GraphCreateNodeMenu : BasicGraphViewModule
     {
         private CreateNodeMenuHandle handle;

@@ -1,8 +1,11 @@
-﻿using UnityEngine;
-using EditorHandleUtility = Emilia.Kit.EditorHandleUtility;
+﻿using Emilia.Kit;
+using UnityEngine;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// Graph基础操作系统
+    /// </summary>
     public class GraphOperate : BasicGraphViewModule
     {
         private GraphOperateHandle handle;

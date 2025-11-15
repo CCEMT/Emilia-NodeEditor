@@ -4,6 +4,9 @@ using UnityEditor.Experimental.GraphView;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// Port表现元素接口
+    /// </summary>
     public interface IEditorPortView : IRemoveViewElement, IGraphSelectable, IGraphCopyPasteElement
     {
         /// <summary>

@@ -7,6 +7,9 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 重写EdgeControl
+    /// </summary>
     public class EditorEdgeControl : EdgeControl_Internals
     {
         protected struct EdgeCornerSweepValues
@@ -83,6 +86,7 @@ namespace Emilia.Node.Editor
 
             renderPoints_Internals.Clear();
 
+            //当Orientation为Custom的处理
             if (inputEditorOrientation == EditorOrientation.Custom || outputEditorOrientation == EditorOrientation.Custom)
             {
                 renderPoints_Internals.Add(p1);

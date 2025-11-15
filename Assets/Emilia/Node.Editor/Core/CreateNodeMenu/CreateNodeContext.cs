@@ -2,6 +2,9 @@
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 创建节点上下文
+    /// </summary>
     public class CreateNodeContext
     {
         /// <summary>

@@ -3,6 +3,9 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 自定义拖拽处理器
+    /// </summary>
     [EditorHandleGenerate]
     public abstract class GraphDragAndDropHandle
     {

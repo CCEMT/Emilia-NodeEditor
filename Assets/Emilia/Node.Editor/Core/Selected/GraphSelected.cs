@@ -5,6 +5,9 @@ using Emilia.Kit;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 选择系统
+    /// </summary>
     public class GraphSelected : BasicGraphViewModule
     {
         private GraphSelectedHandle handle;

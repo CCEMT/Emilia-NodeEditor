@@ -1,5 +1,8 @@
 ﻿namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 操作菜单工具类
+    /// </summary>
     public static class OperateMenuUtility
     {
         /// <summary>

@@ -1,5 +1,8 @@
 ﻿namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 操作菜单行为信息
+    /// </summary>
     public struct OperateMenuActionInfo
     {
         /// <summary>

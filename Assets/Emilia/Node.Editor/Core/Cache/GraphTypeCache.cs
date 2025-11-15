@@ -6,6 +6,9 @@ using UnityEditor;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// Graph元素的类型缓存
+    /// </summary>
     public static class GraphTypeCache
     {
         private static Dictionary<Type, Type> nodeViewTypeCache = new();

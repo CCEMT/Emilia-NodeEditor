@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// GraphView元素的实例缓存
+    /// </summary>
     public class GraphElementCache
     {
         private EditorGraphView editorGraphView;

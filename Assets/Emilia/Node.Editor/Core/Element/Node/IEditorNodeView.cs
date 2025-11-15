@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// Node表现元素接口
+    /// </summary>
     public interface IEditorNodeView : IDeleteGraphElement, IRemoveViewElement, IGraphCopyPasteElement, IGraphSelectable
     {
         /// <summary>

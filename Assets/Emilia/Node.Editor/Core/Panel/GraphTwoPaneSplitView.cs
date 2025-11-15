@@ -3,6 +3,9 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 面板分割实现
+    /// </summary>
     public class GraphTwoPaneSplitView : TwoPaneSplitView_Internals
     {
         public GraphTwoPaneSplitView(int fixedPaneIndex, float fixedPaneStartDimension, TwoPaneSplitViewOrientation orientation) : base(fixedPaneIndex, fixedPaneStartDimension, orientation) { }

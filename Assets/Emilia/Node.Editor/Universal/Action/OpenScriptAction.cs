@@ -5,8 +5,14 @@ using UnityEditor.Experimental.GraphView;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 打开脚本中指定目标对象接口
+    /// </summary>
     public interface ISpecifyOpenScriptObject
     {
+        /// <summary>
+        /// 指定对象
+        /// </summary>
         public object openScriptObject { get; }
     }
 

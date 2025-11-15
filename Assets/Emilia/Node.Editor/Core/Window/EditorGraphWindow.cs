@@ -11,6 +11,9 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 通用Graph的Window
+    /// </summary>
     public class EditorGraphWindow : OdinProEditorWindow, IEditorAssetWindow
     {
         [NonSerialized, OdinSerialize]

@@ -5,6 +5,7 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Editor
 {
+    //重写EdgeManipulator
     public class EditorEdgeManipulator : MouseManipulator
     {
         private bool m_Active;

@@ -2,6 +2,9 @@
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 通用菜单行为
+    /// </summary>
     public class GeneralOperateMenuAction : OperateMenuAction
     {
         public Func<bool> isOnCallback;

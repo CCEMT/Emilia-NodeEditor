@@ -1,9 +1,12 @@
 ﻿namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 创建节点信息
+    /// </summary>
     public struct CreateNodeInfo
     {
         /// <summary>
-        /// 节点信息
+        /// 创建节点菜单信息
         /// </summary>
         public MenuNodeInfo menuInfo;
 

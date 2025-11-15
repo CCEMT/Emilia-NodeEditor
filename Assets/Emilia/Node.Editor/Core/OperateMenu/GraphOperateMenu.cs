@@ -6,6 +6,9 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 操作菜单系统
+    /// </summary>
     public class GraphOperateMenu : BasicGraphViewModule
     {
         public const int SeparatorAt = 1200;

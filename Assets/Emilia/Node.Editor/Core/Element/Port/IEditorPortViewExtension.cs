@@ -2,6 +2,9 @@
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// Port表现元素拓展实用函数
+    /// </summary>
     public static class IEditorPortViewExtension
     {
         /// <summary>
