@@ -14,9 +14,15 @@ namespace Emilia.Node.Editor
         [LabelText("标题")]
         public string groupTitle = "New Group";
 
+        /// <summary>
+        /// 大小
+        /// </summary>
         [HideInInspector]
         public Vector2 size;
 
+        /// <summary>
+        /// 节点列表
+        /// </summary>
         [HideInInspector]
         public List<string> innerNodes = new();
 

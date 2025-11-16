@@ -7,7 +7,14 @@ namespace Emilia.Node.Editor
     /// </summary>
     public struct CreateNodeHandleContext
     {
+        /// <summary>
+        /// 节点资产类型
+        /// </summary>
         public Type nodeType;
+        
+        /// <summary>
+        /// 编辑器节点资产类型
+        /// </summary>
         public Type defaultEditorNodeType;
     }
 }

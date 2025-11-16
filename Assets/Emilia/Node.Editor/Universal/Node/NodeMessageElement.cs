@@ -9,12 +9,22 @@ namespace Emilia.Node.Universal.Editor
     /// </summary>
     public class NodeMessageElement : VisualElement
     {
-        private string _message;
-        private NodeMessageLevel _level;
+        protected string _message;
+        protected NodeMessageLevel _level;
 
+        /// <summary>
+        /// 消息内容
+        /// </summary>
         public string message => this._message;
+
+        /// <summary>
+        /// 消息级别
+        /// </summary>
         public NodeMessageLevel level => this._level;
 
+        /// <summary>
+        /// 移除事件
+        /// </summary>
         public Action onRemove;
 
         public NodeMessageElement()
@@ -48,6 +58,9 @@ namespace Emilia.Node.Universal.Editor
             style.color = color;
         }
 
+        /// <summary>
+        /// 等待移除，直到条件满足
+        /// </summary>
         public void WaitUntilRemove(Func<bool> condition)
         {
             var item = schedule.Execute(() => {

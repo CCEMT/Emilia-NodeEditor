@@ -16,11 +16,11 @@ namespace Emilia.Node.Editor
     [EditorItem(typeof(EditorGroupAsset))]
     public class EditorGroupView : Group, IEditorItemView, IResizedGraphElement
     {
-        private EditorGroupAsset groupAsset;
+        protected EditorGroupAsset groupAsset;
 
-        private Dictionary<string, ContextualMenuManipulator> menuManipulators = new();
+        protected Dictionary<string, ContextualMenuManipulator> menuManipulators = new();
 
-        private bool isUndo;
+        protected bool isUndo;
 
         public EditorItemAsset asset => groupAsset;
         public GraphElement element => this;
@@ -57,7 +57,7 @@ namespace Emilia.Node.Editor
             graphView?.UpdateSelected();
         }
 
-        private void InitializeInnerNodes()
+        protected void InitializeInnerNodes()
         {
             int amount = this.groupAsset.innerNodes.Count;
             for (int i = 0; i < amount; i++)
@@ -76,12 +76,12 @@ namespace Emilia.Node.Editor
             }
         }
 
-        private void GroupMenu(ContextualMenuPopulateEvent evt)
+        protected void GroupMenu(ContextualMenuPopulateEvent evt)
         {
             evt.menu.AppendAction("移除节点", RemoveSelectedNode);
         }
 
-        private void RemoveSelectedNode(DropdownMenuAction dropdownMenuAction)
+        protected void RemoveSelectedNode(DropdownMenuAction dropdownMenuAction)
         {
             Undo.IncrementCurrentGroup();
 
@@ -176,7 +176,7 @@ namespace Emilia.Node.Editor
             this.isUndo = true;
         }
 
-        private void RemoveNode()
+        protected void RemoveNode()
         {
             foreach (GraphElement graphElement in containedElements.ToList())
             {
@@ -189,7 +189,7 @@ namespace Emilia.Node.Editor
             }
         }
 
-        private void AddNode()
+        protected void AddNode()
         {
             foreach (string nodeId in this.groupAsset.innerNodes.ToList())
             {

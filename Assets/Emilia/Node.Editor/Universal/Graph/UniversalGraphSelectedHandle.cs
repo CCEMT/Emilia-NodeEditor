@@ -27,7 +27,7 @@ namespace Emilia.Node.Universal.Editor
             Selection.selectionChanged += OnSelectionChanged;
         }
 
-        private void OnSelectionChanged()
+        protected void OnSelectionChanged()
         {
             List<Object> selectedInspectors = new();
 

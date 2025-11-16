@@ -19,7 +19,7 @@ namespace Emilia.Node.Universal.Editor
         /// <summary>
         /// 节点名称
         /// </summary>
-        public string displayName
+        public virtual string displayName
         {
             get => _displayName;
             set => _displayName = value;

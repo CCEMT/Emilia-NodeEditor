@@ -8,6 +8,9 @@ namespace Emilia.Node.Attributes
     [AttributeUsage(AttributeTargets.Property)]
     public class ToggleToolbarAttribute : ToolbarAttribute
     {
+        /// <summary>
+        /// Toggle名称
+        /// </summary>
         public string displayName { get; private set; }
 
         public ToggleToolbarAttribute(string displayName, ToolbarViewControlPosition position) : base(position)

@@ -9,10 +9,10 @@ namespace Emilia.Node.Universal.Editor
     /// </summary>
     public class ToggleToolbarViewControl : ToolbarViewControl
     {
-        private GUIContent content;
+        protected GUIContent content;
 
-        private Func<bool> getter;
-        private Action<bool> setter;
+        protected Func<bool> getter;
+        protected Action<bool> setter;
 
         public ToggleToolbarViewControl(string displayName, Func<bool> getter, Action<bool> setter)
         {

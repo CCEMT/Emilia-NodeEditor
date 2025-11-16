@@ -7,9 +7,9 @@ namespace Emilia.Node.Universal.Editor
     /// </summary>
     public class SpaceToolbarViewControl : ToolbarViewControl
     {
-        private float size;
-        private bool leftSeparator;
-        private bool rightSeparator;
+        protected float size;
+        protected bool leftSeparator;
+        protected bool rightSeparator;
 
         public SpaceToolbarViewControl(float size, bool leftSeparator = false, bool rightSeparator = false)
         {

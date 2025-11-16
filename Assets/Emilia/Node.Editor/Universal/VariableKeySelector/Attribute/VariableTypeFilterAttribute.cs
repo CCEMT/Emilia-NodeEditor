@@ -7,7 +7,14 @@ namespace Emilia.BehaviorTree.Attributes
     /// </summary>
     public class VariableTypeFilterAttribute : Attribute
     {
+        /// <summary>
+        /// 过滤类型
+        /// </summary>
         public Type type { get; private set; }
+
+        /// <summary>
+        /// 过滤类型表达式
+        /// </summary>
         public string getTypeExpression { get; private set; }
 
         public VariableTypeFilterAttribute(Type type)

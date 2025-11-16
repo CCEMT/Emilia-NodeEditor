@@ -8,6 +8,9 @@ namespace Emilia.Node.Universal.Editor
     /// </summary>
     public static class NodeMessageLevelUtility
     {
+        /// <summary>
+        /// 根据节点消息级别获取图标
+        /// </summary>
         public static Texture GetIcon(NodeMessageLevel level)
         {
             switch (level)
@@ -23,6 +26,9 @@ namespace Emilia.Node.Universal.Editor
             }
         }
 
+        /// <summary>
+        /// 根据节点消息级别获取颜色
+        /// </summary>
         public static Color GetColor(NodeMessageLevel level)
         {
             switch (level)

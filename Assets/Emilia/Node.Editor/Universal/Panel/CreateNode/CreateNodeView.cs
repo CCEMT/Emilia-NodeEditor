@@ -10,12 +10,12 @@ namespace Emilia.Node.Universal.Editor
     /// </summary>
     public class CreateNodeView : GraphPanel
     {
-        private NodeCollectionSetting collectionSetting;
-        private CreateNodeViewState createNodeViewState;
+        protected NodeCollectionSetting collectionSetting;
+        protected CreateNodeViewState createNodeViewState;
 
-        private SearchField searchField;
-        private TreeViewState treeViewState;
-        private CreateNodeTreeView createNodeTreeView;
+        protected SearchField searchField;
+        protected TreeViewState treeViewState;
+        protected CreateNodeTreeView createNodeTreeView;
 
         public CreateNodeView()
         {
@@ -37,7 +37,7 @@ namespace Emilia.Node.Universal.Editor
             schedule.Execute(OnInitialize).ExecuteLater(1);
         }
 
-        private void OnInitialize()
+        protected void OnInitialize()
         {
             collectionSetting = NodeCollectionSetting.Get(graphView);
             createNodeViewState = CreateNodeViewState.Get(graphView);
@@ -54,7 +54,7 @@ namespace Emilia.Node.Universal.Editor
             createNodeTreeView.ReloadSetting(createNodeViewState, this.collectionSetting);
         }
 
-        private void OnReadSetting()
+        protected void OnReadSetting()
         {
             collectionSetting = NodeCollectionSetting.Get(graphView);
             createNodeViewState = CreateNodeViewState.Get(graphView);
@@ -70,12 +70,12 @@ namespace Emilia.Node.Universal.Editor
             createNodeTreeView = null;
         }
 
-        void OnTreeGUI()
+        protected void OnTreeGUI()
         {
             const float IntervalWidth = 5;
             const float ToolbarHeight = 24;
             const float SearchFieldHeight = 20;
-            
+
             if (float.IsNaN(layout.width) || float.IsNaN(layout.height)) return;
 
             Rect rect = new(0.0f, 0.0f, layout.width, layout.height);

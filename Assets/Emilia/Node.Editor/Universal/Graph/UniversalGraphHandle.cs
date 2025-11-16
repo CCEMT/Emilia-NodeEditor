@@ -20,9 +20,9 @@ namespace Emilia.Node.Universal.Editor
         public const string GridBackgroundStyleFilePath = "Node/Styles/GridBackground.uss";
         public const string GraphViewStyleFilePath = "Node/Styles/UniversalEditorGraphView.uss";
 
-        private EditorGraphView editorGraphView;
-        private GraphLoadingContainer loadingContainer;
-        private GraphCompilationContainer currentCompilationContainer;
+        protected EditorGraphView editorGraphView;
+        protected GraphLoadingContainer loadingContainer;
+        protected GraphCompilationContainer currentCompilationContainer;
 
         public override void Initialize(EditorGraphView graphView)
         {
@@ -45,13 +45,13 @@ namespace Emilia.Node.Universal.Editor
             CompilationPipeline.compilationStarted += OnCompilationStarted;
         }
 
-        private void OnLogicTransformChange(Vector3 position, Vector3 scale)
+        protected void OnLogicTransformChange(Vector3 position, Vector3 scale)
         {
             editorGraphView.graphLocalSettingSystem.SetAssetSettingValue(TransformPositionSetting, position);
             editorGraphView.graphLocalSettingSystem.SetAssetSettingValue(TransformScaleSetting, scale);
         }
 
-        private void OnCompilationStarted(object context)
+        protected void OnCompilationStarted(object context)
         {
             currentCompilationContainer = new GraphCompilationContainer();
             editorGraphView.Add(currentCompilationContainer);
@@ -93,7 +93,7 @@ namespace Emilia.Node.Universal.Editor
             editorGraphView.styleSheets.Add(graphViewStyleSheet);
         }
 
-        private void AddLoadingMask()
+        protected void AddLoadingMask()
         {
             if (this.loadingContainer == null)
             {

@@ -13,12 +13,12 @@ namespace Emilia.Node.Universal.Editor
     /// </summary>
     public class CreateNodeTreeView : TreeView
     {
-        private EditorGraphView graphView;
-        private CreateNodeViewState createNodeViewState;
-        private NodeCollectionSetting collectionSetting;
-        private Dictionary<int, ICreateNodeHandle> createNodeHandleMap = new();
+        protected EditorGraphView graphView;
+        protected CreateNodeViewState createNodeViewState;
+        protected NodeCollectionSetting collectionSetting;
+        protected Dictionary<int, ICreateNodeHandle> createNodeHandleMap = new();
 
-        private bool isExpandAll = false;
+        protected bool isExpandAll = false;
 
         public CreateNodeTreeView(EditorGraphView graphView, TreeViewState state) : base(state)
         {
@@ -26,6 +26,9 @@ namespace Emilia.Node.Universal.Editor
             this.graphView = graphView;
         }
 
+        /// <summary>
+        /// 重新加载设置
+        /// </summary>
         public void ReloadSetting(CreateNodeViewState createNodeViewState, NodeCollectionSetting collectionSetting)
         {
             this.createNodeViewState = createNodeViewState;
@@ -34,6 +37,9 @@ namespace Emilia.Node.Universal.Editor
             Reload();
         }
 
+        /// <summary>
+        /// 设置全部展开
+        /// </summary>
         public void SetExpandAll()
         {
             isExpandAll = true;
@@ -53,7 +59,7 @@ namespace Emilia.Node.Universal.Editor
             return treeViewItems;
         }
 
-        private void AddNormalItem(List<TreeViewItem> treeViewItems, TreeViewItem root)
+        protected void AddNormalItem(List<TreeViewItem> treeViewItems, TreeViewItem root)
         {
             AddCollectionItem(treeViewItems, root);
 
@@ -243,7 +249,7 @@ namespace Emilia.Node.Universal.Editor
             }
         }
 
-        void AddCollectionItem(List<TreeViewItem> treeViewItems, TreeViewItem root)
+        protected void AddCollectionItem(List<TreeViewItem> treeViewItems, TreeViewItem root)
         {
             if (collectionSetting == null || collectionSetting.createNodePath.Count == 0) return;
 
@@ -294,7 +300,7 @@ namespace Emilia.Node.Universal.Editor
             }
         }
 
-        void AddSearchItem(List<TreeViewItem> treeViewItems, TreeViewItem root)
+        protected void AddSearchItem(List<TreeViewItem> treeViewItems, TreeViewItem root)
         {
             Dictionary<string, ICreateNodeHandle> nodeMap = new();
             int itemCount = graphView.createNodeMenu.createNodeHandleCacheList.Count;

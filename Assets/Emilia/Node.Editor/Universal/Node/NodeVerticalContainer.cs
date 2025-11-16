@@ -17,13 +17,13 @@ namespace Emilia.Node.Universal.Editor
             RegisterCallback<AttachToPanelEvent>(OnAttachToPanel);
         }
 
-        private void OnAttachToPanel(AttachToPanelEvent evt)
+        protected void OnAttachToPanel(AttachToPanelEvent evt)
         {
             foreach (VisualElement child in Children()) child.style.flexGrow = 1;
             this.AddHierarchyChangedCallback_Internal(OnAddHierarchyChangedCallback);
         }
 
-        private void OnAddHierarchyChangedCallback(VisualElement visualElement, HierarchyChangeType_Internals hierarchyChangeTypeInternals)
+        protected void OnAddHierarchyChangedCallback(VisualElement visualElement, HierarchyChangeType_Internals hierarchyChangeTypeInternals)
         {
             foreach (VisualElement child in Children()) child.style.flexGrow = 1;
         }

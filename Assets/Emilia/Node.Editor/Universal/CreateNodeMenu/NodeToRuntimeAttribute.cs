@@ -8,7 +8,14 @@ namespace Emilia.Node.Universal.Editor
     [AttributeUsage(AttributeTargets.Class)]
     public class NodeToRuntimeAttribute : Attribute
     {
+        /// <summary>
+        /// 运行时资产节点类型（基类）
+        /// </summary>
         public Type baseRuntimeNodeType;
+
+        /// <summary>
+        /// 编辑器资产节点类型（基类）
+        /// </summary>
         public Type baseEditorNodeType;
 
         public NodeToRuntimeAttribute(Type baseRuntimeNodeType, Type baseEditorNodeType)

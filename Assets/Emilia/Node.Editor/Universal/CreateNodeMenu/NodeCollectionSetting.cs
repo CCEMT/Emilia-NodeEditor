@@ -18,7 +18,14 @@ namespace Emilia.Node.Universal.Editor
 
         private List<NodeCollectionInfo> _createNodeInfos = new();
 
+        /// <summary>
+        /// 收藏的节点路径列表
+        /// </summary>
         public IReadOnlyList<string> createNodePath => _createNodePath;
+
+        /// <summary>
+        /// 收藏的节点信息列表
+        /// </summary>
         public IReadOnlyList<NodeCollectionInfo> createNodeInfos => _createNodeInfos;
 
         public void Rebuild()

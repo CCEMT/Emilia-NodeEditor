@@ -5,7 +5,9 @@
     /// </summary>
     public abstract class ToolbarViewControl : IToolbarViewControl
     {
-        public bool isActive { get; set; }
+        /// <summary>
+        /// 绘制
+        /// </summary>
         public abstract void OnDraw();
     }
 }

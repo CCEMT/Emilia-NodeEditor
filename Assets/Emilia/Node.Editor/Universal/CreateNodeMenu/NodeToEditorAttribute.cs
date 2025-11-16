@@ -8,6 +8,9 @@ namespace Emilia.Node.Universal.Editor
     [AttributeUsage(AttributeTargets.Class)]
     public class NodeToEditorAttribute : Attribute
     {
+        /// <summary>
+        /// 编辑器资产节点类型（基类）
+        /// </summary>
         public Type baseEditorNodeType;
 
         public NodeToEditorAttribute(Type baseEditorNodeType)

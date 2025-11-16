@@ -18,8 +18,20 @@ namespace Emilia.Node.Universal.Editor
     /// </summary>
     public interface IUniversalCreateNodeMenuInfoProvider
     {
+        /// <summary>
+        /// 菜单标题
+        /// </summary>
+        /// <returns></returns>
         string GetTitle();
+
+        /// <summary>
+        /// 创建节点树
+        /// </summary>
         void CreateNodeTree(CreateNodeContext createNodeContext, Action<CreateNodeMenuItem> groupCreate, Action<CreateNodeMenuItem> itemCreate);
+
+        /// <summary>
+        /// 创建节点
+        /// </summary>
         bool CreateNode(CreateNodeInfo createNodeInfo, CreateNodeContext createNodeContext);
     }
 

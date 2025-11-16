@@ -10,8 +10,8 @@ namespace Emilia.Node.Universal.Editor
     /// </summary>
     public class DropdownButtonToolbarViewControl : ToolbarViewControl
     {
-        private GUIContent content;
-        private Func<OdinMenu> odinMenuFunc;
+        protected GUIContent content;
+        protected Func<OdinMenu> odinMenuFunc;
 
         public DropdownButtonToolbarViewControl(string displayName, Func<OdinMenu> odinMenuFunc)
         {

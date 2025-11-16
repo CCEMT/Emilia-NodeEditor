@@ -11,8 +11,8 @@ namespace Emilia.Node.Universal.Editor
     /// </summary>
     public class SearchNodeTreeView : TreeView
     {
-        private EditorGraphView graphView;
-        private Dictionary<int, IEditorNodeView> nodeViews = new();
+        protected EditorGraphView graphView;
+        protected Dictionary<int, IEditorNodeView> nodeViews = new();
 
         public SearchNodeTreeView(EditorGraphView graphView, TreeViewState state) : base(state)
         {
@@ -34,7 +34,7 @@ namespace Emilia.Node.Universal.Editor
             return treeViewItems;
         }
 
-        private void AddNormalItem(List<TreeViewItem> treeViewItems, TreeViewItem root)
+        protected void AddNormalItem(List<TreeViewItem> treeViewItems, TreeViewItem root)
         {
             int count = this.graphView.nodeViews.Count;
             for (int i = 0; i < count; i++)
@@ -55,7 +55,7 @@ namespace Emilia.Node.Universal.Editor
             }
         }
 
-        private void AddSearchItem(List<TreeViewItem> treeViewItems, TreeViewItem root)
+        protected void AddSearchItem(List<TreeViewItem> treeViewItems, TreeViewItem root)
         {
             List<(TreeViewItem, int)> collects = new();
 

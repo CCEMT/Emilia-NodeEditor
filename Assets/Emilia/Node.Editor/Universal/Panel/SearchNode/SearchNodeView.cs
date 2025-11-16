@@ -13,11 +13,11 @@ namespace Emilia.Node.Universal.Editor
     /// </summary>
     public class SearchNodeView : GraphPanel
     {
-        private SearchField searchField;
-        private TreeViewState treeViewState;
-        private SearchNodeTreeView searchNodeTreeView;
+        protected SearchField searchField;
+        protected TreeViewState treeViewState;
+        protected SearchNodeTreeView searchNodeTreeView;
 
-        private List<UniversalEditorNodeView> dimNodeViews = new();
+        protected List<UniversalEditorNodeView> dimNodeViews = new();
 
         public SearchNodeView()
         {
@@ -50,7 +50,7 @@ namespace Emilia.Node.Universal.Editor
             ClearDim();
         }
 
-        void OnTreeGUI()
+        protected void OnTreeGUI()
         {
             const float IntervalWidth = 5;
             const float ToolbarHeight = 24;
@@ -79,7 +79,7 @@ namespace Emilia.Node.Universal.Editor
             }
         }
 
-        private void RefreshDim()
+        protected void RefreshDim()
         {
             ClearDim();
 
@@ -100,7 +100,7 @@ namespace Emilia.Node.Universal.Editor
             }
         }
 
-        private void ClearDim()
+        protected void ClearDim()
         {
             int count = dimNodeViews.Count;
             for (int i = 0; i < count; i++)

@@ -17,7 +17,7 @@ namespace Emilia.Node.Universal.Editor
     [EditorItem(typeof(StickyNoteProAsset))]
     public class StickyNoteProView : GraphElement, IEditorItemView, IResizable
     {
-        private StickyNoteProAsset stickyAsset;
+        protected StickyNoteProAsset stickyAsset;
 
         public EditorItemAsset asset => stickyAsset;
         public GraphElement element => this;
@@ -25,15 +25,15 @@ namespace Emilia.Node.Universal.Editor
 
         public bool isSelected { get; protected set; }
 
-        private GUISkin skinLight;
-        private GUISkin skinDark;
-        private string rootPath;
+        protected GUISkin skinLight;
+        protected GUISkin skinDark;
+        protected string rootPath;
 
-        private MarkdownViewer markdownViewer;
+        protected MarkdownViewer markdownViewer;
 
-        private IMGUIContainer markdownContainer;
+        protected IMGUIContainer markdownContainer;
 
-        private VisualElement selectionBorder;
+        protected VisualElement selectionBorder;
 
         public StickyNoteProView()
         {

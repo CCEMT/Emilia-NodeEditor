@@ -7,6 +7,9 @@ namespace Emilia.Node.Universal.Editor
     /// </summary>
     public class CustomToolbarViewControl : ToolbarViewControl
     {
+        /// <summary>
+        /// 自定义绘制事件
+        /// </summary>
         public Action onCustom;
 
         public CustomToolbarViewControl(Action onCustom)

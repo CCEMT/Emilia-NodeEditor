@@ -32,7 +32,7 @@ namespace Emilia.Node.Universal.Editor
             OnKeyDownShortcut_Hook(graphView, evt);
         }
 
-        private void SwitchNodeExpand(EditorGraphView graphView)
+        protected void SwitchNodeExpand(EditorGraphView graphView)
         {
             List<IEditorNodeView> editorNodeViews = graphView.graphSelected.selected.OfType<IEditorNodeView>().ToList();
             if (editorNodeViews.Count == 0) return;
@@ -43,7 +43,7 @@ namespace Emilia.Node.Universal.Editor
             foreach (IEditorNodeView node in editorNodeViews) node.expanded = targetState;
         }
 
-        private void OnKeyDownShortcut_Hook(EditorGraphView graphView, KeyDownEvent evt)
+        protected void OnKeyDownShortcut_Hook(EditorGraphView graphView, KeyDownEvent evt)
         {
             if (! graphView.isReframable || graphView.panel.GetCapturingElement(PointerId.mousePointerId) != null) return;
 

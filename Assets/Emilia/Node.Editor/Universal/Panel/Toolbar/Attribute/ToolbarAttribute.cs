@@ -7,6 +7,9 @@ namespace Emilia.Node.Attributes
     /// </summary>
     public abstract class ToolbarAttribute : Attribute
     {
+        /// <summary>
+        /// 控件位置
+        /// </summary>
         public ToolbarViewControlPosition position { get; private set; }
 
         public ToolbarAttribute(ToolbarViewControlPosition position)

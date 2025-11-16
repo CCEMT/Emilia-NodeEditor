@@ -15,14 +15,14 @@ namespace Emilia.Node.Universal.Editor
     /// </summary>
     public class NodeInsertDragger : MouseManipulator
     {
-        private bool isActive;
+        protected bool isActive;
 
-        private IEditorEdgeView ghostEdgeInput;
-        private IEditorEdgeView ghostEdgeOutput;
+        protected IEditorEdgeView ghostEdgeInput;
+        protected IEditorEdgeView ghostEdgeOutput;
 
-        private IEditorEdgeView targetEdgeView;
-        private IEditorPortView inputPortView;
-        private IEditorPortView outputPortView;
+        protected IEditorEdgeView targetEdgeView;
+        protected IEditorPortView inputPortView;
+        protected IEditorPortView outputPortView;
 
         protected override void RegisterCallbacksOnTarget()
         {
@@ -50,7 +50,7 @@ namespace Emilia.Node.Universal.Editor
             nodeView.graphView.UnregisterCallback<MouseUpEvent>(OnMouseUpEvent);
         }
 
-        private void OnKeyDownEvent(KeyDownEvent evt)
+        protected void OnKeyDownEvent(KeyDownEvent evt)
         {
             if (evt.shiftKey)
             {
@@ -62,12 +62,12 @@ namespace Emilia.Node.Universal.Editor
             }
         }
 
-        private void OnKeyUpEvent(KeyUpEvent evt)
+        protected void OnKeyUpEvent(KeyUpEvent evt)
         {
             if (evt.shiftKey == false) HandleEdgeConnection();
         }
 
-        private void OnMouseDownEvent(MouseDownEvent evt)
+        protected void OnMouseDownEvent(MouseDownEvent evt)
         {
             if (evt.shiftKey)
             {
@@ -89,7 +89,7 @@ namespace Emilia.Node.Universal.Editor
             }
         }
 
-        private void OnMouseMoveEvent(MouseMoveEvent evt)
+        protected void OnMouseMoveEvent(MouseMoveEvent evt)
         {
             if (evt.shiftKey)
             {
@@ -104,7 +104,7 @@ namespace Emilia.Node.Universal.Editor
             HandleEdgeConnection();
         }
 
-        private void HandleEdgeConnection()
+        protected void HandleEdgeConnection()
         {
             if (this.isActive == false) return;
 
@@ -169,7 +169,7 @@ namespace Emilia.Node.Universal.Editor
             this.outputPortView = null;
         }
 
-        private void OnMouseUpEvent(MouseUpEvent evt)
+        protected void OnMouseUpEvent(MouseUpEvent evt)
         {
             if (evt.shiftKey)
             {
@@ -231,7 +231,7 @@ namespace Emilia.Node.Universal.Editor
             isActive = false;
         }
 
-        private void RemoveGhostEdge()
+        protected void RemoveGhostEdge()
         {
             if (this.ghostEdgeInput != null)
             {

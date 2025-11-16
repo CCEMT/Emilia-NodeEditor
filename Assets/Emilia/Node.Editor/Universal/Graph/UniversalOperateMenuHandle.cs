@@ -102,7 +102,7 @@ namespace Emilia.Node.Universal.Editor
             CollectItemMenu(menuItems, context);
         }
 
-        private void CollectAction(EditorGraphView graphView, List<OperateMenuItem> menuItems, OperateMenuContext context)
+        protected void CollectAction(EditorGraphView graphView, List<OperateMenuItem> menuItems, OperateMenuContext context)
         {
             OperateMenuActionContext actionContext = new();
             actionContext.graphView = context.graphView;
@@ -128,7 +128,7 @@ namespace Emilia.Node.Universal.Editor
             }
         }
 
-        private void CollectItemMenu(List<OperateMenuItem> menuItems, OperateMenuContext context)
+        protected void CollectItemMenu(List<OperateMenuItem> menuItems, OperateMenuContext context)
         {
             List<CreateItemMenuInfo> types = context.graphView.createItemMenu.CollectItemMenus();
 

@@ -5,7 +5,6 @@
     /// </summary>
     public interface IToolbarViewControl
     {
-        bool isActive { get; set; }
         void OnDraw();
     }
 }

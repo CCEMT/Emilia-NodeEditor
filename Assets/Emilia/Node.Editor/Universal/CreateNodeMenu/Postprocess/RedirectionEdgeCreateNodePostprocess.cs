@@ -7,9 +7,9 @@ namespace Emilia.Node.Editor
     /// </summary>
     public class RedirectionEdgeCreateNodePostprocess : ICreateNodePostprocess
     {
-        public string originalNodeId;
-        public string targetPortId;
-        public string edgeId;
+        protected string originalNodeId;
+        protected string targetPortId;
+        protected string edgeId;
 
         public RedirectionEdgeCreateNodePostprocess(string originalNodeId, string targetPortId, string edgeId)
         {

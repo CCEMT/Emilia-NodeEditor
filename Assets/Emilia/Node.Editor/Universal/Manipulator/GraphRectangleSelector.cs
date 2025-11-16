@@ -14,7 +14,7 @@ namespace Emilia.Node.Editor
     public class GraphRectangleSelector : MouseManipulator
     {
         private readonly RectangleSelect m_Rectangle;
-        bool m_Active;
+        protected bool m_Active;
 
         public GraphRectangleSelector()
         {
@@ -63,7 +63,7 @@ namespace Emilia.Node.Editor
             target.UnregisterCallback<MouseCaptureOutEvent>(OnMouseCaptureOutEvent);
         }
 
-        void OnMouseCaptureOutEvent(MouseCaptureOutEvent e)
+        protected void OnMouseCaptureOutEvent(MouseCaptureOutEvent e)
         {
             if (m_Active)
             {
@@ -72,7 +72,7 @@ namespace Emilia.Node.Editor
             }
         }
 
-        private void OnMouseDown(MouseDownEvent e)
+        protected void OnMouseDown(MouseDownEvent e)
         {
             if (m_Active)
             {
@@ -101,7 +101,7 @@ namespace Emilia.Node.Editor
             }
         }
 
-        private void OnMouseUp(MouseUpEvent e)
+        protected void OnMouseUp(MouseUpEvent e)
         {
             if (! m_Active) return;
 
@@ -155,7 +155,7 @@ namespace Emilia.Node.Editor
             e.StopPropagation();
         }
 
-        private void OnMouseMove(MouseMoveEvent e)
+        protected void OnMouseMove(MouseMoveEvent e)
         {
             if (! m_Active) return;
 
@@ -163,7 +163,7 @@ namespace Emilia.Node.Editor
             e.StopPropagation();
         }
 
-        private class RectangleSelect : ImmediateModeElement
+        protected class RectangleSelect : ImmediateModeElement
         {
             public Vector2 start { get; set; }
             public Vector2 end { get; set; }
@@ -203,7 +203,7 @@ namespace Emilia.Node.Editor
                 DrawDottedLine(points[3], points[0], segmentSize, lineColor);
             }
 
-            private void DrawDottedLine(Vector3 p1, Vector3 p2, float segmentsLength, Color col)
+            protected void DrawDottedLine(Vector3 p1, Vector3 p2, float segmentsLength, Color col)
             {
                 HandleUtility_Internals.ApplyWireMaterial_Internals();
 

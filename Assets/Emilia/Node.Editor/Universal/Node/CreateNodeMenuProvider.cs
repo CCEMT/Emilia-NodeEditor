@@ -10,9 +10,9 @@ namespace Emilia.Node.Universal.Editor
     /// </summary>
     public class CreateNodeMenuProvider : ScriptableObject, ISearchWindowProvider
     {
-        private EditorGraphView editorGraphView;
-        private CreateNodeContext createNodeContext;
-        private IUniversalCreateNodeMenuInfoProvider infoProvider;
+        protected EditorGraphView editorGraphView;
+        protected CreateNodeContext createNodeContext;
+        protected IUniversalCreateNodeMenuInfoProvider infoProvider;
 
         public void Initialize(EditorGraphView graphView, CreateNodeContext createNodeContext, IUniversalCreateNodeMenuInfoProvider createNodeMenuInfoProvider)
         {
@@ -30,12 +30,12 @@ namespace Emilia.Node.Universal.Editor
             return tree;
         }
 
-        private void CreateGroup(List<SearchTreeEntry> tree, CreateNodeMenuItem menuInfo)
+        protected void CreateGroup(List<SearchTreeEntry> tree, CreateNodeMenuItem menuInfo)
         {
             tree.Add(new SearchTreeGroupEntry(new GUIContent(menuInfo.title), menuInfo.level));
         }
 
-        private void CreateItem(List<SearchTreeEntry> tree, CreateNodeMenuItem menuInfo)
+        protected void CreateItem(List<SearchTreeEntry> tree, CreateNodeMenuItem menuInfo)
         {
             tree.Add(new SearchTreeEntry(new GUIContent(menuInfo.title, menuInfo.info.menuInfo.icon)) {
                 level = menuInfo.level,

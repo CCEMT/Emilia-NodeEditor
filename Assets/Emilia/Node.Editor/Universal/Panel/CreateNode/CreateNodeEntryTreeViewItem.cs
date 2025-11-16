@@ -7,7 +7,14 @@ namespace Emilia.Node.Universal.Editor
     /// </summary>
     public class CreateNodeEntryTreeViewItem : CreateNodeTreeViewItem
     {
+        /// <summary>
+        /// 创建节点信息
+        /// </summary>
         public ICreateNodeHandle createNodeHandle { get; }
+
+        /// <summary>
+        /// 是否为收藏节点
+        /// </summary>
         public bool isCollection { get; private set; }
 
         public CreateNodeEntryTreeViewItem(ICreateNodeHandle createNodeHandle, bool isCollection = false)

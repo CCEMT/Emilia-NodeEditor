@@ -8,6 +8,9 @@ namespace Emilia.Node.Attributes
     [AttributeUsage(AttributeTargets.Method)]
     public class ButtonToolbarAttribute : ToolbarAttribute
     {
+        /// <summary>
+        /// 按钮名称
+        /// </summary>
         public string displayName;
 
         public ButtonToolbarAttribute(string displayName, ToolbarViewControlPosition position) : base(position)

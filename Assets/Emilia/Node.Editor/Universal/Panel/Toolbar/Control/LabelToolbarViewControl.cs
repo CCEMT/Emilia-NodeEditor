@@ -7,6 +7,9 @@ namespace Emilia.Node.Universal.Editor
     /// </summary>
     public class LabelToolbarViewControl : ToolbarViewControl
     {
+        /// <summary>
+        /// 标签内容
+        /// </summary>
         public GUIContent content;
 
         public LabelToolbarViewControl(string text)

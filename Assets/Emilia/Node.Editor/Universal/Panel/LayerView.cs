@@ -29,7 +29,7 @@ namespace Emilia.Node.Universal.Editor
             if (parentView != null) parentView.canResizable = false;
         }
 
-        private void OnImGUI()
+        protected void OnImGUI()
         {
             GUILayout.BeginHorizontal(EditorStyles.toolbar);
 
@@ -67,7 +67,7 @@ namespace Emilia.Node.Universal.Editor
             GUILayout.EndHorizontal();
         }
 
-        private Rect GetLayoutRect(GUIContent content, GUIStyle style)
+        protected Rect GetLayoutRect(GUIContent content, GUIStyle style)
         {
             Texture image = content.image;
             content.image = null;

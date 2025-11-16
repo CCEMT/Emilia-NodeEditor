@@ -8,9 +8,9 @@ namespace Emilia.Node.Editor
     /// </summary>
     public class ConnectCreateNodePostprocess : ICreateNodePostprocess
     {
-        public string originalNodeId;
-        public string originalPortId;
-        public string targetPortId;
+        protected string originalNodeId;
+        protected string originalPortId;
+        protected string targetPortId;
 
         public ConnectCreateNodePostprocess(string originalNodeId, string originalPortId, string targetPortId = null)
         {

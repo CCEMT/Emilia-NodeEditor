@@ -12,10 +12,10 @@ namespace Emilia.Node.Editor
     /// </summary>
     public class InsertCreateNodePostprocess : ICreateNodePostprocess
     {
-        public string insertEdgeId;
+        protected string insertEdgeId;
 
-        public string inputPortId;
-        public string outputPortId;
+        protected string inputPortId;
+        protected string outputPortId;
 
         public InsertCreateNodePostprocess(string insertEdgeId, string inputPortId = null, string outputPortId = null)
         {

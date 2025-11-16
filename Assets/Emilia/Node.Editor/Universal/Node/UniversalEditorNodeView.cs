@@ -16,29 +16,32 @@ namespace Emilia.Node.Universal.Editor
     [EditorNode(typeof(UniversalNodeAsset))]
     public class UniversalEditorNodeView : EditorNodeView
     {
-        private EditorCoroutine focusCoroutine;
-        private VisualElement focusBorder;
+        protected EditorCoroutine focusCoroutine;
+        protected VisualElement focusBorder;
 
-        private UniversalNodeAsset _universalNodeAsset;
+        protected UniversalNodeAsset _universalNodeAsset;
 
-        private VisualElement horizontalContainer;
-        private VisualElement horizontalInputContainer;
-        private VisualElement horizontalOutputContainer;
+        protected VisualElement horizontalContainer;
+        protected VisualElement horizontalInputContainer;
+        protected VisualElement horizontalOutputContainer;
 
-        private VisualElement verticalInputContainer;
-        private VisualElement verticalOutputContainer;
+        protected VisualElement verticalInputContainer;
+        protected VisualElement verticalOutputContainer;
 
-        private TextField titleTextField;
+        protected TextField titleTextField;
 
-        private NodeMessageButtonElement messageButtonElement;
-        private NodeMessageContainer messageContainer;
-        private List<NodeMessageElement> messageElements = new();
+        protected NodeMessageButtonElement messageButtonElement;
+        protected NodeMessageContainer messageContainer;
+        protected List<NodeMessageElement> messageElements = new();
 
-        private Dictionary<string, NodeTipsElement> tipsElements = new();
+        protected Dictionary<string, NodeTipsElement> tipsElements = new();
 
         protected NodeDuplicateDragger duplicateDragger;
         protected NodeInsertDragger insertDragger;
 
+        /// <summary>
+        /// 可以展开
+        /// </summary>
         public virtual bool canExpanded => true;
 
         protected virtual bool canRename => false;
@@ -89,7 +92,7 @@ namespace Emilia.Node.Universal.Editor
             SetTooltip(tipsAttribute.tips);
         }
 
-        private void InitializeExpandButton()
+        protected void InitializeExpandButton()
         {
             if (canExpanded) return;
 
@@ -97,7 +100,7 @@ namespace Emilia.Node.Universal.Editor
             expandButton.style.display = DisplayStyle.None;
         }
 
-        private void InitializeIcon()
+        protected void InitializeIcon()
         {
             if (icon == null) return;
             VisualElement iconElement = new();
@@ -107,7 +110,7 @@ namespace Emilia.Node.Universal.Editor
             titleContainer.Insert(0, iconElement);
         }
 
-        private void InitializeFocusBorder()
+        protected void InitializeFocusBorder()
         {
             const float borderWidth = 2;
 
@@ -123,7 +126,7 @@ namespace Emilia.Node.Universal.Editor
             Add(focusBorder);
         }
 
-        private void InitializeRenamableTitle()
+        protected void InitializeRenamableTitle()
         {
             this.titleTextField = new TextField();
             titleTextField.style.flexGrow = 1;
@@ -164,7 +167,7 @@ namespace Emilia.Node.Universal.Editor
             }
         }
 
-        private void InitializeMessage()
+        protected void InitializeMessage()
         {
             messageButtonElement = new NodeMessageButtonElement(SwitchMessageContainerState);
             messageButtonElement.style.display = DisplayStyle.None;
@@ -177,7 +180,7 @@ namespace Emilia.Node.Universal.Editor
             topLayerContainer.Add(messageContainer);
         }
 
-        private void SwitchMessageContainerState()
+        protected void SwitchMessageContainerState()
         {
             if (messageContainer.style.display == DisplayStyle.None) messageContainer.style.display = DisplayStyle.Flex;
             else messageContainer.style.display = DisplayStyle.None;
@@ -223,7 +226,7 @@ namespace Emilia.Node.Universal.Editor
             return portView;
         }
 
-        private void CreateHorizontalContainer()
+        protected void CreateHorizontalContainer()
         {
             NodeHorizontalContainer nodeHorizontalContainer = new();
             this.horizontalContainer = nodeHorizontalContainer;
@@ -232,7 +235,7 @@ namespace Emilia.Node.Universal.Editor
             portNodeBottomContainer.Add(nodeHorizontalContainer);
         }
 
-        private void CreateVerticalContainer()
+        protected void CreateVerticalContainer()
         {
             NodeVerticalContainer inputVerticalContainer = new();
             this.verticalInputContainer = inputVerticalContainer;
@@ -276,7 +279,7 @@ namespace Emilia.Node.Universal.Editor
             UpdateMessageButtonState();
         }
 
-        private void UpdateMessageButtonState()
+        protected void UpdateMessageButtonState()
         {
             if (this.messageElements.Count == 0) this.messageButtonElement.style.display = DisplayStyle.None;
             else
@@ -288,7 +291,7 @@ namespace Emilia.Node.Universal.Editor
             }
         }
 
-        private NodeMessageLevel GetMaxLevel()
+        protected NodeMessageLevel GetMaxLevel()
         {
             NodeMessageLevel maxLevel = NodeMessageLevel.Info;
             int count = messageElements.Count;
@@ -365,7 +368,7 @@ namespace Emilia.Node.Universal.Editor
             }
         }
 
-        private IEnumerator OnFadeAway(long timeMs)
+        protected IEnumerator OnFadeAway(long timeMs)
         {
             float time = timeMs / 1000f;
             float startTime = Time.realtimeSinceStartup;

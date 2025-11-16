@@ -14,23 +14,23 @@ namespace Emilia.Node.Editor
     /// </summary>
     public class GraphSelectionDragger : Dragger
     {
-        IDropTarget m_PrevDropTarget;
+        protected IDropTarget m_PrevDropTarget;
 
-        bool m_ShiftClicked = false;
-        bool m_Dragging = false;
-        Snapper_Internals m_Snapper = new();
-        internal bool snapEnabled { get; set; }
+        protected bool m_ShiftClicked = false;
+        protected bool m_Dragging = false;
+        protected Snapper_Internals m_Snapper = new();
+        public bool snapEnabled { get; set; }
 
         // selectedElement is used to store a unique selection candidate for cases where user clicks on an item not to
         // drag it but just to reset the selection -- we only know this after the manipulation has ended
-        GraphElement selectedElement { get; set; }
-        GraphElement clickedElement { get; set; }
+        protected GraphElement selectedElement { get; set; }
+        protected GraphElement clickedElement { get; set; }
 
-        private GraphViewChange m_GraphViewChange;
-        private List<GraphElement> m_MovedElements;
-        private List<VisualElement> m_DropTargetPickList = new();
+        protected GraphViewChange m_GraphViewChange;
+        protected List<GraphElement> m_MovedElements;
+        protected List<VisualElement> m_DropTargetPickList = new();
 
-        IDropTarget GetDropTargetAt(Vector2 mousePosition, IEnumerable<VisualElement> exclusionList)
+        protected IDropTarget GetDropTargetAt(Vector2 mousePosition, IEnumerable<VisualElement> exclusionList)
         {
             Vector2 pickPoint = mousePosition;
             List<VisualElement> pickList = m_DropTargetPickList;
@@ -103,9 +103,9 @@ namespace Emilia.Node.Editor
             target.UnregisterCallback<MouseCaptureOutEvent>(OnMouseCaptureOutEvent);
         }
 
-        private EditorGraphView m_GraphView;
+        protected EditorGraphView m_GraphView;
 
-        class OriginalPos
+        protected class OriginalPos
         {
             public Rect pos;
             public Scope scope;
@@ -114,10 +114,10 @@ namespace Emilia.Node.Editor
             public bool dragStarted;
         }
 
-        private Dictionary<GraphElement, OriginalPos> m_OriginalPos;
-        private Vector2 m_originalMouse;
+        protected Dictionary<GraphElement, OriginalPos> m_OriginalPos;
+        protected Vector2 m_originalMouse;
 
-        static void SendDragAndDropEvent(IDragAndDropEvent evt, List<ISelectable> selection, IDropTarget dropTarget, ISelection dragSource)
+        protected static void SendDragAndDropEvent(IDragAndDropEvent evt, List<ISelectable> selection, IDropTarget dropTarget, ISelection dragSource)
         {
             if (dropTarget == null) return;
 
@@ -132,7 +132,7 @@ namespace Emilia.Node.Editor
             else if (e.eventTypeId == DragUpdatedEvent.TypeId()) dropTarget.DragUpdated(evt as DragUpdatedEvent, selection, dropTarget, dragSource);
         }
 
-        private void OnMouseCaptureOutEvent(MouseCaptureOutEvent e)
+        protected void OnMouseCaptureOutEvent(MouseCaptureOutEvent e)
         {
             if (m_Active)
             {
@@ -149,7 +149,7 @@ namespace Emilia.Node.Editor
             }
         }
 
-        private void OnForceSelectedNode(GraphSelectionDraggerForceSelectedNodeEvent evt)
+        protected void OnForceSelectedNode(GraphSelectionDraggerForceSelectedNodeEvent evt)
         {
             m_GraphView = target as EditorGraphView;
 
@@ -284,20 +284,20 @@ namespace Emilia.Node.Editor
             }
         }
 
-        internal const int k_PanAreaWidth = 100;
-        internal const int k_PanSpeed = 4;
-        internal const int k_PanInterval = 10;
-        internal const float k_MinSpeedFactor = 0.5f;
-        internal const float k_MaxSpeedFactor = 2.5f;
-        internal const float k_MaxPanSpeed = k_MaxSpeedFactor * k_PanSpeed;
+        public const int k_PanAreaWidth = 100;
+        public const int k_PanSpeed = 4;
+        public const int k_PanInterval = 10;
+        public const float k_MinSpeedFactor = 0.5f;
+        public const float k_MaxSpeedFactor = 2.5f;
+        public const float k_MaxPanSpeed = k_MaxSpeedFactor * k_PanSpeed;
 
-        private IVisualElementScheduledItem m_PanSchedule;
-        private Vector3 m_PanDiff = Vector3.zero;
-        private Vector3 m_ItemPanDiff = Vector3.zero;
-        private Vector2 m_MouseDiff = Vector2.zero;
-        float m_XScale;
+        protected IVisualElementScheduledItem m_PanSchedule;
+        protected Vector3 m_PanDiff = Vector3.zero;
+        protected Vector3 m_ItemPanDiff = Vector3.zero;
+        protected Vector2 m_MouseDiff = Vector2.zero;
+        protected float m_XScale;
 
-        internal Vector2 GetEffectivePanSpeed(Vector2 mousePos, Rect graphRect)
+        public Vector2 GetEffectivePanSpeed(Vector2 mousePos, Rect graphRect)
         {
             Vector2 effectiveSpeed = Vector2.zero;
 
@@ -328,7 +328,7 @@ namespace Emilia.Node.Editor
             return effectiveSpeed;
         }
 
-        void ComputeSnappedRect(ref Rect selectedElementProposedGeom, float scale)
+        protected void ComputeSnappedRect(ref Rect selectedElementProposedGeom, float scale)
         {
             if (selectedElement == null || selectedElement.parent == null) return;
             // Let the snapper compute a snapped position using the precomputed position relatively to the geometries of all unselected
@@ -436,7 +436,7 @@ namespace Emilia.Node.Editor
             e.StopPropagation();
         }
 
-        private void Pan(TimerState ts)
+        protected void Pan(TimerState ts)
         {
             m_GraphView.viewTransform.position -= m_PanDiff;
             m_ItemPanDiff += m_PanDiff;
@@ -449,7 +449,7 @@ namespace Emilia.Node.Editor
             foreach (KeyValuePair<GraphElement, OriginalPos> v in m_OriginalPos) SnapOrMoveElement(v, selectedElementGeom);
         }
 
-        void SnapOrMoveElement(KeyValuePair<GraphElement, OriginalPos> v, Rect selectedElementGeom)
+        protected void SnapOrMoveElement(KeyValuePair<GraphElement, OriginalPos> v, Rect selectedElementGeom)
         {
             GraphElement ce = v.Key;
             if (EditorPrefs.GetBool("GraphSnapping"))
@@ -464,7 +464,7 @@ namespace Emilia.Node.Editor
             }
         }
 
-        Rect GetSelectedElementGeom()
+        protected Rect GetSelectedElementGeom()
         {
             // Handle the selected element
             Matrix4x4 g = selectedElement.worldTransform;
@@ -476,7 +476,7 @@ namespace Emilia.Node.Editor
             return selectedElementGeom;
         }
 
-        void MoveElement(GraphElement element, Rect originalPos)
+        protected void MoveElement(GraphElement element, Rect originalPos)
         {
             Matrix4x4 g = element.worldTransform;
             var scale = new Vector3(g.m00, g.m11, g.m22);
@@ -574,7 +574,7 @@ namespace Emilia.Node.Editor
             }
         }
 
-        private void OnKeyDown(KeyDownEvent e)
+        protected void OnKeyDown(KeyDownEvent e)
         {
             if (e.keyCode != KeyCode.Escape || m_GraphView == null || ! m_Active) return;
 

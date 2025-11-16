@@ -15,8 +15,8 @@ namespace Emilia.Node.Universal.Editor
     /// </summary>
     public class InspectorView : GraphPanel
     {
-        private PropertyTree propertyTree;
-        private List<Object> selectedObjects;
+        protected PropertyTree propertyTree;
+        protected List<Object> selectedObjects;
 
         public InspectorView()
         {
@@ -74,12 +74,12 @@ namespace Emilia.Node.Universal.Editor
             style.display = DisplayStyle.Flex;
         }
 
-        private void OnGeometryChangedEvent(GeometryChangedEvent evt)
+        protected void OnGeometryChangedEvent(GeometryChangedEvent evt)
         {
             UpdateTransform();
         }
 
-        private void UpdateTransform()
+        protected void UpdateTransform()
         {
             Rect graphRect = graphView.graphPanelSystem.graphLayoutRect;
             transform.position = graphRect.position;
@@ -88,14 +88,14 @@ namespace Emilia.Node.Universal.Editor
             style.width = width;
         }
 
-        private void OnImGUI()
+        protected void OnImGUI()
         {
             string label = GetLabel();
             if (string.IsNullOrEmpty(label) == false) GUILayout.Label(label);
             this.propertyTree?.Draw();
         }
 
-        private string GetLabel()
+        protected string GetLabel()
         {
             if (this.selectedObjects.Count > 1) return "Multiple Objects";
             Object first = this.selectedObjects.FirstOrDefault();

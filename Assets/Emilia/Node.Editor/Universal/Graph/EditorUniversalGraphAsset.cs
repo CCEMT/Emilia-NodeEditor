@@ -19,6 +19,9 @@ namespace Emilia.Node.Universal.Editor
         [LabelText("描述"), TextArea(3, 10)]
         public string description;
 
+        /// <summary>
+        /// 自定义参数
+        /// </summary>
         [NonSerialized, OdinSerialize, HideInInspector]
         public EditorParametersManager editorParametersManage;
 

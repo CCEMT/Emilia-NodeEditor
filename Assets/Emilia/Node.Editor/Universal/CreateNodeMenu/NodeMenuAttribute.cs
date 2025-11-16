@@ -8,7 +8,14 @@ namespace Emilia.Node.Universal.Editor
     [AttributeUsage(AttributeTargets.Class)]
     public class NodeMenuAttribute : Attribute
     {
+        /// <summary>
+        /// 菜单优先级
+        /// </summary>
         public int priority;
+
+        /// <summary>
+        /// 路径
+        /// </summary>
         public string path;
 
         public NodeMenuAttribute(string path, int priority = 0)
