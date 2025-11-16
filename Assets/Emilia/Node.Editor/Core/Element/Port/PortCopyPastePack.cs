@@ -66,10 +66,12 @@ namespace Emilia.Node.Editor
 
                 EditorEdgeAsset copyAsset = edgeCopyPastePack.copyAsset;
 
+                // 实例化新的资产并分配新的ID
                 EditorEdgeAsset pasteAsset = Object.Instantiate(copyAsset);
                 pasteAsset.name = copyAsset.name;
                 pasteAsset.id = Guid.NewGuid().ToString();
 
+                // 粘贴子元素和依赖项
                 pasteAsset.PasteChild();
 
                 if (direction == EditorPortDirection.Input)

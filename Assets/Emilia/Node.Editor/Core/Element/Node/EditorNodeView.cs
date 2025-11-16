@@ -127,6 +127,7 @@ namespace Emilia.Node.Editor
 
         protected virtual void InitializeNodeView()
         {
+            // 移除默认的contents容器，构建自定义UI结构
             VisualElement contents = this.Q("contents");
             contents.RemoveFromHierarchy();
 
@@ -208,12 +209,15 @@ namespace Emilia.Node.Editor
 
         protected virtual void RebuildPortView()
         {
+            // 清理旧数据
             inputEditInfos.Clear();
             RemovePortViews();
 
+            // 收集所有静态端口资产
             List<EditorPortInfo> portInfos = CollectStaticPortAssets();
             portInfos.Sort((a, b) => a.order.CompareTo(b.order));
 
+            // key: (端口方向, 端口朝向), value: 该类别下的端口列表
             Dictionary<(EditorPortDirection, EditorOrientation), List<EditorPortInfo>> categorizedPorts = new();
 
             for (var i = 0; i < portInfos.Count; i++)
@@ -223,6 +227,7 @@ namespace Emilia.Node.Editor
                 bool connected = graphView.graphAsset.GetEdges(asset.id, info.id).Any();
                 if (connected == false && expanded) continue;
 
+                // 构建分类key：端口方向和朝向的组合
                 var key = (info.direction, info.orientation);
 
                 if (categorizedPorts.TryGetValue(key, out List<EditorPortInfo> portInfosInCategory) == false)
@@ -231,11 +236,14 @@ namespace Emilia.Node.Editor
                     categorizedPorts[key] = portInfosInCategory;
                 }
 
+                // 将端口信息添加到对应的分类列表中
                 categorizedPorts[key].Add(info);
             }
 
+            // 遍历所有分类，为每个分类添加端口视图
             foreach (var category in categorizedPorts) AddPortViews(category.Value);
 
+            // 刷新状态
             SetEditInNodeDisplay(editInNode && expanded == false);
             RebuildExpandPort();
         }

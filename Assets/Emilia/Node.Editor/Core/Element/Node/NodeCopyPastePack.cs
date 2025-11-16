@@ -48,16 +48,19 @@ namespace Emilia.Node.Editor
             EditorNodeAsset copy = copyAsset;
             if (copy == null) return;
 
+            // 实例化新的节点资产
             _pasteAsset = Object.Instantiate(copy);
             _pasteAsset.name = copy.name;
             _pasteAsset.id = Guid.NewGuid().ToString();
 
+            // 设置粘贴位置，默认偏移(20, 20)，如果有指定位置则使用指定位置
             Rect rect = _pasteAsset.position;
             rect.position += new Vector2(20, 20);
             if (graphCopyPasteContext.createPosition != null) rect.position = graphCopyPasteContext.createPosition.Value;
 
             _pasteAsset.position = rect;
 
+            // 粘贴子元素
             this._pasteAsset.PasteChild();
 
             graphView.RegisterCompleteObjectUndo("Graph Paste");
