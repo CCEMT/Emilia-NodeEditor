@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Reflection;
 using Emilia.Kit;
 using Emilia.Kit.Editor;
 using Emilia.Reflection.Editor;
@@ -29,7 +28,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public bool isDrag { get; set; }
 
-        public Vector2[] PointsAndTangents_Internals => base.PointsAndTangents;
+        public Vector2[] PointsAndTangents_Internals => PointsAndTangents;
 
         /// <summary>
         /// 输入端口视图
@@ -77,8 +76,6 @@ namespace Emilia.Node.Editor
         public Edge edgeElement => this;
         public bool isSelected { get; protected set; }
         protected virtual string styleFilePath => "Node/Styles/UniversalEditorEdgeView.uss";
-
-        private static MethodBase graphElementCtor;
 
         protected override bool OverrideCtor()
         {
