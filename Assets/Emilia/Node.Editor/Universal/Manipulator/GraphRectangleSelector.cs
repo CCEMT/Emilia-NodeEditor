@@ -85,6 +85,25 @@ namespace Emilia.Node.Editor
 
             Rect rect = graphView.graphPanelSystem.graphRect;
             if (rect.Contains(e.mousePosition) == false) return;
+            
+            // 检查点击目标是否在GraphView的内容区域内
+            // 这可以避免拦截其他VisualElement的事件
+            VisualElement targetElement = e.target as VisualElement;
+            if (targetElement != null && targetElement != graphView)
+            {
+                bool isInContentView = false;
+                VisualElement current = targetElement;
+                while (current != null)
+                {
+                    if (current == graphView.contentViewContainer)
+                    {
+                        isInContentView = true;
+                        break;
+                    }
+                    current = current.parent;
+                }
+                if (isInContentView == false) return;
+            }
 
             if (CanStartManipulation(e))
             {
