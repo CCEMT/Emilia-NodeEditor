@@ -6,14 +6,17 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 重写ContentDragger
+    /// </summary>
     public class GraphContentDragger : MouseManipulator
     {
-        private Vector2 m_Start;
+        protected Vector2 m_Start;
         public Vector2 panSpeed { get; set; }
 
         public bool clampToParentEdges { get; set; }
 
-        bool m_Active;
+        protected bool m_Active;
 
         public GraphContentDragger()
         {

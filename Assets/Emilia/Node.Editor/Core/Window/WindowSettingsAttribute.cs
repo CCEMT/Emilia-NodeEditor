@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Emilia.Node
 {
+    /// <summary>
+    /// 打开模式
+    /// </summary>
     public enum OpenWindowMode
     {
         /// <summary>
@@ -35,7 +38,7 @@ namespace Emilia.Node
         /// <summary>
         /// 开启时窗口大小
         /// </summary>
-        public Vector2 startSize = new Vector2(850, 600);
+        public Vector2 startSize = new(850, 600);
 
         /// <summary>
         /// Window窗口标题

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Emilia.Kit;
 using Emilia.Node.Attributes;
 using Emilia.Node.Editor;
@@ -10,10 +9,13 @@ using Object = UnityEngine.Object;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 便利贴节点表现元素
+    /// </summary>
     [EditorItem(typeof(StickyNoteAsset))]
     public class StickyNoteView : StickyNote, IEditorItemView
     {
-        private StickyNoteAsset stickyAsset;
+        protected StickyNoteAsset stickyAsset;
         public EditorItemAsset asset => stickyAsset;
         public GraphElement element => this;
         public EditorGraphView graphView { get; protected set; }
@@ -35,12 +37,19 @@ namespace Emilia.Node.Universal.Editor
                 stickyAsset.content = contents;
                 stickyAsset.fontSize = fontSize;
                 stickyAsset.theme = theme;
-                
+
                 Rect position = GetPosition();
                 stickyAsset.position = new Rect(position.x, position.y, style.width.value.value, style.height.value.value);
-                
+
                 this.graphView.RegisterCompleteObjectUndo("Graph StickyNoteChange");
             });
+
+            RegisterCallback<MouseDownEvent>(OnMouseDown);
+        }
+
+        protected virtual void OnMouseDown(MouseDownEvent evt)
+        {
+            graphView?.UpdateSelected();
         }
 
         public virtual void OnValueChanged(bool isSilent = false)

@@ -15,9 +15,12 @@ using Object = UnityEngine.Object;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 编辑器GraphView
+    /// </summary>
     public class EditorGraphView : GraphView_Hook
     {
-        private static Dictionary<EditorGraphAsset, EditorGraphView> graphViews = new Dictionary<EditorGraphAsset, EditorGraphView>();
+        private static Dictionary<EditorGraphAsset, EditorGraphView> graphViews = new();
 
         /// <summary>
         /// 聚焦的GraphView
@@ -25,12 +28,13 @@ namespace Emilia.Node.Editor
         public static EditorGraphView focusedGraphView { get; private set; }
 
         private GraphHandle graphHandle;
-        private Dictionary<Type, BasicGraphViewModule> modules = new Dictionary<Type, BasicGraphViewModule>();
-        private Dictionary<Type, CustomGraphViewModule> customModules = new Dictionary<Type, CustomGraphViewModule>();
+        private Dictionary<Type, BasicGraphViewModule> modules = new();
+        private Dictionary<Type, CustomGraphViewModule> customModules = new();
+        private Dictionary<string, object> customData = new();
 
-        private List<IEditorNodeView> _nodeViews = new List<IEditorNodeView>();
-        private List<IEditorEdgeView> _edgeViews = new List<IEditorEdgeView>();
-        private List<IEditorItemView> _itemViews = new List<IEditorItemView>();
+        private List<IEditorNodeView> _nodeViews = new();
+        private List<IEditorEdgeView> _edgeViews = new();
+        private List<IEditorItemView> _itemViews = new();
 
         private GraphContentZoomer graphZoomer;
         private EditorCoroutine loadElementCoroutine;
@@ -242,7 +246,7 @@ namespace Emilia.Node.Editor
             modules.Clear();
 
             IList<Type> types = TypeCache.GetTypesDerivedFrom<BasicGraphViewModule>();
-            List<BasicGraphViewModule> moduleList = new List<BasicGraphViewModule>();
+            List<BasicGraphViewModule> moduleList = new();
 
             foreach (Type type in types)
             {
@@ -314,7 +318,6 @@ namespace Emilia.Node.Editor
                 return;
             }
 
-            asset.RepetitionId();
             graphViews[asset] = this;
 
             onGraphAssetChange?.Invoke(asset);
@@ -333,6 +336,8 @@ namespace Emilia.Node.Editor
                 if (settingStruct != null) graphSetting = settingStruct;
                 SyncSetting();
 
+                customData.Clear();
+
                 if (allReload) AllReload();
                 else ElementReload();
             }
@@ -349,8 +354,9 @@ namespace Emilia.Node.Editor
                 return;
             }
 
-            asset.RepetitionId();
             graphAsset = asset;
+
+            customData.Clear();
 
             ReloadHandle();
             ReloadModule();
@@ -493,12 +499,23 @@ namespace Emilia.Node.Editor
             Type nodeViewType = GraphTypeCache.GetNodeViewType(nodeAsset.GetType());
             if (nodeViewType == null)
             {
-                Debug.LogError($"AddNodeView {nodeViewType.FullName}找不到IEditorNodeView，请在找不到IEditorNodeView使用EditorNodeAttribute指定{nodeViewType.FullName}");
+                Debug.LogError($"AddNodeView {nodeAsset.GetType()}找不到IEditorNodeView，请在找不到IEditorNodeView使用EditorNodeAttribute指定");
                 return null;
             }
 
-            IEditorNodeView nodeView = ReflectUtility.CreateInstance(nodeViewType) as IEditorNodeView;
-            nodeView.Initialize(this, nodeAsset);
+            IEditorNodeView nodeView = null;
+
+            try
+            {
+                nodeView = ReflectUtility.CreateInstance(nodeViewType) as IEditorNodeView;
+                nodeView.Initialize(this, nodeAsset);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"AddNodeView {nodeViewType.FullName} 创建失败 {e}");
+                return null;
+            }
+
             AddElement(nodeView.element);
 
             this._nodeViews.Add(nodeView);
@@ -519,8 +536,16 @@ namespace Emilia.Node.Editor
 
             if (nodeView.asset != null) graphElementCache.RemoveNodeViewCache(nodeView.asset.id);
 
-            nodeView.Dispose();
-            RemoveElement(nodeView.element);
+            try
+            {
+                nodeView.Dispose();
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"RemoveNodeView nodeView 异常 {e}");
+            }
+
+            if (nodeView.element != null) RemoveElement(nodeView.element);
             this._nodeViews.Remove(nodeView);
         }
 
@@ -552,13 +577,23 @@ namespace Emilia.Node.Editor
             Type edgeViewType = GraphTypeCache.GetEdgeViewType(asset.GetType());
             if (edgeViewType == null)
             {
-                Debug.LogError($"AddEdgeView时 {edgeViewType.FullName}找不到IEditorEdgeView，请在找不到IEditorEdgeView使用EditorEdgeAttribute指定{edgeViewType.FullName}");
+                Debug.LogError($"AddEdgeView时 {asset.GetType()}找不到IEditorEdgeView，请在找不到IEditorEdgeView使用EditorEdgeAttribute指定");
                 return null;
             }
 
-            IEditorEdgeView edgeView = ReflectUtility.CreateInstance(edgeViewType) as IEditorEdgeView;
-            edgeView.edgeElement.RegisterCallback<MouseDownEvent>((_) => UpdateSelected());
-            edgeView.Initialize(this, asset);
+            IEditorEdgeView edgeView;
+
+            try
+            {
+                edgeView = ReflectUtility.CreateInstance(edgeViewType) as IEditorEdgeView;
+                edgeView.Initialize(this, asset);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"AddEdgeView {edgeViewType.FullName} 创建失败 {e}");
+                return null;
+            }
+
             AddElement(edgeView.edgeElement);
 
             this._edgeViews.Add(edgeView);
@@ -579,11 +614,22 @@ namespace Emilia.Node.Editor
 
             if (edge.asset != null) graphElementCache.RemoveEdgeViewCache(edge.asset.id);
 
-            edge.Dispose();
-            RemoveElement(edge.edgeElement);
+            try
+            {
+                edge.Dispose();
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"RemoveEdgeView edge 异常 {e}");
+            }
 
-            edge.inputPortView?.portElement.Disconnect(edge.edgeElement);
-            edge.outputPortView?.portElement.Disconnect(edge.edgeElement);
+            if (edge.edgeElement != null)
+            {
+                RemoveElement(edge.edgeElement);
+                edge.inputPortView?.portElement.Disconnect(edge.edgeElement);
+                edge.outputPortView?.portElement.Disconnect(edge.edgeElement);
+            }
+
             this._edgeViews.Remove(edge);
         }
 
@@ -605,19 +651,28 @@ namespace Emilia.Node.Editor
             Type itemViewType = GraphTypeCache.GetItemViewType(asset.GetType());
             if (itemViewType == null)
             {
-                Debug.LogError($"AddNodeView {itemViewType.FullName}找不到IEditorItemView，请在找不到IEditorItemView使用EditorItemAttribute指定{itemViewType.FullName}");
+                Debug.LogError($"AddNodeView {asset.GetType()}找不到IEditorItemView，请在找不到IEditorItemView使用EditorItemAttribute指定");
                 return null;
             }
 
-            IEditorItemView itemView = ReflectUtility.CreateInstance(itemViewType) as IEditorItemView;
+            IEditorItemView itemView;
+            try
+            {
+                itemView = ReflectUtility.CreateInstance(itemViewType) as IEditorItemView;
+                itemView.Initialize(this, asset);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"AddItemView {itemViewType.FullName} 创建失败 {e}");
+                return null;
+            }
+
             if (itemView.element == null)
             {
                 Debug.LogError($"AddItemView {itemViewType.FullName} element 为空");
                 return null;
             }
 
-            itemView.element.RegisterCallback<MouseDownEvent>((_) => UpdateSelected());
-            itemView.Initialize(this, asset);
             AddElement(itemView.element);
 
             this._itemViews.Add(itemView);
@@ -637,14 +692,22 @@ namespace Emilia.Node.Editor
             }
             if (item.asset != null) graphElementCache.RemoveItemViewCache(item.asset.id);
 
-            item.Dispose();
-            RemoveElement(item.element);
+            try
+            {
+                item.Dispose();
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"RemoveItemView item 异常 {e}");
+            }
+
+            if (item.element != null) RemoveElement(item.element);
             this._itemViews.Remove(item);
         }
 
         public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
         {
-            OperateMenuContext menuContext = new OperateMenuContext();
+            OperateMenuContext menuContext = new();
             menuContext.evt = evt;
             menuContext.graphView = this;
 
@@ -653,7 +716,7 @@ namespace Emilia.Node.Editor
 
         public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
         {
-            List<Port> compatiblePorts = new List<Port>();
+            List<Port> compatiblePorts = new();
 
             IEditorPortView startPortView = startPort as IEditorPortView;
             if (startPortView == null) return compatiblePorts;
@@ -682,7 +745,7 @@ namespace Emilia.Node.Editor
 
         private void OnUnserializeAndPaste(string operationName, string data)
         {
-            var pasteObjects = graphCopyPaste.UnserializeAndPasteCallback(operationName, data);
+            GraphElement[] pasteObjects = graphCopyPaste.UnserializeAndPasteCallback(operationName, data).ToArray();
 
             SetSelection(pasteObjects.OfType<ISelectable>().ToList());
             UpdateSelected();
@@ -819,6 +882,56 @@ namespace Emilia.Node.Editor
             graphSave.SetDirty();
         }
 
+        /// <summary>
+        /// 获取自定义数据
+        /// </summary>
+        public T GetCustomData<T>(string key, T defaultValue = default)
+        {
+            if (this.customData.TryGetValue(key, out object value)) return (T) value;
+            return defaultValue;
+        }
+
+        /// <summary>
+        /// 获取自定义数据
+        /// </summary>
+        public T GetCustomData<T>(T defaultValue = default)
+        {
+            if (this.customData.TryGetValue(typeof(T).FullName, out object value)) return (T) value;
+            return defaultValue;
+        }
+
+        /// <summary>
+        /// 设置自定义数据
+        /// </summary>
+        public void SetCustomData<T>(string key, T value)
+        {
+            customData[key] = value;
+        }
+
+        /// <summary>
+        /// 设置自定义数据
+        /// </summary>
+        public void SetCustomData<T>(T value)
+        {
+            customData[typeof(T).FullName] = value;
+        }
+
+        /// <summary>
+        /// 移除自定义数据
+        /// </summary>
+        public void RemoveCustomData(string key)
+        {
+            customData.Remove(key);
+        }
+
+        /// <summary>
+        /// 移除自定义数据
+        /// </summary>
+        public void RemoveCustomData<T>()
+        {
+            customData.Remove(typeof(T).FullName);
+        }
+
         private void RemoveAllElement()
         {
             foreach (GraphElement graphElement in graphElements)
@@ -859,27 +972,33 @@ namespace Emilia.Node.Editor
         /// <summary>
         /// 设置视图Transform
         /// </summary>
-        public void SetViewTransform(Vector3 newPosition, Vector3 newScale, float time = 0.2f)
+        public void SetViewTransform(Vector3 newPosition, Vector3 newScale, float animationTime = 0.2f)
         {
+            // 延迟一帧执行，确保在正确的UI更新周期中执行
             schedule.Execute(OnSetViewTransform).ExecuteLater(1);
 
             void OnSetViewTransform()
             {
+                // 验证输入参数是否有效（检查无穷大和NaN）
                 float validateFloat = newPosition.x + newPosition.y + newPosition.z + newScale.x + newScale.y + newScale.z;
                 if (float.IsInfinity(validateFloat) || float.IsNaN(validateFloat)) return;
 
+                // 将位置对齐到像素网格，避免模糊渲染
                 newPosition.x = GUIUtility_Internals.RoundToPixelGrid_Internals(newPosition.x);
                 newPosition.y = GUIUtility_Internals.RoundToPixelGrid_Internals(newPosition.y);
 
                 UpdateLogicTransform(newPosition, newScale);
 
-                if (time > 0)
+                // 根据time参数决定使用动画过渡还是立即应用
+                if (animationTime > 0)
                 {
+                    // 停止之前的Transform动画协程（如果存在）
                     if (updateViewTransformCoroutine != null) EditorCoroutineUtility.StopCoroutine(updateViewTransformCoroutine);
                     updateViewTransformCoroutine = EditorCoroutineUtility.StartCoroutineOwnerless(SetTransformAnimation());
                 }
                 else
                 {
+                    // 立即应用新的Transform
                     contentViewContainer.transform.position = newPosition;
                     contentViewContainer.transform.scale = newScale;
 
@@ -888,16 +1007,19 @@ namespace Emilia.Node.Editor
                 }
             }
 
+            // Transform动画协程，通过线性插值实现平滑过渡
             IEnumerator SetTransformAnimation()
             {
+                // 记录动画起始状态
                 Vector2 startPosition = contentViewContainer.transform.position;
                 Vector3 startScale = contentViewContainer.transform.scale;
 
                 double startTime = EditorApplication.timeSinceStartup;
 
-                while (EditorApplication.timeSinceStartup - startTime < time)
+                // 动画循环，直到达到指定时长
+                while (EditorApplication.timeSinceStartup - startTime < animationTime)
                 {
-                    float t = (float) ((EditorApplication.timeSinceStartup - startTime) / time);
+                    float t = (float) ((EditorApplication.timeSinceStartup - startTime) / animationTime);
 
                     Vector2 currentPosition = Vector2.Lerp(startPosition, newPosition, t);
                     Vector3 currentScale = Vector3.Lerp(startScale, newScale, t);
@@ -905,9 +1027,11 @@ namespace Emilia.Node.Editor
                     contentViewContainer.transform.position = currentPosition;
                     contentViewContainer.transform.scale = currentScale;
 
+                    // 等待下一帧
                     yield return 0;
                 }
 
+                // 动画结束，确保最终值精确应用
                 contentViewContainer.transform.position = newPosition;
                 contentViewContainer.transform.scale = newScale;
 
@@ -942,7 +1066,7 @@ namespace Emilia.Node.Editor
 
         public void Dispose()
         {
-            if (graphAsset != null && graphViews.ContainsKey(graphAsset)) graphViews.Remove(graphAsset);
+            if (graphAsset != null) graphViews.Remove(graphAsset);
 
             Save(false);
 
@@ -951,12 +1075,13 @@ namespace Emilia.Node.Editor
 
             RemoveAllElement();
 
-            foreach (GraphViewModule customModule in this.customModules.Values) customModule.Dispose();
+            foreach (CustomGraphViewModule customModule in this.customModules.Values) customModule.Dispose();
             this.customModules.Clear();
 
-            foreach (GraphViewModule module in this.modules.Values) module.Dispose();
+            foreach (BasicGraphViewModule module in this.modules.Values) module.Dispose();
 
             graphElementCache.Clear();
+            customData.Clear();
 
             Undo.undoRedoPerformed -= OnUndoRedoPerformed;
 

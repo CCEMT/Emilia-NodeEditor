@@ -2,6 +2,9 @@
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// EdgeView扩展实用方法
+    /// </summary>
     public static class IEditorEdgeViewExtension
     {
         /// <summary>

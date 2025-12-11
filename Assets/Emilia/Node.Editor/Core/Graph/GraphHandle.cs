@@ -4,6 +4,9 @@ using Emilia.Kit;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// Graph自定义处理器
+    /// </summary>
     [EditorHandleGenerate]
     public abstract class GraphHandle
     {

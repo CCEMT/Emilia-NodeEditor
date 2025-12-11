@@ -5,12 +5,18 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 节点消息按钮
+    /// </summary>
     public class NodeMessageButtonElement : VisualElement
     {
-        private NodeMessageLevel level;
+        protected NodeMessageLevel level;
 
-        private Clickable _clickable;
+        protected Clickable _clickable;
 
+        /// <summary>
+        /// 可点击组件
+        /// </summary>
         public Clickable clickable
         {
             get => _clickable;
@@ -24,6 +30,9 @@ namespace Emilia.Node.Universal.Editor
             }
         }
 
+        /// <summary>
+        /// 点击事件
+        /// </summary>
         public event Action clicked
         {
             add
@@ -48,13 +57,13 @@ namespace Emilia.Node.Universal.Editor
             RegisterCallback<KeyDownEvent>(OnKeyDown);
         }
 
-        private void OnNavigationSubmit(NavigationSubmitEvent evt)
+        protected void OnNavigationSubmit(NavigationSubmitEvent evt)
         {
             if (clickable != null) ReflectUtility.Invoke(clickable, "SimulateSingleClick", new object[] {evt});
             evt.StopPropagation();
         }
 
-        private void OnKeyDown(KeyDownEvent evt)
+        protected void OnKeyDown(KeyDownEvent evt)
         {
             if (panel?.contextType != ContextType.Editor) return;
 
@@ -66,6 +75,9 @@ namespace Emilia.Node.Universal.Editor
             }
         }
 
+        /// <summary>
+        /// 设置消息等级
+        /// </summary>
         public void SetLevel(NodeMessageLevel level)
         {
             this.level = level;

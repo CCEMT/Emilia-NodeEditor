@@ -3,6 +3,9 @@ using Emilia.Kit;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 操作菜单自定义处理器
+    /// </summary>
     [EditorHandleGenerate]
     public abstract class OperateMenuHandle
     {
@@ -10,7 +13,7 @@ namespace Emilia.Node.Editor
         /// 初始化缓存
         /// </summary>
         public virtual void InitializeCache(EditorGraphView graphView, List<OperateMenuActionInfo> actionInfos) { }
-        
+
         /// <summary>
         /// 收集操作菜单项
         /// </summary>

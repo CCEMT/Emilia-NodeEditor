@@ -4,13 +4,19 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 通用浮动面板实现
+    /// </summary>
     public class UniversalFloatView : GraphPanel
     {
-        private VisualElement floatContainer;
+        protected VisualElement floatContainer;
 
-        private Dragger _dragger;
-        private Resizer _resizer;
+        protected Dragger _dragger;
+        protected Resizer _resizer;
 
+        /// <summary>
+        /// 内容容器
+        /// </summary>
         public override VisualElement contentContainer => floatContainer;
 
         public override GraphPanelCapabilities panelCapabilities

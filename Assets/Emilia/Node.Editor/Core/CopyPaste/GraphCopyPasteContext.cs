@@ -2,6 +2,9 @@
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 拷贝粘贴上下文
+    /// </summary>
     public struct GraphCopyPasteContext
     {
         public EditorGraphView graphView;

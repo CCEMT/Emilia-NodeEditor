@@ -3,6 +3,9 @@ using UnityEditor.Experimental.GraphView;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 便利贴节点资产
+    /// </summary>
     [HideMonoScript]
     public class StickyNoteAsset : UniversalItemAsset
     {

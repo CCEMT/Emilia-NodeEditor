@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 创建节点适配器
+    /// </summary>
     public class CreateNodeHandle : ICreateNodeHandle
     {
         public object nodeData { get; set; }

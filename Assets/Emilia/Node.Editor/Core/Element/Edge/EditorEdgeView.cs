@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using Emilia.Kit;
+using Emilia.Kit.Editor;
+using Emilia.Reflection.Editor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -7,17 +9,26 @@ using Object = UnityEngine.Object;
 
 namespace Emilia.Node.Editor
 {
-    public abstract class EditorEdgeView : Edge, IEditorEdgeView
+    /// <summary>
+    /// Edge表现元素
+    /// </summary>
+    public abstract class EditorEdgeView : Edge_Hook, IEditorEdgeView
     {
         protected IEditorPortView _inputPortView;
         protected IEditorPortView _outputPortView;
 
+        protected EditorEdgeManipulator editorEdgeManipulator;
+        protected ContextualMenuManipulator contextualMenuManipulator;
+
         public EditorEdgeAsset asset { get; private set; }
         public EditorGraphView graphView { get; private set; }
 
+        /// <summary>
+        /// 拖拽状态
+        /// </summary>
         public bool isDrag { get; set; }
 
-        public new Vector2[] PointsAndTangents => base.PointsAndTangents;
+        public Vector2[] PointsAndTangents_Internals => PointsAndTangents;
 
         /// <summary>
         /// 输入端口视图
@@ -66,6 +77,31 @@ namespace Emilia.Node.Editor
         public bool isSelected { get; protected set; }
         protected virtual string styleFilePath => "Node/Styles/UniversalEditorEdgeView.uss";
 
+        protected override bool OverrideCtor()
+        {
+            BaseCtor();
+
+            ClearClassList();
+            AddToClassList("edge");
+            style.position = Position.Absolute;
+
+            Add(edgeControl);
+
+            capabilities |= Capabilities.Selectable | Capabilities.Deletable;
+
+            this.editorEdgeManipulator = new EditorEdgeManipulator();
+            this.AddManipulator(editorEdgeManipulator);
+
+            this.contextualMenuManipulator = new ContextualMenuManipulator(null);
+            this.AddManipulator(contextualMenuManipulator);
+
+            RegisterCallback<AttachToPanelEvent>(OnEdgeAttach_Internal);
+            RegisterCallback<GeometryChangedEvent>(OnGeometryChanged_Internal);
+            this.AddStyleSheetPath_Internal("StyleSheets/GraphView/Edge.uss");
+
+            return true;
+        }
+
         public virtual void Initialize(EditorGraphView graphView, EditorEdgeAsset asset)
         {
             this.graphView = graphView;
@@ -100,7 +136,7 @@ namespace Emilia.Node.Editor
         public Vector2 GetPointByRate(float rate)
         {
             float length = 0;
-            Vector2[] points = PointsAndTangents;
+            Vector2[] points = PointsAndTangents_Internals;
 
             int amount = points.Length;
             if (amount == 0) return Vector2.zero;

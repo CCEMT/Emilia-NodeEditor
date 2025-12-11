@@ -6,11 +6,14 @@ using UnityEditor;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// Graph元素的类型缓存
+    /// </summary>
     public static class GraphTypeCache
     {
-        private static Dictionary<Type, Type> nodeViewTypeCache = new Dictionary<Type, Type>();
-        private static Dictionary<Type, Type> edgeViewTypeCache = new Dictionary<Type, Type>();
-        private static Dictionary<Type, Type> itemViewTypeCache = new Dictionary<Type, Type>();
+        private static Dictionary<Type, Type> nodeViewTypeCache = new();
+        private static Dictionary<Type, Type> edgeViewTypeCache = new();
+        private static Dictionary<Type, Type> itemViewTypeCache = new();
 
         static GraphTypeCache()
         {
@@ -58,18 +61,27 @@ namespace Emilia.Node.Editor
             }
         }
 
+        /// <summary>
+        /// 获取节点表现类型
+        /// </summary>
         public static Type GetNodeViewType(Type nodeType)
         {
             if (nodeType == null) return null;
             return nodeViewTypeCache.GetValueOrDefault(nodeType);
         }
 
+        /// <summary>
+        /// 获取Edge表现类型
+        /// </summary>
         public static Type GetEdgeViewType(Type edgeType)
         {
             if (edgeType == null) return null;
             return edgeViewTypeCache.GetValueOrDefault(edgeType);
         }
 
+        /// <summary>
+        /// 获取Item表现类型
+        /// </summary>
         public static Type GetItemViewType(Type itemType)
         {
             if (itemType == null) return null;

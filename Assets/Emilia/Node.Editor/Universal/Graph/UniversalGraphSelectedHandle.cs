@@ -9,6 +9,9 @@ using UnityEngine;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 通用选中处理
+    /// </summary>
     [EditorHandle(typeof(EditorUniversalGraphAsset))]
     public class UniversalGraphSelectedHandle : GraphSelectedHandle
     {
@@ -24,9 +27,9 @@ namespace Emilia.Node.Universal.Editor
             Selection.selectionChanged += OnSelectionChanged;
         }
 
-        private void OnSelectionChanged()
+        protected void OnSelectionChanged()
         {
-            List<Object> selectedInspectors = new List<Object>();
+            List<Object> selectedInspectors = new();
 
             foreach (ISelectable selectable in editorGraphView.selection)
             {
@@ -41,7 +44,7 @@ namespace Emilia.Node.Universal.Editor
 
         public override void UpdateSelectedInspector(EditorGraphView graphView, List<ISelectedHandle> selection)
         {
-            List<Object> selectedInspectors = new List<Object>();
+            List<Object> selectedInspectors = new();
 
             foreach (ISelectedHandle selectable in selection) selectedInspectors.AddRange(selectable.GetSelectedObjects());
 

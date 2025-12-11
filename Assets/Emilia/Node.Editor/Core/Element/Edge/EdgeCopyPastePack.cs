@@ -19,6 +19,7 @@ namespace Emilia.Node.Editor
         private EditorEdgeAsset _copyAsset;
         private EditorEdgeAsset _pasteAsset;
 
+
         public EditorEdgeAsset copyAsset
         {
             get
@@ -55,12 +56,15 @@ namespace Emilia.Node.Editor
             EditorEdgeAsset copy = copyAsset;
             if (copy == null) return;
 
+            // 实例化新的Edge资源并生成新的唯一ID
             _pasteAsset = Object.Instantiate(copy);
             _pasteAsset.name = copy.name;
             _pasteAsset.id = Guid.NewGuid().ToString();
 
+            // 粘贴子级元素
             _pasteAsset.PasteChild();
 
+            // 遍历依赖关系，重新建立边与节点之间的连接
             int amount = copyPasteContext.dependency.Count;
             for (int i = 0; i < amount; i++)
             {
@@ -68,6 +72,7 @@ namespace Emilia.Node.Editor
                 INodeCopyPastePack nodeCopyPastePack = pack as INodeCopyPastePack;
                 if (nodeCopyPastePack == null) continue;
 
+                // 检查并更新输入节点ID
                 bool isInput = copy.inputNodeId == nodeCopyPastePack.copyAsset.id;
                 if (isInput)
                 {
@@ -75,6 +80,7 @@ namespace Emilia.Node.Editor
                     continue;
                 }
 
+                // 检查并更新输出节点ID
                 bool isOutput = copy.outputNodeId == nodeCopyPastePack.copyAsset.id;
                 if (isOutput)
                 {
@@ -83,6 +89,7 @@ namespace Emilia.Node.Editor
                 }
             }
 
+            // 注册撤销操作并将边添加到图表视图
             graphView.RegisterCompleteObjectUndo("Graph Paste");
             graphView.AddEdge(_pasteAsset);
             Undo.RegisterCreatedObjectUndo(this._pasteAsset, "Graph Pause");

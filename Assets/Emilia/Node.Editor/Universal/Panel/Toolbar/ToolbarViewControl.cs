@@ -1,8 +1,13 @@
 ﻿namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 工具栏控件
+    /// </summary>
     public abstract class ToolbarViewControl : IToolbarViewControl
     {
-        public bool isActive { get; set; }
+        /// <summary>
+        /// 绘制
+        /// </summary>
         public abstract void OnDraw();
     }
 }

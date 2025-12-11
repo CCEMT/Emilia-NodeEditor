@@ -8,10 +8,8 @@ namespace Emilia.Node.Universal.Editor
     [Action("Paste", 5200, OperateMenuTagDefine.BaseActionTag)]
     public class PasteAction : OperateMenuAction
     {
-        public override OperateMenuActionValidity GetValidity(OperateMenuContext context)
-        {
-            return context.graphView.graphCopyPaste.CanPasteSerializedDataCallback(context.graphView.GetSerializedData_Internal()) ? OperateMenuActionValidity.Valid : OperateMenuActionValidity.Invalid;
-        }
+        public override OperateMenuActionValidity GetValidity(OperateMenuContext context) =>
+            context.graphView.graphCopyPaste.CanPasteSerializedDataCallback(context.graphView.GetSerializedData_Internal()) ? OperateMenuActionValidity.Valid : OperateMenuActionValidity.Invalid;
 
         public override void Execute(OperateMenuActionContext context)
         {

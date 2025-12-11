@@ -3,6 +3,9 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 快捷键系统
+    /// </summary>
     public class GraphHotKeys : BasicGraphViewModule
     {
         private GraphHotKeysHandle handle;

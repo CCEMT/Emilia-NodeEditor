@@ -8,19 +8,46 @@ using UnityEngine;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 布局工具类
+    /// </summary>
     public static class GraphLayoutUtility
     {
+        /// <summary>
+        /// 方向
+        /// </summary>
         [Flags]
         public enum AlignmentType
         {
+            /// <summary>
+            /// 横向
+            /// </summary>
             Horizontal = 1,
+
+            /// <summary>
+            /// 垂直
+            /// </summary>
             Vertical = 2,
 
+            /// <summary>
+            /// 位置-顶部/左边
+            /// </summary>
             TopOrLeft = 4,
+
+            /// <summary>
+            /// 位置-中心
+            /// </summary>
             Center = 8,
+
+            /// <summary>
+            /// 位置-底部/右边
+            /// </summary>
             BottomOrRight = 16,
         }
 
+        /// <summary>
+        /// 开始布局
+        /// </summary>
         public static void Start(float interval, AlignmentType alignmentType, List<IEditorNodeView> elements)
         {
             int count = elements.Count;
@@ -60,7 +87,7 @@ namespace Emilia.Node.Universal.Editor
 
         private static Dictionary<IEditorNodeView, Vector2> LayoutHorizontal(float interval, AlignmentType alignmentType, List<IEditorNodeView> elements)
         {
-            Dictionary<IEditorNodeView, Vector2> nodeLayoutMovePosition = new Dictionary<IEditorNodeView, Vector2>();
+            Dictionary<IEditorNodeView, Vector2> nodeLayoutMovePosition = new();
 
             float y = GetY(alignmentType, elements);
 
@@ -91,7 +118,7 @@ namespace Emilia.Node.Universal.Editor
 
         private static Dictionary<IEditorNodeView, Vector2> LayoutVertical(float interval, AlignmentType alignmentType, List<IEditorNodeView> elements)
         {
-            Dictionary<IEditorNodeView, Vector2> nodeLayoutMovePosition = new Dictionary<IEditorNodeView, Vector2>();
+            Dictionary<IEditorNodeView, Vector2> nodeLayoutMovePosition = new();
 
             float x = GetX(alignmentType, elements);
 
@@ -134,7 +161,7 @@ namespace Emilia.Node.Universal.Editor
 
         private static void RestoreNode(Dictionary<IEditorNodeView, Vector2> nodeLayoutMovePosition)
         {
-            Queue<IEditorNodeView> queue = new Queue<IEditorNodeView>(nodeLayoutMovePosition.Keys);
+            Queue<IEditorNodeView> queue = new(nodeLayoutMovePosition.Keys);
 
             while (queue.Count > 0)
             {
@@ -142,10 +169,10 @@ namespace Emilia.Node.Universal.Editor
                 Vector2 relativePosition = nodeLayoutMovePosition[node];
                 if (relativePosition == Vector2.zero) continue;
 
-                HashSet<IEditorNodeView> connectNodes = new HashSet<IEditorNodeView>();
+                HashSet<IEditorNodeView> connectNodes = new();
                 connectNodes.AddRange(node.GetInputNodeViews());
                 connectNodes.AddRange(node.GetOutputNodeViews());
-                
+
                 foreach (IEditorNodeView connected in connectNodes)
                 {
                     if (nodeLayoutMovePosition.ContainsKey(connected)) continue;

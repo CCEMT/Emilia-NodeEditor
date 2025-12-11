@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// Node表现元素接口
+    /// </summary>
     public interface IEditorNodeView : IDeleteGraphElement, IRemoveViewElement, IGraphCopyPasteElement, IGraphSelectable
     {
         /// <summary>
@@ -20,6 +23,11 @@ namespace Emilia.Node.Editor
         /// 节点元素
         /// </summary>
         GraphElement element { get; }
+
+        /// <summary>
+        /// 是否展开
+        /// </summary>
+        bool expanded { get; set; }
 
         /// <summary>
         /// 端口View列表
@@ -56,6 +64,11 @@ namespace Emilia.Node.Editor
         /// </summary>
         void SetPositionNoUndo(Rect position);
 
+        /// <summary>
+        /// 设置是否展开，不记录撤销
+        /// </summary>
+        void SetExpandedNoUndo(bool expanded, bool isRebuild = false);
+        
         /// <summary>
         /// 值改变
         /// </summary>

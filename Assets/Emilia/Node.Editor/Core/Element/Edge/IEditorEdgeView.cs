@@ -2,6 +2,9 @@
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// Edge表现元素接口
+    /// </summary>
     public interface IEditorEdgeView : IDeleteGraphElement, IRemoveViewElement, IGraphCopyPasteElement, IGraphSelectable
     {
         /// <summary>
@@ -29,6 +32,9 @@ namespace Emilia.Node.Editor
         /// </summary>
         bool isDrag { get; set; }
 
+        /// <summary>
+        /// 元素
+        /// </summary>
         Edge edgeElement { get; }
 
         /// <summary>

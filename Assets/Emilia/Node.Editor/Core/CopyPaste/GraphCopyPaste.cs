@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// Graph拷贝粘贴系统（序列化系统）
+    /// </summary>
     public class GraphCopyPaste : BasicGraphViewModule
     {
         private GraphCopyPasteHandle handle;
@@ -40,13 +43,16 @@ namespace Emilia.Node.Editor
         public IEnumerable<GraphElement> UnserializeAndPasteCallback(string operationName, string serializedData, Vector2? mousePosition = null)
         {
             if (this.handle == null) return null;
-            GraphCopyPasteContext graphCopyPasteContext = new GraphCopyPasteContext();
+            GraphCopyPasteContext graphCopyPasteContext = new();
             graphCopyPasteContext.graphView = this.graphView;
             graphCopyPasteContext.createPosition = mousePosition;
 
             return this.handle.UnserializeAndPasteCallback(graphView, operationName, serializedData, graphCopyPasteContext);
         }
 
+        /// <summary>
+        /// 获取拷贝元素
+        /// </summary>
         public IEnumerable<GraphElement> GetCopyGraphElements(string serializedData)
         {
             if (this.handle == null) return null;

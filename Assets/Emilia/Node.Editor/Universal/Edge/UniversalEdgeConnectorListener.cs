@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 通用IEdgeConnectorListener实现
+    /// </summary>
     public class UniversalEdgeConnectorListener : GraphEdgeConnectorListener
     {
         public override void OnDropOutsidePort(Edge edge, Vector2 position)
@@ -33,8 +36,8 @@ namespace Emilia.Node.Editor
                 IEditorPortView portView = port as IEditorPortView;
                 if (portView == null) return;
 
-                CreateNodeContext createNodeContext = new CreateNodeContext();
-                CreateNodeByPortCollector createNodePortCollector = new CreateNodeByPortCollector(graphView, portView);
+                CreateNodeContext createNodeContext = new();
+                CreateNodeByPortCollector createNodePortCollector = new(graphView, portView);
                 createNodeContext.nodeCollector = createNodePortCollector;
 
                 graphView.graphOperate.OpenCreateNodeMenu(position, createNodeContext);

@@ -9,6 +9,9 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 重写EdgeDragHelper
+    /// </summary>
     public class EditorEdgeDragHelper : EdgeDragHelper
     {
         public const int PanInterval = 10;
@@ -17,13 +20,13 @@ namespace Emilia.Node.Editor
         public const float MaxSpeedFactor = 2.5f;
         public const float MaxPanSpeed = MaxSpeedFactor * PanSpeed;
 
-        protected static NodeAdapter nodeAdapter = new NodeAdapter();
+        protected static NodeAdapter nodeAdapter = new();
 
         private Type edgeViewType;
-        protected List<IEditorPortView> portViews = new List<IEditorPortView>();
-        protected Dictionary<IEditorNodeView, List<IEditorPortView>> nodeByPort = new Dictionary<IEditorNodeView, List<IEditorPortView>>();
+        protected List<IEditorPortView> portViews = new();
+        protected Dictionary<IEditorNodeView, List<IEditorPortView>> nodeByPort = new();
 
-        protected Dictionary<IEditorPortView, IEditorEdgeView> preConnectEdgeViews = new Dictionary<IEditorPortView, IEditorEdgeView>();
+        protected Dictionary<IEditorPortView, IEditorEdgeView> preConnectEdgeViews = new();
 
         protected IEditorEdgeView ghostEdge;
         protected EditorGraphView graphView;
@@ -91,6 +94,9 @@ namespace Emilia.Node.Editor
             }
 
             if (edgeCandidate != null) edgeCandidate.SetEnabled(true);
+
+            foreach (var itemPair in preConnectEdgeViews) itemPair.Value.edgeElement.RemoveFromHierarchy();
+            preConnectEdgeViews.Clear();
 
             ghostEdge = null;
             edgeCandidate = null;
@@ -378,7 +384,7 @@ namespace Emilia.Node.Editor
 
             IEditorPortView endPort = null;
 
-            Dictionary<IEditorPortView, Rect> portBonds = new Dictionary<IEditorPortView, Rect>();
+            Dictionary<IEditorPortView, Rect> portBonds = new();
 
             for (var i = 0; i < this.portViews.Count; i++)
             {
@@ -394,16 +400,15 @@ namespace Emilia.Node.Editor
                 IEditorPortView nearestPort = GetNearestPort(pair.Value);
                 if (nearestPort != null) endPort = nearestPort;
             }
-
-            IEditorPortView GetNearestPort(List<IEditorPortView> ports)
+            
+            IEditorPortView GetNearestPort(List<IEditorPortView> ports)//获取最近的端口
             {
                 IEditorPortView nearestPort = null;
                 float minDistance = int.MaxValue;
                 foreach (IEditorPortView port in ports)
                 {
-                    if (portBonds.ContainsKey(port) == false) continue;
-                    
-                    Rect bounds = portBonds[port];
+                    if (portBonds.TryGetValue(port, out Rect bounds) == false) continue;
+
                     bool isContains = bounds.Contains(mousePosition);
                     if (isContains)
                     {

@@ -2,6 +2,9 @@
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 创建Item菜单信息
+    /// </summary>
     public struct CreateItemMenuInfo
     {
         /// <summary>

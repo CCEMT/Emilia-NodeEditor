@@ -2,16 +2,26 @@
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 创建节点面板TreeViewItem的创建节点Item实现
+    /// </summary>
     public class CreateNodeEntryTreeViewItem : CreateNodeTreeViewItem
     {
-        private ICreateNodeHandle _createNodeHandle;
+        /// <summary>
+        /// 创建节点信息
+        /// </summary>
+        public ICreateNodeHandle createNodeHandle { get; }
 
-        public ICreateNodeHandle createNodeHandle => _createNodeHandle;
+        /// <summary>
+        /// 是否为收藏节点
+        /// </summary>
+        public bool isCollection { get; private set; }
 
-        public CreateNodeEntryTreeViewItem(ICreateNodeHandle createNodeHandle)
+        public CreateNodeEntryTreeViewItem(ICreateNodeHandle createNodeHandle, bool isCollection = false)
         {
-            _createNodeHandle = createNodeHandle;
+            this.createNodeHandle = createNodeHandle;
             icon = createNodeHandle.icon;
+            this.isCollection = isCollection;
         }
     }
 }

@@ -10,6 +10,9 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 通用操作菜单处理
+    /// </summary>
     [EditorHandle(typeof(EditorUniversalGraphAsset))]
     public class UniversalOperateMenuHandle : OperateMenuHandle
     {
@@ -31,7 +34,7 @@ namespace Emilia.Node.Universal.Editor
                 MenuAttribute menuAttribute = method.GetCustomAttribute<MenuAttribute>();
                 if (menuAttribute == null) continue;
 
-                GeneralOperateMenuAction action = new GeneralOperateMenuAction();
+                GeneralOperateMenuAction action = new();
 
                 if (string.IsNullOrEmpty(menuAttribute.isOnExpression) == false)
                 {
@@ -45,12 +48,18 @@ namespace Emilia.Node.Universal.Editor
 
                 if (string.IsNullOrEmpty(menuAttribute.actionValidityMethod) == false) SetValidityCallback(method, menuAttribute, action);
 
-                if (method.GetParameters().Length == 0) { action.executeCallback = (_) => ReflectUtility.Invoke(graphView.graphAsset, method.Name); }
+                if (method.GetParameters().Length == 0)
+                {
+                    action.executeCallback = (_) => ReflectUtility.Invoke(graphView.graphAsset, method.Name);
+                }
                 else if (method.GetParameters().Length == 1 && method.GetParameters()[0].ParameterType == typeof(OperateMenuContext))
                 {
                     action.executeCallback = (context) => ReflectUtility.Invoke(graphView.graphAsset, method.Name, new object[] {context});
                 }
-                else { Debug.LogError($"Method {assetType.FullName}.{method.Name} has invalid parameters for menu action"); }
+                else
+                {
+                    Debug.LogError($"Method {assetType.FullName}.{method.Name} has invalid parameters for menu action");
+                }
 
                 OperateMenuActionInfo actionInfo = action.ToActionInfo(menuAttribute.name, menuAttribute.category, menuAttribute.priority);
                 actionInfos.Add(actionInfo);
@@ -59,7 +68,10 @@ namespace Emilia.Node.Universal.Editor
             void SetValidityCallback(MethodInfo method, MenuAttribute menuAttribute, GeneralOperateMenuAction action)
             {
                 MethodInfo validityMethod = assetType.GetMethod(menuAttribute.actionValidityMethod);
-                if (validityMethod == null) { Debug.LogError($"Method {assetType.FullName}.{method.Name} has invalid {menuAttribute.actionValidityMethod}"); }
+                if (validityMethod == null)
+                {
+                    Debug.LogError($"Method {assetType.FullName}.{method.Name} has invalid {menuAttribute.actionValidityMethod}");
+                }
                 else
                 {
                     if (validityMethod.ReturnType != typeof(OperateMenuActionValidity))
@@ -67,12 +79,18 @@ namespace Emilia.Node.Universal.Editor
                         Debug.LogError($"Method {assetType.FullName}.{method.Name} has invalid return type for {menuAttribute.actionValidityMethod}");
                     }
 
-                    if (validityMethod.GetParameters().Length == 0) { action.validityCallback = (_) => (OperateMenuActionValidity) validityMethod.Invoke(graphView.graphAsset, null); }
+                    if (validityMethod.GetParameters().Length == 0)
+                    {
+                        action.validityCallback = (_) => (OperateMenuActionValidity) validityMethod.Invoke(graphView.graphAsset, null);
+                    }
                     else if (validityMethod.GetParameters().Length == 1 && validityMethod.GetParameters()[0].ParameterType == typeof(OperateMenuContext))
                     {
                         action.validityCallback = (context) => (OperateMenuActionValidity) validityMethod.Invoke(graphView.graphAsset, new object[] {context});
                     }
-                    else { Debug.LogError($"Method {assetType.FullName}.{method.Name} has invalid parameters for {menuAttribute.actionValidityMethod}"); }
+                    else
+                    {
+                        Debug.LogError($"Method {assetType.FullName}.{method.Name} has invalid parameters for {menuAttribute.actionValidityMethod}");
+                    }
                 }
             }
         }
@@ -84,9 +102,9 @@ namespace Emilia.Node.Universal.Editor
             CollectItemMenu(menuItems, context);
         }
 
-        private void CollectAction(EditorGraphView graphView, List<OperateMenuItem> menuItems, OperateMenuContext context)
+        protected void CollectAction(EditorGraphView graphView, List<OperateMenuItem> menuItems, OperateMenuContext context)
         {
-            OperateMenuActionContext actionContext = new OperateMenuActionContext();
+            OperateMenuActionContext actionContext = new();
             actionContext.graphView = context.graphView;
             actionContext.mousePosition = context.evt.mousePosition;
 
@@ -98,7 +116,7 @@ namespace Emilia.Node.Universal.Editor
 
                 if (validity == OperateMenuActionValidity.NotApplicable) continue;
 
-                OperateMenuItem menuItem = new OperateMenuItem();
+                OperateMenuItem menuItem = new();
                 menuItem.menuName = item.name;
                 menuItem.category = item.category;
                 menuItem.priority = item.priority;
@@ -110,7 +128,7 @@ namespace Emilia.Node.Universal.Editor
             }
         }
 
-        private void CollectItemMenu(List<OperateMenuItem> menuItems, OperateMenuContext context)
+        protected void CollectItemMenu(List<OperateMenuItem> menuItems, OperateMenuContext context)
         {
             List<CreateItemMenuInfo> types = context.graphView.createItemMenu.CollectItemMenus();
 
@@ -122,7 +140,7 @@ namespace Emilia.Node.Universal.Editor
             {
                 CreateItemMenuInfo createItem = types[i];
 
-                OperateMenuItem menuItem = new OperateMenuItem();
+                OperateMenuItem menuItem = new();
                 string fullPath = $"CreateItem/{createItem.path}";
                 OperateMenuUtility.PathToNameAndCategory(fullPath, out menuItem.menuName, out menuItem.category);
 

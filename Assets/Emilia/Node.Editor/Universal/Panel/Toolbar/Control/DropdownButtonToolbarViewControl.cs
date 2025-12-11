@@ -5,10 +5,13 @@ using UnityEngine;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 工具栏下拉按钮控件
+    /// </summary>
     public class DropdownButtonToolbarViewControl : ToolbarViewControl
     {
-        private GUIContent content;
-        private Func<OdinMenu> odinMenuFunc;
+        protected GUIContent content;
+        protected Func<OdinMenu> odinMenuFunc;
 
         public DropdownButtonToolbarViewControl(string displayName, Func<OdinMenu> odinMenuFunc)
         {

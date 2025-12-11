@@ -7,31 +7,22 @@ using UnityEngine;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 通用节点资产实现
+    /// </summary>
     [HideMonoScript, OnValueChanged(nameof(OnValueChanged), true)]
     public class UniversalNodeAsset : EditorNodeAsset, IObjectDescription
     {
         [SerializeField, HideInInspector]
         private string _displayName;
 
-        [SerializeField, HideInInspector]
-        private bool _isFold = true;
-
         /// <summary>
         /// 节点名称
         /// </summary>
-        public string displayName
+        public virtual string displayName
         {
             get => _displayName;
             set => _displayName = value;
-        }
-
-        /// <summary>
-        /// 是否折叠
-        /// </summary>
-        public bool isFold
-        {
-            get => _isFold;
-            set => _isFold = value;
         }
 
         public override string title
@@ -78,7 +69,7 @@ namespace Emilia.Node.Universal.Editor
             const int Width = 20;
             const int Height = 20;
 
-            Rect button = new Rect(rect.x + rect.width - Width * 2, rect.y + rect.height / 2f - Height / 2f, Width, Height);
+            Rect button = new(rect.x + rect.width - Width * 2, rect.y + rect.height / 2f - Height / 2f, Width, Height);
 
             SdfIcons.DrawIcon(button, SdfIconType.InfoCircleFill, Color.white);
 

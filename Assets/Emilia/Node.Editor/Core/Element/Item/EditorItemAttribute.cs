@@ -8,6 +8,9 @@ namespace Emilia.Node.Attributes
     [AttributeUsage(AttributeTargets.Class)]
     public class EditorItemAttribute : Attribute
     {
+        /// <summary>
+        /// Item资产类型
+        /// </summary>
         public Type itemType;
 
         public EditorItemAttribute(Type itemType)

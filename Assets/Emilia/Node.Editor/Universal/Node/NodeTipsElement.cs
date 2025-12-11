@@ -4,10 +4,13 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 节点Tips元素
+    /// </summary>
     public class NodeTipsElement : Label
     {
-        private double lastTime;
-        private float speed;
+        protected double lastTime;
+        protected float speed;
 
         public NodeTipsElement()
         {
@@ -29,7 +32,7 @@ namespace Emilia.Node.Universal.Editor
             RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanel);
         }
 
-        private void OnUpdate()
+        protected void OnUpdate()
         {
             float deltaTime = (float) (EditorApplication.timeSinceStartup - lastTime);
 

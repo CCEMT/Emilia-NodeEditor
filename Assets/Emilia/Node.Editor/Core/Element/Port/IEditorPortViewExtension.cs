@@ -2,13 +2,16 @@
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// Port表现元素拓展实用函数
+    /// </summary>
     public static class IEditorPortViewExtension
     {
         /// <summary>
         /// 根据Id获取NodeView
         /// </summary>
         public static IEditorNodeView GetEditorNodeView(this IEditorPortView protView, string id) => protView.master.graphView.graphElementCache.nodeViewById.GetValueOrDefault(id);
-        
+
         /// <summary>
         /// 根据Id获取EdgeView
         /// </summary>
@@ -24,7 +27,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public static List<IEditorEdgeView> GetEdges(this IEditorPortView port)
         {
-            List<IEditorEdgeView> edges = new List<IEditorEdgeView>();
+            List<IEditorEdgeView> edges = new();
 
             EditorGraphView graphView = port.master.graphView;
 
@@ -32,7 +35,7 @@ namespace Emilia.Node.Editor
             for (int i = 0; i < edgeAmount; i++)
             {
                 IEditorEdgeView edge = graphView.edgeViews[i];
-                
+
                 bool hsaValidInput = edge.inputPortView?.master?.asset;
                 bool hsaValidOutput = edge.outputPortView?.master?.asset;
 
@@ -58,7 +61,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public static List<EditorEdgeAsset> GetEdgeAssets(this IEditorPortView editorPortView)
         {
-            List<EditorEdgeAsset> edgeAssets = new List<EditorEdgeAsset>();
+            List<EditorEdgeAsset> edgeAssets = new();
 
             int amount = editorPortView.master.graphView.edgeViews.Count;
             for (int i = 0; i < amount; i++)

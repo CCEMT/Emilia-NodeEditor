@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// Graph自定义基础操作处理器
+    /// </summary>
     [EditorHandleGenerate]
     public abstract class GraphOperateHandle
     {

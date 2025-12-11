@@ -11,12 +11,15 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 通用Graph的Window
+    /// </summary>
     public class EditorGraphWindow : OdinProEditorWindow, IEditorAssetWindow
     {
         [NonSerialized, OdinSerialize]
-        private EditorGraphRoot _graphRoot;
+        private EditorGraphImGUIRoot _graphImGUIRoot;
 
-        public EditorGraphAsset graphAsset => this._graphRoot?.asset;
+        public EditorGraphAsset graphAsset => this._graphImGUIRoot?.asset;
         public string id => GetId(graphAsset);
 
         public void OnReOpen(object arg)
@@ -74,7 +77,7 @@ namespace Emilia.Node.Editor
 
         private void OnEnable()
         {
-            IMGUIContainer container = new IMGUIContainer(Draw);
+            IMGUIContainer container = new(Draw);
             container.style.flexGrow = 1;
             rootVisualElement.Add(container);
         }
@@ -87,7 +90,7 @@ namespace Emilia.Node.Editor
 
         private void Draw()
         {
-            this._graphRoot?.OnImGUI(position.height);
+            this._graphImGUIRoot?.OnImGUI(position.height);
         }
 
         private void UpdateTitle()
@@ -120,7 +123,7 @@ namespace Emilia.Node.Editor
                 titleContent.text = getTitle;
             }
 
-            if (_graphRoot?.graphView?.graphSave?.dirty ?? false) titleContent.text += "*";
+            if (this._graphImGUIRoot?.graphView?.graphSave?.dirty ?? false) titleContent.text += "*";
         }
 
         /// <summary>
@@ -128,25 +131,25 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void SetGraphAsset(EditorGraphAsset graphAsset)
         {
-            if (this._graphRoot == null)
+            if (this._graphImGUIRoot == null)
             {
-                this._graphRoot = new EditorGraphRoot();
-                this._graphRoot.Initialize(this);
+                this._graphImGUIRoot = new EditorGraphImGUIRoot();
+                this._graphImGUIRoot.Initialize(this);
             }
 
-            this._graphRoot.SetAsset(graphAsset);
+            this._graphImGUIRoot.SetAsset(graphAsset);
         }
 
         private void OnDisable()
         {
-            this._graphRoot?.Dispose();
+            this._graphImGUIRoot?.Dispose();
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
 
-            this._graphRoot = null;
+            this._graphImGUIRoot = null;
         }
 
         [OnOpenAsset]
@@ -180,7 +183,6 @@ namespace Emilia.Node.Editor
             if (editorGraphAsset == null) return string.Empty;
             WindowSettingsAttribute settings = editorGraphAsset.GetType().GetAttribute<WindowSettingsAttribute>();
             if (settings == null) return editorGraphAsset.id;
-            editorGraphAsset.RepetitionId();
 
             switch (settings.openMode)
             {

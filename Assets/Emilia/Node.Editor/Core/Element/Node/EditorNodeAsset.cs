@@ -8,6 +8,9 @@ using Object = UnityEngine.Object;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 编辑器Node资源
+    /// </summary>
     [Serializable, SelectedClear]
     public class EditorNodeAsset : TitleAsset, IUnityAsset
     {
@@ -16,6 +19,9 @@ namespace Emilia.Node.Editor
 
         [SerializeField, HideInInspector]
         private Rect _position;
+
+        [SerializeField, HideInInspector]
+        private bool _isExpanded = false;
 
         [SerializeField, HideInInspector]
         private object _userData;
@@ -47,6 +53,15 @@ namespace Emilia.Node.Editor
         }
 
         /// <summary>
+        /// 节点是否展开
+        /// </summary>
+        public bool isExpanded
+        {
+            get => this._isExpanded;
+            set => this._isExpanded = value;
+        }
+
+        /// <summary>
         /// 自定义数据
         /// </summary>
         public object userData
@@ -67,18 +82,21 @@ namespace Emilia.Node.Editor
         /// <summary>
         /// 自身Odin属性树
         /// </summary>
-        public PropertyTree propertyTree => _propertyTree;
+        public PropertyTree propertyTree
+        {
+            get
+            {
+                if (_propertyTree == null) _propertyTree = PropertyTree.Create(this);
+                return _propertyTree;
+            }
+        }
 
         /// <summary>
         /// 节点Tips
         /// </summary>
         public string tips { get; set; }
 
-        protected virtual void OnEnable()
-        {
-            if (_propertyTree != null) _propertyTree.Dispose();
-            _propertyTree = PropertyTree.Create(this);
-        }
+        protected virtual void OnEnable() { }
 
         public virtual void SetChildren(List<Object> childAssets) { }
         public virtual List<Object> GetChildren() => null;

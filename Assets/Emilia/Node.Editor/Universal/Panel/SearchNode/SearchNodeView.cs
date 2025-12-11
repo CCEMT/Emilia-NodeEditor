@@ -8,19 +8,22 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 搜索节点目标
+    /// </summary>
     public class SearchNodeView : GraphPanel
     {
-        private SearchField searchField;
-        private TreeViewState treeViewState;
-        private SearchNodeTreeView searchNodeTreeView;
+        protected SearchField searchField;
+        protected TreeViewState treeViewState;
+        protected SearchNodeTreeView searchNodeTreeView;
 
-        private List<UniversalEditorNodeView> dimNodeViews = new List<UniversalEditorNodeView>();
+        protected List<UniversalEditorNodeView> dimNodeViews = new();
 
         public SearchNodeView()
         {
             name = nameof(SearchNodeView);
 
-            IMGUIContainer container = new IMGUIContainer(OnTreeGUI);
+            IMGUIContainer container = new(OnTreeGUI);
             container.name = $"{nameof(SearchNodeView)}-TreeView";
 
             Add(container);
@@ -47,16 +50,23 @@ namespace Emilia.Node.Universal.Editor
             ClearDim();
         }
 
-        void OnTreeGUI()
+        protected void OnTreeGUI()
         {
+            const float IntervalWidth = 5;
+            const float ToolbarHeight = 24;
+            const float SearchFieldHeight = 20;
+
             if (float.IsNaN(layout.width) || float.IsNaN(layout.height)) return;
 
-            Rect rect = new Rect(0.0f, 0.0f, layout.width, layout.height);
+            Rect rect = new(0.0f, 0.0f, layout.width, layout.height);
 
             if (searchNodeTreeView != null)
             {
                 Rect searchRect = rect;
-                searchRect.height = 20;
+                searchRect.x += IntervalWidth;
+                searchRect.y += (ToolbarHeight - SearchFieldHeight) / 2;
+                searchRect.height = SearchFieldHeight;
+                searchRect.width -= IntervalWidth * 2;
 
                 EditorGUI.BeginChangeCheck();
                 searchNodeTreeView.searchString = searchField.OnToolbarGUI(searchRect, searchNodeTreeView.searchString);
@@ -69,7 +79,7 @@ namespace Emilia.Node.Universal.Editor
             }
         }
 
-        private void RefreshDim()
+        protected void RefreshDim()
         {
             ClearDim();
 
@@ -90,7 +100,7 @@ namespace Emilia.Node.Universal.Editor
             }
         }
 
-        private void ClearDim()
+        protected void ClearDim()
         {
             int count = dimNodeViews.Count;
             for (int i = 0; i < count; i++)

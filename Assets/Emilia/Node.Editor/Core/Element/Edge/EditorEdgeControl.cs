@@ -7,6 +7,9 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 重写EdgeControl
+    /// </summary>
     public class EditorEdgeControl : EdgeControl_Internals
     {
         protected struct EdgeCornerSweepValues
@@ -28,6 +31,9 @@ namespace Emilia.Node.Editor
         protected EditorOrientation _inputEditorOrientation;
         protected EditorOrientation _outputEditorOrientation;
 
+        /// <summary>
+        /// 输入方向
+        /// </summary>
         public virtual EditorOrientation inputEditorOrientation
         {
             get => this._inputEditorOrientation;
@@ -39,6 +45,9 @@ namespace Emilia.Node.Editor
             }
         }
 
+        /// <summary>
+        /// 输出方向
+        /// </summary>
         public virtual EditorOrientation outputEditorOrientation
         {
             get => this._outputEditorOrientation;
@@ -50,7 +59,7 @@ namespace Emilia.Node.Editor
             }
         }
 
-        protected List<Vector2> lastLocalControlPoints = new List<Vector2>();
+        protected List<Vector2> lastLocalControlPoints = new();
 
         protected override void UpdateRenderPoints()
         {
@@ -83,6 +92,7 @@ namespace Emilia.Node.Editor
 
             renderPoints_Internals.Clear();
 
+            //当Orientation为Custom的处理
             if (inputEditorOrientation == EditorOrientation.Custom || outputEditorOrientation == EditorOrientation.Custom)
             {
                 renderPoints_Internals.Add(p1);
@@ -195,7 +205,7 @@ namespace Emilia.Node.Editor
         protected EdgeCornerSweepValues GetCornerSweepValues(
             Vector2 p1, Vector2 cornerPoint, Vector2 p2, float diameter, Direction closestPortDirection)
         {
-            EdgeCornerSweepValues corner = new EdgeCornerSweepValues();
+            EdgeCornerSweepValues corner = new();
 
             corner.radius = diameter / 2;
 
@@ -296,9 +306,6 @@ namespace Emilia.Node.Editor
             }
         }
 
-        protected static bool Approximately(Vector2 v1, Vector2 v2)
-        {
-            return Mathf.Approximately(v1.x, v2.x) && Mathf.Approximately(v1.y, v2.y);
-        }
+        protected static bool Approximately(Vector2 v1, Vector2 v2) => Mathf.Approximately(v1.x, v2.x) && Mathf.Approximately(v1.y, v2.y);
     }
 }

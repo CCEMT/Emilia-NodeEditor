@@ -5,6 +5,9 @@ using Emilia.Node.Editor;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 工具栏按钮特性处理
+    /// </summary>
     public class ButtonToolbarAttributeHandle : ToolbarViewControlAttributeHandle
     {
         public override void OnHandle(ToolbarView toolbarView, EditorGraphView editorGraphView)
@@ -20,7 +23,7 @@ namespace Emilia.Node.Universal.Editor
                 if (buttonToolbarAttribute == null) continue;
                 Action action = Delegate.CreateDelegate(typeof(Action), methodInfo) as Action;
                 if (action == null) return;
-                ButtonToolbarViewControl buttonToolbarViewControl = new ButtonToolbarViewControl(buttonToolbarAttribute.displayName, action);
+                ButtonToolbarViewControl buttonToolbarViewControl = new(buttonToolbarAttribute.displayName, action);
                 toolbarView.AddControl(buttonToolbarViewControl, buttonToolbarAttribute.position);
             }
         }

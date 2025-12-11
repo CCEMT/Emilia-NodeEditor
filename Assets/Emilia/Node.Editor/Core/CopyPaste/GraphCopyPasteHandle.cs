@@ -4,6 +4,9 @@ using UnityEditor.Experimental.GraphView;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// Graph拷贝粘贴自定义处理器
+    /// </summary>
     [EditorHandleGenerate]
     public abstract class GraphCopyPasteHandle
     {

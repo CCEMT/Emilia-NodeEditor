@@ -1,5 +1,8 @@
 ﻿namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 节点缓存数据结构
+    /// </summary>
     public class NodeCache
     {
         /// <summary>

@@ -1,5 +1,8 @@
 ﻿namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 方向
+    /// </summary>
     public enum EditorOrientation
     {
         /// <summary>

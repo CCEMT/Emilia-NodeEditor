@@ -2,6 +2,9 @@
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 本地设置自定义处理器
+    /// </summary>
     [EditorHandleGenerate]
     public abstract class GraphLocalSettingHandle
     {

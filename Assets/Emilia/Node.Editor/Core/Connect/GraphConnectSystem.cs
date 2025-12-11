@@ -8,6 +8,9 @@ using Object = UnityEngine.Object;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// Graph的连接系统
+    /// </summary>
     public class GraphConnectSystem : BasicGraphViewModule
     {
         private ConnectSystemHandle handle;

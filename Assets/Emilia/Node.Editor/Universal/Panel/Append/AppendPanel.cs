@@ -9,9 +9,12 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 可附加面板
+    /// </summary>
     public class AppendPanel : GraphPanel
     {
-        struct AppendPanelInfo : IEquatable<AppendPanelInfo>
+        protected struct AppendPanelInfo : IEquatable<AppendPanelInfo>
         {
             public IGraphPanel graphPanel;
             public string displayName;
@@ -21,13 +24,20 @@ namespace Emilia.Node.Universal.Editor
             public override int GetHashCode() => HashCode.Combine(this.graphPanel, this.displayName);
         }
 
+        /// <summary>
+        /// 左边距
+        /// </summary>
         public float leftMargin = 5;
+        
+        /// <summary>
+        /// 右边距
+        /// </summary>
         public float rightMargin = 5f;
 
-        private IGraphPanel selectedPanel;
-        private List<AppendPanelInfo> graphPanels = new List<AppendPanelInfo>();
+        protected IGraphPanel selectedPanel;
+        protected List<AppendPanelInfo> graphPanels = new();
 
-        private IMGUIContainer toggleContainer;
+        protected IMGUIContainer toggleContainer;
 
         public AppendPanel()
         {
@@ -41,18 +51,24 @@ namespace Emilia.Node.Universal.Editor
             RegisterCallback<GeometryChangedEvent>((_) => { this.toggleContainer.style.width = layout.width; });
         }
 
+        /// <summary>
+        /// 设置边距
+        /// </summary>
         public void SetMargins(float size)
         {
             this.leftMargin = size;
             this.rightMargin = size;
         }
 
+        /// <summary>
+        /// 添加面板
+        /// </summary>
         public void AddGraphPanel<T>(string displayName) where T : IGraphPanel
         {
             IGraphPanel graphPanel = ReflectUtility.CreateInstance<T>() as IGraphPanel;
             if (graphPanel == null) return;
 
-            AppendPanelInfo panelInfo = new AppendPanelInfo {
+            AppendPanelInfo panelInfo = new() {
                 graphPanel = graphPanel,
                 displayName = displayName
             };
@@ -63,6 +79,9 @@ namespace Emilia.Node.Universal.Editor
 
         }
 
+        /// <summary>
+        /// 移除面板
+        /// </summary>
         public void RemoveGraphPanel<T>() where T : IGraphPanel
         {
             IGraphPanel graphPanel = ReflectUtility.CreateInstance<T>();
@@ -84,7 +103,7 @@ namespace Emilia.Node.Universal.Editor
 
         }
 
-        private void SwitchPanel(IGraphPanel panel)
+        protected void SwitchPanel(IGraphPanel panel)
         {
             if (this.selectedPanel != null)
             {
@@ -98,7 +117,7 @@ namespace Emilia.Node.Universal.Editor
             selectedPanel = panel;
         }
 
-        private void OnToggleGUI()
+        protected void OnToggleGUI()
         {
             GUILayout.BeginHorizontal(EditorStyles.toolbar);
 

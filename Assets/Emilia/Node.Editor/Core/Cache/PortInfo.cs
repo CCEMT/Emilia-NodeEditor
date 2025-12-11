@@ -2,6 +2,9 @@
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 端口缓存的数据结构
+    /// </summary>
     public struct PortInfo
     {
         /// <summary>
@@ -18,7 +21,7 @@ namespace Emilia.Node.Editor
         /// 端口Id
         /// </summary>
         public string portId;
-        
+
         /// <summary>
         /// 端口名称
         /// </summary>

@@ -5,6 +5,9 @@ using Emilia.Node.Editor;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 工具栏自定义GUI特性处理
+    /// </summary>
     public class CustomToolbarAttributeHandle : ToolbarViewControlAttributeHandle
     {
         public override void OnHandle(ToolbarView toolbarView, EditorGraphView editorGraphView)
@@ -20,7 +23,7 @@ namespace Emilia.Node.Universal.Editor
                 if (customToolbarAttribute == null) continue;
                 Action action = Delegate.CreateDelegate(typeof(Action), methodInfo) as Action;
                 if (action == null) return;
-                CustomToolbarViewControl customToolbarViewControl = new CustomToolbarViewControl(action);
+                CustomToolbarViewControl customToolbarViewControl = new(action);
                 toolbarView.AddControl(customToolbarViewControl, customToolbarAttribute.position);
             }
         }

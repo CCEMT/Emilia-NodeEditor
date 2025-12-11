@@ -13,35 +13,81 @@ using Object = UnityEngine.Object;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// Node表现元素
+    /// </summary>
     public abstract class EditorNodeView : NodeView, IEditorNodeView
     {
-        protected List<IEditorPortView> _portViews = new List<IEditorPortView>();
-        protected Dictionary<string, IEditorPortView> _portViewMap = new Dictionary<string, IEditorPortView>();
+        protected List<IEditorPortView> _portViews = new();
+        protected Dictionary<string, IEditorPortView> _portViewMap = new();
 
-        protected Dictionary<string, EditorNodeInputPortEditInfo> inputEditInfos = new Dictionary<string, EditorNodeInputPortEditInfo>();
-        protected Dictionary<string, VisualElement> inputEditElements = new Dictionary<string, VisualElement>();
-        protected Dictionary<string, InspectorPropertyField> inputFields = new Dictionary<string, InspectorPropertyField>();
+        protected Dictionary<string, EditorNodeInputPortEditInfo> inputEditInfos = new();
+        protected Dictionary<string, VisualElement> inputEditElements = new();
+        protected Dictionary<string, InspectorPropertyField> inputFields = new();
 
         public EditorNodeAsset asset { get; private set; }
 
         public EditorGraphView graphView { get; private set; }
 
+        /// <summary>
+        /// 底层容器
+        /// </summary>
         public VisualElement bottomLayerContainer { get; protected set; }
+
+        /// <summary>
+        /// 顶层容器
+        /// </summary>
         public VisualElement topLayerContainer { get; protected set; }
 
+        /// <summary>
+        /// 顶部节点容器
+        /// </summary>
         public VisualElement nodeTopContainer { get; protected set; }
+
+        /// <summary>
+        /// 底部节点容器
+        /// </summary>
         public VisualElement nodeBottomContainer { get; protected set; }
 
+        /// <summary>
+        /// 底部端口容器
+        /// </summary>
         public VisualElement portBottomContainer { get; protected set; }
+
+        /// <summary>
+        /// 顶部端口容器
+        /// </summary>
         public VisualElement portTopContainer { get; protected set; }
+
+        /// <summary>
+        /// 底部节点端口容器
+        /// </summary>
         public VisualElement portNodeBottomContainer { get; protected set; }
+
+        /// <summary>
+        /// 顶部节点端口容器
+        /// </summary>
         public VisualElement portNodeTopContainer { get; protected set; }
 
+        /// <summary>
+        /// Input端口编辑控件容器
+        /// </summary>
         public VisualElement inputEditContainer { get; protected set; }
 
+        /// <summary>
+        /// 资源Inspector容器
+        /// </summary>
+        public VisualElement assetContainer { get; protected set; }
+
+        /// <summary>
+        /// 标题
+        /// </summary>
         public Label titleLabel { get; protected set; }
 
-        public virtual Color topicColor { get; private set; } = Color.black;
+        /// <summary>
+        /// 主题颜色
+        /// </summary>
+        public virtual Color topicColor { get; protected set; } = Color.black;
 
         public virtual GraphElement element => this;
         public IReadOnlyList<IEditorPortView> portViews => this._portViews;
@@ -50,7 +96,25 @@ namespace Emilia.Node.Editor
         protected virtual bool editInNode => false;
 
         protected virtual bool canDelete => true;
+        protected virtual bool canCollapsible => true;
         protected virtual string styleFilePath { get; } = string.Empty;
+
+        public override bool expanded
+        {
+            get => asset?.isExpanded ?? false;
+            set
+            {
+                if (capabilities.HasFlag(Capabilities.Collapsible) == false) return;
+                if (asset == null) return;
+
+                RegisterCompleteObjectUndo("Graph SetExpanded");
+
+                base.expanded = value;
+                asset.isExpanded = value;
+
+                RebuildPortView();
+            }
+        }
 
         public virtual void Initialize(EditorGraphView graphView, EditorNodeAsset asset)
         {
@@ -59,11 +123,11 @@ namespace Emilia.Node.Editor
 
             InitializeNodeView();
             RebuildPortView();
-            InitializeExpandPort();
         }
 
         protected virtual void InitializeNodeView()
         {
+            // 移除默认的contents容器，构建自定义UI结构
             VisualElement contents = this.Q("contents");
             contents.RemoveFromHierarchy();
 
@@ -129,12 +193,6 @@ namespace Emilia.Node.Editor
 
             titleLabel = this.Q<Label>("title-label");
 
-            if (editInNode)
-            {
-                IMGUIContainer assetContainer = new IMGUIContainer(() => asset.propertyTree?.Draw());
-                topLayerContainer.Add(assetContainer);
-            }
-
             if (string.IsNullOrEmpty(styleFilePath) == false)
             {
                 StyleSheet styleSheet = ResourceUtility.LoadResource<StyleSheet>(styleFilePath);
@@ -142,38 +200,62 @@ namespace Emilia.Node.Editor
             }
 
             if (canDelete == false) capabilities &= ~Capabilities.Deletable;
+            if (canCollapsible) capabilities |= Capabilities.Collapsible;
 
             SetPositionNoUndo(asset.position);
             SetColor(topicColor);
+            SetExpandedNoUndo(asset.isExpanded);
         }
 
         protected virtual void RebuildPortView()
         {
+            // 清理旧数据
+            inputEditInfos.Clear();
+            RemovePortViews();
+
+            // 收集所有静态端口资产
             List<EditorPortInfo> portInfos = CollectStaticPortAssets();
             portInfos.Sort((a, b) => a.order.CompareTo(b.order));
 
-            var categorizedPorts = new Dictionary<(EditorPortDirection, EditorOrientation), List<EditorPortInfo>> {
-                {(EditorPortDirection.Input, EditorOrientation.Horizontal), new List<EditorPortInfo>()},
-                {(EditorPortDirection.Input, EditorOrientation.Vertical), new List<EditorPortInfo>()},
-                {(EditorPortDirection.Input, EditorOrientation.Custom), new List<EditorPortInfo>()},
-                {(EditorPortDirection.Output, EditorOrientation.Horizontal), new List<EditorPortInfo>()},
-                {(EditorPortDirection.Output, EditorOrientation.Vertical), new List<EditorPortInfo>()},
-                {(EditorPortDirection.Output, EditorOrientation.Custom), new List<EditorPortInfo>()},
-                {(EditorPortDirection.Any, EditorOrientation.Horizontal), new List<EditorPortInfo>()},
-                {(EditorPortDirection.Any, EditorOrientation.Vertical), new List<EditorPortInfo>()},
-                {(EditorPortDirection.Any, EditorOrientation.Custom), new List<EditorPortInfo>()}
-            };
+            // key: (端口方向, 端口朝向), value: 该类别下的端口列表
+            Dictionary<(EditorPortDirection, EditorOrientation), List<EditorPortInfo>> categorizedPorts = new();
 
             for (var i = 0; i < portInfos.Count; i++)
             {
                 EditorPortInfo info = portInfos[i];
+
+                bool connected = graphView.graphAsset.GetEdges(asset.id, info.id).Any();
+                if (connected == false && expanded) continue;
+
+                // 构建分类key：端口方向和朝向的组合
                 var key = (info.direction, info.orientation);
-                if (categorizedPorts.ContainsKey(key)) categorizedPorts[key].Add(info);
+
+                if (categorizedPorts.TryGetValue(key, out List<EditorPortInfo> portInfosInCategory) == false)
+                {
+                    portInfosInCategory = new List<EditorPortInfo>();
+                    categorizedPorts[key] = portInfosInCategory;
+                }
+
+                // 将端口信息添加到对应的分类列表中
+                categorizedPorts[key].Add(info);
             }
 
+            // 遍历所有分类，为每个分类添加端口视图
             foreach (var category in categorizedPorts) AddPortViews(category.Value);
 
-            RemoveUnusedPortViews(portInfos);
+            // 刷新状态
+            SetEditInNodeDisplay(editInNode && expanded == false);
+            RebuildExpandPort();
+        }
+
+        private void RemovePortViews()
+        {
+            int removeCount = _portViews.Count;
+            for (int i = removeCount - 1; i >= 0; i--)
+            {
+                IEditorPortView portView = _portViews[i];
+                RemovePortView(portView);
+            }
         }
 
         private void AddPortViews(List<EditorPortInfo> portInfos)
@@ -181,16 +263,7 @@ namespace Emilia.Node.Editor
             for (int i = 0; i < portInfos.Count; i++)
             {
                 EditorPortInfo info = portInfos[i];
-                if (_portViewMap.ContainsKey(info.id) == false) AddPortView(i, info);
-            }
-        }
-
-        private void RemoveUnusedPortViews(List<EditorPortInfo> portInfos)
-        {
-            for (int i = _portViews.Count - 1; i >= 0; i--)
-            {
-                IEditorPortView portView = _portViews[i];
-                if (portInfos.All(p => p.id != portView.info.id)) RemovePortView(portView);
+                AddPortView(i, info);
             }
         }
 
@@ -231,6 +304,13 @@ namespace Emilia.Node.Editor
             portView.onConnected -= OnPortConnected;
             portView.OnDisconnected -= OnPortDisconnected;
 
+            if (inputEditElements.TryGetValue(portView.info.id, out VisualElement editElement)) editElement.RemoveFromHierarchy();
+            if (inputFields.TryGetValue(portView.info.id, out InspectorPropertyField field)) field.RemoveFromHierarchy();
+
+            inputEditInfos.Remove(portView.info.id);
+            inputEditElements.Remove(portView.info.id);
+            inputFields.Remove(portView.info.id);
+
             this._portViews.Remove(portView);
             this._portViewMap.Remove(portView.info.id);
 
@@ -255,7 +335,7 @@ namespace Emilia.Node.Editor
             if (inputFields.TryGetValue(editorPortView.info.id, out InspectorPropertyField field)) field.style.display = DisplayStyle.Flex;
         }
 
-        protected void InitializeExpandPort()
+        protected void RebuildExpandPort()
         {
             int amount = portViews.Count;
             for (int i = 0; i < amount; i++)
@@ -265,7 +345,7 @@ namespace Emilia.Node.Editor
 
                 if (inputEditInfos.TryGetValue(portView.info.id, out EditorNodeInputPortEditInfo info))
                 {
-                    AddInputEditContainer(info.portName, info.fieldPath, info.forceImGUIDraw);
+                    AddInputEditContainer(info.portId, info.fieldPath, info.forceImGUIDraw);
                     continue;
                 }
 
@@ -303,18 +383,18 @@ namespace Emilia.Node.Editor
             return top;
         }
 
-        protected void AddInputEditContainer(string portName, string fieldPath, bool forceImGUIDraw = false)
+        protected void AddInputEditContainer(string portId, string fieldPath, bool forceImGUIDraw = false)
         {
-            VisualElement editContainer = new VisualElement();
+            VisualElement editContainer = new();
             editContainer.name = "edit-container";
 
             InspectorProperty inspectorProperty = asset.propertyTree.GetPropertyAtPath(fieldPath);
-            InspectorPropertyField inspectorPropertyField = new InspectorPropertyField(inspectorProperty, forceImGUIDraw, false);
+            InspectorPropertyField inspectorPropertyField = new(inspectorProperty, forceImGUIDraw, false);
             inspectorPropertyField.AddToClassList("port-input-element");
             editContainer.Add(inspectorPropertyField);
 
             editContainer.RegisterCallback<GeometryChangedEvent>(_ => {
-                IEditorPortView portView = this._portViewMap.GetValueOrDefault(portName);
+                IEditorPortView portView = this._portViewMap.GetValueOrDefault(portId);
                 if (portView == null) return;
                 float editHeight = editContainer.resolvedStyle.height + editContainer.resolvedStyle.marginTop + editContainer.resolvedStyle.marginBottom;
                 float portHeight = portView.portElement.layout.height;
@@ -325,23 +405,24 @@ namespace Emilia.Node.Editor
 
             inputEditContainer.Add(editContainer);
 
-            inputEditElements[portName] = editContainer;
-            inputFields[portName] = inspectorPropertyField;
+            inputEditElements[portId] = editContainer;
+            inputFields[portId] = inspectorPropertyField;
         }
 
-        protected void AddEmptyInputEditContainer(string portName)
+        protected void AddEmptyInputEditContainer(string portId)
         {
-            VisualElement editContainer = new VisualElement();
+            VisualElement editContainer = new();
             editContainer.name = "edit-container";
             editContainer.AddToClassList("empty");
 
             inputEditContainer.Add(editContainer);
-            inputEditElements[portName] = editContainer;
+            inputEditElements[portId] = editContainer;
         }
 
         public virtual void OnValueChanged(bool isSilent = false)
         {
             SetPositionNoUndo(asset.position);
+            SetExpandedNoUndo(asset.isExpanded, true);
             foreach (InspectorPropertyField value in inputFields.Values) value.Update();
 
             if (isSilent == false) graphView.graphSave.SetDirty();
@@ -369,6 +450,9 @@ namespace Emilia.Node.Editor
             }
         }
 
+        /// <summary>
+        /// 设置位置
+        /// </summary>
         public override void SetPosition(Rect newPos)
         {
             if (capabilities.HasFlag(Capabilities.Movable) == false) return;
@@ -377,6 +461,9 @@ namespace Emilia.Node.Editor
             asset.position = newPos;
         }
 
+        /// <summary>
+        /// 设置位置（无撤销）
+        /// </summary>
         public void SetPositionNoUndo(Rect newPos)
         {
             if (capabilities.HasFlag(Capabilities.Movable) == false) return;
@@ -385,9 +472,41 @@ namespace Emilia.Node.Editor
         }
 
         /// <summary>
+        /// 设置展开（无撤销）
+        /// </summary>
+        public void SetExpandedNoUndo(bool expanded, bool isRebuild = false)
+        {
+            if (capabilities.HasFlag(Capabilities.Collapsible) == false) return;
+
+            bool isChanged = expanded != base.expanded;
+
+            base.expanded = expanded;
+            asset.isExpanded = expanded;
+
+            if (isRebuild && isChanged) RebuildPortView();
+        }
+
+        /// <summary>
+        /// 设置资源Inspector的显示状态
+        /// </summary>
+        public virtual void SetEditInNodeDisplay(bool display)
+        {
+            if (assetContainer != null)
+            {
+                assetContainer.RemoveFromHierarchy();
+                assetContainer = null;
+            }
+
+            if (display == false) return;
+
+            assetContainer = new IMGUIContainer(() => asset.propertyTree?.Draw());
+            topLayerContainer.Add(assetContainer);
+        }
+
+        /// <summary>
         /// 设置节点主题颜色
         /// </summary>
-        public void SetColor(Color color)
+        public virtual void SetColor(Color color)
         {
             topicColor = color;
 
@@ -409,6 +528,7 @@ namespace Emilia.Node.Editor
 
         public virtual void Delete()
         {
+            if (capabilities.HasFlag(Capabilities.Deletable) == false) return;
             graphView.nodeSystem.DeleteNode(this);
         }
 
@@ -435,7 +555,7 @@ namespace Emilia.Node.Editor
 
         public virtual IEnumerable<Object> GetSelectedObjects()
         {
-            if (editInNode) yield break;
+            if (editInNode && expanded == false) yield break;
             if (asset != null) yield return asset;
         }
 

@@ -8,15 +8,29 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 工具栏面板
+    /// </summary>
     public class ToolbarView : GraphPanel
     {
-        private float _leftMargin = 5;
-        private float _rightMargin = 5f;
+        protected float _leftMargin = 5;
+        protected float _rightMargin = 5f;
 
-        private Dictionary<ToolbarViewControlPosition, List<IToolbarViewControl>> controls = new Dictionary<ToolbarViewControlPosition, List<IToolbarViewControl>>();
+        protected Dictionary<ToolbarViewControlPosition, List<IToolbarViewControl>> controls = new();
+
+        /// <summary>
+        /// 方向
+        /// </summary>
         public ToolbarViewOrientation orientation { get; set; } = ToolbarViewOrientation.Horizontal;
 
+        /// <summary>
+        /// 左边距
+        /// </summary>
         public float leftMargin => _leftMargin;
+
+        /// <summary>
+        /// 右边距
+        /// </summary>
         public float rightMargin => _rightMargin;
 
         public ToolbarView()
@@ -33,7 +47,7 @@ namespace Emilia.Node.Universal.Editor
             InitAttributeControls();
 
             if (parentView != null) parentView.canResizable = false;
-            
+
             EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
             EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
         }
@@ -54,7 +68,7 @@ namespace Emilia.Node.Universal.Editor
             this._rightMargin = size;
         }
 
-        private void OnPlayModeStateChanged(PlayModeStateChange playModeStateChange)
+        protected void OnPlayModeStateChanged(PlayModeStateChange playModeStateChange)
         {
             ReInitControls();
         }

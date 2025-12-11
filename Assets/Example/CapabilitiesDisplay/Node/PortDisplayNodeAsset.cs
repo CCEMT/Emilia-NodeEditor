@@ -29,9 +29,9 @@ namespace Example
 
         public override List<EditorPortInfo> CollectStaticPortAssets()
         {
-            List<EditorPortInfo> portInfos = new List<EditorPortInfo>();
+            List<EditorPortInfo> portInfos = new();
 
-            EditorPortInfo leftIntPortInfo = new EditorPortInfo();
+            EditorPortInfo leftIntPortInfo = new();
             leftIntPortInfo.id = "leftIntPortInfo";
             leftIntPortInfo.displayName = "左端口(int)";
             leftIntPortInfo.tips = "这个一个测试端口int";
@@ -45,7 +45,7 @@ namespace Example
 
             this.inputEditInfos.Add("leftIntPortInfo", new EditorNodeInputPortEditInfo("leftIntPortInfo", "leftIntPortValue"));
 
-            EditorPortInfo leftStringPortInfo = new EditorPortInfo();
+            EditorPortInfo leftStringPortInfo = new();
             leftStringPortInfo.id = "leftStringPortInfo";
             leftStringPortInfo.displayName = "左端口(string)";
             leftStringPortInfo.tips = "这个一个测试端口string";
@@ -59,7 +59,7 @@ namespace Example
 
             this.inputEditInfos.Add("leftStringPortInfo", new EditorNodeInputPortEditInfo("leftStringPortInfo", "leftStringPortValue"));
 
-            EditorPortInfo rightIntPortInfo = new EditorPortInfo();
+            EditorPortInfo rightIntPortInfo = new();
             rightIntPortInfo.id = "rightIntPortInfo";
             rightIntPortInfo.displayName = "右端口(int)";
             rightIntPortInfo.portType = typeof(int);
@@ -70,7 +70,7 @@ namespace Example
 
             portInfos.Add(rightIntPortInfo);
 
-            EditorPortInfo rightStringPortInfo = new EditorPortInfo();
+            EditorPortInfo rightStringPortInfo = new();
             rightStringPortInfo.id = "rightStringPortInfo";
             rightStringPortInfo.displayName = "右端口(string)";
             rightStringPortInfo.portType = typeof(string);
@@ -81,7 +81,7 @@ namespace Example
 
             portInfos.Add(rightStringPortInfo);
 
-            EditorPortInfo topIntPortInfo = new EditorPortInfo();
+            EditorPortInfo topIntPortInfo = new();
             topIntPortInfo.id = "topIntPortInfo";
             topIntPortInfo.displayName = "上端口(int)";
             topIntPortInfo.portType = typeof(int);
@@ -92,7 +92,7 @@ namespace Example
 
             portInfos.Add(topIntPortInfo);
 
-            EditorPortInfo topStringPortInfo = new EditorPortInfo();
+            EditorPortInfo topStringPortInfo = new();
             topStringPortInfo.id = "topStringPortInfo";
             topStringPortInfo.displayName = "上端口(string)";
             topStringPortInfo.portType = typeof(string);
@@ -103,7 +103,7 @@ namespace Example
 
             portInfos.Add(topStringPortInfo);
 
-            EditorPortInfo bottomIntPortInfo = new EditorPortInfo();
+            EditorPortInfo bottomIntPortInfo = new();
             bottomIntPortInfo.id = "bottomIntPortInfo";
             bottomIntPortInfo.displayName = "下端口(int)";
             bottomIntPortInfo.portType = typeof(int);
@@ -114,7 +114,7 @@ namespace Example
 
             portInfos.Add(bottomIntPortInfo);
 
-            EditorPortInfo bottomStringPortInfo = new EditorPortInfo();
+            EditorPortInfo bottomStringPortInfo = new();
             bottomStringPortInfo.id = "bottomStringPortInfo";
             bottomStringPortInfo.displayName = "下端口(string)";
             bottomStringPortInfo.portType = typeof(string);

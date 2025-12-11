@@ -6,6 +6,9 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 通用拖拽处理
+    /// </summary>
     [EditorHandle(typeof(EditorUniversalGraphAsset))]
     public class UniversalDragAndDropHandle : GraphDragAndDropHandle
     {
@@ -19,7 +22,7 @@ namespace Emilia.Node.Universal.Editor
             {
                 Vector2 mousePosition = evt.mousePosition;
                 Vector2 graphMousePosition = graphView.contentViewContainer.WorldToLocal(mousePosition);
-                
+
                 graphView.nodeSystem.CreateNode(createNodeHandle.editorNodeType, graphMousePosition, createNodeHandle.nodeData);
             }
         }

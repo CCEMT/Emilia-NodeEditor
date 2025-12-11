@@ -37,13 +37,13 @@ namespace Emilia.Node.Editor
                 }
             }
         }
-        
+
         /// <summary>
         /// 获取Unity的子资产
         /// </summary>
         public virtual List<Object> GetChildren()
         {
-            List<Object> assets = new List<Object>();
+            List<Object> assets = new();
 
             for (var i = 0; i < this._nodes.Count; i++)
             {

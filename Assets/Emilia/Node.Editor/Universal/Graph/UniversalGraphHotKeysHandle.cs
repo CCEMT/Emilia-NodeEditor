@@ -1,12 +1,16 @@
-﻿using Emilia.Kit;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Emilia.Kit;
 using Emilia.Node.Editor;
-using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 通用快捷键处理
+    /// </summary>
     [EditorHandle(typeof(EditorUniversalGraphAsset))]
     public class UniversalGraphHotKeysHandle : GraphHotKeysHandle
     {
@@ -19,10 +23,27 @@ namespace Emilia.Node.Universal.Editor
                 evt.StopPropagation();
             }
 
+            if (evt.keyCode == KeyCode.E && evt.actionKey)
+            {
+                SwitchNodeExpand(graphView);
+                evt.StopPropagation();
+            }
+
             OnKeyDownShortcut_Hook(graphView, evt);
         }
 
-        private void OnKeyDownShortcut_Hook(EditorGraphView graphView, KeyDownEvent evt)
+        protected void SwitchNodeExpand(EditorGraphView graphView)
+        {
+            List<IEditorNodeView> editorNodeViews = graphView.graphSelected.selected.OfType<IEditorNodeView>().ToList();
+            if (editorNodeViews.Count == 0) return;
+
+            bool allCollapsed = editorNodeViews.All(node => node.expanded == false);
+            bool targetState = allCollapsed;
+
+            foreach (IEditorNodeView node in editorNodeViews) node.expanded = targetState;
+        }
+
+        protected void OnKeyDownShortcut_Hook(EditorGraphView graphView, KeyDownEvent evt)
         {
             if (! graphView.isReframable || graphView.panel.GetCapturingElement(PointerId.mousePointerId) != null) return;
 

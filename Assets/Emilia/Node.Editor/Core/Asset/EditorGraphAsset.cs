@@ -9,29 +9,32 @@ using UnityEngine;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// Graph编辑器资产
+    /// </summary>
     [Serializable]
     public partial class EditorGraphAsset : SerializedScriptableObject
     {
-        [SerializeField, HideInInspector]
+        [SerializeField, ReadOnly]
         private string _id;
 
         [NonSerialized, OdinSerialize, HideInInspector]
-        private List<EditorNodeAsset> _nodes = new List<EditorNodeAsset>();
+        private List<EditorNodeAsset> _nodes = new();
 
         [NonSerialized, OdinSerialize, HideInInspector]
-        private List<EditorEdgeAsset> _edges = new List<EditorEdgeAsset>();
+        private List<EditorEdgeAsset> _edges = new();
 
         [NonSerialized, OdinSerialize, HideInInspector]
-        private List<EditorItemAsset> _items = new List<EditorItemAsset>();
+        private List<EditorItemAsset> _items = new();
 
         [NonSerialized, OdinSerialize, HideInInspector]
-        private Dictionary<string, EditorNodeAsset> _nodeMap = new Dictionary<string, EditorNodeAsset>();
+        private Dictionary<string, EditorNodeAsset> _nodeMap = new();
 
         [NonSerialized, OdinSerialize, HideInInspector]
-        private Dictionary<string, EditorEdgeAsset> _edgeMap = new Dictionary<string, EditorEdgeAsset>();
+        private Dictionary<string, EditorEdgeAsset> _edgeMap = new();
 
         [NonSerialized, OdinSerialize, HideInInspector]
-        private Dictionary<string, EditorItemAsset> _itemMap = new Dictionary<string, EditorItemAsset>();
+        private Dictionary<string, EditorItemAsset> _itemMap = new();
 
         [NonSerialized]
         private PropertyTree _propertyTree;
@@ -86,7 +89,14 @@ namespace Emilia.Node.Editor
         /// </summary>
         public IReadOnlyDictionary<string, EditorItemAsset> itemMap => _itemMap;
 
-        public PropertyTree propertyTree => _propertyTree;
+        public PropertyTree propertyTree
+        {
+            get
+            {
+                if (_propertyTree == null) _propertyTree = PropertyTree.Create(this);
+                return _propertyTree;
+            }
+        }
 
         protected virtual void Reset()
         {
@@ -99,20 +109,6 @@ namespace Emilia.Node.Editor
             AssetDatabase.SaveAssetIfDirty(this);
         }
 
-        public void RepetitionId()
-        {
-            EditorGraphAsset[] graphAssets = EditorAssetKit.GetEditorResources<EditorGraphAsset>();
-            int count = graphAssets.Length;
-            for (int i = 0; i < count; i++)
-            {
-                EditorGraphAsset graphAsset = graphAssets[i];
-                if (graphAsset == this || graphAsset == null) continue;
-                if (graphAsset._id != this._id) continue;
-                ResetId();
-                break;
-            }
-        }
-
         public override string ToString()
         {
             if (this == null) return "Null";
@@ -122,14 +118,10 @@ namespace Emilia.Node.Editor
         protected virtual void OnValidate()
         {
             if (string.IsNullOrEmpty(this._id)) ResetId();
-            else RepetitionId();
         }
 
         protected virtual void OnEnable()
         {
-            if (_propertyTree != null) _propertyTree.Dispose();
-            _propertyTree = PropertyTree.Create(this);
-
             if (string.IsNullOrEmpty(this._id)) ResetId();
         }
 

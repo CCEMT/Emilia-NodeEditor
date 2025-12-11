@@ -4,6 +4,9 @@ using Emilia.Kit;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// Port拷贝粘贴Pack接口
+    /// </summary>
     public interface IPortCopyPastePack : ICopyPastePack
     {
         /// <summary>

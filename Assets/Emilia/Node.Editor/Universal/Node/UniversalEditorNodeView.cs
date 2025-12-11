@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using Emilia.Kit;
 using Emilia.Node.Attributes;
 using Emilia.Node.Editor;
 using Sirenix.Utilities;
@@ -11,47 +10,42 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 通用节点表现元素实现
+    /// </summary>
     [EditorNode(typeof(UniversalNodeAsset))]
     public class UniversalEditorNodeView : EditorNodeView
     {
-        private EditorCoroutine focusCoroutine;
-        private VisualElement focusBorder;
+        protected EditorCoroutine focusCoroutine;
+        protected VisualElement focusBorder;
 
-        private UniversalNodeAsset _universalNodeAsset;
+        protected UniversalNodeAsset _universalNodeAsset;
 
-        private VisualElement horizontalContainer;
-        private VisualElement horizontalInputContainer;
-        private VisualElement horizontalOutputContainer;
+        protected VisualElement horizontalContainer;
+        protected VisualElement horizontalInputContainer;
+        protected VisualElement horizontalOutputContainer;
 
-        private VisualElement verticalInputContainer;
-        private VisualElement verticalOutputContainer;
+        protected VisualElement verticalInputContainer;
+        protected VisualElement verticalOutputContainer;
 
-        private TextField titleTextField;
+        protected TextField titleTextField;
 
-        private NodeMessageButtonElement messageButtonElement;
-        private NodeMessageContainer messageContainer;
-        private List<NodeMessageElement> messageElements = new List<NodeMessageElement>();
+        protected NodeMessageButtonElement messageButtonElement;
+        protected NodeMessageContainer messageContainer;
+        protected List<NodeMessageElement> messageElements = new();
 
-        private Dictionary<string, NodeTipsElement> tipsElements = new Dictionary<string, NodeTipsElement>();
+        protected Dictionary<string, NodeTipsElement> tipsElements = new();
 
         protected NodeDuplicateDragger duplicateDragger;
         protected NodeInsertDragger insertDragger;
 
+        /// <summary>
+        /// 可以展开
+        /// </summary>
         public virtual bool canExpanded => true;
 
-        public override bool expanded
-        {
-            get => this._universalNodeAsset == null || this._universalNodeAsset.isFold;
-            set
-            {
-                base.expanded = value;
-                _universalNodeAsset.isFold = value;
-                UpdateFoldState();
-            }
-        }
-
         protected virtual bool canRename => false;
-        protected virtual string iconPath => null;
+        protected virtual Texture2D icon => null;
         protected override string styleFilePath => "Node/Styles/UniversalEditorNodeView.uss";
 
         public override void Initialize(EditorGraphView graphView, EditorNodeAsset asset)
@@ -62,7 +56,6 @@ namespace Emilia.Node.Universal.Editor
             if ((capabilities & Capabilities.Renamable) != 0) InitializeRenamableTitle();
 
             UpdateTitle();
-            UpdateFoldState();
 
             duplicateDragger = new NodeDuplicateDragger();
             this.insertDragger = new NodeInsertDragger();
@@ -99,7 +92,7 @@ namespace Emilia.Node.Universal.Editor
             SetTooltip(tipsAttribute.tips);
         }
 
-        private void InitializeExpandButton()
+        protected void InitializeExpandButton()
         {
             if (canExpanded) return;
 
@@ -107,16 +100,17 @@ namespace Emilia.Node.Universal.Editor
             expandButton.style.display = DisplayStyle.None;
         }
 
-        private void InitializeIcon()
+        protected void InitializeIcon()
         {
-            if (string.IsNullOrEmpty(iconPath)) return;
-            Texture2D icon = ResourceUtility.LoadResource<Texture2D>(styleFilePath);
-            VisualElement iconElement = new VisualElement();
+            if (icon == null) return;
+            VisualElement iconElement = new();
+            iconElement.name = "title-icon";
+
             iconElement.style.backgroundImage = icon;
             titleContainer.Insert(0, iconElement);
         }
 
-        private void InitializeFocusBorder()
+        protected void InitializeFocusBorder()
         {
             const float borderWidth = 2;
 
@@ -132,7 +126,7 @@ namespace Emilia.Node.Universal.Editor
             Add(focusBorder);
         }
 
-        private void InitializeRenamableTitle()
+        protected void InitializeRenamableTitle()
         {
             this.titleTextField = new TextField();
             titleTextField.style.flexGrow = 1;
@@ -173,7 +167,7 @@ namespace Emilia.Node.Universal.Editor
             }
         }
 
-        private void InitializeMessage()
+        protected void InitializeMessage()
         {
             messageButtonElement = new NodeMessageButtonElement(SwitchMessageContainerState);
             messageButtonElement.style.display = DisplayStyle.None;
@@ -186,7 +180,7 @@ namespace Emilia.Node.Universal.Editor
             topLayerContainer.Add(messageContainer);
         }
 
-        private void SwitchMessageContainerState()
+        protected void SwitchMessageContainerState()
         {
             if (messageContainer.style.display == DisplayStyle.None) messageContainer.style.display = DisplayStyle.Flex;
             else messageContainer.style.display = DisplayStyle.None;
@@ -201,7 +195,7 @@ namespace Emilia.Node.Universal.Editor
         /// <summary>
         /// 更新标题
         /// </summary>
-        public void UpdateTitle()
+        public virtual void UpdateTitle()
         {
             title = this._universalNodeAsset.title;
         }
@@ -232,22 +226,22 @@ namespace Emilia.Node.Universal.Editor
             return portView;
         }
 
-        private void CreateHorizontalContainer()
+        protected void CreateHorizontalContainer()
         {
-            NodeHorizontalContainer nodeHorizontalContainer = new NodeHorizontalContainer();
+            NodeHorizontalContainer nodeHorizontalContainer = new();
             this.horizontalContainer = nodeHorizontalContainer;
             this.horizontalInputContainer = nodeHorizontalContainer.inputContainer;
             this.horizontalOutputContainer = nodeHorizontalContainer.outputContainer;
             portNodeBottomContainer.Add(nodeHorizontalContainer);
         }
 
-        private void CreateVerticalContainer()
+        protected void CreateVerticalContainer()
         {
-            NodeVerticalContainer inputVerticalContainer = new NodeVerticalContainer();
+            NodeVerticalContainer inputVerticalContainer = new();
             this.verticalInputContainer = inputVerticalContainer;
             nodeTopContainer.Add(inputVerticalContainer);
 
-            NodeVerticalContainer outputVerticalContainer = new NodeVerticalContainer();
+            NodeVerticalContainer outputVerticalContainer = new();
             this.verticalOutputContainer = outputVerticalContainer;
             nodeBottomContainer.Add(outputVerticalContainer);
         }
@@ -258,16 +252,11 @@ namespace Emilia.Node.Universal.Editor
         protected virtual void AddCustomPortView(int index, IEditorPortView portView, EditorPortInfo info) { }
 
         /// <summary>
-        /// 更新折叠状态
-        /// </summary>
-        public virtual void UpdateFoldState() { }
-
-        /// <summary>
         /// 添加消息
         /// </summary>
         public NodeMessageElement AddMessage(string message, NodeMessageLevel level)
         {
-            NodeMessageElement nodeMessageElement = new NodeMessageElement();
+            NodeMessageElement nodeMessageElement = new();
             nodeMessageElement.Init(message, level);
 
             nodeMessageElement.onRemove += () => RemoveMessage(nodeMessageElement);
@@ -290,7 +279,7 @@ namespace Emilia.Node.Universal.Editor
             UpdateMessageButtonState();
         }
 
-        private void UpdateMessageButtonState()
+        protected void UpdateMessageButtonState()
         {
             if (this.messageElements.Count == 0) this.messageButtonElement.style.display = DisplayStyle.None;
             else
@@ -302,7 +291,7 @@ namespace Emilia.Node.Universal.Editor
             }
         }
 
-        private NodeMessageLevel GetMaxLevel()
+        protected NodeMessageLevel GetMaxLevel()
         {
             NodeMessageLevel maxLevel = NodeMessageLevel.Info;
             int count = messageElements.Count;
@@ -322,7 +311,7 @@ namespace Emilia.Node.Universal.Editor
         {
             if (tipsElements.ContainsKey(text)) return;
 
-            NodeTipsElement nodeTipsElement = new NodeTipsElement();
+            NodeTipsElement nodeTipsElement = new();
             nodeTipsElement.text = text;
 
             tipsElements[text] = nodeTipsElement;
@@ -379,7 +368,7 @@ namespace Emilia.Node.Universal.Editor
             }
         }
 
-        private IEnumerator OnFadeAway(long timeMs)
+        protected IEnumerator OnFadeAway(long timeMs)
         {
             float time = timeMs / 1000f;
             float startTime = Time.realtimeSinceStartup;

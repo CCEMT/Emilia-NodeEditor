@@ -5,12 +5,15 @@ using Emilia.Kit;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 选择系统
+    /// </summary>
     public class GraphSelected : BasicGraphViewModule
     {
         private GraphSelectedHandle handle;
 
-        private List<ISelectedHandle> _selected = new List<ISelectedHandle>();
-        private List<IGraphSelectedDrawer> selectedDrawers = new List<IGraphSelectedDrawer>();
+        private List<ISelectedHandle> _selected = new();
+        private List<IGraphSelectedDrawer> selectedDrawers = new();
 
         public override int order => 600;
 

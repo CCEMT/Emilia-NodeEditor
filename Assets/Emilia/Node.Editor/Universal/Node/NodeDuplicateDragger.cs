@@ -6,6 +6,9 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 节点拖拽复制
+    /// </summary>
     public class NodeDuplicateDragger : MouseManipulator
     {
         protected override void RegisterCallbacksOnTarget()
@@ -32,8 +35,8 @@ namespace Emilia.Node.Universal.Editor
             IEditorNodeView pasteNode = nodeViews.FirstOrDefault();
             pasteNode.asset.position = editorNodeView.asset.position;
             pasteNode.SetPositionNoUndo(editorNodeView.asset.position);
-            
-            editorNodeView.graphView.SetSelection(new List<ISelectable>(){pasteNode.element});
+
+            editorNodeView.graphView.SetSelection(new List<ISelectable> {pasteNode.element});
             editorNodeView.graphView.UpdateSelected();
 
             GraphSelectionDraggerForceSelectedNodeEvent selectEvent = GraphSelectionDraggerForceSelectedNodeEvent.Create(pasteNode.element, evt.mousePosition);

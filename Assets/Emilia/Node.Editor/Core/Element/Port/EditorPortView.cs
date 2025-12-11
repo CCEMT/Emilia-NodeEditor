@@ -11,23 +11,45 @@ using Object = UnityEngine.Object;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// Port表现元素
+    /// </summary>
     public class EditorPortView : Port_Internals, IEditorPortView, ICollectibleElement
     {
-        private List<IEditorEdgeView> _edges = new List<IEditorEdgeView>();
+        private List<IEditorEdgeView> _edges = new();
 
         public EditorPortInfo info { get; private set; }
         public IEditorNodeView master { get; private set; }
         public EditorGraphView graphView => master?.graphView;
 
+        /// <summary>
+        /// 端口方向
+        /// </summary>
         public virtual EditorPortDirection portDirection => info.direction;
+
+        /// <summary>
+        /// 方向
+        /// </summary>
         public virtual EditorOrientation editorOrientation => info.orientation;
+
         public Port portElement => this;
         public bool isSelected { get; protected set; }
+
+        /// <summary>
+        /// 连接的Edge
+        /// </summary>
         public IReadOnlyList<IEditorEdgeView> edges => _edges;
 
         protected virtual string portStyleFilePath => "Node/Styles/UniversalEditorPortView.uss";
 
+        /// <summary>
+        /// 连接事件
+        /// </summary>
         public event Action<IEditorPortView, IEditorEdgeView> onConnected;
+
+        /// <summary>
+        /// 断开连接事件
+        /// </summary>
         public event Action<IEditorPortView, IEditorEdgeView> OnDisconnected;
 
         public EditorPortView() : base(default, default, default, null) { }
@@ -70,7 +92,7 @@ namespace Emilia.Node.Editor
 
             capabilities |= Capabilities.Copiable;
 
-            ContextualMenuManipulator contextualMenuManipulator = new ContextualMenuManipulator(OnContextualMenuManipulator);
+            ContextualMenuManipulator contextualMenuManipulator = new(OnContextualMenuManipulator);
             this.AddManipulator(contextualMenuManipulator);
 
             if (graphView.isInitialized) schedule.Execute(RefreshEdge).ExecuteLater(1);
@@ -107,10 +129,10 @@ namespace Emilia.Node.Editor
 
             boxRect.xMin -= leftSpace;
             boxRect.width += leftSpace;
-            
+
             return boxRect.Contains(this.ChangeCoordinatesTo(m_ConnectorBox, localPoint));
         }
-    
+
         protected virtual void OnCopyConnect()
         {
             graphView.ClearSelection();
@@ -206,7 +228,7 @@ namespace Emilia.Node.Editor
         {
             List<IEditorEdgeView> edgeViews = this.GetEdges();
 
-            List<IEdgeCopyPastePack> packs = new List<IEdgeCopyPastePack>(edgeViews.Count);
+            List<IEdgeCopyPastePack> packs = new(edgeViews.Count);
             for (int i = 0; i < edgeViews.Count; i++)
             {
                 IEditorEdgeView edgeView = edgeViews[i];
@@ -214,7 +236,7 @@ namespace Emilia.Node.Editor
                 packs.Add(edgePack);
             }
 
-            PortCopyPastePack pack = new PortCopyPastePack(master.asset.id, info.id, info.portType, info.direction, packs);
+            PortCopyPastePack pack = new(master.asset.id, info.id, info.portType, info.direction, packs);
             return pack;
         }
 

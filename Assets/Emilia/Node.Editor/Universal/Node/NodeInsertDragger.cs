@@ -10,21 +10,27 @@ using Object = UnityEngine.Object;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 节点插入
+    /// </summary>
     public class NodeInsertDragger : MouseManipulator
     {
-        private bool isActive;
+        protected bool isActive;
 
-        private IEditorEdgeView ghostEdgeInput;
-        private IEditorEdgeView ghostEdgeOutput;
+        protected IEditorEdgeView ghostEdgeInput;
+        protected IEditorEdgeView ghostEdgeOutput;
 
-        private IEditorEdgeView targetEdgeView;
-        private IEditorPortView inputPortView;
-        private IEditorPortView outputPortView;
+        protected IEditorEdgeView targetEdgeView;
+        protected IEditorPortView inputPortView;
+        protected IEditorPortView outputPortView;
 
         protected override void RegisterCallbacksOnTarget()
         {
             IEditorNodeView nodeView = target as IEditorNodeView;
             if (nodeView == null) return;
+
+            nodeView.graphView.RegisterCallback<KeyDownEvent>(OnKeyDownEvent);
+            nodeView.graphView.RegisterCallback<KeyUpEvent>(OnKeyUpEvent);
 
             nodeView.element.RegisterCallback<MouseDownEvent>(OnMouseDownEvent);
             nodeView.graphView.RegisterCallback<MouseMoveEvent>(OnMouseMoveEvent);
@@ -36,13 +42,39 @@ namespace Emilia.Node.Universal.Editor
             IEditorNodeView nodeView = target as IEditorNodeView;
             if (nodeView == null) return;
 
+            nodeView.graphView.UnregisterCallback<KeyDownEvent>(OnKeyDownEvent);
+            nodeView.graphView.UnregisterCallback<KeyUpEvent>(OnKeyUpEvent);
+
             nodeView.element.UnregisterCallback<MouseDownEvent>(OnMouseDownEvent);
             nodeView.graphView.UnregisterCallback<MouseMoveEvent>(OnMouseMoveEvent);
             nodeView.graphView.UnregisterCallback<MouseUpEvent>(OnMouseUpEvent);
         }
 
-        private void OnMouseDownEvent(MouseDownEvent evt)
+        protected void OnKeyDownEvent(KeyDownEvent evt)
         {
+            if (evt.shiftKey)
+            {
+                RemoveGhostEdge();
+
+                targetEdgeView = null;
+                inputPortView = null;
+                outputPortView = null;
+            }
+        }
+
+        protected void OnKeyUpEvent(KeyUpEvent evt)
+        {
+            if (evt.shiftKey == false) HandleEdgeConnection();
+        }
+
+        protected void OnMouseDownEvent(MouseDownEvent evt)
+        {
+            if (evt.shiftKey)
+            {
+                isActive = false;
+                return;
+            }
+
             IEditorNodeView nodeView = target as IEditorNodeView;
 
             this.isActive = true;
@@ -57,9 +89,24 @@ namespace Emilia.Node.Universal.Editor
             }
         }
 
-        private void OnMouseMoveEvent(MouseMoveEvent evt)
+        protected void OnMouseMoveEvent(MouseMoveEvent evt)
         {
-            if (isActive == false) return;
+            if (evt.shiftKey)
+            {
+                RemoveGhostEdge();
+
+                targetEdgeView = null;
+                inputPortView = null;
+                outputPortView = null;
+                return;
+            }
+
+            HandleEdgeConnection();
+        }
+
+        protected void HandleEdgeConnection()
+        {
+            if (this.isActive == false) return;
 
             IEditorNodeView nodeView = target as IEditorNodeView;
 
@@ -79,36 +126,36 @@ namespace Emilia.Node.Universal.Editor
 
                 if (nodeView.GetCanConnectPort(edgeView, out List<IEditorPortView> canConnectInput, out List<IEditorPortView> canConnectOutput))
                 {
-                    if (ghostEdgeInput == null)
+                    if (this.ghostEdgeInput == null)
                     {
-                        ghostEdgeInput = ReflectUtility.CreateInstance(edgeView.GetType()) as IEditorEdgeView;
-                        ghostEdgeInput.edgeElement.isGhostEdge = true;
-                        ghostEdgeInput.edgeElement.pickingMode = PickingMode.Ignore;
+                        this.ghostEdgeInput = ReflectUtility.CreateInstance(edgeView.GetType()) as IEditorEdgeView;
+                        this.ghostEdgeInput.edgeElement.isGhostEdge = true;
+                        this.ghostEdgeInput.edgeElement.pickingMode = PickingMode.Ignore;
                         nodeView.graphView.AddElement(this.ghostEdgeInput.edgeElement);
                     }
 
-                    if (ghostEdgeOutput == null)
+                    if (this.ghostEdgeOutput == null)
                     {
-                        ghostEdgeOutput = ReflectUtility.CreateInstance(edgeView.GetType()) as IEditorEdgeView;
-                        ghostEdgeOutput.edgeElement.isGhostEdge = true;
-                        ghostEdgeOutput.edgeElement.pickingMode = PickingMode.Ignore;
+                        this.ghostEdgeOutput = ReflectUtility.CreateInstance(edgeView.GetType()) as IEditorEdgeView;
+                        this.ghostEdgeOutput.edgeElement.isGhostEdge = true;
+                        this.ghostEdgeOutput.edgeElement.pickingMode = PickingMode.Ignore;
                         nodeView.graphView.AddElement(this.ghostEdgeOutput.edgeElement);
                     }
 
-                    targetEdgeView = edgeView;
-                    inputPortView = canConnectInput.FirstOrDefault();
-                    outputPortView = canConnectOutput.FirstOrDefault();
+                    this.targetEdgeView = edgeView;
+                    this.inputPortView = canConnectInput.FirstOrDefault();
+                    this.outputPortView = canConnectOutput.FirstOrDefault();
 
-                    ghostEdgeInput.inputPortView = this.inputPortView;
-                    ghostEdgeInput.outputPortView = targetEdgeView.outputPortView;
+                    this.ghostEdgeInput.inputPortView = this.inputPortView;
+                    this.ghostEdgeInput.outputPortView = this.targetEdgeView.outputPortView;
 
-                    ghostEdgeOutput.inputPortView = this.targetEdgeView.inputPortView;
-                    ghostEdgeOutput.outputPortView = this.outputPortView;
+                    this.ghostEdgeOutput.inputPortView = this.targetEdgeView.inputPortView;
+                    this.ghostEdgeOutput.outputPortView = this.outputPortView;
 
                     this.inputPortView.portElement.portCapLit = true;
-                    outputPortView.portElement.portCapLit = true;
+                    this.outputPortView.portElement.portCapLit = true;
 
-                    targetEdgeView.outputPortView.portElement.portCapLit = true;
+                    this.targetEdgeView.outputPortView.portElement.portCapLit = true;
                     this.targetEdgeView.inputPortView.portElement.portCapLit = true;
 
                     return;
@@ -117,13 +164,24 @@ namespace Emilia.Node.Universal.Editor
 
             RemoveGhostEdge();
 
-            targetEdgeView = null;
-            inputPortView = null;
-            outputPortView = null;
+            this.targetEdgeView = null;
+            this.inputPortView = null;
+            this.outputPortView = null;
         }
 
-        private void OnMouseUpEvent(MouseUpEvent evt)
+        protected void OnMouseUpEvent(MouseUpEvent evt)
         {
+            if (evt.shiftKey)
+            {
+                RemoveGhostEdge();
+
+                targetEdgeView = null;
+                inputPortView = null;
+                outputPortView = null;
+                isActive = false;
+                return;
+            }
+
             if (isActive == false) return;
 
             if (this.targetEdgeView != null)
@@ -173,7 +231,7 @@ namespace Emilia.Node.Universal.Editor
             isActive = false;
         }
 
-        private void RemoveGhostEdge()
+        protected void RemoveGhostEdge()
         {
             if (this.ghostEdgeInput != null)
             {

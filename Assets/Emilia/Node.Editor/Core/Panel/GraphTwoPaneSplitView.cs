@@ -3,10 +3,16 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 面板分割实现
+    /// </summary>
     public class GraphTwoPaneSplitView : TwoPaneSplitView_Internals
     {
         public GraphTwoPaneSplitView(int fixedPaneIndex, float fixedPaneStartDimension, TwoPaneSplitViewOrientation orientation) : base(fixedPaneIndex, fixedPaneStartDimension, orientation) { }
 
+        /// <summary>
+        /// 可以调整大小
+        /// </summary>
         public bool canResizable
         {
             get => dragLineAnchor_Internal.style.width.value.value > 0f && dragLineAnchor_Internal.style.height.value.value > 0f;

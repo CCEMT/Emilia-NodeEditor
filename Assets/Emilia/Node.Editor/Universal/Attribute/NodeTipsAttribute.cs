@@ -2,6 +2,9 @@
 
 namespace Emilia.Node.Attributes
 {
+    /// <summary>
+    /// 节点Tips
+    /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
     public class NodeTipsAttribute : Attribute
     {

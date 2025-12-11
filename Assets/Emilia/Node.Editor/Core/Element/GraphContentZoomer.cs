@@ -7,6 +7,9 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 重写ContentZoomer
+    /// </summary>
     public class GraphContentZoomer : Manipulator
     {
         public static readonly float DefaultReferenceScale = 1;

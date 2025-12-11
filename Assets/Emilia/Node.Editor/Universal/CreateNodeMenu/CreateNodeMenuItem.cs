@@ -1,5 +1,8 @@
 ﻿namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 创建节点菜单项数据结构
+    /// </summary>
     public class CreateNodeMenuItem
     {
         /// <summary>

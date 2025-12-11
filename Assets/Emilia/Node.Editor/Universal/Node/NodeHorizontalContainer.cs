@@ -2,6 +2,9 @@
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 节点Horizontal容器
+    /// </summary>
     public class NodeHorizontalContainer : VisualElement
     {
         public VisualElement inputContainer { get; private set; }
@@ -9,10 +12,10 @@ namespace Emilia.Node.Universal.Editor
 
         public NodeHorizontalContainer()
         {
-            VisualElement divider = new VisualElement();
+            VisualElement divider = new();
             Add(divider);
 
-            VisualElement top = new VisualElement();
+            VisualElement top = new();
             top.name = "top";
             top.style.flexDirection = FlexDirection.Row;
 
@@ -22,7 +25,7 @@ namespace Emilia.Node.Universal.Editor
             inputContainer.name = "inputContainer";
             top.Add(inputContainer);
 
-            VisualElement spacer = new VisualElement();
+            VisualElement spacer = new();
             spacer.name = "spacer";
             spacer.style.flexGrow = 1;
             top.Add(spacer);

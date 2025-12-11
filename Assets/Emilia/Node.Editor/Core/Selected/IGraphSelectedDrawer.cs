@@ -3,6 +3,9 @@ using Emilia.Kit;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 选中绘制器接口
+    /// </summary>
     public interface IGraphSelectedDrawer
     {
         /// <summary>

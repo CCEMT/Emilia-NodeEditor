@@ -10,10 +10,13 @@ using Object = UnityEngine.Object;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 内置Inspector面板
+    /// </summary>
     public class InspectorView : GraphPanel
     {
-        private PropertyTree propertyTree;
-        private List<Object> selectedObjects;
+        protected PropertyTree propertyTree;
+        protected List<Object> selectedObjects;
 
         public InspectorView()
         {
@@ -30,7 +33,7 @@ namespace Emilia.Node.Universal.Editor
             graphView.UnregisterCallback<GeometryChangedEvent>(OnGeometryChangedEvent);
             graphView.RegisterCallback<GeometryChangedEvent>(OnGeometryChangedEvent);
         }
-        
+
         /// <summary>
         /// 设置显示的对象
         /// </summary>
@@ -49,7 +52,10 @@ namespace Emilia.Node.Universal.Editor
 
                 if (ReferenceEquals(target, null)) return;
 
-                if (i == 0) { targetType = target.GetType(); }
+                if (i == 0)
+                {
+                    targetType = target.GetType();
+                }
                 else if (targetType != (otherType = target.GetType()))
                 {
                     if (targetType.IsAssignableFrom(otherType)) continue;
@@ -68,12 +74,12 @@ namespace Emilia.Node.Universal.Editor
             style.display = DisplayStyle.Flex;
         }
 
-        private void OnGeometryChangedEvent(GeometryChangedEvent evt)
+        protected void OnGeometryChangedEvent(GeometryChangedEvent evt)
         {
             UpdateTransform();
         }
 
-        private void UpdateTransform()
+        protected void UpdateTransform()
         {
             Rect graphRect = graphView.graphPanelSystem.graphLayoutRect;
             transform.position = graphRect.position;
@@ -82,14 +88,14 @@ namespace Emilia.Node.Universal.Editor
             style.width = width;
         }
 
-        private void OnImGUI()
+        protected void OnImGUI()
         {
             string label = GetLabel();
             if (string.IsNullOrEmpty(label) == false) GUILayout.Label(label);
             this.propertyTree?.Draw();
         }
 
-        private string GetLabel()
+        protected string GetLabel()
         {
             if (this.selectedObjects.Count > 1) return "Multiple Objects";
             Object first = this.selectedObjects.FirstOrDefault();
@@ -101,10 +107,10 @@ namespace Emilia.Node.Universal.Editor
         public override void Dispose()
         {
             base.Dispose();
-            
+
             graphView.UnregisterCallback<GeometryChangedEvent>(OnGeometryChangedEvent);
             graphView.UnregisterCallback<GeometryChangedEvent>(OnGeometryChangedEvent);
-            
+
             if (propertyTree != null)
             {
                 propertyTree.Dispose();

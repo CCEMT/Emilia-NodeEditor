@@ -5,6 +5,9 @@ using Emilia.Node.Editor;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 工具栏Toggle特性处理
+    /// </summary>
     public class ToggleToolbarAttributeHandle : ToolbarViewControlAttributeHandle
     {
         public override void OnHandle(ToolbarView toolbarView, EditorGraphView editorGraphView)
@@ -29,7 +32,7 @@ namespace Emilia.Node.Universal.Editor
                 Action<bool> setMethod = Delegate.CreateDelegate(typeof(Action<bool>), propertyInfo.SetMethod) as Action<bool>;
                 if (setMethod == null) return;
 
-                ToggleToolbarViewControl toggleToolbarViewControl = new ToggleToolbarViewControl(toggleToolbarAttribute.displayName, getMethod, setMethod);
+                ToggleToolbarViewControl toggleToolbarViewControl = new(toggleToolbarAttribute.displayName, getMethod, setMethod);
                 toolbarView.AddControl(toggleToolbarViewControl, toggleToolbarAttribute.position);
             }
         }

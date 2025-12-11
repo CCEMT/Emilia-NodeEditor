@@ -1,8 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Emilia.Kit;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 本地设置系统
+    /// </summary>
     public class GraphLocalSettingSystem : BasicGraphViewModule
     {
         private const string GraphLocalSettingSaveKey = "GraphLocalSettingKey";
@@ -16,6 +20,21 @@ namespace Emilia.Node.Editor
         private string assetSaveKey => GraphLocalSettingSaveKey + this.graphView.graphAsset.id;
 
         public override int order => 100;
+
+        /// <summary>
+        /// 类型设置改变事件
+        /// </summary>
+        public event Action onTypeSettingChanged;
+
+        /// <summary>
+        /// 资源设置改变事件
+        /// </summary>
+        public event Action onAssetSettingChanged;
+
+        /// <summary>
+        /// 设置改变事件
+        /// </summary>
+        public event Action onSettingChanged;
 
         public override void Initialize(EditorGraphView graphView)
         {
@@ -67,7 +86,8 @@ namespace Emilia.Node.Editor
         {
             string byteString = _typeSettingCache.GetValueOrDefault(key);
             if (string.IsNullOrEmpty(byteString)) return defaultValue;
-            return OdinSerializableUtility.FromByteString<T>(byteString);
+            T result = OdinSerializableUtility.FromByteString<T>(byteString);
+            return result == null ? defaultValue : result;
         }
 
         /// <summary>
@@ -76,6 +96,8 @@ namespace Emilia.Node.Editor
         public void SetTypeSettingValue<T>(string key, T value)
         {
             _typeSettingCache[key] = OdinSerializableUtility.ToByteString(value);
+            onTypeSettingChanged?.Invoke();
+            onSettingChanged?.Invoke();
         }
 
         /// <summary>
@@ -85,7 +107,8 @@ namespace Emilia.Node.Editor
         {
             string byteString = _assetSettingCache.GetValueOrDefault(key);
             if (string.IsNullOrEmpty(byteString)) return defaultValue;
-            return OdinSerializableUtility.FromByteString<T>(byteString);
+            T result = OdinSerializableUtility.FromByteString<T>(byteString);
+            return result == null ? defaultValue : result;
         }
 
         /// <summary>
@@ -94,6 +117,8 @@ namespace Emilia.Node.Editor
         public void SetAssetSettingValue<T>(string key, T value)
         {
             _assetSettingCache[key] = OdinSerializableUtility.ToByteString(value);
+            onAssetSettingChanged?.Invoke();
+            onSettingChanged?.Invoke();
         }
 
         /// <summary>
@@ -137,6 +162,8 @@ namespace Emilia.Node.Editor
 
             _typeSettingCache = null;
             _assetSettingCache = null;
+            onTypeSettingChanged = null;
+            onAssetSettingChanged = null;
 
             base.Dispose();
         }

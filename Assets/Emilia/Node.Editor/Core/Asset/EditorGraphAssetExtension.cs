@@ -9,7 +9,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public static List<EditorNodeAsset> GetOutputNodes(this EditorGraphAsset graphAsset, EditorNodeAsset nodeAsset)
         {
-            List<EditorNodeAsset> outputNodes = new List<EditorNodeAsset>();
+            List<EditorNodeAsset> outputNodes = new();
 
             int edgeCount = graphAsset.edges.Count;
             for (int i = 0; i < edgeCount; i++)
@@ -32,7 +32,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public static List<EditorNodeAsset> GetInputNodes(this EditorGraphAsset graphAsset, EditorNodeAsset nodeAsset)
         {
-            List<EditorNodeAsset> inputNodes = new List<EditorNodeAsset>();
+            List<EditorNodeAsset> inputNodes = new();
 
             int edgeCount = graphAsset.edges.Count;
             for (int i = 0; i < edgeCount; i++)
@@ -55,7 +55,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public static List<EditorNodeAsset> GetAllOutputNodes(this EditorGraphAsset graphAsset, EditorNodeAsset nodeAsset)
         {
-            List<EditorNodeAsset> outputNodes = new List<EditorNodeAsset>();
+            List<EditorNodeAsset> outputNodes = new();
 
             int edgeCount = graphAsset.edges.Count;
             for (int i = 0; i < edgeCount; i++)
@@ -79,7 +79,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public static List<EditorNodeAsset> GetAllInputNodes(this EditorGraphAsset graphAsset, EditorNodeAsset nodeAsset)
         {
-            List<EditorNodeAsset> inputNodes = new List<EditorNodeAsset>();
+            List<EditorNodeAsset> inputNodes = new();
 
             int edgeCount = graphAsset.edges.Count;
             for (int i = 0; i < edgeCount; i++)
@@ -103,7 +103,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public static List<EditorEdgeAsset> GetOutputEdges(this EditorGraphAsset graphAsset, EditorNodeAsset nodeAsset)
         {
-            List<EditorEdgeAsset> outputEdges = new List<EditorEdgeAsset>();
+            List<EditorEdgeAsset> outputEdges = new();
 
             int edgeCount = graphAsset.edges.Count;
             for (int i = 0; i < edgeCount; i++)
@@ -121,7 +121,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public static List<EditorEdgeAsset> GetInputEdges(this EditorGraphAsset graphAsset, EditorNodeAsset nodeAsset)
         {
-            List<EditorEdgeAsset> inputEdges = new List<EditorEdgeAsset>();
+            List<EditorEdgeAsset> inputEdges = new();
 
             int edgeCount = graphAsset.edges.Count;
             for (int i = 0; i < edgeCount; i++)
@@ -133,13 +133,13 @@ namespace Emilia.Node.Editor
 
             return inputEdges;
         }
-        
+
         /// <summary>
         /// 获取指定端口的所有Edge
         /// </summary>
         public static List<EditorEdgeAsset> GetEdges(this EditorGraphAsset graphAsset, string nodeId, string portId)
         {
-            List<EditorEdgeAsset> edges = new List<EditorEdgeAsset>();
+            List<EditorEdgeAsset> edges = new();
 
             int edgeCount = graphAsset.edges.Count;
             for (int i = 0; i < edgeCount; i++)

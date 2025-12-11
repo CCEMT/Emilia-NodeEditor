@@ -13,10 +13,10 @@ namespace Example.Expand
         {
             base.InitializeCache(graphView, actionInfos);
 
-            OperateMenuActionInfo operateMenuActionInfo = new OperateMenuActionInfo();
+            OperateMenuActionInfo operateMenuActionInfo = new();
             operateMenuActionInfo.name = "Test";
 
-            GeneralOperateMenuAction generalOperateMenuAction = new GeneralOperateMenuAction();
+            GeneralOperateMenuAction generalOperateMenuAction = new();
             generalOperateMenuAction.executeCallback = (_) => Debug.Log("Hello, World!");
 
             operateMenuActionInfo.action = generalOperateMenuAction;

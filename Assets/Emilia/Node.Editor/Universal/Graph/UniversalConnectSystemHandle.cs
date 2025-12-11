@@ -4,6 +4,9 @@ using Emilia.Node.Editor;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 通用连接处理器
+    /// </summary>
     [EditorHandle(typeof(EditorUniversalGraphAsset))]
     public class UniversalConnectSystemHandle : ConnectSystemHandle
     {

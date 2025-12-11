@@ -13,6 +13,9 @@ using UnityEngine;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 变量类型过滤器绘制
+    /// </summary>
     public class VariableTypeFilterAttributeDrawer : OdinAttributeDrawer<VariableTypeFilterAttribute>
     {
         protected override void DrawPropertyLayout(GUIContent label)

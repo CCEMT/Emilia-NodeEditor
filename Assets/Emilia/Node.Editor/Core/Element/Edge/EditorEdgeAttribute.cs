@@ -8,6 +8,9 @@ namespace Emilia.Node.Editor
     [AttributeUsage(AttributeTargets.Class)]
     public class EditorEdgeAttribute : Attribute
     {
+        /// <summary>
+        /// EdgeAsset类型
+        /// </summary>
         public Type edgeType;
 
         public EditorEdgeAttribute(Type edgeType)

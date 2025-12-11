@@ -3,11 +3,14 @@ using System.Linq;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 创建节点后连接处理器
+    /// </summary>
     public class ConnectCreateNodePostprocess : ICreateNodePostprocess
     {
-        public string originalNodeId;
-        public string originalPortId;
-        public string targetPortId;
+        protected string originalNodeId;
+        protected string originalPortId;
+        protected string targetPortId;
 
         public ConnectCreateNodePostprocess(string originalNodeId, string originalPortId, string targetPortId = null)
         {

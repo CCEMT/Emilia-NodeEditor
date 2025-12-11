@@ -3,10 +3,13 @@ using UnityEngine;
 
 namespace Emilia.Node.Attributes
 {
+    /// <summary>
+    /// Graph设置属性
+    /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
     public class GraphSettingAttribute : Attribute
     {
-        public GraphSettingStruct settingStruct = new GraphSettingStruct {
+        public GraphSettingStruct settingStruct = new() {
             maxLoadTimeMs = 0.0416f,
             fastUndo = true,
             immediatelySave = true,
@@ -21,7 +24,7 @@ namespace Emilia.Node.Attributes
             get => settingStruct.maxLoadTimeMs;
             set => settingStruct.maxLoadTimeMs = value;
         }
-        
+
         /// <summary>
         /// 是否启用快速撤销
         /// </summary>
@@ -50,6 +53,9 @@ namespace Emilia.Node.Attributes
         }
     }
 
+    /// <summary>
+    /// Graph设置
+    /// </summary>
     [Serializable]
     public struct GraphSettingStruct
     {

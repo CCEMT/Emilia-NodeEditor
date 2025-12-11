@@ -6,6 +6,9 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 重写EdgeConnector
+    /// </summary>
     public class EditorEdgeConnector : EdgeConnector
     {
         public const float ConnectionDistanceTreshold = 10f;
@@ -93,16 +96,29 @@ namespace Emilia.Node.Editor
 
         private void OnMouseUp(MouseUpEvent evt)
         {
-            if (active == false || CanStopManipulation(evt) == false) return;
+            if (active == false) return;
 
-            bool canPerformConnection = Vector2.Distance(downPosition, evt.localMousePosition) > ConnectionDistanceTreshold;
-            if (canPerformConnection) edgeDragHelper.HandleMouseUp(evt);
-            else Abort();
+            bool shouldStop = CanStopManipulation(evt) || evt.button == (int) MouseButton.RightMouse;
+            if (shouldStop == false) return;
+
+            if (evt.button == (int) MouseButton.RightMouse)
+            {
+                Abort();
+                
+                evt.StopImmediatePropagation();
+            }
+            else
+            {
+                bool canPerformConnection = Vector2.Distance(downPosition, evt.localMousePosition) > ConnectionDistanceTreshold;
+                if (canPerformConnection) edgeDragHelper.HandleMouseUp(evt);
+                else Abort();
+
+                evt.StopPropagation();
+            }
 
             active = false;
             this.edgeViewCandidate = null;
             target.ReleaseMouse();
-            evt.StopPropagation();
         }
 
         private void OnKeyDown(KeyDownEvent evt)

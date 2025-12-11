@@ -2,9 +2,15 @@
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 面板功能
+    /// </summary>
     [Flags]
     public enum GraphPanelCapabilities
     {
+        /// <summary>
+        /// 无
+        /// </summary>
         None = 0,
 
         /// <summary>

@@ -17,6 +17,10 @@ namespace Emilia.Node.Universal.Editor
         BottomRight
     }
 
+    /// <summary>
+    /// 小地图面板
+    /// 重写MiniMap
+    /// </summary>
     public class MiniMapView : GraphPanel
     {
         public float maxHeight { get; set; }
@@ -25,9 +29,9 @@ namespace Emilia.Node.Universal.Editor
         float m_PreviousContainerWidth = -1;
         float m_PreviousContainerHeight = -1;
 
-        readonly Color m_ViewportColor = new Color(1.0f, 1.0f, 0.0f, 0.35f);
-        protected readonly Color m_SelectedChildrenColor = new Color(1.0f, 1.0f, 1.0f, 0.5f);
-        readonly Color m_PlacematBorderColor = new Color(0.23f, 0.23f, 0.23f);
+        readonly Color m_ViewportColor = new(1.0f, 1.0f, 0.0f, 0.35f);
+        protected readonly Color m_SelectedChildrenColor = new(1.0f, 1.0f, 1.0f, 0.5f);
+        readonly Color m_PlacematBorderColor = new(0.23f, 0.23f, 0.23f);
 
         // Various rects used by the MiniMap
         Rect m_ViewportRect; // Rect that represents the current viewport
@@ -101,7 +105,7 @@ namespace Emilia.Node.Universal.Editor
         void UpdatePosition()
         {
             Vector2 position = GetViewPosition();
-            Vector2 size = new Vector2(maxWidth, maxHeight);
+            Vector2 size = new(maxWidth, maxHeight);
             SetPosition(new Rect(position, size));
         }
 
@@ -296,7 +300,7 @@ namespace Emilia.Node.Universal.Editor
             Handles.DrawSolidRectangleWithOutline(cachedRect, faceColor, typeColor);
         }
 
-        static readonly ProfilerMarker k_ImmediateRepaintMarker = new ProfilerMarker("MiniMap.ImmediateRepaint");
+        static readonly ProfilerMarker k_ImmediateRepaintMarker = new("MiniMap.ImmediateRepaint");
 
         void DrawMinimapContent()
         {
@@ -430,7 +434,7 @@ namespace Emilia.Node.Universal.Editor
 
             // Convert mouse position to graphView coordinates
             var minimapFactor = m_ContentRect.width / m_ContentRectLocal.width;
-            Vector2 graphViewPosition = new Vector2(
+            Vector2 graphViewPosition = new(
                 (mousePosition.x - m_ContentRect.x) / minimapFactor + m_ContentRectLocal.x,
                 (mousePosition.y - m_ContentRect.y) / minimapFactor + m_ContentRectLocal.y
             );
@@ -439,7 +443,7 @@ namespace Emilia.Node.Universal.Editor
             graphViewPosition.y -= graphView.layout.height / 2 / graphView.viewTransform.scale.y;
 
             // Update graphView's viewTransform position
-            Vector3 newPosition = new Vector3(
+            Vector3 newPosition = new(
                 -graphViewPosition.x * graphView.viewTransform.scale.x,
                 -graphViewPosition.y * graphView.viewTransform.scale.y,
                 graphView.viewTransform.position.z

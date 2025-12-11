@@ -6,6 +6,9 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 操作菜单系统
+    /// </summary>
     public class GraphOperateMenu : BasicGraphViewModule
     {
         public const int SeparatorAt = 1200;
@@ -15,7 +18,7 @@ namespace Emilia.Node.Editor
         /// <summary>
         /// 缓存操作菜单信息
         /// </summary>
-        public List<OperateMenuActionInfo> actionInfoCache { get; private set; } = new List<OperateMenuActionInfo>();
+        public List<OperateMenuActionInfo> actionInfoCache { get; private set; } = new();
 
         public override int order => 1100;
 
@@ -51,9 +54,11 @@ namespace Emilia.Node.Editor
                 return;
             }
 
-            List<OperateMenuItem> graphMenuItems = new List<OperateMenuItem>();
+            // 收集菜单项
+            List<OperateMenuItem> graphMenuItems = new();
             handle.CollectMenuItems(this.graphView, graphMenuItems, menuContext);
 
+            // 对菜单项进行分组和排序：先按类别分组，类别内按优先级排序
             var sortedItems = graphMenuItems
                 .GroupBy(x => string.IsNullOrEmpty(x.category) ? x.menuName : x.category)
                 .OrderBy(x => x.Min(y => y.priority))
@@ -67,6 +72,7 @@ namespace Emilia.Node.Editor
                 if (item.state == OperateMenuActionValidity.NotApplicable) continue;
 
                 int priority = item.priority;
+                // 根据优先级插入分隔符（当优先级跨越SeparatorAt的倍数时）
                 if (lastPriority != int.MinValue && priority / SeparatorAt > lastPriority / SeparatorAt)
                 {
                     string path = string.Empty;
@@ -79,6 +85,7 @@ namespace Emilia.Node.Editor
 
                 string entryName = item.category + item.menuName;
 
+                // 设置菜单项状态
                 DropdownMenuAction.Status status = DropdownMenuAction.Status.Normal;
                 if (item.state == OperateMenuActionValidity.Invalid) status = DropdownMenuAction.Status.Disabled;
                 if (item.isOn) status |= DropdownMenuAction.Status.Checked;

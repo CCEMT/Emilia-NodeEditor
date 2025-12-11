@@ -11,10 +11,13 @@ using Object = UnityEngine.Object;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 便利贴（支持MarkDown格式）节点表现元素
+    /// </summary>
     [EditorItem(typeof(StickyNoteProAsset))]
     public class StickyNoteProView : GraphElement, IEditorItemView, IResizable
     {
-        private StickyNoteProAsset stickyAsset;
+        protected StickyNoteProAsset stickyAsset;
 
         public EditorItemAsset asset => stickyAsset;
         public GraphElement element => this;
@@ -22,15 +25,15 @@ namespace Emilia.Node.Universal.Editor
 
         public bool isSelected { get; protected set; }
 
-        private GUISkin skinLight;
-        private GUISkin skinDark;
-        private string rootPath;
+        protected GUISkin skinLight;
+        protected GUISkin skinDark;
+        protected string rootPath;
 
-        private MarkdownViewer markdownViewer;
+        protected MarkdownViewer markdownViewer;
 
-        private IMGUIContainer markdownContainer;
+        protected IMGUIContainer markdownContainer;
 
-        private VisualElement selectionBorder;
+        protected VisualElement selectionBorder;
 
         public StickyNoteProView()
         {
@@ -42,7 +45,7 @@ namespace Emilia.Node.Universal.Editor
             this.graphView = graphView;
             this.stickyAsset = asset as StickyNoteProAsset;
 
-            this.capabilities = Capabilities.Selectable | Capabilities.Movable | Capabilities.Deletable | Capabilities.Ascendable | Capabilities.Copiable;
+            capabilities = Capabilities.Selectable | Capabilities.Movable | Capabilities.Deletable | Capabilities.Ascendable | Capabilities.Copiable;
 
             StyleSheet styleSheet = ResourceUtility.LoadResource<StyleSheet>("Node/Styles/UniversalEditorItemView.uss");
             styleSheets.Add(styleSheet);
@@ -57,7 +60,7 @@ namespace Emilia.Node.Universal.Editor
             selectionBorder = new VisualElement();
             this.selectionBorder.name = "selection-border";
 
-            ResizableElement resizableElement = new ResizableElement();
+            ResizableElement resizableElement = new();
             Add(resizableElement);
 
             skinLight = ResourceUtility.LoadResource<GUISkin>("Node/GUISkin/MarkdownSkinLight.guiskin");
@@ -72,8 +75,9 @@ namespace Emilia.Node.Universal.Editor
 
             SetPositionNoUndo(stickyAsset.position);
             RegisterCallback<GeometryChangedEvent>(OnGeometryChangedEvent);
+            RegisterCallback<MouseDownEvent>(OnMouseDown);
 
-            this.AddManipulator(new ContextualMenuManipulator(this.BuildContextualMenu));
+            this.AddManipulator(new ContextualMenuManipulator(BuildContextualMenu));
         }
 
         protected virtual void BuildContextualMenu(ContextualMenuPopulateEvent evt) { }
@@ -88,6 +92,11 @@ namespace Emilia.Node.Universal.Editor
             markdownContainer.style.top = -layout.height / 2f;
         }
 
+        protected virtual void OnMouseDown(MouseDownEvent evt)
+        {
+            graphView?.UpdateSelected();
+        }
+        
         private void OnMarkdownGUI()
         {
             Event evt = Event.current;

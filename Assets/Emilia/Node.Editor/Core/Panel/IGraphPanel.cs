@@ -2,6 +2,9 @@
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 面板接口
+    /// </summary>
     public interface IGraphPanel
     {
         /// <summary>

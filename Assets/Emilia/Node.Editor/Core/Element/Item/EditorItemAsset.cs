@@ -8,6 +8,9 @@ using Object = UnityEngine.Object;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 编辑器Item资源
+    /// </summary>
     [Serializable, SelectedClear]
     public abstract class EditorItemAsset : TitleAsset, IUnityAsset
     {
@@ -53,13 +56,16 @@ namespace Emilia.Node.Editor
         /// <summary>
         /// 自身Odin属性树
         /// </summary>
-        public PropertyTree propertyTree => _propertyTree;
-
-        protected virtual void OnEnable()
+        public PropertyTree propertyTree
         {
-            if (_propertyTree != null) _propertyTree.Dispose();
-            _propertyTree = PropertyTree.Create(this);
+            get
+            {
+                if (_propertyTree == null) _propertyTree = PropertyTree.Create(this);
+                return _propertyTree;
+            }
         }
+
+        protected virtual void OnEnable() { }
 
         public virtual void SetChildren(List<Object> childAssets) { }
         public virtual List<Object> GetChildren() => null;

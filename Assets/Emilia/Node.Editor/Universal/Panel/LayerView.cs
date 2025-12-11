@@ -7,6 +7,9 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Universal.Editor
 {
+    /// <summary>
+    /// 层级面板
+    /// </summary>
     public class LayerView : GraphPanel
     {
         public static readonly GUIStyle BreadCrumbLeft = "GUIEditor.BreadcrumbLeft";
@@ -26,11 +29,11 @@ namespace Emilia.Node.Universal.Editor
             if (parentView != null) parentView.canResizable = false;
         }
 
-        private void OnImGUI()
+        protected void OnImGUI()
         {
             GUILayout.BeginHorizontal(EditorStyles.toolbar);
 
-            Stack<IHierarchyAsset> hierarchyAssets = new Stack<IHierarchyAsset>();
+            Stack<IHierarchyAsset> hierarchyAssets = new();
 
             IHierarchyAsset current = graphView.graphAsset;
             while (current != null)
@@ -48,7 +51,7 @@ namespace Emilia.Node.Universal.Editor
                 GUIStyle style2 = i == 0 ? BreadCrumbLeftBg : BreadCrumbMidBg;
 
                 string label = hierarchyAsset.ToString();
-                GUIContent guiContent = new GUIContent(label);
+                GUIContent guiContent = new(label);
                 Rect rect = GetLayoutRect(guiContent, style1);
                 if (Event.current.type == EventType.Repaint) style2.Draw(rect, GUIContent.none, 0);
 
@@ -64,7 +67,7 @@ namespace Emilia.Node.Universal.Editor
             GUILayout.EndHorizontal();
         }
 
-        private Rect GetLayoutRect(GUIContent content, GUIStyle style)
+        protected Rect GetLayoutRect(GUIContent content, GUIStyle style)
         {
             Texture image = content.image;
             content.image = null;

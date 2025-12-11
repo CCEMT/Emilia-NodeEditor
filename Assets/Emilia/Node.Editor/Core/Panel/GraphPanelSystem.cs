@@ -8,21 +8,29 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// Graph面板系统
+    /// </summary>
     public class GraphPanelSystem : BasicGraphViewModule
     {
         private const string SplitViewPlaceholderName = "splitView-placeholder";
+
         private const float DockOffsetSize = 5f;
 
         private GraphPanelHandle handle;
 
-        private List<IGraphPanel> _openPanels = new List<IGraphPanel>();
-        private Dictionary<Type, IGraphPanel> openPanelMap = new Dictionary<Type, IGraphPanel>();
+        private List<IGraphPanel> _openPanels = new();
+        private Dictionary<Type, IGraphPanel> openPanelMap = new();
 
+ 
         private GraphPanelContainer floatRootContainer;
-        private Dictionary<IGraphPanel, GraphPanelContainer> floatPanelMap = new Dictionary<IGraphPanel, GraphPanelContainer>();
+   
+        private Dictionary<IGraphPanel, GraphPanelContainer> floatPanelMap = new();
 
+ 
         private GraphPanelContainer _dockRootContainer;
-        private List<IGraphPanel> dockPanels = new List<IGraphPanel>();
+    
+        private List<IGraphPanel> dockPanels = new();
 
         private VisualElement dockLeisureArea;
         private Rect dockAreaOffset;
@@ -74,6 +82,9 @@ namespace Emilia.Node.Editor
             handle?.LoadPanel(this.graphView, this);
         }
 
+        /// <summary>
+        /// 创建容器
+        /// </summary>
         private void CreateContainer()
         {
             if (this._dockRootContainer != null) this._dockRootContainer.RemoveFromHierarchy();
@@ -124,10 +135,12 @@ namespace Emilia.Node.Editor
         }
 
         /// <summary>
-        /// 打开面板以停靠的形式
+        /// 打开面板以停靠的形式，并停靠到指定的区域
         /// </summary>
         public T OpenDockPanel<T>(VisualElement dockArea, float size, GraphDockPosition position) where T : IGraphPanel
         {
+            // 查找有效的GraphTwoPaneSplitView作为停靠目标
+            // 优先级：1.dockArea本身 2.dockArea的父级 3.dockArea的第一个子级
             VisualElement addDockArea = dockArea;
             GraphTwoPaneSplitView splitView = dockArea as GraphTwoPaneSplitView;
 
@@ -143,10 +156,13 @@ namespace Emilia.Node.Editor
                 addDockArea = dockArea;
             }
 
+            // 如果找不到有效的SplitView，返回default
             if (splitView == null) return default;
 
+            // 创建面板实例
             T panel = ReflectUtility.CreateInstance<T>();
 
+            // 如果SplitView还没有填满两个子元素，直接添加面板
             if (splitView.contentContainer.childCount < 2)
             {
                 splitView.Add(panel.rootView);
@@ -154,15 +170,21 @@ namespace Emilia.Node.Editor
             }
             else
             {
+                // SplitView已经有两个子元素，需要创建新的嵌套SplitView
+                // 确定实际操作的区域（优先使用placeholder区域）
                 VisualElement area;
                 if (addDockArea is GraphTwoPaneSplitView splitViewArea) area = splitViewArea.Q(SplitViewPlaceholderName);
                 else area = addDockArea;
 
+                // 保存原有内容
                 VisualElement original = null;
                 if (area.contentContainer.childCount > 0) original = area.contentContainer.Children().FirstOrDefault();
 
+                // 创建新的SplitView并添加面板
                 GraphTwoPaneSplitView addSplitView = AddDockPanel(panel, size, position, area);
                 if (original == null) return panel;
+
+                // 将原有内容放入新SplitView的placeholder区域
                 VisualElement placeholder = addSplitView.Q(SplitViewPlaceholderName);
                 original.RemoveFromHierarchy();
                 placeholder.Add(original);
@@ -256,7 +278,7 @@ namespace Emilia.Node.Editor
 
         private GraphPanelContainer AddFloatPanel(IGraphPanel panel)
         {
-            GraphPanelContainer container = new GraphPanelContainer();
+            GraphPanelContainer container = new();
 
             container.Add(panel.rootView);
             this.floatRootContainer.Add(container);
@@ -268,6 +290,7 @@ namespace Emilia.Node.Editor
             bool isInverted = false;
             TwoPaneSplitViewOrientation orientation = default;
 
+            // 根据停靠位置确定方向和是否反转
             if (position == GraphDockPosition.Left || position == GraphDockPosition.Right)
             {
                 orientation = TwoPaneSplitViewOrientation.Horizontal;
@@ -279,16 +302,20 @@ namespace Emilia.Node.Editor
                 isInverted = position == GraphDockPosition.Bottom;
             }
 
+            // 创建SplitView
             int index = isInverted ? 1 : 0;
-            GraphTwoPaneSplitView splitView = new GraphTwoPaneSplitView(index, size, orientation);
+            GraphTwoPaneSplitView splitView = new(index, size, orientation);
             splitView.pickingMode = PickingMode.Ignore;
 
-            VisualElement placeholder = new VisualElement();
+            // 创建占位符元素
+            VisualElement placeholder = new();
             placeholder.name = SplitViewPlaceholderName;
             placeholder.pickingMode = PickingMode.Ignore;
 
+            // 设置停靠偏移量
             SetDockOffset(position);
 
+            // 根据是否反转，决定面板和占位符的添加顺序
             if (isInverted)
             {
                 splitView.Add(placeholder);
@@ -302,10 +329,12 @@ namespace Emilia.Node.Editor
 
             splitView.contentContainer.pickingMode = PickingMode.Ignore;
 
+            // 将SplitView添加到停靠区域
             if (dockArea != null) dockArea.Add(splitView);
             else
             {
                 this.dockLeisureArea.Add(splitView);
+                // 更新停靠区域的空闲区域为占位符
                 this.dockLeisureArea = placeholder;
             }
 

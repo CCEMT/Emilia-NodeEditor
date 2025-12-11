@@ -2,6 +2,9 @@
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 操作菜单项数据结构
+    /// </summary>
     public struct OperateMenuItem
     {
         /// <summary>

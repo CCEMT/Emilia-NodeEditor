@@ -1,9 +1,18 @@
 ﻿namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 基础模块
+    /// </summary>
     public abstract class BasicGraphViewModule : GraphViewModule { }
 
+    /// <summary>
+    /// 自定义模块
+    /// </summary>
     public abstract class CustomGraphViewModule : GraphViewModule { }
 
+    /// <summary>
+    /// GraphView子模块
+    /// </summary>
     public abstract class GraphViewModule
     {
         protected EditorGraphView graphView;

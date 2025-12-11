@@ -3,6 +3,9 @@ using Emilia.Kit;
 
 namespace Emilia.Node.Editor
 {
+    /// <summary>
+    /// 创建Item菜单系统
+    /// </summary>
     public class GraphCreateItemMenu : BasicGraphViewModule
     {
         private CreateItemMenuHandle handle;
@@ -19,7 +22,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public List<CreateItemMenuInfo> CollectItemMenus()
         {
-            List<CreateItemMenuInfo> types = new List<CreateItemMenuInfo>();
+            List<CreateItemMenuInfo> types = new();
             handle.CollectItemMenus(this.graphView, types);
             return types;
         }

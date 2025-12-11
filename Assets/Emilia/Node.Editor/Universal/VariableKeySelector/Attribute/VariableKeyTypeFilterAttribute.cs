@@ -8,6 +8,9 @@ namespace Emilia.Node.Attributes
     [AttributeUsage(AttributeTargets.Field)]
     public class VariableKeyTypeFilterAttribute : Attribute
     {
+        /// <summary>
+        /// 过滤类型
+        /// </summary>
         public Type type;
 
         public VariableKeyTypeFilterAttribute(Type type)
