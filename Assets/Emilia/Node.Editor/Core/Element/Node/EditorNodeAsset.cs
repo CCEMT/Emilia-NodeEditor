@@ -106,5 +106,45 @@ namespace Emilia.Node.Editor
             _propertyTree?.Dispose();
             _propertyTree = null;
         }
+
+        /// <summary>
+        /// 获取逻辑输出节点
+        /// </summary>
+        public virtual List<EditorNodeAsset> GetLogicalOutputNodes(HashSet<string> visited = null)
+        {
+            if (graphAsset == null) return new List<EditorNodeAsset>();
+
+            List<EditorNodeAsset> result = new();
+            List<EditorEdgeAsset> edges = graphAsset.GetOutputEdges(this);
+
+            for (var i = 0; i < edges.Count; i++)
+            {
+                EditorEdgeAsset edge = edges[i];
+                EditorNodeAsset targetNode = graphAsset.nodeMap.GetValueOrDefault(edge.inputNodeId);
+                if (targetNode != null) result.Add(targetNode);
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// 获取逻辑输入节点
+        /// </summary>
+        public virtual List<EditorNodeAsset> GetLogicalInputNodes(HashSet<string> visited = null)
+        {
+            if (graphAsset == null) return new List<EditorNodeAsset>();
+
+            List<EditorNodeAsset> result = new();
+            List<EditorEdgeAsset> edges = graphAsset.GetInputEdges(this);
+
+            for (var i = 0; i < edges.Count; i++)
+            {
+                EditorEdgeAsset edge = edges[i];
+                EditorNodeAsset sourceNode = graphAsset.nodeMap.GetValueOrDefault(edge.outputNodeId);
+                if (sourceNode != null) result.Add(sourceNode);
+            }
+
+            return result;
+        }
     }
 }
