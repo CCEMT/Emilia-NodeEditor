@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Emilia.Kit
 {
-    public static class ObjectDescriptionUtility
+    public static partial class ObjectDescriptionUtility
     {
         private static Dictionary<Type, IObjectDescriptionGetter> descriptionGetterMap = new();
 
