@@ -330,7 +330,7 @@ namespace Emilia.Node.Universal.Editor
                 string[] pathParts = path.Split('/');
                 string title = pathParts.Length > 0 ? pathParts[pathParts.Length - 1] : path;
 
-                int score = SearchUtility.Search(title, searchString);
+                int score = SearchUtility.SmartSearch(title, searchString);
                 if (score == 0) continue;
 
                 CreateNodeEntryTreeViewItem nodeItem = new(createNodeHandle) {

@@ -1,0 +1,24 @@
+{
+    "name": "Example",
+    "rootNamespace": "",
+    "references": [
+        "GUID:d9cefae20c909d449a8545e0c915e664",
+        "GUID:b56a80d637f16264186fc4837331915e",
+        "GUID:c456a771040151a47ba4531eaf18d92e",
+        "GUID:0f891019c50a19d4790728aa30f61078",
+        "GUID:b161c419d3a677d499b5e6e5562d8105",
+        "GUID:75e104de4c9984d4885cb52da91afec5",
+        "GUID:9545ec3cc66453f42a45fa6837e482b4"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "ODIN_INSPECTOR"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

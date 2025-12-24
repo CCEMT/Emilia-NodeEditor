@@ -5,6 +5,7 @@ using UnityEditor.Compilation;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
+using FreehandSelector = UnityEditor.Experimental.GraphView.FreehandSelector;
 
 namespace Emilia.Node.Universal.Editor
 {
@@ -76,6 +77,7 @@ namespace Emilia.Node.Universal.Editor
             editorGraphView.AddManipulator(new GraphContentDragger());
             editorGraphView.AddManipulator(new GraphSelectionDragger());
             editorGraphView.AddManipulator(new GraphRectangleSelector());
+            editorGraphView.AddManipulator(new FreehandSelector());
         }
 
         protected void AddGridBackground()

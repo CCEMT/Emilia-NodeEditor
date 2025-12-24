@@ -15,7 +15,7 @@ namespace Emilia.Node.Editor
     [Serializable]
     public partial class EditorGraphAsset : SerializedScriptableObject
     {
-        [SerializeField, ReadOnly]
+        [SerializeField, InlineButton(nameof(ResetId))]
         private string _id;
 
         [NonSerialized, OdinSerialize, HideInInspector]

@@ -72,7 +72,7 @@ namespace Emilia.Node.Universal.Editor
                 
                 displayName = RemoveRichTextLabel(displayName);
 
-                int score = SearchUtility.Search(displayName, searchString);
+                int score = SearchUtility.SmartSearch(displayName, searchString);
                 if (score == 0) continue;
 
                 TreeViewItem item = new(id, 0, displayName);
