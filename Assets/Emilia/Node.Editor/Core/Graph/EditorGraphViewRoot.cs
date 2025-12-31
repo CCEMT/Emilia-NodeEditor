@@ -84,7 +84,9 @@ namespace Emilia.Node.Editor
         public void Reload()
         {
             if (this._graphView == null) return;
-            this._graphView.Reload(this._asset, this.settingStruct);
+            this._graphView.Reload(this._asset);
+            BasicGraphData basicGraphData = this._graphView.GetGraphData<BasicGraphData>();
+            if (this.settingStruct != null) basicGraphData.graphSetting = this.settingStruct.Value;
         }
 
         /// <summary>

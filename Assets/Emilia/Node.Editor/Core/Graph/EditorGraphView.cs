@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Emilia.Kit;
 using Emilia.Kit.Editor;
-using Emilia.Node.Attributes;
 using Emilia.Reflection.Editor;
 using Unity.EditorCoroutines.Editor;
 using UnityEditor;
@@ -25,12 +24,13 @@ namespace Emilia.Node.Editor
         /// <summary>
         /// 聚焦的GraphView
         /// </summary>
-        public static EditorGraphView focusedGraphView { get; private set; }
+        public static EditorGraphView focusedGraphView { get; set; }
 
         private GraphHandle graphHandle;
+        private List<GraphData> datas = new();
+
         private Dictionary<Type, BasicGraphViewModule> modules = new();
         private Dictionary<Type, CustomGraphViewModule> customModules = new();
-        private Dictionary<string, object> customData = new();
 
         private List<IEditorNodeView> _nodeViews = new();
         private List<IEditorEdgeView> _edgeViews = new();
@@ -67,117 +67,112 @@ namespace Emilia.Node.Editor
         /// <summary>
         /// 加载的GraphAsset
         /// </summary>
-        public EditorGraphAsset graphAsset { get; private set; }
-
-        /// <summary>
-        /// Graph设置
-        /// </summary>
-        public GraphSettingStruct? graphSetting { get; private set; }
+        public EditorGraphAsset graphAsset { get; set; }
 
         /// <summary>
         /// Element缓存
         /// </summary>
-        public GraphElementCache graphElementCache { get; private set; }
+        public GraphElementCache graphElementCache { get; set; }
 
         /// <summary>
         /// 本地设置
         /// </summary>
-        public GraphLocalSettingSystem graphLocalSettingSystem { get; private set; }
+        public GraphLocalSettingSystem graphLocalSettingSystem { get; set; }
 
         /// <summary>
         /// 操作
         /// </summary>
-        public GraphOperate graphOperate { get; private set; }
+        public GraphOperate graphOperate { get; set; }
 
         /// <summary>
         /// 拷贝粘贴处理
         /// </summary>
-        public GraphCopyPaste graphCopyPaste { get; private set; }
+        public GraphCopyPaste graphCopyPaste { get; set; }
 
         /// <summary>
         /// 撤销处理
         /// </summary>
-        public GraphUndo graphUndo { get; private set; }
+        public GraphUndo graphUndo { get; set; }
 
         /// <summary>
         /// 保存处理
         /// </summary>
-        public GraphSave graphSave { get; private set; }
+        public GraphSave graphSave { get; set; }
 
         /// <summary>
         /// 选中处理
         /// </summary>
-        public GraphSelected graphSelected { get; private set; }
+        public GraphSelected graphSelected { get; set; }
 
         /// <summary>
         /// 面板管理
         /// </summary>
-        public GraphPanelSystem graphPanelSystem { get; private set; }
+        public GraphPanelSystem graphPanelSystem { get; set; }
 
         /// <summary>
         /// 快捷键管理
         /// </summary>
-        public GraphHotKeys hotKeys { get; private set; }
+        public GraphHotKeys hotKeys { get; set; }
 
         /// <summary>
         /// 节点管理
         /// </summary>
-        public GraphNodeSystem nodeSystem { get; private set; }
+        public GraphNodeSystem nodeSystem { get; set; }
 
         /// <summary>
         /// 连接管理
         /// </summary>
-        public GraphConnectSystem connectSystem { get; private set; }
+        public GraphConnectSystem connectSystem { get; set; }
 
         /// <summary>
         /// Item管理
         /// </summary>
-        public GraphItemSystem itemSystem { get; private set; }
+        public GraphItemSystem itemSystem { get; set; }
 
         /// <summary>
         /// 操作菜单
         /// </summary>
-        public GraphOperateMenu operateMenu { get; private set; }
+        public GraphOperateMenu operateMenu { get; set; }
 
         /// <summary>
         /// 创建节点菜单
         /// </summary>
-        public GraphCreateNodeMenu createNodeMenu { get; private set; }
+        public GraphCreateNodeMenu createNodeMenu { get; set; }
 
         /// <summary>
         /// 创建Item菜单
         /// </summary>
-        public GraphCreateItemMenu createItemMenu { get; private set; }
+        public GraphCreateItemMenu createItemMenu { get; set; }
 
         /// <summary>
         /// 拖拽管理
         /// </summary>
-        public GraphDragAndDrop dragAndDrop { get; private set; }
+        public GraphDragAndDrop dragAndDrop { get; set; }
 
         /// <summary>
         /// 每帧最大加载时间（毫秒）
         /// </summary>
-        public float maxLoadTimeMs { get; private set; } = 0.0416f;
+        public float maxLoadTimeMs { get; set; } = 0.0416f;
 
         /// <summary>
         /// 最后更新时间
         /// </summary>
-        public double lastUpdateTime { get; private set; }
+        public double lastUpdateTime { get; set; }
 
         /// <summary>
         /// 加载进度
         /// </summary>
-        public float loadProgress { get; private set; }
+        public float loadProgress { get; set; }
 
         /// <summary>
         /// 初始化完成
         /// </summary>
-        public bool isInitialized { get; private set; }
+        public bool isInitialized { get; set; }
 
         /// <summary>
         /// 是否聚焦
         /// </summary>
-        public bool isFocus { get; private set; }
+        public bool isFocus { get; set; }
 
         /// <summary>
         /// 当前窗口
@@ -310,7 +305,7 @@ namespace Emilia.Node.Editor
         /// <summary>
         /// 重新加载
         /// </summary>
-        public void Reload(EditorGraphAsset asset, GraphSettingStruct? settingStruct = null)
+        public void Reload(EditorGraphAsset asset)
         {
             if (asset == null)
             {
@@ -324,20 +319,17 @@ namespace Emilia.Node.Editor
             loadProgress = 0;
             isInitialized = false;
 
+            if (loadElementCoroutine != null) EditorCoroutineUtility.StopCoroutine(loadElementCoroutine);
+
+            bool allReload = graphAsset == null || graphAsset.GetType() != asset.GetType();
+            graphAsset = asset;
+
+            ReloadData();
+
             schedule.Execute(OnReload).ExecuteLater(1);
 
             void OnReload()
             {
-                if (loadElementCoroutine != null) EditorCoroutineUtility.StopCoroutine(loadElementCoroutine);
-
-                bool allReload = graphAsset == null || graphAsset.GetType() != asset.GetType();
-                graphAsset = asset;
-
-                if (settingStruct != null) graphSetting = settingStruct;
-                SyncSetting();
-
-                customData.Clear();
-
                 if (allReload) AllReload();
                 else ElementReload();
             }
@@ -356,8 +348,7 @@ namespace Emilia.Node.Editor
 
             graphAsset = asset;
 
-            customData.Clear();
-
+            ReloadData();
             ReloadHandle();
             ReloadModule();
             RemoveAllElement();
@@ -365,14 +356,6 @@ namespace Emilia.Node.Editor
             graphElementCache.BuildCache(this);
             loadProgress = 1;
             isInitialized = true;
-        }
-
-        private void SyncSetting()
-        {
-            if (graphSetting == null) return;
-            maxLoadTimeMs = graphSetting.Value.maxLoadTimeMs;
-            SetupZoom(graphSetting.Value.zoomSize.x, graphSetting.Value.zoomSize.y);
-            if (graphSetting.Value.immediatelySave == false) graphAsset = graphSave.ResetCopy(graphAsset);
         }
 
         private void AllReload()
@@ -389,6 +372,30 @@ namespace Emilia.Node.Editor
             if (this.graphHandle != null) graphHandle.Dispose(this);
             this.graphHandle = EditorHandleUtility.CreateHandle<GraphHandle>(graphAsset.GetType());
             this.graphHandle?.Initialize(this);
+        }
+
+        private void ReloadData()
+        {
+            Type currentType = graphAsset.GetType();
+
+            datas.Clear();
+
+            while (currentType != null)
+            {
+                Type graphType = GraphDataCache.GetGraphDataType(currentType);
+                if (graphType != null)
+                {
+                    GraphData graphData = ReflectUtility.CreateInstance(graphType) as GraphData;
+                    if (graphData != null)
+                    {
+                        graphData.OnCreate(this);
+                        this.datas.Add(graphData);
+                    }
+                }
+
+                if (currentType == typeof(EditorGraphAsset)) break;
+                currentType = currentType.BaseType;
+            }
         }
 
         private void ReloadModule()
@@ -814,12 +821,7 @@ namespace Emilia.Node.Editor
 
         private void OnUndoRedoPerformed()
         {
-            if (graphSetting != null && graphSetting.Value.fastUndo == false) Reload(graphAsset);
-            else
-            {
-                graphUndo.OnUndoRedoPerformed();
-                if (focusedGraphView == this) graphSelected.UpdateSelected();
-            }
+            graphUndo?.UndoRedoPerformed();
         }
 
         /// <summary>
@@ -827,7 +829,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void UpdateSelected()
         {
-            graphSelected.UpdateSelected(selection.OfType<ISelectedHandle>().ToList());
+            graphSelected?.UpdateSelected(selection.OfType<ISelectedHandle>().ToList());
         }
 
         /// <summary>
@@ -883,53 +885,17 @@ namespace Emilia.Node.Editor
         }
 
         /// <summary>
-        /// 获取自定义数据
+        /// 获取GraphData
         /// </summary>
-        public T GetCustomData<T>(string key, T defaultValue = default)
+        public T GetGraphData<T>()
         {
-            if (this.customData.TryGetValue(key, out object value)) return (T) value;
-            return defaultValue;
-        }
+            for (var i = 0; i < this.datas.Count; i++)
+            {
+                GraphData data = this.datas[i];
+                if (data is T result) return result;
+            }
 
-        /// <summary>
-        /// 获取自定义数据
-        /// </summary>
-        public T GetCustomData<T>(T defaultValue = default)
-        {
-            if (this.customData.TryGetValue(typeof(T).FullName, out object value)) return (T) value;
-            return defaultValue;
-        }
-
-        /// <summary>
-        /// 设置自定义数据
-        /// </summary>
-        public void SetCustomData<T>(string key, T value)
-        {
-            customData[key] = value;
-        }
-
-        /// <summary>
-        /// 设置自定义数据
-        /// </summary>
-        public void SetCustomData<T>(T value)
-        {
-            customData[typeof(T).FullName] = value;
-        }
-
-        /// <summary>
-        /// 移除自定义数据
-        /// </summary>
-        public void RemoveCustomData(string key)
-        {
-            customData.Remove(key);
-        }
-
-        /// <summary>
-        /// 移除自定义数据
-        /// </summary>
-        public void RemoveCustomData<T>()
-        {
-            customData.Remove(typeof(T).FullName);
+            return default;
         }
 
         private void RemoveAllElement()
@@ -1047,16 +1013,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void Save(bool force = true)
         {
-            if (force) graphSave?.OnSave();
-            else
-            {
-                bool isInquire = graphSetting != null && graphSetting.Value.immediatelySave == false && graphSave.dirty;
-                if (isInquire == false) graphSave?.OnSave();
-                else
-                {
-                    if (EditorUtility.DisplayDialog("是否保存", "是否保存当前修改", "保存", "不保存")) graphSave?.OnSave();
-                }
-            }
+            graphSave?.Save(force);
         }
 
         /// <summary>
@@ -1081,7 +1038,6 @@ namespace Emilia.Node.Editor
             foreach (BasicGraphViewModule module in this.modules.Values) module.Dispose();
 
             graphElementCache.Clear();
-            customData.Clear();
 
             Undo.undoRedoPerformed -= OnUndoRedoPerformed;
 

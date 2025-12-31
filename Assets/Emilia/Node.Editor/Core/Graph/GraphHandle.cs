@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Emilia.Kit;
+using Emilia.Node.Attributes;
 
 namespace Emilia.Node.Editor
 {
@@ -59,6 +60,26 @@ namespace Emilia.Node.Editor
         protected void AddModule<TModule>(Dictionary<Type, CustomGraphViewModule> modules) where TModule : CustomGraphViewModule, new()
         {
             modules.Add(typeof(TModule), new TModule());
+        }
+    }
+
+    [EditorHandle(typeof(EditorGraphAsset))]
+    public class BasicGraphHandle : GraphHandle
+    {
+        public override void Initialize(EditorGraphView graphView)
+        {
+            base.Initialize(graphView);
+            SyncSetting(graphView);
+        }
+
+        protected void SyncSetting(EditorGraphView graphView)
+        {
+            GraphSettingStruct? graphSetting = graphView.GetGraphData<BasicGraphData>()?.graphSetting;
+            if (graphSetting == null) return;
+
+            graphView.maxLoadTimeMs = graphSetting.Value.maxLoadTimeMs;
+            graphView.SetupZoom(graphSetting.Value.zoomSize.x, graphSetting.Value.zoomSize.y);
+            if (graphSetting.Value.immediatelySave == false) graphView.graphSave.ResetCopy(graphView.graphAsset);
         }
     }
 }

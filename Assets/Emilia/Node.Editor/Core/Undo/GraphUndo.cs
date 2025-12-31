@@ -1,4 +1,5 @@
 ﻿using Emilia.Kit;
+using Emilia.Node.Attributes;
 
 namespace Emilia.Node.Editor
 {
@@ -15,6 +16,18 @@ namespace Emilia.Node.Editor
         {
             base.Initialize(graphView);
             handle = EditorHandleUtility.CreateHandle<GraphUndoHandle>(this.graphView.graphAsset.GetType());
+        }
+
+        public void UndoRedoPerformed()
+        {
+            GraphSettingStruct? graphSetting = this.graphView.GetGraphData<BasicGraphData>()?.graphSetting;
+
+            if (graphSetting != null && graphSetting.Value.fastUndo == false) graphView.Reload(graphView.graphAsset);
+            else
+            {
+                OnUndoRedoPerformed();
+                if (EditorGraphView.focusedGraphView == this.graphView) graphView.graphSelected.UpdateSelected();
+            }
         }
 
         /// <summary>

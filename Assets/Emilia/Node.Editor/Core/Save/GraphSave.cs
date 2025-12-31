@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using Emilia.Kit;
 using Emilia.Kit.Editor;
+using Emilia.Node.Attributes;
 using UnityEditor;
 
 namespace Emilia.Node.Editor
@@ -28,9 +29,9 @@ namespace Emilia.Node.Editor
         /// <summary>
         /// 重置副本
         /// </summary>
-        public EditorGraphAsset ResetCopy(EditorGraphAsset source)
+        public void ResetCopy(EditorGraphAsset source)
         {
-            if (source == null) return null;
+            if (source == null) return;
             this.sourceGraphAsset = source;
 
             string path = AssetDatabase.GetAssetPath(source);
@@ -41,8 +42,7 @@ namespace Emilia.Node.Editor
             AssetDatabase.CopyAsset(path, tempPath);
 
             EditorGraphAsset copy = AssetDatabase.LoadAssetAtPath<EditorGraphAsset>(tempPath);
-
-            return copy;
+            this.graphView.graphAsset = copy;
         }
 
         /// <summary>
@@ -57,7 +57,23 @@ namespace Emilia.Node.Editor
         /// <summary>
         /// 保存
         /// </summary>
-        public void OnSave()
+        public void Save(bool force = true)
+        {
+            if (force) OnSave();
+            else
+            {
+                GraphSettingStruct? graphSetting = this.graphView.GetGraphData<BasicGraphData>()?.graphSetting;
+
+                bool isInquire = graphSetting != null && graphSetting.Value.immediatelySave == false && dirty;
+                if (isInquire == false) OnSave();
+                else
+                {
+                    if (EditorUtility.DisplayDialog("是否保存", "是否保存当前修改", "保存", "不保存")) OnSave();
+                }
+            }
+        }
+
+        private void OnSave()
         {
             if (this.graphView == null) return;
 
