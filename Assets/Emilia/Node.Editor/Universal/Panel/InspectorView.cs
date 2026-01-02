@@ -81,9 +81,12 @@ namespace Emilia.Node.Universal.Editor
 
         protected void UpdateTransform()
         {
-            Rect graphRect = graphView.graphPanelSystem.graphLayoutRect;
-            transform.position = graphRect.position;
-            float width = graphRect.width / 3f;
+            Rect worldRect = graphView.graphPanelSystem.graphRect;
+            Vector2 localPosition = graphView.WorldToLocal(worldRect.position);
+            transform.position = localPosition;
+
+            Rect layoutRect = graphView.graphPanelSystem.graphLayoutRect;
+            float width = layoutRect.width / 3f;
             width = Mathf.Max(width, 225);
             style.width = width;
         }
