@@ -46,13 +46,13 @@ namespace Emilia.Node.Universal.Editor
             graphView.RegisterCompleteObjectUndo("Convert Edges to Portals");
 
             // 用于存储创建的Exit Portal以便调整位置（多个Exit Portal连接到同一输入端口时需要调整位置）
-            Dictionary<string, List<PortalNodeAsset>> exitPortalsByInputPort = new Dictionary<string, List<PortalNodeAsset>>();
+            Dictionary<string, List<PortalNodeAsset>> exitPortalsByInputPort = new();
 
-            List<IEditorNodeView> createdNodeViews = new List<IEditorNodeView>();
+            List<IEditorNodeView> createdNodeViews = new();
+            List<IEditorEdgeView> createdEdgeViews = new();
 
             // 第一步：收集所有Edge信息，按输出端口分组
-            Dictionary<string, List<(IEditorEdgeView edgeView, IEditorPortView outputPort, IEditorPortView inputPort)>> edgesByOutputPort =
-                new Dictionary<string, List<(IEditorEdgeView, IEditorPortView, IEditorPortView)>>();
+            Dictionary<string, List<(IEditorEdgeView edgeView, IEditorPortView outputPort, IEditorPortView inputPort)>> edgesByOutputPort = new();
 
             foreach (IEditorEdgeView edgeView in selectedEdges)
             {
@@ -63,7 +63,7 @@ namespace Emilia.Node.Universal.Editor
 
                 string outputPortKey = $"{outputPort.master.asset.id}_{outputPort.info.id}";
 
-                if (!edgesByOutputPort.TryGetValue(outputPortKey, out var edgeList))
+                if (! edgesByOutputPort.TryGetValue(outputPortKey, out var edgeList))
                 {
                     edgeList = new List<(IEditorEdgeView, IEditorPortView, IEditorPortView)>();
                     edgesByOutputPort[outputPortKey] = edgeList;
@@ -89,7 +89,7 @@ namespace Emilia.Node.Universal.Editor
                 string portalGroupId = Guid.NewGuid().ToString();
 
                 // 创建Entry Portal（接收来自原始输出端口的连接）
-                Vector2 entryPosition = new Vector2(outputNodePos.x + outputNodeSize.x + EntryPortalOffsetX, outputNodePos.y);
+                Vector2 entryPosition = new(outputNodePos.x + outputNodeSize.x + EntryPortalOffsetX, outputNodePos.y);
 
                 IEditorNodeView entryNodeView = CreatePortalNode(
                     graphView,
@@ -114,14 +114,14 @@ namespace Emilia.Node.Universal.Editor
                     string inputPortKey = $"{inputPort.master.asset.id}_{inputPort.info.id}";
 
                     // 检查是否需要调整位置（多个Exit Portal连接到同一输入端口）
-                    if (!exitPortalsByInputPort.TryGetValue(inputPortKey, out var exitPortals))
+                    if (! exitPortalsByInputPort.TryGetValue(inputPortKey, out var exitPortals))
                     {
                         exitPortals = new List<PortalNodeAsset>();
                         exitPortalsByInputPort[inputPortKey] = exitPortals;
                     }
 
                     // 创建Exit Portal（发送连接到原始输入端口）
-                    Vector2 exitPosition = new Vector2(inputNodePos.x + ExitPortalOffsetX, inputNodePos.y);
+                    Vector2 exitPosition = new(inputNodePos.x + ExitPortalOffsetX, inputNodePos.y);
 
                     // 根据已有的Exit Portal数量调整Y位置
                     float yOffset = exitPortals.Count * PortalHeight;
@@ -159,7 +159,8 @@ namespace Emilia.Node.Universal.Editor
                     IEditorPortView exitOutputPort = exitNodeView.GetPortView("portal_port");
                     if (exitOutputPort != null && inputPort != null)
                     {
-                        graphView.connectSystem.Connect(inputPort, exitOutputPort);
+                        IEditorEdgeView exitEdge = graphView.connectSystem.Connect(inputPort, exitOutputPort);
+                        if (exitEdge != null) createdEdgeViews.Add(exitEdge);
                     }
 
                     exitIndex++;
@@ -169,9 +170,13 @@ namespace Emilia.Node.Universal.Editor
                 IEditorPortView entryInputPort = entryNodeView.GetPortView("portal_port");
                 if (entryInputPort != null && outputPort != null)
                 {
-                    graphView.connectSystem.Connect(entryInputPort, outputPort);
+                    IEditorEdgeView entryEdge = graphView.connectSystem.Connect(entryInputPort, outputPort);
+                    if (entryEdge != null) createdEdgeViews.Add(entryEdge);
                 }
             }
+
+            // 强制更新所有新创建边的EdgeControl，避免一帧显示残影
+            foreach (IEditorEdgeView edgeView in createdEdgeViews) edgeView.ForceUpdateView();
 
             // 清除选择并选中新创建的节点
             graphView.ClearSelection();
@@ -204,6 +209,5 @@ namespace Emilia.Node.Universal.Editor
 
             return nodeView;
         }
-
     }
 }

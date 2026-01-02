@@ -127,7 +127,7 @@ namespace Emilia.Node.Editor
             StyleSheet styleSheet = ResourceUtility.LoadResource<StyleSheet>(styleFilePath);
             styleSheets.Add(styleSheet);
 
-            schedule.Execute(() => schedule.Execute(ForceUpdateEdgeControl).ExecuteLater(1)).ExecuteLater(1);
+            schedule.Execute(() => schedule.Execute(ForceUpdateView).ExecuteLater(1)).ExecuteLater(1);
         }
 
         /// <summary>
@@ -169,7 +169,7 @@ namespace Emilia.Node.Editor
 
         public virtual void OnValueChanged(bool isSilent = false)
         {
-            schedule.Execute(ForceUpdateEdgeControl).ExecuteLater(1);
+            schedule.Execute(ForceUpdateView).ExecuteLater(1);
             if (isSilent == false) graphView.graphSave.SetDirty();
         }
 
@@ -182,7 +182,7 @@ namespace Emilia.Node.Editor
         /// <summary>
         /// 强制更新EdgeControl
         /// </summary>
-        public void ForceUpdateEdgeControl()
+        public void ForceUpdateView()
         {
             if (inputPortView != null) editorEdgeControl.to = this.WorldToLocal(inputPortView.portElement.GetGlobalCenter());
             if (outputPortView != null) editorEdgeControl.from = this.WorldToLocal(outputPortView.portElement.GetGlobalCenter());
