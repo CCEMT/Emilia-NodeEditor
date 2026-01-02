@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using Emilia.Node.Attributes;
 using Emilia.Node.Editor;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Emilia.Node.Universal.Editor
 {
     /// <summary>
-    /// Portal节点视图
+    /// Portal节点视图，负责Portal节点的UI显示和交互
     /// </summary>
     [EditorNode(typeof(PortalNodeAsset))]
     public class PortalEditorNodeView : UniversalEditorNodeView
@@ -15,6 +16,7 @@ namespace Emilia.Node.Universal.Editor
         private static readonly Color HighlightColor = new Color(1f, 0.8f, 0.2f, 1f);
         private static readonly Color EntryDefaultColor = new Color(0.2f, 0.6f, 0.3f);
         private static readonly Color ExitDefaultColor = new Color(0.3f, 0.4f, 0.7f);
+        private const float ClickAreaSize = 10;
 
         private PortalNodeAsset _portalAsset;
 
@@ -25,165 +27,258 @@ namespace Emilia.Node.Universal.Editor
             _portalAsset = asset as PortalNodeAsset;
             base.Initialize(graphView, asset);
 
-            // 设置Portal节点的默认颜色
-            SetColor(GetDefaultPortalColor());
+            SetColor(GetDefaultColor());
+            HideTitleContainer();
+            SetupClickAreaBorder();
         }
 
-        private Color GetDefaultPortalColor()
+        private void HideTitleContainer()
+        {
+            titleContainer.style.display = DisplayStyle.None;
+        }
+
+        /// <summary>
+        /// 设置可点击区域的边框，扩展Portal的可选择范围
+        /// </summary>
+        private void SetupClickAreaBorder()
+        {
+            bool isHorizontal = _portalAsset.portOrientation == EditorOrientation.Horizontal;
+            bool isEntry = _portalAsset.direction == PortalDirection.Entry;
+
+            nodeBottomContainer.pickingMode = PickingMode.Position;
+
+            if (isHorizontal)
+            {
+                // 横向布局：Entry向右扩展，Exit向左扩展
+                if (isEntry)
+                    nodeBottomContainer.style.borderRightWidth = ClickAreaSize;
+                else
+                    nodeBottomContainer.style.borderLeftWidth = ClickAreaSize;
+            }
+            else
+            {
+                // 纵向布局：Entry向下扩展，Exit向上扩展
+                if (isEntry)
+                    nodeTopContainer.style.borderBottomWidth = ClickAreaSize;
+                else
+                    nodeBottomContainer.style.borderTopWidth = ClickAreaSize;
+            }
+
+            UpdateBorderColors();
+        }
+
+        private Color GetDefaultColor()
         {
             return _portalAsset.direction == PortalDirection.Entry ? EntryDefaultColor : ExitDefaultColor;
         }
 
-        /// <summary>
-        /// 从连接的边动态获取端口信息
-        /// </summary>
-        private (Type portType, Color portColor) GetPortInfoFromConnections()
+        public override void SetColor(Color color)
         {
-            Type portType = typeof(object);
-            Color portColor = Color.white;
+            base.SetColor(color);
+            UpdateBorderColors();
+        }
 
-            if (_portalAsset == null || graphView?.graphAsset == null) return (portType, portColor);
+        private void UpdateBorderColors()
+        {
+            Color borderColor = topicColor;
+            SetContainerBorderColor(nodeTopContainer, borderColor);
+            SetContainerBorderColor(nodeBottomContainer, borderColor);
+        }
 
-            // 获取连接到此Portal的边
-            List<EditorEdgeAsset> edges = graphView.graphAsset.GetEdges(_portalAsset.id, "portal_port");
-
-            if (edges.Count > 0)
-            {
-                EditorEdgeAsset firstEdge = edges[0];
-
-                // 根据Portal方向获取对应的端口信息
-                string connectedNodeId;
-                string connectedPortId;
-
-                if (_portalAsset.direction == PortalDirection.Entry)
-                {
-                    // Entry Portal的输入端口连接到其他节点的输出端口
-                    connectedNodeId = firstEdge.outputNodeId;
-                    connectedPortId = firstEdge.outputPortId;
-                }
-                else
-                {
-                    // Exit Portal的输出端口连接到其他节点的输入端口
-                    connectedNodeId = firstEdge.inputNodeId;
-                    connectedPortId = firstEdge.inputPortId;
-                }
-
-                // 获取连接节点的端口视图
-                IEditorNodeView connectedNodeView = graphView.graphElementCache.nodeViewById.GetValueOrDefault(connectedNodeId);
-                if (connectedNodeView != null)
-                {
-                    IEditorPortView connectedPortView = connectedNodeView.GetPortView(connectedPortId);
-                    if (connectedPortView != null)
-                    {
-                        portType = connectedPortView.info.portType ?? typeof(object);
-                        portColor = connectedPortView.info.color;
-                    }
-                }
-            }
-
-            return (portType, portColor);
+        private void SetContainerBorderColor(VisualElement container, Color color)
+        {
+            container.style.borderTopColor = color;
+            container.style.borderBottomColor = color;
+            container.style.borderLeftColor = color;
+            container.style.borderRightColor = color;
         }
 
         public override List<EditorPortInfo> CollectStaticPortAssets()
         {
-            List<EditorPortInfo> portInfos = new List<EditorPortInfo>();
-
+            var portInfos = new List<EditorPortInfo>();
             if (_portalAsset == null) return portInfos;
 
-            // 动态获取端口类型和颜色
-            var (portType, portColor) = GetPortInfoFromConnections();
+            var (displayName, portColor) = GetPortDisplayInfo();
 
-            EditorPortInfo portInfo = new EditorPortInfo
+            portInfos.Add(new EditorPortInfo
             {
-                id = "portal_port",
-                displayName = string.Empty,
-                portType = portType,
+                id = PortalHelper.PortalPortId,
+                displayName = displayName,
+                portType = typeof(object),
                 direction = _portalAsset.direction == PortalDirection.Entry
                     ? EditorPortDirection.Input
                     : EditorPortDirection.Output,
-                orientation = EditorOrientation.Horizontal,
+                orientation = _portalAsset.portOrientation,
                 canMultiConnect = true,
                 color = portColor
-            };
-
-            portInfos.Add(portInfo);
+            });
 
             return portInfos;
+        }
+
+        /// <summary>
+        /// 获取端口显示信息（名称和颜色）
+        /// </summary>
+        private (string displayName, Color portColor) GetPortDisplayInfo()
+        {
+            var connectionInfo = GetConnectionInfo();
+            return (connectionInfo.displayName, connectionInfo.portColor);
+        }
+
+        /// <summary>
+        /// 从关联Portal的连接中获取端口信息
+        /// </summary>
+        private (Type portType, Color portColor, string displayName) GetConnectionInfo()
+        {
+            Type portType = typeof(object);
+            Color portColor = Color.white;
+            string displayName = string.Empty;
+
+            if (_portalAsset == null || graphView?.graphAsset == null)
+                return (portType, portColor, displayName);
+
+            string linkedPortalId = _portalAsset.linkedPortalId;
+            if (string.IsNullOrEmpty(linkedPortalId))
+                return (portType, portColor, displayName);
+
+            var linkedPortal = graphView.graphAsset.nodeMap.GetValueOrDefault(linkedPortalId) as PortalNodeAsset;
+            if (linkedPortal == null)
+                return (portType, portColor, displayName);
+
+            var edges = graphView.graphAsset.GetEdges(linkedPortal.id, PortalHelper.PortalPortId);
+            if (edges.Count == 0)
+                return (portType, portColor, displayName);
+
+            return CollectPortInfoFromEdges(edges, linkedPortal);
+        }
+
+        /// <summary>
+        /// 从边集合中收集端口信息
+        /// </summary>
+        private (Type portType, Color portColor, string displayName) CollectPortInfoFromEdges(
+            List<EditorEdgeAsset> edges,
+            PortalNodeAsset linkedPortal)
+        {
+            var portNames = new List<string>();
+            Type firstPortType = null;
+            Color firstPortColor = Color.white;
+
+            foreach (EditorEdgeAsset edge in edges)
+            {
+                var (nodeId, portId) = GetConnectedPortIds(edge, linkedPortal);
+                var portView = GetConnectedPortView(nodeId, portId);
+
+                if (portView != null)
+                {
+                    portNames.Add(GetPortDisplayName(portView));
+
+                    if (firstPortType == null)
+                    {
+                        firstPortType = portView.info.portType ?? typeof(object);
+                        firstPortColor = portView.info.color;
+                    }
+                }
+            }
+
+            if (portNames.Count == 0)
+                return (typeof(object), Color.white, string.Empty);
+
+            string displayName = AreAllNamesEqual(portNames) ? portNames[0] : "...";
+            return (firstPortType ?? typeof(object), firstPortColor, displayName);
+        }
+
+        private (string nodeId, string portId) GetConnectedPortIds(EditorEdgeAsset edge, PortalNodeAsset linkedPortal)
+        {
+            // Entry Portal的输入端口连接到其他节点的输出端口
+            // Exit Portal的输出端口连接到其他节点的输入端口
+            if (linkedPortal.direction == PortalDirection.Entry)
+                return (edge.outputNodeId, edge.outputPortId);
+            else
+                return (edge.inputNodeId, edge.inputPortId);
+        }
+
+        private IEditorPortView GetConnectedPortView(string nodeId, string portId)
+        {
+            var nodeView = graphView.graphElementCache.nodeViewById.GetValueOrDefault(nodeId);
+            return nodeView?.GetPortView(portId);
+        }
+
+        private string GetPortDisplayName(IEditorPortView portView)
+        {
+            Type type = portView.info.portType;
+            if (type == null || type == typeof(object))
+                return portView.info.displayName ?? string.Empty;
+            return type.Name;
+        }
+
+        private bool AreAllNamesEqual(List<string> names)
+        {
+            if (names.Count <= 1) return true;
+            string first = names[0];
+            for (int i = 1; i < names.Count; i++)
+            {
+                if (names[i] != first) return false;
+            }
+            return true;
         }
 
         public override void UpdateTitle()
         {
             if (_portalAsset != null)
-            {
                 title = _portalAsset.title;
-            }
         }
 
         public override void Select()
         {
             base.Select();
-            HighlightLinkedPortal(true);
+            SetLinkedPortalsHighlight(true);
         }
 
         public override void Unselect()
         {
             base.Unselect();
-            HighlightLinkedPortal(false);
+            SetLinkedPortalsHighlight(false);
         }
 
         /// <summary>
-        /// 高亮关联的Portal节点（Entry高亮Exit，Exit高亮Entry）
+        /// 设置关联Portal的高亮状态
         /// </summary>
-        private void HighlightLinkedPortal(bool highlight)
+        private void SetLinkedPortalsHighlight(bool highlight)
         {
-            if (_portalAsset == null || string.IsNullOrEmpty(_portalAsset.portalGroupId)) return;
+            if (_portalAsset == null || string.IsNullOrEmpty(_portalAsset.portalGroupId))
+                return;
 
-            // 确定需要高亮的方向（Entry找Exit，Exit找Entry）
             PortalDirection targetDirection = _portalAsset.direction == PortalDirection.Entry
                 ? PortalDirection.Exit
                 : PortalDirection.Entry;
 
-            // 通过portalGroupId查找同组的目标方向Portal节点
-            foreach (var kvp in graphView.graphElementCache.nodeViewById)
+            var linkedPortals = PortalHelper.FindLinkedPortals(graphView, _portalAsset, targetDirection);
+
+            foreach (IEditorNodeView nodeView in linkedPortals)
             {
-                if (kvp.Value.asset is PortalNodeAsset otherPortal &&
-                    otherPortal.portalGroupId == _portalAsset.portalGroupId &&
-                    otherPortal.direction == targetDirection)
+                if (nodeView is PortalEditorNodeView linkedPortalView)
                 {
-                    if (kvp.Value is PortalEditorNodeView linkedPortalView)
-                    {
-                        if (highlight)
-                        {
-                            linkedPortalView.SetFocus(HighlightColor);
-                        }
-                        else
-                        {
-                            linkedPortalView.ClearFocus();
-                        }
-                    }
+                    if (highlight)
+                        linkedPortalView.SetFocus(HighlightColor);
+                    else
+                        linkedPortalView.ClearFocus();
                 }
             }
         }
 
         /// <summary>
-        /// 刷新端口视图（当连接改变时调用）
+        /// 刷新端口视图，当连接改变时调用以更新端口信息和颜色
         /// </summary>
         public void RefreshPortFromConnections()
         {
-            // 重新构建端口视图以获取最新的端口信息
-            schedule.Execute(() =>
-            {
-                // 更新节点颜色
-                var (_, portColor) = GetPortInfoFromConnections();
-                if (portColor != Color.white)
-                {
-                    SetColor(portColor);
-                }
-                else
-                {
-                    SetColor(GetDefaultPortalColor());
-                }
-            }).ExecuteLater(1);
+            RebuildPortView();
+            UpdateColorFromConnections();
+        }
+
+        private void UpdateColorFromConnections()
+        {
+            var (_, portColor, _) = GetConnectionInfo();
+            SetColor(portColor != Color.white ? portColor : GetDefaultColor());
         }
     }
 }

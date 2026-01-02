@@ -1,28 +1,57 @@
 using System.Collections.Generic;
 using System.Linq;
 using Emilia.Node.Editor;
-using UnityEditor.Experimental.GraphView;
 
 namespace Emilia.Node.Universal.Editor
 {
     /// <summary>
-    /// 将选中的Portal节点还原为普通边
+    /// 将Portal节点还原为普通边的操作。
+    /// 选中任意Portal后，会还原整个Portal组（Entry和所有关联的Exit）。
     /// </summary>
     [Action("Convert/Revert Portals to Edges", 7001, OperateMenuTagDefine.UniversalActionTag)]
     public class RevertPortalsToEdgesAction : OperateMenuAction
     {
+        /// <summary>
+        /// 待创建的连接信息
+        /// </summary>
+        private struct ConnectionInfo
+        {
+            public IEditorPortView outputPort;
+            public IEditorPortView inputPort;
+        }
+
         public override OperateMenuActionValidity GetValidity(OperateMenuContext context)
         {
-            var selectedPortals = GetSelectedPortalNodes(context.graphView);
-            return selectedPortals.Count > 0 ? OperateMenuActionValidity.Valid : OperateMenuActionValidity.NotApplicable;
+            var graphData = context.graphView.GetGraphData<UniversalGraphData>();
+            if (graphData.graphSetting.disabledTransmitNode)
+                return OperateMenuActionValidity.NotApplicable;
+
+            return GetSelectedPortals(context.graphView).Count > 0
+                ? OperateMenuActionValidity.Valid
+                : OperateMenuActionValidity.NotApplicable;
         }
 
         public override void Execute(OperateMenuActionContext context)
         {
-            RevertPortalsToEdges(context.graphView);
+            RevertPortals(context.graphView);
         }
 
-        private List<IEditorNodeView> GetSelectedPortalNodes(EditorGraphView graphView)
+        private void RevertPortals(EditorGraphView graphView)
+        {
+            var selectedPortals = GetSelectedPortals(graphView);
+            if (selectedPortals.Count == 0) return;
+
+            graphView.RegisterCompleteObjectUndo("Revert Portals to Edges");
+
+            var (connections, portalsToDelete) = CollectRevertData(graphView, selectedPortals);
+            DeletePortals(graphView, portalsToDelete);
+            CreateDirectConnections(graphView, connections);
+
+            graphView.UpdateSelected();
+            graphView.graphSave.SetDirty();
+        }
+
+        private List<IEditorNodeView> GetSelectedPortals(EditorGraphView graphView)
         {
             return graphView.selection
                 .OfType<IEditorNodeView>()
@@ -30,113 +59,128 @@ namespace Emilia.Node.Universal.Editor
                 .ToList();
         }
 
-        private void RevertPortalsToEdges(EditorGraphView graphView)
+        /// <summary>
+        /// 收集还原操作所需的数据：要创建的连接和要删除的Portal
+        /// </summary>
+        private (List<ConnectionInfo> connections, List<IEditorNodeView> portals) CollectRevertData(
+            EditorGraphView graphView,
+            List<IEditorNodeView> selectedPortals)
         {
-            List<IEditorNodeView> selectedPortals = GetSelectedPortalNodes(graphView);
-            if (selectedPortals.Count == 0) return;
-
-            // 记录撤销
-            graphView.RegisterCompleteObjectUndo("Revert Portals to Edges");
-
-            // 收集所有需要处理的Portal组
-            HashSet<string> processedGroups = new HashSet<string>();
-            List<(IEditorPortView fromPort, IEditorPortView toPort)> connectionsToCreate = new List<(IEditorPortView, IEditorPortView)>();
-            List<IEditorNodeView> portalsToDelete = new List<IEditorNodeView>();
+            var processedGroupIds = new HashSet<string>();
+            var connections = new List<ConnectionInfo>();
+            var portalsToDelete = new List<IEditorNodeView>();
 
             foreach (IEditorNodeView nodeView in selectedPortals)
             {
-                PortalNodeAsset portalAsset = nodeView.asset as PortalNodeAsset;
-                if (portalAsset == null) continue;
+                if (nodeView.asset is not PortalNodeAsset portalAsset)
+                    continue;
 
-                // 检查是否已处理过该组
-                if (processedGroups.Contains(portalAsset.portalGroupId)) continue;
-                processedGroups.Add(portalAsset.portalGroupId);
+                if (processedGroupIds.Contains(portalAsset.portalGroupId))
+                    continue;
 
-                // 通过portalGroupId查找同组的所有Portal（而不是只通过linkedPortalId）
-                List<IEditorNodeView> entryPortals = new List<IEditorNodeView>();
-                List<IEditorNodeView> exitPortals = new List<IEditorNodeView>();
+                processedGroupIds.Add(portalAsset.portalGroupId);
+                ProcessPortalGroup(graphView, portalAsset.portalGroupId, connections, portalsToDelete);
+            }
 
-                foreach (var kvp in graphView.graphElementCache.nodeViewById)
+            return (connections, portalsToDelete);
+        }
+
+        /// <summary>
+        /// 处理单个Portal组，收集其连接信息和Portal节点
+        /// </summary>
+        private void ProcessPortalGroup(
+            EditorGraphView graphView,
+            string portalGroupId,
+            List<ConnectionInfo> connections,
+            List<IEditorNodeView> portalsToDelete)
+        {
+            var groupInfo = PortalHelper.FindPortalsInGroup(graphView, portalGroupId);
+
+            CollectConnectionsFromGroup(groupInfo, connections);
+            AddUniquePortals(groupInfo.GetAllPortals(), portalsToDelete);
+        }
+
+        /// <summary>
+        /// 从Portal组收集需要重建的连接
+        /// </summary>
+        private void CollectConnectionsFromGroup(PortalGroupInfo groupInfo, List<ConnectionInfo> connections)
+        {
+            foreach (IEditorNodeView entryView in groupInfo.entryPortals)
+            {
+                IEditorPortView entryPort = PortalHelper.GetPortalPort(entryView);
+                if (entryPort == null) continue;
+
+                // 获取Entry Portal连接的源输出端口
+                foreach (IEditorEdgeView entryEdge in entryPort.edges)
                 {
-                    if (kvp.Value.asset is PortalNodeAsset otherPortal && otherPortal.portalGroupId == portalAsset.portalGroupId)
-                    {
-                        if (otherPortal.direction == PortalDirection.Entry)
-                        {
-                            entryPortals.Add(kvp.Value);
-                        }
-                        else
-                        {
-                            exitPortals.Add(kvp.Value);
-                        }
-                    }
+                    IEditorPortView sourceOutput = entryEdge.outputPortView;
+                    if (sourceOutput == null) continue;
+
+                    // 收集所有Exit Portal连接的目标输入端口
+                    CollectExitConnections(groupInfo.exitPortals, sourceOutput, connections);
                 }
+            }
+        }
 
-                // 收集原始连接信息
-                foreach (IEditorNodeView entryPortalView in entryPortals)
+        /// <summary>
+        /// 收集Exit Portal到目标节点的连接
+        /// </summary>
+        private void CollectExitConnections(
+            List<IEditorNodeView> exitPortals,
+            IEditorPortView sourceOutput,
+            List<ConnectionInfo> connections)
+        {
+            foreach (IEditorNodeView exitView in exitPortals)
+            {
+                IEditorPortView exitPort = PortalHelper.GetPortalPort(exitView);
+                if (exitPort == null) continue;
+
+                foreach (IEditorEdgeView exitEdge in exitPort.edges)
                 {
-                    IEditorPortView entryPort = entryPortalView.GetPortView("portal_port");
-                    if (entryPort == null) continue;
-
-                    // Entry Portal的输入边 - 获取连接到它的输出端口
-                    foreach (IEditorEdgeView edge in entryPort.edges)
+                    IEditorPortView targetInput = exitEdge.inputPortView;
+                    if (targetInput != null)
                     {
-                        IEditorPortView sourceOutputPort = edge.outputPortView;
-                        if (sourceOutputPort == null) continue;
-
-                        // 遍历所有Exit Portal，获取它们连接到的输入端口
-                        foreach (IEditorNodeView exitPortalView in exitPortals)
+                        connections.Add(new ConnectionInfo
                         {
-                            IEditorPortView exitPort = exitPortalView.GetPortView("portal_port");
-                            if (exitPort == null) continue;
-
-                            // Exit Portal的输出边 - 获取连接到它的输入端口
-                            foreach (IEditorEdgeView exitEdge in exitPort.edges)
-                            {
-                                IEditorPortView targetInputPort = exitEdge.inputPortView;
-                                if (targetInputPort != null)
-                                {
-                                    connectionsToCreate.Add((sourceOutputPort, targetInputPort));
-                                }
-                            }
-                        }
-                    }
-
-                    if (!portalsToDelete.Contains(entryPortalView))
-                    {
-                        portalsToDelete.Add(entryPortalView);
-                    }
-                }
-
-                // 添加所有Exit Portal到删除列表
-                foreach (IEditorNodeView exitPortalView in exitPortals)
-                {
-                    if (!portalsToDelete.Contains(exitPortalView))
-                    {
-                        portalsToDelete.Add(exitPortalView);
+                            outputPort = sourceOutput,
+                            inputPort = targetInput
+                        });
                     }
                 }
             }
+        }
 
-            // 选中要删除的Portal节点，然后走默认删除逻辑
+        /// <summary>
+        /// 添加不重复的Portal到删除列表
+        /// </summary>
+        private void AddUniquePortals(List<IEditorNodeView> portals, List<IEditorNodeView> targetList)
+        {
+            foreach (var portal in portals)
+            {
+                if (!targetList.Contains(portal))
+                    targetList.Add(portal);
+            }
+        }
+
+        private void DeletePortals(EditorGraphView graphView, List<IEditorNodeView> portals)
+        {
             graphView.ClearSelection();
-            foreach (IEditorNodeView portalView in portalsToDelete)
-            {
-                graphView.AddToSelection(portalView.element);
-            }
-            graphView.graphOperate.Delete();
 
-            // 创建新的直接连接
-            foreach (var connection in connectionsToCreate)
+            foreach (IEditorNodeView portal in portals)
+                graphView.AddToSelection(portal.element);
+
+            graphView.graphOperate.Delete();
+        }
+
+        private void CreateDirectConnections(EditorGraphView graphView, List<ConnectionInfo> connections)
+        {
+            foreach (var conn in connections)
             {
-                // 检查连接是否有效
-                if (graphView.connectSystem.CanConnect(connection.toPort, connection.fromPort))
+                if (graphView.connectSystem.CanConnect(conn.inputPort, conn.outputPort))
                 {
-                    graphView.connectSystem.Connect(connection.toPort, connection.fromPort);
+                    graphView.connectSystem.Connect(conn.inputPort, conn.outputPort);
                 }
             }
-
-            // 保存更改
-            graphView.graphSave.SetDirty();
         }
     }
 }

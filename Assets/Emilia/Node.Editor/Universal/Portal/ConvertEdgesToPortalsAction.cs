@@ -2,31 +2,80 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Emilia.Node.Editor;
-using UnityEditor;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Emilia.Node.Universal.Editor
 {
     /// <summary>
-    /// 将选中的边转换为Portal节点
+    /// 边转换操作的中间数据结构
+    /// </summary>
+    internal struct EdgeConversionInfo
+    {
+        public IEditorEdgeView edgeView;
+        public IEditorPortView outputPort;
+        public IEditorPortView inputPort;
+    }
+
+    /// <summary>
+    /// Portal创建结果
+    /// </summary>
+    internal struct PortalCreationResult
+    {
+        public List<IEditorNodeView> nodeViews;
+        public List<IEditorEdgeView> edgeViews;
+
+        public static PortalCreationResult Create()
+        {
+            return new PortalCreationResult
+            {
+                nodeViews = new List<IEditorNodeView>(),
+                edgeViews = new List<IEditorEdgeView>()
+            };
+        }
+    }
+
+    /// <summary>
+    /// 将选中的边转换为Portal节点对的操作。
+    /// 同一输出端口的多条边会共享一个Entry Portal，每条边对应一个Exit Portal。
     /// </summary>
     [Action("Convert/Convert to Portals", 7000, OperateMenuTagDefine.UniversalActionTag)]
     public class ConvertEdgesToPortalsAction : OperateMenuAction
     {
-        private const float EntryPortalOffsetX = 50f;
-        private const float ExitPortalOffsetX = -150f;
-        private const float PortalHeight = 60f;
+        private const float EntryOffsetX = 100f;
+        private const float ExitOffsetX = -175f;
+        private const float EntryOffsetY = 50f;
+        private const float ExitOffsetY = -80f;
+        private const float PortalOffset = 25f;
+        private const float PortalSpacing = 60f;
 
         public override OperateMenuActionValidity GetValidity(OperateMenuContext context)
         {
-            // 检查是否有选中的边
-            var selectedEdges = GetSelectedEdges(context.graphView);
-            return selectedEdges.Count > 0 ? OperateMenuActionValidity.Valid : OperateMenuActionValidity.NotApplicable;
+            var graphData = context.graphView.GetGraphData<UniversalGraphData>();
+            if (graphData.graphSetting.disabledTransmitNode)
+                return OperateMenuActionValidity.NotApplicable;
+
+            return GetSelectedEdges(context.graphView).Count > 0
+                ? OperateMenuActionValidity.Valid
+                : OperateMenuActionValidity.NotApplicable;
         }
 
         public override void Execute(OperateMenuActionContext context)
         {
-            ConvertEdgesToPortals(context.graphView);
+            ConvertEdges(context.graphView);
+        }
+
+        private void ConvertEdges(EditorGraphView graphView)
+        {
+            var selectedEdges = GetSelectedEdges(graphView);
+            if (selectedEdges.Count == 0) return;
+
+            graphView.RegisterCompleteObjectUndo("Convert Edges to Portals");
+
+            var edgeGroups = GroupEdgesByOutputPort(selectedEdges);
+            var result = CreatePortalsForGroups(graphView, edgeGroups);
+
+            FinalizeConversion(graphView, result);
         }
 
         private List<IEditorEdgeView> GetSelectedEdges(EditorGraphView graphView)
@@ -37,177 +86,193 @@ namespace Emilia.Node.Universal.Editor
                 .ToList();
         }
 
-        private void ConvertEdgesToPortals(EditorGraphView graphView)
+        /// <summary>
+        /// 按输出端口对边进行分组，同一输出端口的边将共享Entry Portal
+        /// </summary>
+        private Dictionary<string, List<EdgeConversionInfo>> GroupEdgesByOutputPort(List<IEditorEdgeView> edges)
         {
-            List<IEditorEdgeView> selectedEdges = GetSelectedEdges(graphView);
-            if (selectedEdges.Count == 0) return;
+            var groups = new Dictionary<string, List<EdgeConversionInfo>>();
 
-            // 记录撤销
-            graphView.RegisterCompleteObjectUndo("Convert Edges to Portals");
-
-            // 用于存储创建的Exit Portal以便调整位置（多个Exit Portal连接到同一输入端口时需要调整位置）
-            Dictionary<string, List<PortalNodeAsset>> exitPortalsByInputPort = new();
-
-            List<IEditorNodeView> createdNodeViews = new();
-            List<IEditorEdgeView> createdEdgeViews = new();
-
-            // 第一步：收集所有Edge信息，按输出端口分组
-            Dictionary<string, List<(IEditorEdgeView edgeView, IEditorPortView outputPort, IEditorPortView inputPort)>> edgesByOutputPort = new();
-
-            foreach (IEditorEdgeView edgeView in selectedEdges)
+            foreach (IEditorEdgeView edgeView in edges)
             {
-                if (edgeView.inputPortView == null || edgeView.outputPortView == null) continue;
+                if (edgeView.inputPortView == null || edgeView.outputPortView == null)
+                    continue;
 
-                IEditorPortView outputPort = edgeView.outputPortView;
-                IEditorPortView inputPort = edgeView.inputPortView;
+                string outputPortKey = PortalHelper.GetPortKey(edgeView.outputPortView);
 
-                string outputPortKey = $"{outputPort.master.asset.id}_{outputPort.info.id}";
-
-                if (! edgesByOutputPort.TryGetValue(outputPortKey, out var edgeList))
+                if (!groups.TryGetValue(outputPortKey, out var edgeList))
                 {
-                    edgeList = new List<(IEditorEdgeView, IEditorPortView, IEditorPortView)>();
-                    edgesByOutputPort[outputPortKey] = edgeList;
-                }
-                edgeList.Add((edgeView, outputPort, inputPort));
-            }
-
-            // 第二步：按输出端口组处理
-            foreach (var kvp in edgesByOutputPort)
-            {
-                var edgeList = kvp.Value;
-                if (edgeList.Count == 0) continue;
-
-                // 获取第一条边的输出端口信息来创建Entry Portal
-                var firstEdgeInfo = edgeList[0];
-                IEditorPortView outputPort = firstEdgeInfo.outputPort;
-
-                // 获取输出节点位置（Entry Portal放在输出节点右侧）
-                Vector2 outputNodePos = outputPort.master.asset.position.position;
-                Vector2 outputNodeSize = outputPort.master.asset.position.size;
-
-                // 生成新的Portal组ID
-                string portalGroupId = Guid.NewGuid().ToString();
-
-                // 创建Entry Portal（接收来自原始输出端口的连接）
-                Vector2 entryPosition = new(outputNodePos.x + outputNodeSize.x + EntryPortalOffsetX, outputNodePos.y);
-
-                IEditorNodeView entryNodeView = CreatePortalNode(
-                    graphView,
-                    PortalDirection.Entry,
-                    entryPosition,
-                    portalGroupId
-                );
-
-                PortalNodeAsset entryPortal = entryNodeView.asset as PortalNodeAsset;
-                createdNodeViews.Add(entryNodeView);
-
-                // 处理该输出端口的所有边
-                int exitIndex = 0;
-                foreach (var edgeInfo in edgeList)
-                {
-                    IEditorEdgeView edgeView = edgeInfo.edgeView;
-                    IEditorPortView inputPort = edgeInfo.inputPort;
-
-                    // 获取输入节点位置（Exit Portal放在输入节点左侧）
-                    Vector2 inputNodePos = inputPort.master.asset.position.position;
-
-                    string inputPortKey = $"{inputPort.master.asset.id}_{inputPort.info.id}";
-
-                    // 检查是否需要调整位置（多个Exit Portal连接到同一输入端口）
-                    if (! exitPortalsByInputPort.TryGetValue(inputPortKey, out var exitPortals))
-                    {
-                        exitPortals = new List<PortalNodeAsset>();
-                        exitPortalsByInputPort[inputPortKey] = exitPortals;
-                    }
-
-                    // 创建Exit Portal（发送连接到原始输入端口）
-                    Vector2 exitPosition = new(inputNodePos.x + ExitPortalOffsetX, inputNodePos.y);
-
-                    // 根据已有的Exit Portal数量调整Y位置
-                    float yOffset = exitPortals.Count * PortalHeight;
-                    exitPosition.y += yOffset;
-
-                    IEditorNodeView exitNodeView = CreatePortalNode(
-                        graphView,
-                        PortalDirection.Exit,
-                        exitPosition,
-                        portalGroupId
-                    );
-
-                    PortalNodeAsset exitPortal = exitNodeView.asset as PortalNodeAsset;
-                    exitPortals.Add(exitPortal);
-                    createdNodeViews.Add(exitNodeView);
-
-                    // 设置Portal之间的链接关系
-                    // 注意：Entry Portal的linkedPortalId只保存最后一个Exit Portal
-                    // 但通过portalGroupId可以找到所有关联的Portal
-                    entryPortal.linkedPortalId = exitPortal.id;
-                    exitPortal.linkedPortalId = entryPortal.id;
-
-                    // 设置显示名称
-                    string portalName = $"Portal_{exitIndex + 1}";
-                    if (exitIndex == 0)
-                    {
-                        entryPortal.displayName = portalName;
-                    }
-                    exitPortal.displayName = portalName;
-
-                    // 删除原始边
-                    graphView.connectSystem.Disconnect(edgeView);
-
-                    // 创建从Exit Portal到原始输入端口的连接
-                    IEditorPortView exitOutputPort = exitNodeView.GetPortView("portal_port");
-                    if (exitOutputPort != null && inputPort != null)
-                    {
-                        IEditorEdgeView exitEdge = graphView.connectSystem.Connect(inputPort, exitOutputPort);
-                        if (exitEdge != null) createdEdgeViews.Add(exitEdge);
-                    }
-
-                    exitIndex++;
+                    edgeList = new List<EdgeConversionInfo>();
+                    groups[outputPortKey] = edgeList;
                 }
 
-                // 创建从原始输出端口到Entry Portal的连接（只需要创建一次）
-                IEditorPortView entryInputPort = entryNodeView.GetPortView("portal_port");
-                if (entryInputPort != null && outputPort != null)
+                edgeList.Add(new EdgeConversionInfo
                 {
-                    IEditorEdgeView entryEdge = graphView.connectSystem.Connect(entryInputPort, outputPort);
-                    if (entryEdge != null) createdEdgeViews.Add(entryEdge);
-                }
+                    edgeView = edgeView,
+                    outputPort = edgeView.outputPortView,
+                    inputPort = edgeView.inputPortView
+                });
             }
 
-            // 强制更新所有新创建边的EdgeControl，避免一帧显示残影
-            foreach (IEditorEdgeView edgeView in createdEdgeViews) edgeView.ForceUpdateView();
-
-            // 清除选择并选中新创建的节点
-            graphView.ClearSelection();
-            foreach (var nodeView in createdNodeViews)
-            {
-                graphView.AddToSelection(nodeView.element);
-            }
-
-            // 保存更改
-            graphView.graphSave.SetDirty();
+            return groups;
         }
 
-        private IEditorNodeView CreatePortalNode(
+        private PortalCreationResult CreatePortalsForGroups(
             EditorGraphView graphView,
-            PortalDirection direction,
-            Vector2 position,
-            string portalGroupId)
+            Dictionary<string, List<EdgeConversionInfo>> edgeGroups)
         {
-            // 创建Portal节点资产（端口类型和颜色从连接动态获取）
-            PortalNodeAsset portalAsset = ScriptableObject.CreateInstance<PortalNodeAsset>();
-            portalAsset.id = Guid.NewGuid().ToString();
-            portalAsset.position = new Rect(position, new Vector2(100, 60));
-            portalAsset.direction = direction;
-            portalAsset.portalGroupId = portalGroupId;
+            var result = PortalCreationResult.Create();
+            var exitCountByInputPort = new Dictionary<string, int>();
 
-            Undo.RegisterCreatedObjectUndo(portalAsset, "Create Portal Node");
+            foreach (var group in edgeGroups.Values)
+            {
+                if (group.Count == 0) continue;
+                CreatePortalPairForGroup(graphView, group, exitCountByInputPort, result);
+            }
 
-            // 添加到图表
-            IEditorNodeView nodeView = graphView.AddNode(portalAsset);
+            return result;
+        }
 
-            return nodeView;
+        /// <summary>
+        /// 为一组边创建Portal对：一个Entry Portal和多个Exit Portal
+        /// </summary>
+        private void CreatePortalPairForGroup(
+            EditorGraphView graphView,
+            List<EdgeConversionInfo> edgeGroup,
+            Dictionary<string, int> exitCountByInputPort,
+            PortalCreationResult result)
+        {
+            var firstEdge = edgeGroup[0];
+            EditorOrientation orientation = firstEdge.outputPort.info.orientation;
+
+            // 创建Entry Portal
+            Vector2 entryPosition = CalculateEntryPosition(graphView, firstEdge.outputPort, orientation);
+            string portalGroupId = Guid.NewGuid().ToString();
+
+            var entryNodeView = PortalHelper.CreatePortalNode(
+                graphView, PortalDirection.Entry, entryPosition, portalGroupId, orientation);
+            var entryPortal = entryNodeView.asset as PortalNodeAsset;
+            result.nodeViews.Add(entryNodeView);
+
+            // 为每条边创建Exit Portal
+            foreach (var edgeInfo in edgeGroup)
+            {
+                CreateExitPortalForEdge(graphView, edgeInfo, entryPortal, portalGroupId,
+                    exitCountByInputPort, result);
+            }
+
+            // 连接Entry Portal到原始输出端口
+            ConnectEntryToOutput(graphView, entryNodeView, firstEdge.outputPort, result);
+        }
+
+        private void CreateExitPortalForEdge(
+            EditorGraphView graphView,
+            EdgeConversionInfo edgeInfo,
+            PortalNodeAsset entryPortal,
+            string portalGroupId,
+            Dictionary<string, int> exitCountByInputPort,
+            PortalCreationResult result)
+        {
+            IEditorPortView inputPort = edgeInfo.inputPort;
+            EditorOrientation orientation = inputPort.info.orientation;
+
+            // 计算Exit Portal位置（考虑同一输入端口的多个Exit）
+            string inputPortKey = PortalHelper.GetPortKey(inputPort);
+            int exitIndex = exitCountByInputPort.GetValueOrDefault(inputPortKey, 0);
+            exitCountByInputPort[inputPortKey] = exitIndex + 1;
+
+            Vector2 exitPosition = CalculateExitPosition(graphView, inputPort, orientation, exitIndex);
+
+            var exitNodeView = PortalHelper.CreatePortalNode(
+                graphView, PortalDirection.Exit, exitPosition, portalGroupId, orientation);
+            var exitPortal = exitNodeView.asset as PortalNodeAsset;
+            result.nodeViews.Add(exitNodeView);
+
+            // 建立Portal关联
+            entryPortal.linkedPortalId = exitPortal.id;
+            exitPortal.linkedPortalId = entryPortal.id;
+
+            // 断开原边，创建新连接
+            graphView.connectSystem.Disconnect(edgeInfo.edgeView);
+            ConnectExitToInput(graphView, exitNodeView, inputPort, result);
+        }
+
+        private void ConnectEntryToOutput(
+            EditorGraphView graphView,
+            IEditorNodeView entryNodeView,
+            IEditorPortView outputPort,
+            PortalCreationResult result)
+        {
+            IEditorPortView entryPort = PortalHelper.GetPortalPort(entryNodeView);
+            if (entryPort != null)
+            {
+                var edge = graphView.connectSystem.Connect(entryPort, outputPort);
+                if (edge != null) result.edgeViews.Add(edge);
+            }
+        }
+
+        private void ConnectExitToInput(
+            EditorGraphView graphView,
+            IEditorNodeView exitNodeView,
+            IEditorPortView inputPort,
+            PortalCreationResult result)
+        {
+            IEditorPortView exitPort = PortalHelper.GetPortalPort(exitNodeView);
+            if (exitPort != null)
+            {
+                var edge = graphView.connectSystem.Connect(inputPort, exitPort);
+                if (edge != null) result.edgeViews.Add(edge);
+            }
+        }
+
+        private Vector2 CalculateEntryPosition(EditorGraphView graphView, IEditorPortView outputPort, EditorOrientation orientation)
+        {
+            Vector2 portPos = WorldToLocal(graphView, outputPort.portElement.worldBound.center);
+
+            return orientation == EditorOrientation.Vertical
+                ? new Vector2(portPos.x + PortalOffset, portPos.y + EntryOffsetY)
+                : new Vector2(portPos.x + EntryOffsetX, portPos.y + PortalOffset);
+        }
+
+        private Vector2 CalculateExitPosition(EditorGraphView graphView, IEditorPortView inputPort, EditorOrientation orientation, int index)
+        {
+            Vector2 portPos = WorldToLocal(graphView, inputPort.portElement.worldBound.center);
+
+            if (orientation == EditorOrientation.Vertical)
+            {
+                return new Vector2(
+                    portPos.x - PortalOffset + index * PortalSpacing,
+                    portPos.y + ExitOffsetY);
+            }
+            else
+            {
+                return new Vector2(
+                    portPos.x + ExitOffsetX,
+                    portPos.y - PortalOffset + index * PortalSpacing);
+            }
+        }
+
+        private Vector2 WorldToLocal(EditorGraphView graphView, Vector2 worldPos)
+        {
+            return graphView.contentViewContainer.WorldToLocal(worldPos);
+        }
+
+        private void FinalizeConversion(EditorGraphView graphView, PortalCreationResult result)
+        {
+            // 更新边视图
+            foreach (IEditorEdgeView edgeView in result.edgeViews)
+                edgeView.ForceUpdateView();
+
+            // 刷新Portal端口信息
+            PortalHelper.RefreshPortalViews(result.nodeViews);
+
+            // 选中新创建的Portal节点
+            graphView.ClearSelection();
+            foreach (var nodeView in result.nodeViews)
+                graphView.AddToSelection(nodeView.element);
+
+            graphView.UpdateSelected();
+            graphView.graphSave.SetDirty();
         }
     }
 }
