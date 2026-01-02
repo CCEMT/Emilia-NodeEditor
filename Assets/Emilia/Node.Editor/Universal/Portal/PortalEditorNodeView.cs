@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Emilia.Node.Attributes;
 using Emilia.Node.Editor;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -30,6 +31,64 @@ namespace Emilia.Node.Universal.Editor
             SetColor(GetDefaultColor());
             HideTitleContainer();
             SetupClickAreaBorder();
+            SetupContextualMenu();
+        }
+
+        private void SetupContextualMenu()
+        {
+            this.AddManipulator(new ContextualMenuManipulator(BuildContextualMenu));
+        }
+
+        public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
+        {
+            if (_portalAsset == null) return;
+
+            if (_portalAsset.direction == PortalDirection.Entry)
+            {
+                evt.menu.AppendAction("创建 Exit Portal", CreateLinkedExitPortal);
+            }
+            else
+            {
+                evt.menu.AppendAction("创建 Entry Portal", CreateLinkedEntryPortal);
+            }
+        }
+
+        private void CreateLinkedExitPortal(DropdownMenuAction action)
+        {
+            CreateLinkedPortal(PortalDirection.Exit);
+        }
+
+        private void CreateLinkedEntryPortal(DropdownMenuAction action)
+        {
+            CreateLinkedPortal(PortalDirection.Entry);
+        }
+
+        private void CreateLinkedPortal(PortalDirection direction)
+        {
+            if (_portalAsset == null) return;
+
+            Undo.IncrementCurrentGroup();
+
+            Vector2 offset = direction == PortalDirection.Exit ? new Vector2(150, 0) : new Vector2(-150, 0);
+            Vector2 newPosition = _portalAsset.position.position + offset;
+
+            var newPortalView = PortalHelper.CreatePortalNode(
+                graphView,
+                direction,
+                newPosition,
+                _portalAsset.portalGroupId,
+                _portalAsset.portOrientation);
+
+            var newPortalAsset = newPortalView.asset as PortalNodeAsset;
+            if (newPortalAsset != null)
+            {
+                graphView.RegisterCompleteObjectUndo("Link Portal");
+                newPortalAsset.linkedPortalId = _portalAsset.id;
+                _portalAsset.linkedPortalId = newPortalAsset.id;
+            }
+
+            Undo.CollapseUndoOperations(Undo.GetCurrentGroup());
+            Undo.IncrementCurrentGroup();
         }
 
         private void HideTitleContainer()
