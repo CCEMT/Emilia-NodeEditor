@@ -9,12 +9,7 @@ namespace Emilia.Node.Attributes
     [AttributeUsage(AttributeTargets.Class)]
     public class GraphSettingAttribute : Attribute
     {
-        public GraphSettingStruct settingStruct = new() {
-            maxLoadTimeMs = 0.0416f,
-            fastUndo = true,
-            immediatelySave = true,
-            zoomSize = new Vector2(0.15f, 3f)
-        };
+        public GraphSettingStruct settingStruct = GraphSettingStruct.Default;
 
         /// <summary>
         /// 最大加载时间
@@ -63,5 +58,12 @@ namespace Emilia.Node.Attributes
         public bool fastUndo;
         public bool immediatelySave;
         public Vector2 zoomSize;
+
+        public static readonly GraphSettingStruct Default = new() {
+            maxLoadTimeMs = 0.0416f,
+            fastUndo = true,
+            immediatelySave = true,
+            zoomSize = new Vector2(0.15f, 3f)
+        };
     }
 }

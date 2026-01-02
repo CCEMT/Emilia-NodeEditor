@@ -22,6 +22,6 @@ namespace Emilia.Node.Editor
     [GraphData(typeof(EditorGraphAsset))]
     public class BasicGraphData : GraphData
     {
-        public GraphSettingStruct graphSetting;
+        public GraphSettingStruct graphSetting = GraphSettingStruct.Default;
     }
 }

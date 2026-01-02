@@ -320,6 +320,7 @@ namespace Emilia.Node.Editor
             isInitialized = false;
 
             if (loadElementCoroutine != null) EditorCoroutineUtility.StopCoroutine(loadElementCoroutine);
+            loadElementCoroutine = null;
 
             bool allReload = graphAsset == null || graphAsset.GetType() != asset.GetType();
             graphAsset = asset;
@@ -413,6 +414,8 @@ namespace Emilia.Node.Editor
 
             foreach (BasicGraphViewModule module in this.modules.Values) module.AllModuleInitializeSuccess();
             foreach (CustomGraphViewModule customModule in this.customModules.Values) customModule.AllModuleInitializeSuccess();
+
+            graphHandle?.AllModuleInitializeSuccess(this);
         }
 
         private void ElementReload()
@@ -436,9 +439,13 @@ namespace Emilia.Node.Editor
 
         private IEnumerator LoadNodeView()
         {
+            if (graphAsset == null) yield break;
+
             int amount = graphAsset.nodes.Count;
             for (int i = 0; i < amount; i++)
             {
+                if (graphAsset == null) yield break;
+
                 EditorNodeAsset node = graphAsset.nodes[i];
                 AddNodeView(node);
 
@@ -449,9 +456,13 @@ namespace Emilia.Node.Editor
 
         private IEnumerator LoadEdge()
         {
+            if (graphAsset == null) yield break;
+
             int amount = graphAsset.edges.Count;
             for (int i = 0; i < amount; i++)
             {
+                if (graphAsset == null) yield break;
+
                 EditorEdgeAsset edge = graphAsset.edges[i];
                 AddEdgeView(edge);
 
@@ -462,9 +473,13 @@ namespace Emilia.Node.Editor
 
         private IEnumerator LoadItem()
         {
+            if (graphAsset == null) yield break;
+
             int amount = graphAsset.items.Count;
             for (int i = 0; i < amount; i++)
             {
+                if (graphAsset == null) yield break;
+
                 EditorItemAsset itemAsset = graphAsset.items[i];
                 AddItemView(itemAsset);
 

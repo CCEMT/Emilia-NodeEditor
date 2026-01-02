@@ -22,6 +22,11 @@ namespace Emilia.Node.Editor
         public virtual void InitializeCustomModule(EditorGraphView graphView, Dictionary<Type, CustomGraphViewModule> modules) { }
 
         /// <summary>
+        /// 所有模块初始化成功
+        /// </summary>
+        public virtual void AllModuleInitializeSuccess(EditorGraphView graphView) { }
+
+        /// <summary>
         /// 加载前处理
         /// </summary>
         public virtual void OnLoadBefore(EditorGraphView graphView) { }
@@ -72,14 +77,14 @@ namespace Emilia.Node.Editor
             SyncSetting(graphView);
         }
 
-        protected void SyncSetting(EditorGraphView graphView)
+        protected virtual void SyncSetting(EditorGraphView graphView)
         {
             GraphSettingStruct? graphSetting = graphView.GetGraphData<BasicGraphData>()?.graphSetting;
             if (graphSetting == null) return;
 
             graphView.maxLoadTimeMs = graphSetting.Value.maxLoadTimeMs;
             graphView.SetupZoom(graphSetting.Value.zoomSize.x, graphSetting.Value.zoomSize.y);
-            if (graphSetting.Value.immediatelySave == false) graphView.graphSave.ResetCopy(graphView.graphAsset);
+            if (graphSetting.Value.immediatelySave == false) graphView.graphSave.ResetCopy(graphView, graphView.graphAsset);
         }
     }
 }

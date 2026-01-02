@@ -1,5 +1,6 @@
 ﻿using Emilia.Kit;
 using Emilia.Node.Editor;
+using Sirenix.Utilities;
 using UnityEditor;
 using UnityEditor.Compilation;
 using UnityEditor.Experimental.GraphView;
@@ -13,7 +14,7 @@ namespace Emilia.Node.Universal.Editor
     /// 通用Graph处理
     /// </summary>
     [EditorHandle(typeof(EditorUniversalGraphAsset))]
-    public class UniversalGraphHandle : GraphHandle
+    public class UniversalGraphHandle : BasicGraphHandle
     {
         private const string TransformPositionSetting = "TransformPositionKey";
         private const string TransformScaleSetting = "TransformScaleKey";
@@ -29,6 +30,16 @@ namespace Emilia.Node.Universal.Editor
         {
             base.Initialize(graphView);
             editorGraphView = graphView;
+        }
+
+        protected override void SyncSetting(EditorGraphView graphView)
+        {
+            base.SyncSetting(graphView);
+            UniversalGraphSettingAttribute settingAttribute = graphView.graphAsset.GetType().GetCustomAttribute<UniversalGraphSettingAttribute>(true);
+            if (settingAttribute == null) return;
+
+            UniversalGraphData universalGraphData = graphView.GetGraphData<UniversalGraphData>();
+            universalGraphData.graphSetting = settingAttribute.settingStruct;
         }
 
         public override void OnLoadBefore(EditorGraphView graphView)

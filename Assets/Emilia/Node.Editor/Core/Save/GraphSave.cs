@@ -29,20 +29,35 @@ namespace Emilia.Node.Editor
         /// <summary>
         /// 重置副本
         /// </summary>
-        public void ResetCopy(EditorGraphAsset source)
+        public void ResetCopy(EditorGraphView editorGraphView, EditorGraphAsset source)
         {
             if (source == null) return;
-            this.sourceGraphAsset = source;
 
             string path = AssetDatabase.GetAssetPath(source);
             string tempPath = $"{TempFolderKit.TempFolderPath}/{source.name}.asset";
 
             TempFolderKit.CreateTempFolder();
 
-            AssetDatabase.CopyAsset(path, tempPath);
+            bool isTemp = path.Contains(TempFolderKit.TempFolderPath);
+            if (isTemp)
+            {
+                if (this.sourceGraphAsset == null) return;
+
+                path = AssetDatabase.GetAssetPath(sourceGraphAsset);
+                source = sourceGraphAsset;
+            }
+
+            bool isExist = AssetDatabase.LoadAssetAtPath<EditorGraphAsset>(tempPath);
+            if (isExist) AssetDatabase.DeleteAsset(tempPath);
+
+            bool result = AssetDatabase.CopyAsset(path, tempPath);
+            if (result == false) return;
 
             EditorGraphAsset copy = AssetDatabase.LoadAssetAtPath<EditorGraphAsset>(tempPath);
-            this.graphView.graphAsset = copy;
+            if (copy == null) return;
+            
+            this.sourceGraphAsset = source;
+            editorGraphView.graphAsset = copy;
         }
 
         /// <summary>
