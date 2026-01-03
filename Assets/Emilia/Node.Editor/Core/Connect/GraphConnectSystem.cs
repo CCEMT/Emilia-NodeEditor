@@ -87,15 +87,17 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void Disconnect(IEditorEdgeView edge)
         {
+            EditorEdgeAsset edgeAsset = edge.asset;
+
             edge.RemoveView();
 
-            if (edge.asset != null && string.IsNullOrEmpty(edge.asset.id) == false)
+            if (edgeAsset != null && string.IsNullOrEmpty(edgeAsset.id) == false)
             {
                 this.graphView.RegisterCompleteObjectUndo("Graph Disconnect");
 
-                this.graphView.graphAsset.RemoveEdge(edge.asset);
+                this.graphView.graphAsset.RemoveEdge(edgeAsset);
 
-                List<Object> assets = edge.asset.CollectAsset();
+                List<Object> assets = edgeAsset.CollectAsset();
 
                 int amount = assets.Count;
                 for (int i = 0; i < amount; i++)
@@ -103,6 +105,8 @@ namespace Emilia.Node.Editor
                     Object asset = assets[i];
                     Undo.DestroyObjectImmediate(asset);
                 }
+
+                handle?.AfterDisconnect(graphView, edgeAsset);
             }
         }
 
@@ -111,13 +115,15 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void DisconnectNoUndo(IEditorEdgeView edge)
         {
+            EditorEdgeAsset edgeAsset = edge.asset;
+
             edge.RemoveView();
 
-            if (edge.asset != null && string.IsNullOrEmpty(edge.asset.id) == false)
+            if (edgeAsset != null && string.IsNullOrEmpty(edgeAsset.id) == false)
             {
-                this.graphView.graphAsset.RemoveEdge(edge.asset);
+                this.graphView.graphAsset.RemoveEdge(edgeAsset);
 
-                List<Object> assets = edge.asset.CollectAsset();
+                List<Object> assets = edgeAsset.CollectAsset();
 
                 int amount = assets.Count;
                 for (int i = 0; i < amount; i++)
@@ -125,6 +131,8 @@ namespace Emilia.Node.Editor
                     Object asset = assets[i];
                     Object.DestroyImmediate(asset, true);
                 }
+
+                handle?.AfterDisconnect(graphView, edgeAsset);
             }
         }
 
