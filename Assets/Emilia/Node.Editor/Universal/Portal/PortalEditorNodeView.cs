@@ -68,6 +68,7 @@ namespace Emilia.Node.Universal.Editor
             if (_portalAsset == null) return;
 
             Undo.IncrementCurrentGroup();
+            int undoGroup = Undo.GetCurrentGroup();
 
             Vector2 offset = direction == PortalDirection.Exit ? new Vector2(150, 0) : new Vector2(-150, 0);
             Vector2 newPosition = _portalAsset.position.position + offset;
@@ -82,7 +83,9 @@ namespace Emilia.Node.Universal.Editor
             var newPortalAsset = newPortalView.asset as PortalNodeAsset;
             if (newPortalAsset != null)
             {
-                graphView.RegisterCompleteObjectUndo("Link Portal");
+                Undo.RecordObject(newPortalAsset, "Link Portal");
+                Undo.RecordObject(_portalAsset, "Link Portal");
+
                 newPortalAsset.linkedPortalId = _portalAsset.id;
                 _portalAsset.linkedPortalId = newPortalAsset.id;
             }
@@ -91,8 +94,8 @@ namespace Emilia.Node.Universal.Editor
             PortalHelper.RefreshPortalView(newPortalView);
             RefreshPortFromConnections();
 
-            Undo.CollapseUndoOperations(Undo.GetCurrentGroup());
-            Undo.IncrementCurrentGroup();
+            Undo.CollapseUndoOperations(undoGroup);
+            Undo.SetCurrentGroupName("Create Linked Portal");
         }
 
         private void HideTitleContainer()

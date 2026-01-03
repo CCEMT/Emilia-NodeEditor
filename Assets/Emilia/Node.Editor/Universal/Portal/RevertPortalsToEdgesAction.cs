@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Emilia.Node.Editor;
+using UnityEditor;
 
 namespace Emilia.Node.Universal.Editor
 {
@@ -41,6 +42,9 @@ namespace Emilia.Node.Universal.Editor
             var selectedPortals = GetSelectedPortals(graphView);
             if (selectedPortals.Count == 0) return;
 
+            Undo.IncrementCurrentGroup();
+            int undoGroup = Undo.GetCurrentGroup();
+
             graphView.RegisterCompleteObjectUndo("Revert Portals to Edges");
 
             var (connections, portalsToDelete) = CollectRevertData(graphView, selectedPortals);
@@ -49,6 +53,9 @@ namespace Emilia.Node.Universal.Editor
 
             graphView.UpdateSelected();
             graphView.graphSave.SetDirty();
+
+            Undo.CollapseUndoOperations(undoGroup);
+            Undo.SetCurrentGroupName("Revert Portals to Edges");
         }
 
         private List<IEditorNodeView> GetSelectedPortals(EditorGraphView graphView)

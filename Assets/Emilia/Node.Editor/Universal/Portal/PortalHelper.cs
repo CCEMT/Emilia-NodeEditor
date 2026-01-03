@@ -152,13 +152,15 @@ namespace Emilia.Node.Universal.Editor
         /// <param name="position">节点位置</param>
         /// <param name="portalGroupId">Portal组ID</param>
         /// <param name="portOrientation">端口方向</param>
+        /// <param name="registerUndo">是否注册撤销（默认为true）</param>
         /// <returns>创建的Portal节点视图</returns>
         public static IEditorNodeView CreatePortalNode(
             EditorGraphView graphView,
             PortalDirection direction,
             Vector2 position,
             string portalGroupId,
-            EditorOrientation portOrientation)
+            EditorOrientation portOrientation,
+            bool registerUndo = true)
         {
             PortalNodeAsset portalAsset = ScriptableObject.CreateInstance<PortalNodeAsset>();
             portalAsset.id = Guid.NewGuid().ToString();
@@ -167,7 +169,11 @@ namespace Emilia.Node.Universal.Editor
             portalAsset.portalGroupId = portalGroupId;
             portalAsset.portOrientation = portOrientation;
 
-            Undo.RegisterCreatedObjectUndo(portalAsset, "Create Portal Node");
+            if (registerUndo)
+            {
+                Undo.RegisterCreatedObjectUndo(portalAsset, "Create Portal Node");
+                graphView.RegisterCompleteObjectUndo("Create Portal Node");
+            }
 
             return graphView.AddNode(portalAsset);
         }
@@ -186,6 +192,9 @@ namespace Emilia.Node.Universal.Editor
             Vector2 exitPosition,
             EditorOrientation portOrientation)
         {
+            Undo.IncrementCurrentGroup();
+            int undoGroup = Undo.GetCurrentGroup();
+
             string portalGroupId = Guid.NewGuid().ToString();
 
             var entryNodeView = CreatePortalNode(graphView, PortalDirection.Entry, entryPosition, portalGroupId, portOrientation);
@@ -196,9 +205,15 @@ namespace Emilia.Node.Universal.Editor
 
             if (entryPortal != null && exitPortal != null)
             {
+                Undo.RecordObject(entryPortal, "Link Portal Pair");
+                Undo.RecordObject(exitPortal, "Link Portal Pair");
+
                 entryPortal.linkedPortalId = exitPortal.id;
                 exitPortal.linkedPortalId = entryPortal.id;
             }
+
+            Undo.CollapseUndoOperations(undoGroup);
+            Undo.SetCurrentGroupName("Create Portal Pair");
 
             return (entryNodeView, exitNodeView);
         }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Emilia.Node.Editor;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -70,12 +71,18 @@ namespace Emilia.Node.Universal.Editor
             var selectedEdges = GetSelectedEdges(graphView);
             if (selectedEdges.Count == 0) return;
 
+            Undo.IncrementCurrentGroup();
+            int undoGroup = Undo.GetCurrentGroup();
+
             graphView.RegisterCompleteObjectUndo("Convert Edges to Portals");
 
             var edgeGroups = GroupEdgesByOutputPort(selectedEdges);
             var result = CreatePortalsForGroups(graphView, edgeGroups);
 
             FinalizeConversion(graphView, result);
+
+            Undo.CollapseUndoOperations(undoGroup);
+            Undo.SetCurrentGroupName("Convert Edges to Portals");
         }
 
         private List<IEditorEdgeView> GetSelectedEdges(EditorGraphView graphView)
@@ -150,9 +157,11 @@ namespace Emilia.Node.Universal.Editor
             string portalGroupId = Guid.NewGuid().ToString();
 
             var entryNodeView = PortalHelper.CreatePortalNode(
-                graphView, PortalDirection.Entry, entryPosition, portalGroupId, orientation);
+                graphView, PortalDirection.Entry, entryPosition, portalGroupId, orientation, registerUndo: false);
             var entryPortal = entryNodeView.asset as PortalNodeAsset;
             result.nodeViews.Add(entryNodeView);
+
+            Undo.RegisterCreatedObjectUndo(entryPortal, "Create Portal Node");
 
             // 为每条边创建Exit Portal
             foreach (var edgeInfo in edgeGroup)
@@ -184,11 +193,16 @@ namespace Emilia.Node.Universal.Editor
             Vector2 exitPosition = CalculateExitPosition(graphView, inputPort, orientation, exitIndex);
 
             var exitNodeView = PortalHelper.CreatePortalNode(
-                graphView, PortalDirection.Exit, exitPosition, portalGroupId, orientation);
+                graphView, PortalDirection.Exit, exitPosition, portalGroupId, orientation, registerUndo: false);
             var exitPortal = exitNodeView.asset as PortalNodeAsset;
             result.nodeViews.Add(exitNodeView);
 
+            Undo.RegisterCreatedObjectUndo(exitPortal, "Create Portal Node");
+
             // 建立Portal关联
+            Undo.RecordObject(entryPortal, "Link Portal");
+            Undo.RecordObject(exitPortal, "Link Portal");
+
             entryPortal.linkedPortalId = exitPortal.id;
             exitPortal.linkedPortalId = entryPortal.id;
 
