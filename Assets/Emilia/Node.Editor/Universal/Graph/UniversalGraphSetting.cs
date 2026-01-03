@@ -11,7 +11,6 @@ namespace Emilia.Node.Universal.Editor
             forceUseBuiltInInspector = false,
             disabledTransmitNode = false,
             disabledNodeInsert = false,
-            disabledEdgeDrawOptimization = false
         };
 
         /// <summary>
@@ -40,15 +39,6 @@ namespace Emilia.Node.Universal.Editor
             get => settingStruct.disabledNodeInsert;
             set => settingStruct.disabledNodeInsert = value;
         }
-
-        /// <summary>
-        /// 禁用边绘制优化
-        /// </summary>
-        public bool disabledEdgeDrawOptimization
-        {
-            get => settingStruct.disabledEdgeDrawOptimization;
-            set => settingStruct.disabledEdgeDrawOptimization = value;
-        }
     }
 
     /// <summary>
@@ -71,10 +61,5 @@ namespace Emilia.Node.Universal.Editor
         /// 禁用节点插入
         /// </summary>
         public bool disabledNodeInsert;
-
-        /// <summary>
-        /// 禁用边绘制优化
-        /// </summary>
-        public bool disabledEdgeDrawOptimization;
     }
 }

@@ -186,6 +186,8 @@ namespace Emilia.Node.Editor
         {
             if (inputPortView != null) editorEdgeControl.to = this.WorldToLocal(inputPortView.portElement.GetGlobalCenter());
             if (outputPortView != null) editorEdgeControl.from = this.WorldToLocal(outputPortView.portElement.GetGlobalCenter());
+            
+            _editorEdgeControl.disabledEdgeDrawOptimization = graphView.GetGraphData<BasicGraphData>().graphSetting.disabledEdgeDrawOptimization;
             UpdateEdgeControl();
         }
 

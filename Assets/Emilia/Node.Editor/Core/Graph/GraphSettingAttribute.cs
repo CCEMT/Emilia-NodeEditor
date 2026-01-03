@@ -46,6 +46,15 @@ namespace Emilia.Node.Attributes
             get => settingStruct.zoomSize;
             set => settingStruct.zoomSize = value;
         }
+
+        /// <summary>
+        /// 禁用边绘制优化
+        /// </summary>
+        public bool disabledEdgeDrawOptimization
+        {
+            get => settingStruct.disabledEdgeDrawOptimization;
+            set => settingStruct.disabledEdgeDrawOptimization = value;
+        }
     }
 
     /// <summary>
@@ -58,12 +67,14 @@ namespace Emilia.Node.Attributes
         public bool fastUndo;
         public bool immediatelySave;
         public Vector2 zoomSize;
+        public bool disabledEdgeDrawOptimization;
 
         public static readonly GraphSettingStruct Default = new() {
             maxLoadTimeMs = 0.0416f,
             fastUndo = true,
             immediatelySave = true,
-            zoomSize = new Vector2(0.15f, 3f)
+            zoomSize = new Vector2(0.15f, 3f),
+            disabledEdgeDrawOptimization = false
         };
     }
 }
