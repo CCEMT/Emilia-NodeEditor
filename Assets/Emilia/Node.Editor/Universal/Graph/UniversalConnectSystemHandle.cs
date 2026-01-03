@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Emilia.Kit;
 using Emilia.Node.Editor;
 
@@ -33,6 +34,37 @@ namespace Emilia.Node.Universal.Editor
             if (inputType != null && outputType != null && inputType.IsAssignableFrom(outputType)) return true;
 
             return false;
+        }
+
+        public override void AfterConnect(EditorGraphView graphView, IEditorEdgeView edgeView)
+        {
+            RefreshPortalIfNeeded(graphView, edgeView.asset?.inputNodeId);
+            RefreshPortalIfNeeded(graphView, edgeView.asset?.outputNodeId);
+        }
+
+        public override void AfterDisconnect(EditorGraphView graphView, EditorEdgeAsset edgeAsset)
+        {
+            RefreshPortalIfNeeded(graphView, edgeAsset?.inputNodeId);
+            RefreshPortalIfNeeded(graphView, edgeAsset?.outputNodeId);
+        }
+
+        private void RefreshPortalIfNeeded(EditorGraphView graphView, string nodeId)
+        {
+            if (string.IsNullOrEmpty(nodeId)) return;
+
+            var nodeView = graphView.graphElementCache.nodeViewById.GetValueOrDefault(nodeId);
+            if (nodeView?.asset is PortalNodeAsset portalAsset)
+            {
+                // 刷新当前 Portal
+                PortalHelper.RefreshPortalView(nodeView);
+
+                // 刷新关联的 Portal
+                if (!string.IsNullOrEmpty(portalAsset.linkedPortalId))
+                {
+                    var linkedNodeView = PortalHelper.FindPortalById(graphView, portalAsset.linkedPortalId);
+                    PortalHelper.RefreshPortalView(linkedNodeView);
+                }
+            }
         }
     }
 }

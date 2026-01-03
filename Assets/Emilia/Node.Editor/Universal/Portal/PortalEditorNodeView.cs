@@ -87,6 +87,10 @@ namespace Emilia.Node.Universal.Editor
                 _portalAsset.linkedPortalId = newPortalAsset.id;
             }
 
+            // 刷新端口视图以获取正确的类型信息
+            PortalHelper.RefreshPortalView(newPortalView);
+            RefreshPortFromConnections();
+
             Undo.CollapseUndoOperations(Undo.GetCurrentGroup());
             Undo.IncrementCurrentGroup();
         }
@@ -185,7 +189,7 @@ namespace Emilia.Node.Universal.Editor
         }
 
         /// <summary>
-        /// 从关联Portal的连接中获取端口信息
+        /// 从自身或关联Portal的连接中获取端口信息
         /// </summary>
         private (Type portType, Color portColor, string displayName) GetConnectionInfo()
         {
@@ -196,6 +200,12 @@ namespace Emilia.Node.Universal.Editor
             if (_portalAsset == null || graphView?.graphAsset == null)
                 return (portType, portColor, displayName);
 
+            // 优先从自身的连接获取信息
+            var selfEdges = graphView.graphAsset.GetEdges(_portalAsset.id, PortalHelper.PortalPortId);
+            if (selfEdges.Count > 0)
+                return CollectPortInfoFromEdges(selfEdges, _portalAsset);
+
+            // 如果自身没有连接，尝试从关联Portal的连接获取
             string linkedPortalId = _portalAsset.linkedPortalId;
             if (string.IsNullOrEmpty(linkedPortalId))
                 return (portType, portColor, displayName);
@@ -204,11 +214,11 @@ namespace Emilia.Node.Universal.Editor
             if (linkedPortal == null)
                 return (portType, portColor, displayName);
 
-            var edges = graphView.graphAsset.GetEdges(linkedPortal.id, PortalHelper.PortalPortId);
-            if (edges.Count == 0)
+            var linkedEdges = graphView.graphAsset.GetEdges(linkedPortal.id, PortalHelper.PortalPortId);
+            if (linkedEdges.Count == 0)
                 return (portType, portColor, displayName);
 
-            return CollectPortInfoFromEdges(edges, linkedPortal);
+            return CollectPortInfoFromEdges(linkedEdges, linkedPortal);
         }
 
         /// <summary>
