@@ -274,14 +274,21 @@ namespace Emilia.Node.Editor
             if (isFocus) return;
             isFocus = true;
 
-            graphUndo.OnUndoRedoPerformed(true);
             this.graphHandle?.OnEnterFocus(this);
         }
 
         public void OnFocus()
         {
             if (isInitialized == false) return;
-            if (focusedGraphView != this) focusedGraphView = this;
+
+            if (isFocus == false) OnEnterFocus();
+            
+            if (focusedGraphView != this)
+            {
+                focusedGraphView = this;
+                graphUndo.OnUndoRedoPerformed(true);
+            }
+            
             this.graphHandle?.OnFocus(this);
         }
 
