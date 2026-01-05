@@ -1035,7 +1035,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void Save(bool force = true)
         {
-            graphSave?.Save(force);
+            graphSave?.Save(this, force);
         }
 
         /// <summary>

@@ -1,0 +1,16 @@
+{
+    "name": "Emilia.Kit",
+    "rootNamespace": "Emilia.Kit",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "ODIN_INSPECTOR"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
