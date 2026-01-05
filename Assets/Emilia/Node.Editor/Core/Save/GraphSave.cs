@@ -73,37 +73,37 @@ namespace Emilia.Node.Editor
         /// <summary>
         /// 保存
         /// </summary>
-        public void Save(EditorGraphView editorGraphView, bool force = true)
+        public void Save(bool force = true)
         {
-            if (editorGraphView == null) return;
+            if (this.graphView == null) return;
 
-            if (force) OnSave(editorGraphView);
+            if (force) OnSave();
             else
             {
-                GraphSettingStruct? graphSetting = editorGraphView.GetGraphData<BasicGraphData>()?.graphSetting;
+                GraphSettingStruct? graphSetting = graphView.GetGraphData<BasicGraphData>()?.graphSetting;
 
                 bool isInquire = graphSetting != null && graphSetting.Value.immediatelySave == false && dirty;
-                if (isInquire == false) OnSave(editorGraphView);
+                if (isInquire == false) OnSave();
                 else
                 {
-                    if (EditorUtility.DisplayDialog("是否保存", "是否保存当前修改", "保存", "不保存")) OnSave(editorGraphView);
+                    if (EditorUtility.DisplayDialog("是否保存", "是否保存当前修改", "保存", "不保存")) OnSave();
                 }
             }
         }
 
-        private void OnSave(EditorGraphView editorGraphView)
+        private void OnSave()
         {
-            if (editorGraphView == null) return;
+            if (this.graphView == null) return;
 
-            handle?.OnSaveBefore(editorGraphView);
+            handle?.OnSaveBefore(graphView);
 
-            if (editorGraphView.graphAsset != null) editorGraphView.graphAsset.SaveAll();
+            if (graphView.graphAsset != null) graphView.graphAsset.SaveAll();
 
-            editorGraphView.graphLocalSettingSystem.SaveAll();
+            graphView.graphLocalSettingSystem.SaveAll();
 
             if (sourceGraphAsset != null)
             {
-                string path = AssetDatabase.GetAssetPath(editorGraphView.graphAsset);
+                string path = AssetDatabase.GetAssetPath(graphView.graphAsset);
                 string savePath = AssetDatabase.GetAssetPath(this.sourceGraphAsset);
 
                 string filePath = Path.GetFullPath(path);
@@ -115,7 +115,7 @@ namespace Emilia.Node.Editor
 
             this._dirty = false;
 
-            handle?.OnSaveAfter(editorGraphView);
+            handle?.OnSaveAfter(graphView);
         }
 
         public override void Dispose()
