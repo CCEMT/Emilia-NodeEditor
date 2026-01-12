@@ -29,10 +29,10 @@ namespace Emilia.Node.Editor
 
         protected override void RegisterCallbacksOnTarget()
         {
-            target.RegisterCallback<MouseDownEvent>(OnMouseDown, TrickleDown.TrickleDown);
-            target.RegisterCallback<MouseMoveEvent>(OnMouseMove, TrickleDown.TrickleDown);
-            target.RegisterCallback<MouseUpEvent>(OnMouseUp, TrickleDown.TrickleDown);
-            target.RegisterCallback<KeyDownEvent>(OnKeyDown, TrickleDown.TrickleDown);
+            target.RegisterCallback<MouseDownEvent>(OnMouseDown);
+            target.RegisterCallback<MouseMoveEvent>(OnMouseMove);
+            target.RegisterCallback<MouseUpEvent>(OnMouseUp);
+            target.RegisterCallback<KeyDownEvent>(OnKeyDown);
         }
 
         protected override void UnregisterCallbacksFromTarget()
@@ -68,6 +68,7 @@ namespace Emilia.Node.Editor
             }
 
             m_Edge = (evt.target as VisualElement).GetFirstOfType<Edge>();
+            if (m_Edge == null) return;
 
             m_PressPos = evt.mousePosition;
             target.CaptureMouse();
