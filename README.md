@@ -23,17 +23,6 @@ Emilia-NodeEditor 是基于 Unity UIElements/GraphView 的节点编辑器框架�
 
 Odin 为付费插件，请自行导入。
 
-### 使用 unitypackage 安装
-
-在 Tag 界面中选择对应版本并下载 `.unitypackage` 文件：
-- https://github.com/CCEMT/Emilia-NodeEditor/tags
-
-![install](./doc/install-unitypackage-image.png)
-
-导入 Unity 后，在 Package Manager 中安装 `Editor Coroutines`：
-
-![install](./doc/install-unitypackage-editorcoroutines-image.png)
-
 ### 使用 Unity Package Manager 安装
 
 打开 `Packages/manifest.json`，添加以下内容：
