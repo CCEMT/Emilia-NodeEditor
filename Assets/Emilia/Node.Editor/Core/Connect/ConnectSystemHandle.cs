@@ -33,5 +33,10 @@ namespace Emilia.Node.Editor
         /// 连接后的回调
         /// </summary>
         public virtual void AfterConnect(EditorGraphView graphView, IEditorEdgeView edgeView) { }
+
+        /// <summary>
+        /// 断开连接后的回调
+        /// </summary>
+        public virtual void AfterDisconnect(EditorGraphView graphView, EditorEdgeAsset edgeAsset) { }
     }
 }

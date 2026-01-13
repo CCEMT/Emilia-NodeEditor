@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using Emilia.Kit;
 using Emilia.Kit.Editor;
+using Emilia.Node.Attributes;
 using UnityEditor;
 
 namespace Emilia.Node.Editor
@@ -28,21 +29,35 @@ namespace Emilia.Node.Editor
         /// <summary>
         /// 重置副本
         /// </summary>
-        public EditorGraphAsset ResetCopy(EditorGraphAsset source)
+        public void ResetCopy(EditorGraphView editorGraphView, EditorGraphAsset source)
         {
-            if (source == null) return null;
-            this.sourceGraphAsset = source;
+            if (source == null) return;
 
             string path = AssetDatabase.GetAssetPath(source);
             string tempPath = $"{TempFolderKit.TempFolderPath}/{source.name}.asset";
 
             TempFolderKit.CreateTempFolder();
 
-            AssetDatabase.CopyAsset(path, tempPath);
+            bool isTemp = path.Contains(TempFolderKit.TempFolderPath);
+            if (isTemp)
+            {
+                if (this.sourceGraphAsset == null) return;
+
+                path = AssetDatabase.GetAssetPath(sourceGraphAsset);
+                source = sourceGraphAsset;
+            }
+
+            bool isExist = AssetDatabase.LoadAssetAtPath<EditorGraphAsset>(tempPath);
+            if (isExist) AssetDatabase.DeleteAsset(tempPath);
+
+            bool result = AssetDatabase.CopyAsset(path, tempPath);
+            if (result == false) return;
 
             EditorGraphAsset copy = AssetDatabase.LoadAssetAtPath<EditorGraphAsset>(tempPath);
+            if (copy == null) return;
 
-            return copy;
+            this.sourceGraphAsset = source;
+            editorGraphView.graphAsset = copy;
         }
 
         /// <summary>
@@ -50,6 +65,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void SetDirty()
         {
+            if (this.graphView == null) return;
             if (this.graphView.isInitialized == false) return;
             this._dirty = true;
         }
@@ -57,15 +73,33 @@ namespace Emilia.Node.Editor
         /// <summary>
         /// 保存
         /// </summary>
-        public void OnSave()
+        public void Save(bool force = true)
         {
             if (this.graphView == null) return;
 
-            handle?.OnSaveBefore(this.graphView);
+            if (force) OnSave();
+            else
+            {
+                GraphSettingStruct? graphSetting = graphView.GetGraphData<BasicGraphData>()?.graphSetting;
 
-            if (this.graphView.graphAsset != null) graphView.graphAsset.SaveAll();
+                bool isInquire = graphSetting != null && graphSetting.Value.immediatelySave == false && dirty;
+                if (isInquire == false) OnSave();
+                else
+                {
+                    if (EditorUtility.DisplayDialog("是否保存", "是否保存当前修改", "保存", "不保存")) OnSave();
+                }
+            }
+        }
 
-            this.graphView.graphLocalSettingSystem.SaveAll();
+        private void OnSave()
+        {
+            if (this.graphView == null) return;
+
+            handle?.OnSaveBefore(graphView);
+
+            if (graphView.graphAsset != null) graphView.graphAsset.SaveAll();
+
+            graphView.graphLocalSettingSystem.SaveAll();
 
             if (sourceGraphAsset != null)
             {
@@ -81,7 +115,7 @@ namespace Emilia.Node.Editor
 
             this._dirty = false;
 
-            handle?.OnSaveAfter(this.graphView);
+            handle?.OnSaveAfter(graphView);
         }
 
         public override void Dispose()

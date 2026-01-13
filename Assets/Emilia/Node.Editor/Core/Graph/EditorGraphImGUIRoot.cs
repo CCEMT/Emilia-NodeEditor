@@ -77,7 +77,8 @@ namespace Emilia.Node.Editor
                 GraphSettingStruct? loadSetting = settingStruct;
                 if (settingStruct == null) loadSetting = asset.GetType().GetCustomAttribute<GraphSettingAttribute>()?.settingStruct;
 
-                graphView.Reload(asset, loadSetting);
+                graphView.Reload(asset);
+                if (loadSetting != null) graphView.GetGraphData<BasicGraphData>().graphSetting = loadSetting.Value;
 
                 this._drawer = new EditorGraphViewDrawer();
                 this._drawer.Initialize(graphView);

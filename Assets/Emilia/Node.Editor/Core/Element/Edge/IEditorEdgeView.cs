@@ -48,6 +48,11 @@ namespace Emilia.Node.Editor
         void OnValueChanged(bool isSilent = false);
 
         /// <summary>
+        /// 强制更新
+        /// </summary>
+        void ForceUpdateView();
+
+        /// <summary>
         /// 释放
         /// </summary>
         void Dispose();

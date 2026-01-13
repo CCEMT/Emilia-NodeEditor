@@ -48,11 +48,15 @@ namespace Emilia.Node.Universal.Editor
 
             foreach (ISelectedHandle selectable in selection) selectedInspectors.AddRange(selectable.GetSelectedObjects());
 
-            bool isUseSelection = graphView.window?.GetType() != InspectorWindow_Internals.inspectorWindowType_Internals;
+            UniversalGraphSetting? graphSetting = graphView.GetGraphData<UniversalGraphData>()?.graphSetting;
+
+            bool isForceUseBuiltIn = graphSetting?.forceUseBuiltInInspector ?? false;
+            bool isInspectorWindow = graphView.window?.GetType() == InspectorWindow_Internals.inspectorWindowType_Internals;
+            bool isUseBuiltIn = isInspectorWindow || isForceUseBuiltIn;
 
             if (selectedInspectors.Count > 0)
             {
-                if (isUseSelection)
+                if (isUseBuiltIn == false)
                 {
                     int selectedCount = selectedInspectors.Count;
                     for (int i = 0; i < selectedCount; i++)
@@ -74,7 +78,7 @@ namespace Emilia.Node.Universal.Editor
             }
             else
             {
-                if (isUseSelection)
+                if (isUseBuiltIn == false)
                 {
                     Selection.objects = null;
                     SelectedOwnerUtility.Update();

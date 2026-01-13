@@ -30,6 +30,16 @@ namespace Emilia.Node.Editor
 
         protected EditorOrientation _inputEditorOrientation;
         protected EditorOrientation _outputEditorOrientation;
+        protected bool _disabledEdgeDrawOptimization;
+
+        /// <summary>
+        /// 禁用边绘制优化
+        /// </summary>
+        public bool disabledEdgeDrawOptimization
+        {
+            get => _disabledEdgeDrawOptimization;
+            set => _disabledEdgeDrawOptimization = value;
+        }
 
         /// <summary>
         /// 输入方向
@@ -97,6 +107,14 @@ namespace Emilia.Node.Editor
             {
                 renderPoints_Internals.Add(p1);
                 renderPoints_Internals.Add(p4);
+                return;
+            }
+
+            // 非自然连接优化（电路图样式）
+            if (disabledEdgeDrawOptimization == false && IsUnnaturalConnection(p1, p4, p2, p3))
+            {
+                RenderCircuitStyleConnection(p1, p4, p2, p3);
+                renderPointsDirty_Internals = false;
                 return;
             }
 
@@ -307,5 +325,198 @@ namespace Emilia.Node.Editor
         }
 
         protected static bool Approximately(Vector2 v1, Vector2 v2) => Mathf.Approximately(v1.x, v2.x) && Mathf.Approximately(v1.y, v2.y);
+
+        /// <summary>
+        /// 判断是否为非自然连接（端口朝向与目标方向相反）
+        /// </summary>
+        protected bool IsUnnaturalConnection(Vector2 from, Vector2 to, Vector2 outputControlPoint, Vector2 inputControlPoint)
+        {
+            if (outputEditorOrientation == EditorOrientation.Horizontal)
+            {
+                // 使用控制点判断输出端口实际朝向
+                float outputDir = Mathf.Sign(outputControlPoint.x - from.x);
+                float targetDir = Mathf.Sign(to.x - from.x);
+
+                // 如果输出方向与目标方向相反，则为非自然连接
+                if (outputDir != targetDir && Mathf.Abs(to.x - from.x) > EdgeLengthFromPort)
+                {
+                    return true;
+                }
+            }
+            else if (outputEditorOrientation == EditorOrientation.Vertical)
+            {
+                float outputDir = Mathf.Sign(outputControlPoint.y - from.y);
+                float targetDir = Mathf.Sign(to.y - from.y);
+
+                if (outputDir != targetDir && Mathf.Abs(to.y - from.y) > EdgeLengthFromPort)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// 渲染电路图样式连接（带圆角）
+        /// </summary>
+        protected void RenderCircuitStyleConnection(Vector2 p1, Vector2 p4, Vector2 outputControlPoint, Vector2 inputControlPoint)
+        {
+            const float cornerRadius = 8f;
+            float diameter = cornerRadius * 2;
+            float extendDistance = EdgeLengthFromPort + EdgeTurnDiameter;
+
+            // 使用控制点确定输出和输入的延伸方向
+            Vector2 outputDir = (outputControlPoint - p1).normalized;
+            Vector2 inputDir = (inputControlPoint - p4).normalized;
+
+            // 计算输出延伸点
+            Vector2 extend1 = p1 + outputDir * extendDistance;
+
+            // 计算输入延伸点
+            Vector2 extend2 = p4 + inputDir * extendDistance;
+
+            // 计算中间高度/宽度
+            float midY, midX;
+            if (outputEditorOrientation == EditorOrientation.Horizontal)
+            {
+                midY = (p1.y + p4.y) / 2;
+                // 如果Y坐标太接近，增加偏移避免折线重叠
+                if (Mathf.Abs(p1.y - p4.y) < cornerRadius * 6)
+                {
+                    midY = Mathf.Min(p1.y, p4.y) - cornerRadius * 4;
+                }
+                midX = (extend1.x + extend2.x) / 2;
+
+                // 水平方向的电路图路径
+                RenderHorizontalCircuitPath(p1, p4, extend1, extend2, midY, diameter);
+            }
+            else
+            {
+                midX = (p1.x + p4.x) / 2;
+                if (Mathf.Abs(p1.x - p4.x) < cornerRadius * 6)
+                {
+                    midX = Mathf.Min(p1.x, p4.x) - cornerRadius * 4;
+                }
+                midY = (extend1.y + extend2.y) / 2;
+
+                // 垂直方向的电路图路径
+                RenderVerticalCircuitPath(p1, p4, extend1, extend2, midX, diameter);
+            }
+        }
+
+        /// <summary>
+        /// 渲染水平方向的电路图路径
+        /// </summary>
+        protected void RenderHorizontalCircuitPath(Vector2 p1, Vector2 p4, Vector2 extend1, Vector2 extend2, float midY, float diameter)
+        {
+            float radius = diameter / 2;
+
+            // 构建路径的关键点
+            Vector2 corner1 = new Vector2(extend1.x, p1.y);      // 第一个拐角
+            Vector2 corner2 = new Vector2(extend1.x, midY);      // 第二个拐角
+            Vector2 corner3 = new Vector2(extend2.x, midY);      // 第三个拐角
+            Vector2 corner4 = new Vector2(extend2.x, p4.y);      // 第四个拐角
+
+            // 添加起点
+            renderPoints_Internals.Add(p1);
+
+            // 第一个圆角：水平转垂直
+            float dir1X = Mathf.Sign(corner1.x - p1.x);          // 水平方向
+            float dir1Y = Mathf.Sign(corner2.y - corner1.y);     // 垂直方向
+            AddRoundedCorner(corner1, radius, dir1X, 0, 0, dir1Y);
+
+            // 第二个圆角：垂直转水平
+            float dir2X = Mathf.Sign(corner3.x - corner2.x);     // 水平方向
+            float dir2Y = Mathf.Sign(corner2.y - corner1.y);     // 垂直方向（从上一段来）
+            AddRoundedCorner(corner2, radius, 0, dir2Y, dir2X, 0);
+
+            // 第三个圆角：水平转垂直
+            float dir3X = Mathf.Sign(corner3.x - corner2.x);     // 水平方向（从上一段来）
+            float dir3Y = Mathf.Sign(corner4.y - corner3.y);     // 垂直方向
+            AddRoundedCorner(corner3, radius, dir3X, 0, 0, dir3Y);
+
+            // 第四个圆角：垂直转水平
+            float dir4X = Mathf.Sign(p4.x - corner4.x);          // 水平方向
+            float dir4Y = Mathf.Sign(corner4.y - corner3.y);     // 垂直方向（从上一段来）
+            AddRoundedCorner(corner4, radius, 0, dir4Y, dir4X, 0);
+
+            // 添加终点
+            renderPoints_Internals.Add(p4);
+        }
+
+        /// <summary>
+        /// 添加圆角点
+        /// </summary>
+        /// <param name="corner">拐角位置</param>
+        /// <param name="radius">圆角半径</param>
+        /// <param name="inDirX">进入方向X分量（-1, 0, 1）</param>
+        /// <param name="inDirY">进入方向Y分量（-1, 0, 1）</param>
+        /// <param name="outDirX">离开方向X分量（-1, 0, 1）</param>
+        /// <param name="outDirY">离开方向Y分量（-1, 0, 1）</param>
+        protected void AddRoundedCorner(Vector2 corner, float radius, float inDirX, float inDirY, float outDirX, float outDirY)
+        {
+            // 计算圆心位置：corner + (-inDir + outDir) * radius
+            Vector2 center = corner + new Vector2((-inDirX + outDirX) * radius, (-inDirY + outDirY) * radius);
+
+            // 入口切点相对于圆心的方向是 -outDir
+            // 出口切点相对于圆心的方向是 inDir
+            float startAngle = Mathf.Atan2(-outDirY, -outDirX);
+            float endAngle = Mathf.Atan2(inDirY, inDirX);
+
+            // 计算扫描角度，确保是较短的弧
+            float sweepAngle = endAngle - startAngle;
+            if (sweepAngle > Mathf.PI) sweepAngle -= 2 * Mathf.PI;
+            if (sweepAngle < -Mathf.PI) sweepAngle += 2 * Mathf.PI;
+
+            // 生成弧线上的点
+            int segments = Mathf.Max(4, Mathf.CeilToInt(Mathf.Abs(sweepAngle) * 4));
+            for (int i = 0; i <= segments; i++)
+            {
+                float t = i / (float) segments;
+                float angle = startAngle + sweepAngle * t;
+                renderPoints_Internals.Add(center + new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * radius);
+            }
+        }
+
+        /// <summary>
+        /// 渲染垂直方向的电路图路径
+        /// </summary>
+        protected void RenderVerticalCircuitPath(Vector2 p1, Vector2 p4, Vector2 extend1, Vector2 extend2, float midX, float diameter)
+        {
+            float radius = diameter / 2;
+
+            // 构建路径的关键点
+            Vector2 corner1 = new Vector2(p1.x, extend1.y);      // 第一个拐角
+            Vector2 corner2 = new Vector2(midX, extend1.y);      // 第二个拐角
+            Vector2 corner3 = new Vector2(midX, extend2.y);      // 第三个拐角
+            Vector2 corner4 = new Vector2(p4.x, extend2.y);      // 第四个拐角
+
+            // 添加起点
+            renderPoints_Internals.Add(p1);
+
+            // 第一个圆角：垂直转水平
+            float dir1Y = Mathf.Sign(corner1.y - p1.y);          // 垂直方向
+            float dir1X = Mathf.Sign(corner2.x - corner1.x);     // 水平方向
+            AddRoundedCorner(corner1, radius, 0, dir1Y, dir1X, 0);
+
+            // 第二个圆角：水平转垂直
+            float dir2X = Mathf.Sign(corner2.x - corner1.x);     // 水平方向（从上一段来）
+            float dir2Y = Mathf.Sign(corner3.y - corner2.y);     // 垂直方向
+            AddRoundedCorner(corner2, radius, dir2X, 0, 0, dir2Y);
+
+            // 第三个圆角：垂直转水平
+            float dir3Y = Mathf.Sign(corner3.y - corner2.y);     // 垂直方向（从上一段来）
+            float dir3X = Mathf.Sign(corner4.x - corner3.x);     // 水平方向
+            AddRoundedCorner(corner3, radius, 0, dir3Y, dir3X, 0);
+
+            // 第四个圆角：水平转垂直
+            float dir4X = Mathf.Sign(corner4.x - corner3.x);     // 水平方向（从上一段来）
+            float dir4Y = Mathf.Sign(p4.y - corner4.y);          // 垂直方向
+            AddRoundedCorner(corner4, radius, dir4X, 0, 0, dir4Y);
+
+            // 添加终点
+            renderPoints_Internals.Add(p4);
+        }
     }
 }
