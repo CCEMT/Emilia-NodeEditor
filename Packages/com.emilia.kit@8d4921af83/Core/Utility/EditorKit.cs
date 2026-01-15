@@ -69,6 +69,12 @@ namespace Emilia.Kit
             }
         }
 
+        public static void SetSceneDisplay(GameObject[] gameObjects, bool isDisplay, bool includeDescendants)
+        {
+            if (isDisplay) SceneVisibilityManager.instance.Show(gameObjects, includeDescendants);
+            else SceneVisibilityManager.instance.Hide(gameObjects, includeDescendants);
+        }
+
         public static void SetScenePicking(GameObject[] gameObjects, bool isEnable, bool includeDescendants)
         {
             if (isEnable) SceneVisibilityManager.instance.EnablePicking(gameObjects, includeDescendants);
