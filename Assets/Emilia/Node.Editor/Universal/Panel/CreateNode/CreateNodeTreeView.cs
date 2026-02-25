@@ -13,6 +13,9 @@ namespace Emilia.Node.Universal.Editor
     /// </summary>
     public class CreateNodeTreeView : TreeView
     {
+        private const int CollectionTitleId = int.MinValue + 1;
+        private const string CollectionReorderKey = "CollectionReorder";
+
         protected EditorGraphView graphView;
         protected CreateNodeViewState createNodeViewState;
         protected NodeCollectionSetting collectionSetting;
@@ -256,7 +259,7 @@ namespace Emilia.Node.Universal.Editor
             string displayName = "收藏节点";
 
             CreateNodeTitleTreeViewItem titleItem = new() {
-                id = displayName.GetHashCode(),
+                id = CollectionTitleId,
                 depth = 0,
                 displayName = displayName,
             };
@@ -362,10 +365,36 @@ namespace Emilia.Node.Universal.Editor
                 DragAndDrop.PrepareStartDrag();
                 DragAndDrop.SetGenericData(UniversalDragAndDropHandle.CreateNodeDragAndDropType, createNodeHandle);
                 DragAndDrop.StartDrag(createNodeHandle.path);
+
+                if (FindItem(id, rootItem) is CreateNodeEntryTreeViewItem entryItem && entryItem.isCollection)
+                {
+                    DragAndDrop.SetGenericData(CollectionReorderKey, createNodeHandle.path);
+                }
             }
         }
 
-        protected override DragAndDropVisualMode HandleDragAndDrop(DragAndDropArgs args) => DragAndDropVisualMode.Rejected;
+        protected override DragAndDropVisualMode HandleDragAndDrop(DragAndDropArgs args)
+        {
+            string draggedPath = DragAndDrop.GetGenericData(CollectionReorderKey) as string;
+            if (draggedPath == null) return DragAndDropVisualMode.Rejected;
+
+            TreeViewItem parentItem = args.parentItem;
+            if (parentItem is not CreateNodeTitleTreeViewItem titleItem || titleItem.id != CollectionTitleId)
+                return DragAndDropVisualMode.Rejected;
+
+            if (args.performDrop)
+            {
+                int toIndex = args.insertAtIndex;
+                int count = collectionSetting.createNodePath.Count;
+                if (toIndex < 0 || toIndex >= count) toIndex = count - 1;
+
+                collectionSetting.Move(draggedPath, toIndex);
+                collectionSetting.Save(graphView);
+                Reload();
+            }
+
+            return DragAndDropVisualMode.Move;
+        }
 
         protected override void ExpandedStateChanged()
         {

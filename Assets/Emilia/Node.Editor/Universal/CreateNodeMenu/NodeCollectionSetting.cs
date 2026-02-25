@@ -41,6 +41,21 @@ namespace Emilia.Node.Universal.Editor
             _createNodeInfos.Add(new NodeCollectionInfo(path));
         }
 
+        public void Move(string path, int toIndex)
+        {
+            int fromIndex = _createNodePath.IndexOf(path);
+            if (fromIndex < 0) return;
+            if (toIndex < 0 || toIndex >= _createNodePath.Count) return;
+            if (fromIndex == toIndex) return;
+
+            _createNodePath.RemoveAt(fromIndex);
+            _createNodePath.Insert(toIndex, path);
+
+            NodeCollectionInfo info = _createNodeInfos[fromIndex];
+            _createNodeInfos.RemoveAt(fromIndex);
+            _createNodeInfos.Insert(toIndex, info);
+        }
+
         public void Remove(string path)
         {
             if (_createNodePath.Contains(path) == false) return;

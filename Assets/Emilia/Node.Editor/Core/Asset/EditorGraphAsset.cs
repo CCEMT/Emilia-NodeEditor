@@ -106,6 +106,7 @@ namespace Emilia.Node.Editor
         public virtual void ResetId()
         {
             _id = Guid.NewGuid().ToString();
+            EditorUtility.SetDirty(this);
             AssetDatabase.SaveAssetIfDirty(this);
         }
 

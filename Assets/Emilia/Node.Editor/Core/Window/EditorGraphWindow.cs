@@ -178,7 +178,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public static string GetId(EditorGraphAsset editorGraphAsset)
         {
-            const string SingleKey = "{SingleWindow}";
+            const string SingleKey = "{SingleGraphWindow}";
 
             if (editorGraphAsset == null) return string.Empty;
             WindowSettingsAttribute settings = editorGraphAsset.GetType().GetAttribute<WindowSettingsAttribute>();
