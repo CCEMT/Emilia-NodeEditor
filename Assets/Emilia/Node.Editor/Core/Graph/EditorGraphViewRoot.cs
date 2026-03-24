@@ -79,6 +79,19 @@ namespace Emilia.Node.Editor
         }
 
         /// <summary>
+        /// 销毁
+        /// 只进行最基本的清理
+        /// </summary>
+        public void Destroy()
+        {
+            EditorApplication.update -= OnUpdate;
+            EditorApplication.update -= OnUpdate;
+
+            this._graphView.Destroy();
+            this._graphView = null;
+        }
+
+        /// <summary>
         /// 重新加载
         /// </summary>
         public void Reload()

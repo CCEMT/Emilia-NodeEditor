@@ -1072,6 +1072,30 @@ namespace Emilia.Node.Editor
         }
 
         /// <summary>
+        /// 销毁
+        /// 只进行最基本的清理
+        /// </summary>
+        public void Destroy()
+        {
+            if (loadElementCoroutine != null) EditorCoroutineUtility.StopCoroutine(loadElementCoroutine);
+            loadElementCoroutine = null;
+            
+            foreach (CustomGraphViewModule customModule in this.customModules.Values) customModule.Dispose();
+            this.customModules.Clear();
+
+            foreach (BasicGraphViewModule module in this.modules.Values) module.Dispose();
+            
+            Undo.undoRedoPerformed -= OnUndoRedoPerformed;
+            
+            if (focusedGraphView == this) focusedGraphView = null;
+            if (this.graphHandle != null)
+            {
+                this.graphHandle.Dispose(this);
+                this.graphHandle = null;
+            }
+        }
+
+        /// <summary>
         /// 根据Asset获取View
         /// </summary>
         public static EditorGraphView GetGraphView(EditorGraphAsset asset)
