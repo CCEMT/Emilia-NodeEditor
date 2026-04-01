@@ -145,5 +145,21 @@ namespace Emilia.Node.Editor
 
             EditorApplication.update -= Update;
         }
+        
+        /// <summary>
+        /// 销毁
+        /// 只进行最基本的清理
+        /// </summary>
+        public void Destroy()
+        {
+            EditorApplication.update -= Update;
+            EditorApplication.update -= Update;
+
+            this._drawer?.Dispose();
+            this._drawer = null;
+            
+            graphView.Destroy();
+            graphView = null;
+        }
     }
 }

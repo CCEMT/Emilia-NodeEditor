@@ -38,16 +38,19 @@ namespace Emilia.Kit.Editor
 
         public static void SaveAll(this IUnityAsset unityAsset)
         {
+            unityAsset.SetDirtyAll();
+            AssetDatabase.SaveAssets();
+        }
+        
+        public static void SetDirtyAll(this IUnityAsset unityAsset)
+        {
             List<Object> allAsset = unityAsset.CollectAsset();
-
             int count = allAsset.Count;
             for (int i = 0; i < count; i++)
             {
                 Object asset = allAsset[i];
                 EditorUtility.SetDirty(asset);
             }
-
-            AssetDatabase.SaveAssets();
         }
 
         public static void PasteChild(this IUnityAsset asset)
