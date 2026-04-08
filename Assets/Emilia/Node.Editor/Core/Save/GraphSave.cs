@@ -97,7 +97,7 @@ namespace Emilia.Node.Editor
 
             handle?.OnSaveBefore(graphView);
 
-            if (graphView.graphAsset != null) graphView.graphAsset.SaveAll();
+            if (graphView.graphAsset != null) graphView.graphAsset.OnlySaveAll();
 
             graphView.graphLocalSettingSystem.SaveAll();
 

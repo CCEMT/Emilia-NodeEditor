@@ -128,11 +128,18 @@ namespace Emilia.Kit
             if (prefabStage != null) return AssetDatabase.LoadAssetAtPath<GameObject>(prefabStage.assetPath);
             return null;
         }
-        
+
         public static void Save(this Object target, bool isRefresh = false)
         {
             EditorUtility.SetDirty(target);
             AssetDatabase.SaveAssets();
+            if (isRefresh) AssetDatabase.Refresh();
+        }
+
+        public static void SaveThis(this Object target, bool isRefresh = false)
+        {
+            EditorUtility.SetDirty(target);
+            AssetDatabase.SaveAssetIfDirty(target);
             if (isRefresh) AssetDatabase.Refresh();
         }
     }

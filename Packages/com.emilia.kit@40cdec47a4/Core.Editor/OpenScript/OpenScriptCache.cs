@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Sirenix.Serialization;
@@ -58,7 +58,7 @@ namespace Emilia.Kit.Editor
     public class ScriptInfo
     {
         public string guid;
-        public int hash;
+        public long lastWriteTimeTicks;
         public List<TypeInfo> typeInfos = new List<TypeInfo>();
     }
 }
