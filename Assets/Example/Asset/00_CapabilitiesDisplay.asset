@@ -60,6 +60,42 @@ MonoBehaviour:
   _outputPortId: bottomIntPortInfo
   _inputPortId: topIntPortInfo
   _graphAsset: {fileID: 11400000}
+--- !u!114 &-8847109216341779921
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a56498cf6eaa4b0b8539a4ea58d67b3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 6
+      Data: 
+  _id: b4e0e793-29bd-4c3c-b771-6a3cea3e5ab8
+  _position:
+    serializedVersion: 2
+    x: -187.06763
+    y: 477.55475
+    width: 100
+    height: 100
+  _isExpanded: 0
+  _graphAsset: {fileID: 11400000}
+  _displayName: 
+  leftIntPortValue: 0
+  leftStringPortValue: 
 --- !u!114 &-8758231218325031721
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -121,9 +157,9 @@ MonoBehaviour:
     y: -227.20001
     width: 214.40002
     height: 165.59999
+  _isExpanded: 0
   _graphAsset: {fileID: 11400000}
   _displayName: 
-  _isFold: 1
   leftIntPortValue: 0
   leftStringPortValue: string
 --- !u!114 &-7788558300624362625
@@ -157,9 +193,9 @@ MonoBehaviour:
     y: -459.19998
     width: 214.40002
     height: 124
+  _isExpanded: 0
   _graphAsset: {fileID: 11400000}
   _displayName: 
-  _isFold: 1
   leftIntPortValue: 0
   leftStringPortValue: 
 --- !u!114 &-7687679859001626940
@@ -463,9 +499,9 @@ MonoBehaviour:
     y: -248.80005
     width: 214.40001
     height: 128.8
+  _isExpanded: 0
   _graphAsset: {fileID: 11400000}
   _displayName: 
-  _isFold: 1
   leftIntPortValue: 2
   leftStringPortValue: string
 --- !u!114 &-4759726541771898770
@@ -499,9 +535,9 @@ MonoBehaviour:
     y: -248.79999
     width: 214.40002
     height: 124
+  _isExpanded: 0
   _graphAsset: {fileID: 11400000}
   _displayName: 
-  _isFold: 1
   leftIntPortValue: 0
   leftStringPortValue: 
 --- !u!114 &-3677751301401593754
@@ -534,6 +570,42 @@ MonoBehaviour:
   _outputPortId: bottomIntPortInfo
   _inputPortId: topIntPortInfo
   _graphAsset: {fileID: 11400000}
+--- !u!114 &-3086110882190357191
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a56498cf6eaa4b0b8539a4ea58d67b3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 6
+      Data: 
+  _id: 19dd6f7f-48dc-4b78-852c-14451ce8099c
+  _position:
+    serializedVersion: 2
+    x: -431.04996
+    y: 525.2
+    width: 214
+    height: 127
+  _isExpanded: 0
+  _graphAsset: {fileID: 11400000}
+  _displayName: 
+  leftIntPortValue: 0
+  leftStringPortValue: 
 --- !u!114 &-2975212599382200385
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -565,9 +637,9 @@ MonoBehaviour:
     y: 10
     width: 182
     height: 68
+  _isExpanded: 0
   _graphAsset: {fileID: 11400000}
   _displayName: 
-  _isFold: 1
   _capabilitiesDisplayAsset: {fileID: 8410584222130817346}
 --- !u!114 &-2919790231849425125
 MonoBehaviour:
@@ -600,9 +672,9 @@ MonoBehaviour:
     y: -248.8001
     width: 214.39996
     height: 124
+  _isExpanded: 0
   _graphAsset: {fileID: 11400000}
   _displayName: 
-  _isFold: 1
   leftIntPortValue: 0
   leftStringPortValue: 
 --- !u!114 &-2606262831388170815
@@ -666,11 +738,41 @@ MonoBehaviour:
     y: -459.19998
     width: 214.40001
     height: 128.79999
+  _isExpanded: 0
   _graphAsset: {fileID: 11400000}
   _displayName: 
-  _isFold: 1
   leftIntPortValue: 1
   leftStringPortValue: string
+--- !u!114 &-816544809540027077
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97ea6614a3484b77981400fed0cfb405, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _userData
+      Entry: 6
+      Data: 
+  _id: fa641a03-05fe-4b46-a6ed-8e641a2151c0
+  _outputNodeId: b4e0e793-29bd-4c3c-b771-6a3cea3e5ab8
+  _inputNodeId: 19dd6f7f-48dc-4b78-852c-14451ce8099c
+  _outputPortId: rightStringPortInfo
+  _inputPortId: leftStringPortInfo
+  _graphAsset: {fileID: 11400000}
 --- !u!114 &-794964730234354178
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -762,9 +864,9 @@ MonoBehaviour:
     y: -221.43004
     width: 180.79999
     height: 68
+  _isExpanded: 0
   _graphAsset: {fileID: 4794869389120513231}
   _displayName: 
-  _isFold: 1
   _capabilitiesDisplayAsset: {fileID: 6397969052164475063}
 --- !u!114 &-383451858857789330
 MonoBehaviour:
@@ -824,6 +926,8 @@ MonoBehaviour:
     - {fileID: 1647309643366325311}
     - {fileID: -8732193448724720668}
     - {fileID: -2975212599382200385}
+    - {fileID: -8847109216341779921}
+    - {fileID: -3086110882190357191}
     - {fileID: 1860359994414155345}
     - {fileID: -383451858857789330}
     - {fileID: -7687679859001626940}
@@ -857,7 +961,9 @@ MonoBehaviour:
     - {fileID: 928838790087731062}
     - {fileID: 7022791245233566243}
     - {fileID: 8322338279420764467}
+    - {fileID: -816544809540027077}
     - {fileID: 8410584222130817346}
+    - {fileID: 0}
     - {fileID: 5639668003298107180}
     SerializedBytesString: 
     Prefab: {fileID: 0}
@@ -870,7 +976,7 @@ MonoBehaviour:
         Emilia.Node.Editor]], mscorlib
     - Name: 
       Entry: 12
-      Data: 12
+      Data: 14
     - Name: 
       Entry: 10
       Data: 0
@@ -908,6 +1014,12 @@ MonoBehaviour:
       Entry: 10
       Data: 11
     - Name: 
+      Entry: 10
+      Data: 12
+    - Name: 
+      Entry: 10
+      Data: 13
+    - Name: 
       Entry: 13
       Data: 
     - Name: 
@@ -919,13 +1031,7 @@ MonoBehaviour:
         Emilia.Node.Editor]], mscorlib
     - Name: 
       Entry: 12
-      Data: 33
-    - Name: 
-      Entry: 10
-      Data: 12
-    - Name: 
-      Entry: 10
-      Data: 13
+      Data: 34
     - Name: 
       Entry: 10
       Data: 14
@@ -1020,6 +1126,15 @@ MonoBehaviour:
       Entry: 10
       Data: 44
     - Name: 
+      Entry: 10
+      Data: 45
+    - Name: 
+      Entry: 10
+      Data: 46
+    - Name: 
+      Entry: 10
+      Data: 47
+    - Name: 
       Entry: 13
       Data: 
     - Name: 
@@ -1051,7 +1166,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 12
-      Data: 12
+      Data: 14
     - Name: 
       Entry: 7
       Data: 
@@ -1197,6 +1312,30 @@ MonoBehaviour:
       Entry: 8
       Data: 
     - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: b4e0e793-29bd-4c3c-b771-6a3cea3e5ab8
+    - Name: $v
+      Entry: 10
+      Data: 12
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 19dd6f7f-48dc-4b78-852c-14451ce8099c
+    - Name: $v
+      Entry: 10
+      Data: 13
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
       Entry: 13
       Data: 
     - Name: 
@@ -1211,49 +1350,13 @@ MonoBehaviour:
       Data: 4
     - Name: 
       Entry: 12
-      Data: 33
+      Data: 34
     - Name: 
       Entry: 7
       Data: 
     - Name: $k
       Entry: 1
       Data: 871f692e-4846-4c24-ae0f-b4e68a715ddf
-    - Name: $v
-      Entry: 10
-      Data: 12
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: ad2223c3-0645-410c-97b6-471797fa88a4
-    - Name: $v
-      Entry: 10
-      Data: 13
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: 84bf7822-aaca-4bf1-beb6-258a3bd626b6
-    - Name: $v
-      Entry: 10
-      Data: 37
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: e29da660-315e-4394-b872-4eecb5df185b
     - Name: $v
       Entry: 10
       Data: 14
@@ -1265,19 +1368,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: dbade8d9-8123-4e66-b3b2-6e5927595a5d
-    - Name: $v
-      Entry: 10
-      Data: 36
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: 1d33d554-693b-41b7-99de-f3650f1fc534
+      Data: ad2223c3-0645-410c-97b6-471797fa88a4
     - Name: $v
       Entry: 10
       Data: 15
@@ -1289,259 +1380,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: 9ac4e978-14b8-4c8a-90d1-1b87eae32fe2
-    - Name: $v
-      Entry: 10
-      Data: 16
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: 634ba33b-0476-47c2-b6d8-55bbd5af5efb
-    - Name: $v
-      Entry: 10
-      Data: 17
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: 64554971-15df-42fb-86d8-c17d77cd0ad6
-    - Name: $v
-      Entry: 10
-      Data: 18
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: 0bd36e3e-2c04-4d4e-a38c-eb4080fbf336
-    - Name: $v
-      Entry: 10
-      Data: 19
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: 4f9277e7-aafe-40b2-bf90-98d14fc72995
-    - Name: $v
-      Entry: 10
-      Data: 20
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: 93ca6340-fefd-470d-825d-cd502330f4d6
-    - Name: $v
-      Entry: 10
-      Data: 21
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: 52b13d44-fcbf-456f-a316-115e4f949f7c
-    - Name: $v
-      Entry: 10
-      Data: 22
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: a39092ad-daae-40ad-8ce2-79b3a5186b0f
-    - Name: $v
-      Entry: 10
-      Data: 23
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: 0dcaa982-ac60-4bc9-a129-99d15e94bd9c
-    - Name: $v
-      Entry: 10
-      Data: 24
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: f360254d-b20f-4677-b4a8-539cc3c7bd5f
-    - Name: $v
-      Entry: 10
-      Data: 25
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: c783649c-1c02-4e67-9654-4a46bf6ab497
-    - Name: $v
-      Entry: 10
-      Data: 26
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: dff7a7d8-1e78-4dd6-8a33-f97e2122d794
-    - Name: $v
-      Entry: 10
-      Data: 27
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: 6deec39b-e3fe-4fdd-b665-271ffd2c4d38
-    - Name: $v
-      Entry: 10
-      Data: 28
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: 98166503-c2ef-4ca5-91bd-e4b459d5c5f2
-    - Name: $v
-      Entry: 10
-      Data: 29
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: e27f6882-bdb4-40fa-9fb1-089adfb82b4b
-    - Name: $v
-      Entry: 10
-      Data: 30
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: 305d35ea-d81e-4222-bc10-9227281bbf57
-    - Name: $v
-      Entry: 10
-      Data: 31
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: 489e3b41-cb36-41bf-b297-28f1695198f2
-    - Name: $v
-      Entry: 10
-      Data: 32
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: dc28c240-d189-4a71-a87f-fc776a544b94
-    - Name: $v
-      Entry: 10
-      Data: 33
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: 42908546-4d84-4f73-b093-87d7ccfe8069
-    - Name: $v
-      Entry: 10
-      Data: 34
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: b598fb86-c675-4bba-a9af-bc2298000a19
-    - Name: $v
-      Entry: 10
-      Data: 35
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: e51eea8f-0df2-4cce-b2f0-672d0ad3ddef
-    - Name: $v
-      Entry: 10
-      Data: 38
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: 7a3ba0d5-fb6f-4285-82e9-b336b0b1ae2e
+      Data: 84bf7822-aaca-4bf1-beb6-258a3bd626b6
     - Name: $v
       Entry: 10
       Data: 39
@@ -1553,7 +1392,283 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: 6bdd4345-5279-4980-b6d6-65c34573ceb5
+      Data: e29da660-315e-4394-b872-4eecb5df185b
+    - Name: $v
+      Entry: 10
+      Data: 16
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: dbade8d9-8123-4e66-b3b2-6e5927595a5d
+    - Name: $v
+      Entry: 10
+      Data: 38
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 1d33d554-693b-41b7-99de-f3650f1fc534
+    - Name: $v
+      Entry: 10
+      Data: 17
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 9ac4e978-14b8-4c8a-90d1-1b87eae32fe2
+    - Name: $v
+      Entry: 10
+      Data: 18
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 634ba33b-0476-47c2-b6d8-55bbd5af5efb
+    - Name: $v
+      Entry: 10
+      Data: 19
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 64554971-15df-42fb-86d8-c17d77cd0ad6
+    - Name: $v
+      Entry: 10
+      Data: 20
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 0bd36e3e-2c04-4d4e-a38c-eb4080fbf336
+    - Name: $v
+      Entry: 10
+      Data: 21
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 4f9277e7-aafe-40b2-bf90-98d14fc72995
+    - Name: $v
+      Entry: 10
+      Data: 22
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 93ca6340-fefd-470d-825d-cd502330f4d6
+    - Name: $v
+      Entry: 10
+      Data: 23
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 52b13d44-fcbf-456f-a316-115e4f949f7c
+    - Name: $v
+      Entry: 10
+      Data: 24
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: a39092ad-daae-40ad-8ce2-79b3a5186b0f
+    - Name: $v
+      Entry: 10
+      Data: 25
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 0dcaa982-ac60-4bc9-a129-99d15e94bd9c
+    - Name: $v
+      Entry: 10
+      Data: 26
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: f360254d-b20f-4677-b4a8-539cc3c7bd5f
+    - Name: $v
+      Entry: 10
+      Data: 27
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: c783649c-1c02-4e67-9654-4a46bf6ab497
+    - Name: $v
+      Entry: 10
+      Data: 28
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: dff7a7d8-1e78-4dd6-8a33-f97e2122d794
+    - Name: $v
+      Entry: 10
+      Data: 29
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 6deec39b-e3fe-4fdd-b665-271ffd2c4d38
+    - Name: $v
+      Entry: 10
+      Data: 30
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 98166503-c2ef-4ca5-91bd-e4b459d5c5f2
+    - Name: $v
+      Entry: 10
+      Data: 31
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: e27f6882-bdb4-40fa-9fb1-089adfb82b4b
+    - Name: $v
+      Entry: 10
+      Data: 32
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 305d35ea-d81e-4222-bc10-9227281bbf57
+    - Name: $v
+      Entry: 10
+      Data: 33
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 489e3b41-cb36-41bf-b297-28f1695198f2
+    - Name: $v
+      Entry: 10
+      Data: 34
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: dc28c240-d189-4a71-a87f-fc776a544b94
+    - Name: $v
+      Entry: 10
+      Data: 35
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 42908546-4d84-4f73-b093-87d7ccfe8069
+    - Name: $v
+      Entry: 10
+      Data: 36
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: b598fb86-c675-4bba-a9af-bc2298000a19
+    - Name: $v
+      Entry: 10
+      Data: 37
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: e51eea8f-0df2-4cce-b2f0-672d0ad3ddef
     - Name: $v
       Entry: 10
       Data: 40
@@ -1565,7 +1680,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: 3b066973-9339-4313-b32a-823b494b3472
+      Data: 7a3ba0d5-fb6f-4285-82e9-b336b0b1ae2e
     - Name: $v
       Entry: 10
       Data: 41
@@ -1577,7 +1692,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: 26627dea-f9a6-42bf-b934-f52bcbd7d0cc
+      Data: 6bdd4345-5279-4980-b6d6-65c34573ceb5
     - Name: $v
       Entry: 10
       Data: 42
@@ -1589,7 +1704,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: 1ac795be-f584-45b8-9b26-b08b39c23544
+      Data: 3b066973-9339-4313-b32a-823b494b3472
     - Name: $v
       Entry: 10
       Data: 43
@@ -1601,10 +1716,46 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: 643a1b5f-6e1a-43e8-9675-33fb479d970b
+      Data: 26627dea-f9a6-42bf-b934-f52bcbd7d0cc
     - Name: $v
       Entry: 10
       Data: 44
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 1ac795be-f584-45b8-9b26-b08b39c23544
+    - Name: $v
+      Entry: 10
+      Data: 45
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: 643a1b5f-6e1a-43e8-9675-33fb479d970b
+    - Name: $v
+      Entry: 10
+      Data: 46
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: fa641a03-05fe-4b46-a6ed-8e641a2151c0
+    - Name: $v
+      Entry: 10
+      Data: 47
     - Name: 
       Entry: 8
       Data: 
@@ -1639,13 +1790,16 @@ MonoBehaviour:
         Emilia.Node.Editor]], mscorlib
     - Name: 
       Entry: 12
-      Data: 2
+      Data: 3
     - Name: 
       Entry: 10
-      Data: 45
+      Data: 48
     - Name: 
       Entry: 6
       Data: 
+    - Name: 
+      Entry: 10
+      Data: 49
     - Name: 
       Entry: 13
       Data: 
@@ -1654,7 +1808,7 @@ MonoBehaviour:
       Data: 
     - Name: editorParametersManage
       Entry: 10
-      Data: 46
+      Data: 50
   _id: d28de47d-afbf-41d3-a996-87496270c073
   description: "\u529F\u80FD\u5C55\u793A\u4F8B\u5B50"
 --- !u!114 &278626000185543226
@@ -1778,9 +1932,9 @@ MonoBehaviour:
     y: -22.400011
     width: 214.40001
     height: 123.99999
+  _isExpanded: 0
   _graphAsset: {fileID: 11400000}
   _displayName: 
-  _isFold: 1
   leftIntPortValue: 3
   leftStringPortValue: string
 --- !u!114 &1655077350164446172
@@ -1934,9 +2088,9 @@ MonoBehaviour:
     y: -22.399998
     width: 214.40002
     height: 123.99999
+  _isExpanded: 0
   _graphAsset: {fileID: 11400000}
   _displayName: 
-  _isFold: 1
   leftIntPortValue: 0
   leftStringPortValue: 
 --- !u!114 &3053712448341329148
@@ -2060,9 +2214,9 @@ MonoBehaviour:
     y: -459.19998
     width: 214.39996
     height: 125.600006
+  _isExpanded: 0
   _graphAsset: {fileID: 11400000}
   _displayName: 
-  _isFold: 1
   leftIntPortValue: 0
   leftStringPortValue: 
 --- !u!114 &4794869389120513231
@@ -2314,9 +2468,9 @@ MonoBehaviour:
     y: -227.13785
     width: 214.40002
     height: 167.2
+  _isExpanded: 0
   _graphAsset: {fileID: 11400000}
   _displayName: 
-  _isFold: 1
   leftIntPortValue: 0
   leftStringPortValue: string
 --- !u!114 &6397969052164475063
@@ -2574,9 +2728,9 @@ MonoBehaviour:
     y: -147.06203
     width: 100
     height: 100
+  _isExpanded: 0
   _graphAsset: {fileID: 8410584222130817346}
   _displayName: 
-  _isFold: 1
   _capabilitiesDisplayAsset: {fileID: 4794869389120513231}
 --- !u!114 &7833063105386985103
 MonoBehaviour:
@@ -2639,9 +2793,9 @@ MonoBehaviour:
     y: -22.399984
     width: 214.39996
     height: 123.99999
+  _isExpanded: 0
   _graphAsset: {fileID: 11400000}
   _displayName: 
-  _isFold: 1
   leftIntPortValue: 0
   leftStringPortValue: 
 --- !u!114 &8322338279420764467

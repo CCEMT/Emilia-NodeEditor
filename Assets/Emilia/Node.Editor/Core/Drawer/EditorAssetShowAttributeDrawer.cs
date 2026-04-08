@@ -43,7 +43,7 @@ namespace Emilia.Node.Editor
         {
             if (this._graphImGUIRoot != null)
             {
-                if (this._graphImGUIRoot.asset != null) this._graphImGUIRoot.asset.SaveAll();
+                if (this._graphImGUIRoot.asset != null) this._graphImGUIRoot.asset.OnlySaveAll();
                 this._graphImGUIRoot.Dispose();
             }
 

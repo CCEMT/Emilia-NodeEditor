@@ -31,11 +31,11 @@ namespace Emilia.Kit.Editor
                 Object childAsset = childAssets[i];
                 UnityAssetSerializationPack child = new UnityAssetSerializationPack();
                 parent.children.Add(child);
-                child.type = child.GetType();
+                child.type = childAsset.GetType();
                 UnitySerializationUtility.SerializeUnityObject(childAsset, ref child.data, ref child.unityObjects, DataFormat.Binary, true);
                 child.children = new List<UnityAssetSerializationPack>();
 
-                if (child is IUnityAsset unityChildAsset) SerializeUnityAsset(unityChildAsset, child);
+                if (childAsset is IUnityAsset unityChildAsset) SerializeUnityAsset(unityChildAsset, child);
             }
         }
 
