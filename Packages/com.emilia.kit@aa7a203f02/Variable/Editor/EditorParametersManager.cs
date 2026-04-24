@@ -92,6 +92,7 @@ namespace Emilia.Variables.Editor
             {
                 EditorParameter editorParameter = parameters[i];
                 Variable variable = VariableUtility.Create(editorParameter.value.type);
+                variable.SetValue(editorParameter.value.GetValue());
                 variablesManage.SetThisValue(editorParameter.key, variable);
             }
 

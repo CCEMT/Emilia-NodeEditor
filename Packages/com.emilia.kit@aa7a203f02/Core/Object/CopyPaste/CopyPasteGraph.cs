@@ -3,14 +3,14 @@ using System;
 using System.Collections.Generic;
 using Sirenix.Serialization;
 using UnityEditor;
+using UnityEngine;
 
 namespace Emilia.Kit
 {
     [Serializable]
     public class CopyPasteGraph
     {
-        [OdinSerialize, NonSerialized]
-        private List<CopyPasteNode> nodes = new List<CopyPasteNode>();
+        [OdinSerialize, NonSerialized] private List<CopyPasteNode> nodes = new();
 
         /// <summary>
         /// 开始粘贴
@@ -19,7 +19,7 @@ namespace Emilia.Kit
         {
             Undo.IncrementCurrentGroup();
 
-            Queue<CopyPasteNode> nodeQueue = new Queue<CopyPasteNode>();
+            Queue<CopyPasteNode> nodeQueue = new();
 
             int nodeAmount = this.nodes.Count;
             for (int i = 0; i < nodeAmount; i++)
@@ -28,40 +28,54 @@ namespace Emilia.Kit
                 if (node.input.Count == 0) nodeQueue.Enqueue(node);
             }
 
-            List<object> pasteContents = new List<object>();
-            List<CopyPasteNode> successNodes = new List<CopyPasteNode>();
+            List<object> pasteContents = new();
+            List<CopyPasteNode> successNodes = new();
+            CopyPasteSaveTransaction transaction = new();
 
-            while (nodeQueue.Count > 0)
+            AssetDatabase.StartAssetEditing();
+
+            try
             {
-                CopyPasteNode node = nodeQueue.Dequeue();
-
-                bool isZero = node.input.Count == 0;
-                bool isSuccess = node.input.TrueForAll(outputNode => successNodes.Contains(outputNode));
-                bool canPaste = isZero || isSuccess;
-
-                if (canPaste)
+                while (nodeQueue.Count > 0)
                 {
-                    CopyPasteContext copyPasteContext = new CopyPasteContext();
-                    copyPasteContext.userData = userData;
-                    copyPasteContext.dependency = GetInputPack(node);
-                    copyPasteContext.pasteContent = pasteContents;
+                    CopyPasteNode node = nodeQueue.Dequeue();
 
-                    node.pack.Paste(copyPasteContext);
-                    successNodes.Add(node);
+                    bool isZero = node.input.Count == 0;
+                    bool isSuccess = node.input.TrueForAll(successNodes.Contains);
+                    bool canPaste = isZero || isSuccess;
 
-                    int inputAmount = node.output.Count;
-                    for (int i = 0; i < inputAmount; i++)
+                    if (canPaste)
                     {
-                        CopyPasteNode outputNode = node.output[i];
-                        if (successNodes.Contains(outputNode) || nodeQueue.Contains(outputNode)) continue;
-                        nodeQueue.Enqueue(outputNode);
+                        CopyPasteContext copyPasteContext = new();
+                        copyPasteContext.userData = userData;
+                        copyPasteContext.transaction = transaction;
+                        copyPasteContext.dependency = GetInputPack(node);
+                        copyPasteContext.pasteContent = pasteContents;
+
+                        node.pack.Paste(copyPasteContext);
+                        successNodes.Add(node);
+
+                        int inputAmount = node.output.Count;
+                        for (int i = 0; i < inputAmount; i++)
+                        {
+                            CopyPasteNode outputNode = node.output[i];
+                            if (successNodes.Contains(outputNode) || nodeQueue.Contains(outputNode)) continue;
+                            nodeQueue.Enqueue(outputNode);
+                        }
+
+                        continue;
                     }
 
-                    continue;
+                    nodeQueue.Enqueue(node);
                 }
-
-                nodeQueue.Enqueue(node);
             }
+            catch (Exception e)
+            {
+                Debug.LogError(e.ToUnityLogString());
+            }
+
+            AssetDatabase.StopAssetEditing();
+            transaction.Flush();
 
             Undo.CollapseUndoOperations(Undo.GetCurrentGroup());
             Undo.IncrementCurrentGroup();
@@ -71,7 +85,7 @@ namespace Emilia.Kit
 
         private List<ICopyPastePack> GetInputPack(CopyPasteNode node)
         {
-            List<ICopyPastePack> inputPacks = new List<ICopyPastePack>();
+            List<ICopyPastePack> inputPacks = new();
             int amount = node.input.Count;
             for (int i = 0; i < amount; i++)
             {
@@ -87,7 +101,7 @@ namespace Emilia.Kit
         /// </summary>
         public void AddPack(ICopyPastePack pack)
         {
-            CopyPasteNode addNode = new CopyPasteNode(pack);
+            CopyPasteNode addNode = new(pack);
 
             int amount = this.nodes.Count;
             for (int i = 0; i < amount; i++)
@@ -164,7 +178,7 @@ namespace Emilia.Kit
         /// </summary>
         public List<ICopyPastePack> GetAllPacks()
         {
-            List<ICopyPastePack> packs = new List<ICopyPastePack>();
+            List<ICopyPastePack> packs = new();
             int amount = this.nodes.Count;
             for (int i = 0; i < amount; i++)
             {
