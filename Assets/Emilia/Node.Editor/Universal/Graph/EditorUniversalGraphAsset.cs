@@ -39,7 +39,7 @@ namespace Emilia.Node.Universal.Editor
             EditorParametersManager parametersManage = childAssets.OfType<EditorParametersManager>().FirstOrDefault();
             if (parametersManage == null) return;
 
-            if (this.editorParametersManage != null) DestroyImmediate(this.editorParametersManage);
+            if (this.editorParametersManage != null) editorParametersManage = null;
 
             this.editorParametersManage = parametersManage;
             EditorAssetKit.SaveAssetIntoObject(this.editorParametersManage, this);
