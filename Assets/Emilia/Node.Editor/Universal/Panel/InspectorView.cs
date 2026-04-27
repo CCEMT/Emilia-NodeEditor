@@ -96,6 +96,7 @@ namespace Emilia.Node.Universal.Editor
             string label = GetLabel();
             if (string.IsNullOrEmpty(label) == false) GUILayout.Label(label);
             this.propertyTree?.Draw();
+            if (Event.current.type == EventType.MouseDown) Event.current.Use();
         }
 
         protected string GetLabel()
