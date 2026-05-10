@@ -81,56 +81,44 @@ namespace Emilia.Node.Universal.Editor
 
         public override string title => string.IsNullOrEmpty(displayName) ? defaultDisplayName : displayName;
 
+        public override bool isLogicalTransparent => true;
+
         /// <summary>
-        /// 获取逻辑输出节点，实现Portal的透传遍历。
+        /// 获取逻辑输出连接，实现Portal的透传遍历。
         /// Entry Portal会跳转到关联的Exit Portal获取其输出节点。
         /// Exit Portal会获取其直接连接的目标节点。
         /// </summary>
-        public override List<EditorNodeAsset> GetLogicalOutputNodes(HashSet<string> visited = null)
+        public override List<EditorLogicalConnection> GetLogicalOutputNodes(HashSet<string> visited = null)
         {
-            if (graphAsset == null) return new List<EditorNodeAsset>();
+            if (graphAsset == null) return new List<EditorLogicalConnection>();
 
             visited ??= new HashSet<string>();
-            if (visited.Contains(id)) return new List<EditorNodeAsset>();
-            visited.Add(id);
+            if (visited.Add(id) == false) return new List<EditorLogicalConnection>();
 
-            var result = new List<EditorNodeAsset>();
+            var result = new List<EditorLogicalConnection>();
 
-            if (direction == PortalDirection.Entry)
-            {
-                AppendLinkedPortalOutputs(result, visited);
-            }
-            else
-            {
-                AppendDirectOutputs(result, visited);
-            }
+            if (direction == PortalDirection.Entry) AppendLinkedPortalOutputs(result, visited);
+            else AppendDirectOutputs(result, visited);
 
             return result;
         }
 
         /// <summary>
-        /// 获取逻辑输入节点，实现Portal的透传遍历。
+        /// 获取逻辑输入连接，实现Portal的透传遍历。
         /// Exit Portal会跳转到关联的Entry Portal获取其输入节点。
         /// Entry Portal会获取其直接连接的源节点。
         /// </summary>
-        public override List<EditorNodeAsset> GetLogicalInputNodes(HashSet<string> visited = null)
+        public override List<EditorLogicalConnection> GetLogicalInputNodes(HashSet<string> visited = null)
         {
-            if (graphAsset == null) return new List<EditorNodeAsset>();
+            if (graphAsset == null) return new List<EditorLogicalConnection>();
 
             visited ??= new HashSet<string>();
-            if (visited.Contains(id)) return new List<EditorNodeAsset>();
-            visited.Add(id);
+            if (visited.Add(id) == false) return new List<EditorLogicalConnection>();
 
-            var result = new List<EditorNodeAsset>();
+            var result = new List<EditorLogicalConnection>();
 
-            if (direction == PortalDirection.Exit)
-            {
-                AppendLinkedPortalInputs(result, visited);
-            }
-            else
-            {
-                AppendDirectInputs(result, visited);
-            }
+            if (direction == PortalDirection.Exit) AppendLinkedPortalInputs(result, visited);
+            else AppendDirectInputs(result, visited);
 
             return result;
         }
@@ -138,61 +126,134 @@ namespace Emilia.Node.Universal.Editor
         /// <summary>
         /// 通过关联Portal获取输出节点（Entry Portal使用）
         /// </summary>
-        private void AppendLinkedPortalOutputs(List<EditorNodeAsset> result, HashSet<string> visited)
+        private void AppendLinkedPortalOutputs(List<EditorLogicalConnection> result, HashSet<string> visited)
         {
-            if (string.IsNullOrEmpty(linkedPortalId)) return;
-
-            EditorNodeAsset linkedPortal = graphAsset.nodeMap.GetValueOrDefault(linkedPortalId);
-            if (linkedPortal != null)
+            List<EditorNodeAsset> linkedPortals = GetLinkedPortals(PortalDirection.Exit);
+            int count = linkedPortals.Count;
+            for (int i = 0; i < count; i++)
             {
-                result.AddRange(linkedPortal.GetLogicalOutputNodes(visited));
+                EditorNodeAsset linkedPortal = linkedPortals[i];
+                result.AddRange(linkedPortal.GetLogicalOutputNodes(new HashSet<string>(visited)));
             }
         }
 
         /// <summary>
         /// 获取直接连接的输出节点（Exit Portal使用）
         /// </summary>
-        private void AppendDirectOutputs(List<EditorNodeAsset> result, HashSet<string> visited)
+        private void AppendDirectOutputs(List<EditorLogicalConnection> result, HashSet<string> visited)
         {
             List<EditorEdgeAsset> edges = graphAsset.GetOutputEdges(this);
             foreach (EditorEdgeAsset edge in edges)
             {
                 EditorNodeAsset targetNode = graphAsset.nodeMap.GetValueOrDefault(edge.inputNodeId);
-                if (targetNode != null)
-                {
-                    result.AddRange(targetNode.GetLogicalOutputNodes(visited));
-                }
+                if (targetNode != null) AppendLogicalOutputNode(result, targetNode, edge, visited);
             }
         }
 
         /// <summary>
         /// 通过关联Portal获取输入节点（Exit Portal使用）
         /// </summary>
-        private void AppendLinkedPortalInputs(List<EditorNodeAsset> result, HashSet<string> visited)
+        private void AppendLinkedPortalInputs(List<EditorLogicalConnection> result, HashSet<string> visited)
         {
-            if (string.IsNullOrEmpty(linkedPortalId)) return;
-
-            EditorNodeAsset linkedPortal = graphAsset.nodeMap.GetValueOrDefault(linkedPortalId);
-            if (linkedPortal != null)
+            List<EditorNodeAsset> linkedPortals = GetLinkedPortals(PortalDirection.Entry);
+            int count = linkedPortals.Count;
+            for (int i = 0; i < count; i++)
             {
-                result.AddRange(linkedPortal.GetLogicalInputNodes(visited));
+                EditorNodeAsset linkedPortal = linkedPortals[i];
+                result.AddRange(linkedPortal.GetLogicalInputNodes(new HashSet<string>(visited)));
             }
         }
 
         /// <summary>
         /// 获取直接连接的输入节点（Entry Portal使用）
         /// </summary>
-        private void AppendDirectInputs(List<EditorNodeAsset> result, HashSet<string> visited)
+        private void AppendDirectInputs(List<EditorLogicalConnection> result, HashSet<string> visited)
         {
             List<EditorEdgeAsset> edges = graphAsset.GetInputEdges(this);
             foreach (EditorEdgeAsset edge in edges)
             {
                 EditorNodeAsset sourceNode = graphAsset.nodeMap.GetValueOrDefault(edge.outputNodeId);
-                if (sourceNode != null)
+                if (sourceNode != null) AppendLogicalInputNode(result, sourceNode, edge, visited);
+            }
+        }
+
+        private void AppendLogicalOutputNode(
+            List<EditorLogicalConnection> result,
+            EditorNodeAsset nodeAsset,
+            EditorEdgeAsset edge,
+            HashSet<string> visited)
+        {
+            if (nodeAsset.isLogicalTransparent)
+            {
+                List<EditorLogicalConnection> logicalConnections = nodeAsset.GetLogicalOutputNodes(new HashSet<string>(visited));
+                int count = logicalConnections.Count;
+                for (int i = 0; i < count; i++)
                 {
-                    result.AddRange(sourceNode.GetLogicalInputNodes(visited));
+                    EditorLogicalConnection logicalConnection = logicalConnections[i];
+                    result.Add(new EditorLogicalConnection(
+                        this,
+                        edge.outputPortId,
+                        logicalConnection.inputNode,
+                        logicalConnection.inputPortId));
+                }
+
+                return;
+            }
+
+            result.Add(new EditorLogicalConnection(this, edge.outputPortId, nodeAsset, edge.inputPortId));
+        }
+
+        private void AppendLogicalInputNode(
+            List<EditorLogicalConnection> result,
+            EditorNodeAsset nodeAsset,
+            EditorEdgeAsset edge,
+            HashSet<string> visited)
+        {
+            if (nodeAsset.isLogicalTransparent)
+            {
+                List<EditorLogicalConnection> logicalConnections = nodeAsset.GetLogicalInputNodes(new HashSet<string>(visited));
+                int count = logicalConnections.Count;
+                for (int i = 0; i < count; i++)
+                {
+                    EditorLogicalConnection logicalConnection = logicalConnections[i];
+                    result.Add(new EditorLogicalConnection(
+                        logicalConnection.outputNode,
+                        logicalConnection.outputPortId,
+                        this,
+                        edge.inputPortId));
+                }
+
+                return;
+            }
+
+            result.Add(new EditorLogicalConnection(nodeAsset, edge.outputPortId, this, edge.inputPortId));
+        }
+
+        private List<EditorNodeAsset> GetLinkedPortals(PortalDirection targetDirection)
+        {
+            List<EditorNodeAsset> result = new();
+
+            if (string.IsNullOrEmpty(portalGroupId) == false)
+            {
+                int nodeCount = graphAsset.nodes.Count;
+                for (int i = 0; i < nodeCount; i++)
+                {
+                    if (graphAsset.nodes[i] is not PortalNodeAsset portal) continue;
+                    if (portal.portalGroupId != portalGroupId) continue;
+                    if (portal.direction != targetDirection) continue;
+
+                    result.Add(portal);
                 }
             }
+
+            if (result.Count != 0 || string.IsNullOrEmpty(linkedPortalId)) return result;
+            if (graphAsset.nodeMap.GetValueOrDefault(linkedPortalId) is PortalNodeAsset linkedPortal &&
+                linkedPortal.direction == targetDirection)
+            {
+                result.Add(linkedPortal);
+            }
+
+            return result;
         }
     }
 }

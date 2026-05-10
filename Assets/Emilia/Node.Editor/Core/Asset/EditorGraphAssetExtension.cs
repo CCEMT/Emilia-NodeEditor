@@ -69,10 +69,12 @@ namespace Emilia.Node.Editor
             List<EditorNodeAsset> outputNodes,
             HashSet<string> visited)
         {
-            List<EditorNodeAsset> directOutputs = nodeAsset.GetLogicalOutputNodes();
+            List<EditorLogicalConnection> directOutputs = nodeAsset.GetLogicalOutputNodes();
 
-            foreach (EditorNodeAsset outputNode in directOutputs)
+            foreach (EditorLogicalConnection logicalConnection in directOutputs)
             {
+                EditorNodeAsset outputNode = logicalConnection.inputNode;
+                if (outputNode == null) continue;
                 if (visited.Add(outputNode.id) == false) continue;
 
                 outputNodes.Add(outputNode);
@@ -99,10 +101,12 @@ namespace Emilia.Node.Editor
             List<EditorNodeAsset> inputNodes,
             HashSet<string> visited)
         {
-            List<EditorNodeAsset> directInputs = nodeAsset.GetLogicalInputNodes(visited);
+            List<EditorLogicalConnection> directInputs = nodeAsset.GetLogicalInputNodes();
 
-            foreach (EditorNodeAsset inputNode in directInputs)
+            foreach (EditorLogicalConnection logicalConnection in directInputs)
             {
+                EditorNodeAsset inputNode = logicalConnection.outputNode;
+                if (inputNode == null) continue;
                 if (visited.Add(inputNode.id) == false) continue;
 
                 inputNodes.Add(inputNode);
