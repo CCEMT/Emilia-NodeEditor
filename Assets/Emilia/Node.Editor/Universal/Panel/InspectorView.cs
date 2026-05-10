@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Emilia.Kit;
 using Emilia.Node.Editor;
-using Sirenix.OdinInspector.Editor;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Object = UnityEngine.Object;
@@ -15,13 +14,21 @@ namespace Emilia.Node.Universal.Editor
     /// </summary>
     public class InspectorView : GraphPanel
     {
-        protected PropertyTree propertyTree;
-        protected List<Object> selectedObjects;
+        protected UnityEditor.Editor editor;
+        protected IMGUIContainer imguiContainer;
+        protected List<Object> selectedObjects = new();
+        protected Vector2 scrollPosition;
 
         public InspectorView()
         {
             name = nameof(InspectorView);
-            Add(new IMGUIContainer(OnImGUI));
+            style.overflow = Overflow.Hidden;
+
+            imguiContainer = new IMGUIContainer(OnImGUI);
+            imguiContainer.name = $"{nameof(InspectorView)}-IMGUI";
+            imguiContainer.style.flexGrow = 1;
+            imguiContainer.style.flexShrink = 1;
+            Add(imguiContainer);
         }
 
         public override void Initialize(EditorGraphView graphView)
@@ -39,18 +46,29 @@ namespace Emilia.Node.Universal.Editor
         /// </summary>
         public void SetObjects(List<Object> selected)
         {
-            selectedObjects = selected;
+            List<Object> newSelectedObjects = selected == null ? new List<Object>() : selected.Where(selectedObject => selectedObject != null).ToList();
+            if (editor != null && IsSameSelectedObjects(newSelectedObjects)) return;
 
             style.display = DisplayStyle.None;
+            DisposeEditor();
 
+            selectedObjects = newSelectedObjects;
+            if (selectedObjects.Count == 0) return;
+            if (CanCreateEditor(selectedObjects) == false) return;
+
+            scrollPosition = Vector2.zero;
+            UnityEditor.Editor.CreateCachedEditor(selectedObjects.ToArray(), null, ref editor);
+            style.display = DisplayStyle.Flex;
+        }
+
+        protected bool CanCreateEditor(List<Object> targets)
+        {
             Type targetType = null;
 
-            for (int i = 0; i < selectedObjects.Count; i++)
+            for (int i = 0; i < targets.Count; i++)
             {
                 Type otherType;
-                object target = selectedObjects[i];
-
-                if (ReferenceEquals(target, null)) return;
+                object target = targets[i];
 
                 if (i == 0)
                 {
@@ -65,13 +83,24 @@ namespace Emilia.Node.Universal.Editor
                         continue;
                     }
 
-                    return;
+                    return false;
                 }
             }
 
-            if (propertyTree != null) propertyTree.Dispose();
-            propertyTree = PropertyTree.Create(selectedObjects);
-            style.display = DisplayStyle.Flex;
+            return true;
+        }
+
+        protected bool IsSameSelectedObjects(List<Object> targets)
+        {
+            if (selectedObjects == null) return false;
+            if (selectedObjects.Count != targets.Count) return false;
+
+            for (int i = 0; i < targets.Count; i++)
+            {
+                if (ReferenceEquals(selectedObjects[i], targets[i]) == false) return false;
+            }
+
+            return true;
         }
 
         protected void OnGeometryChangedEvent(GeometryChangedEvent evt)
@@ -93,18 +122,18 @@ namespace Emilia.Node.Universal.Editor
 
         protected void OnImGUI()
         {
-            string label = GetLabel();
-            if (string.IsNullOrEmpty(label) == false) GUILayout.Label(label);
-            this.propertyTree?.Draw();
-        }
+            if (editor == null) return;
 
-        protected string GetLabel()
-        {
-            if (this.selectedObjects.Count > 1) return "Multiple Objects";
-            Object first = this.selectedObjects.FirstOrDefault();
-            TitleAsset titleAsset = first as TitleAsset;
-            if (titleAsset != null) return titleAsset.title;
-            return null;
+            scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
+            try
+            {
+                editor.DrawHeader();
+                editor.OnInspectorGUI();
+            }
+            finally
+            {
+                EditorGUILayout.EndScrollView();
+            }
         }
 
         public override void Dispose()
@@ -112,13 +141,15 @@ namespace Emilia.Node.Universal.Editor
             base.Dispose();
 
             graphView.UnregisterCallback<GeometryChangedEvent>(OnGeometryChangedEvent);
-            graphView.UnregisterCallback<GeometryChangedEvent>(OnGeometryChangedEvent);
 
-            if (propertyTree != null)
-            {
-                propertyTree.Dispose();
-                propertyTree = null;
-            }
+            DisposeEditor();
+        }
+
+        protected void DisposeEditor()
+        {
+            if (editor == null) return;
+            Object.DestroyImmediate(editor);
+            editor = null;
         }
     }
 }

@@ -12,6 +12,7 @@ namespace Emilia.Kit
     {
         private string _title = OdinMenu.DefaultName;
         private float _width = OdinMenu.DefaultWidth;
+        private Func<TResource, string> _getDisplayName;
         private Func<TResource, string> _getDescription;
         private Func<TResource, TOutput> _selector;
         private IEnumerable<TResource> _resources;
@@ -21,6 +22,12 @@ namespace Emilia.Kit
         public OdinMenuBuilder<TResource, TOutput> WithResources(IEnumerable<TResource> resources)
         {
             _resources = resources;
+            return this;
+        }
+
+        public OdinMenuBuilder<TResource, TOutput> WithDisplayName(Func<TResource, string> displayName)
+        {
+            this._getDisplayName = displayName;
             return this;
         }
 
@@ -53,13 +60,14 @@ namespace Emilia.Kit
             if (_resources == null) throw new InvalidOperationException("Resources not set. Call WithResources first.");
             if (_selector == null) throw new InvalidOperationException("Selector not set. Call WithSelector first.");
 
-            ShowInPopupList(_title, _width, _resources, _getDescription, _selector, onSelected);
+            ShowInPopupList(_title, _width, _resources, this._getDisplayName, _getDescription, _selector, onSelected);
         }
 
         private static void ShowInPopupList<TAsset, TOut>(
             string title,
             float width,
             IEnumerable<TAsset> assets,
+            Func<TAsset, string> getDisplayName,
             Func<TAsset, string> getDescription,
             Func<TAsset, TOut> selectValue,
             Action<TOut> onSelected)
@@ -72,9 +80,15 @@ namespace Emilia.Kit
                 if (asset == null) continue;
                 if (HideUtility.IsHide(asset)) continue;
 
-                string displayName = asset.name;
-                string description = getDescription?.Invoke(asset) ?? string.Empty;
-                if (string.IsNullOrEmpty(description) == false) displayName += $"({description})";
+                string displayName;
+
+                if (getDisplayName != null) displayName = getDisplayName(asset);
+                else
+                {
+                    displayName = asset.name;
+                    string description = getDescription?.Invoke(asset) ?? string.Empty;
+                    if (string.IsNullOrEmpty(description) == false) displayName += $"({description})";
+                }
 
                 TOut value = selectValue(asset);
 

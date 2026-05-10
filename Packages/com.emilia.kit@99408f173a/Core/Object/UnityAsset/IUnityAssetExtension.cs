@@ -55,13 +55,44 @@ namespace Emilia.Kit.Editor
 
         public static void OnlySaveAll(this IUnityAsset unityAsset)
         {
+            HashSet<string> paths = new();
+
             List<Object> allAsset = unityAsset.CollectAsset();
             int count = allAsset.Count;
             for (int i = 0; i < count; i++)
             {
                 Object asset = allAsset[i];
                 EditorUtility.SetDirty(asset);
-                AssetDatabase.SaveAssetIfDirty(asset);
+
+                string path = AssetDatabase.GetAssetPath(asset);
+                paths.Add(path);
+            }
+
+            foreach (string path in paths)
+            {
+                GUID guid = AssetDatabase.GUIDFromAssetPath(path);
+                AssetDatabase.SaveAssetIfDirty(guid);
+            }
+        }
+
+        public static void SaveAssetIfDirtyAll(this IUnityAsset unityAsset)
+        {
+            HashSet<string> paths = new();
+
+            List<Object> allAsset = unityAsset.CollectAsset();
+            int count = allAsset.Count;
+            for (int i = 0; i < count; i++)
+            {
+                Object asset = allAsset[i];
+
+                string path = AssetDatabase.GetAssetPath(asset);
+                paths.Add(path);
+            }
+
+            foreach (string path in paths)
+            {
+                GUID guid = AssetDatabase.GUIDFromAssetPath(path);
+                AssetDatabase.SaveAssetIfDirty(guid);
             }
         }
 
@@ -90,6 +121,19 @@ namespace Emilia.Kit.Editor
             }
 
             asset.SetChildren(pasteList);
+        }
+
+        public static void DestroyImmediateAll(this IUnityAsset asset, bool allowDestroyingAssets = false)
+        {
+            List<Object> childAssets = asset.GetChildren();
+            if (childAssets == null) return;
+
+            for (var i = childAssets.Count - 1; i >= 0; i--)
+            {
+                Object childAsset = childAssets[i];
+                if (childAsset == null) continue;
+                Object.DestroyImmediate(childAsset, allowDestroyingAssets);
+            }
         }
     }
 }

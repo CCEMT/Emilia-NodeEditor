@@ -11,6 +11,11 @@ namespace Emilia.Kit
         public object userData;
 
         /// <summary>
+        /// 保存管理
+        /// </summary>
+        public CopyPasteSaveTransaction transaction;
+
+        /// <summary>
         /// 依赖的Pack
         /// </summary>
         public List<ICopyPastePack> dependency;

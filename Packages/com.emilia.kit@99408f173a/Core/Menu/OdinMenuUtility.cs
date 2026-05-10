@@ -18,6 +18,11 @@ namespace Emilia.Kit
         public static OdinMenuBuilder<T, string> GetScriptableObjectName<T>(string path) where T : ScriptableObject
             => OdinMenuFactory.ScriptableObjectAtPath<T, string>(path).WithSelector(x => x.name);
 
+        public static OdinMenuBuilder<T, string> GetScriptableObjectNameWithPath<T>(string path) where T : ScriptableObject
+            => OdinMenuFactory.ScriptableObjectAtPath<T, string>(path)
+                .WithSelector(x => x.name)
+                .WithDisplayName((x) => AssetDatabase.GetAssetPath(x).Replace($"{path}/", ""));
+
         public static OdinMenuBuilder<T, string> GetScriptableObjectPath<T>() where T : ScriptableObject
             => OdinMenuFactory.ScriptableObject<T, string>().WithSelector(AssetDatabase.GetAssetPath);
 
@@ -36,6 +41,11 @@ namespace Emilia.Kit
         public static OdinMenuBuilder<GameObject, string> GetPrefabName(string path)
             => OdinMenuFactory.Prefab<string>(path).WithSelector(x => x.name);
 
+        public static OdinMenuBuilder<GameObject, string> GetPrefabNameWithPath(string path)
+            => OdinMenuFactory.Prefab<string>(path)
+                .WithSelector(x => x.name)
+                .WithDisplayName((x) => AssetDatabase.GetAssetPath(x).Replace($"{path}/", "").Replace(".prefab", ""));
+
         public static OdinMenuBuilder<GameObject, string> GetPrefabPath(string path)
             => OdinMenuFactory.Prefab<string>(path).WithSelector(AssetDatabase.GetAssetPath);
 
@@ -47,6 +57,11 @@ namespace Emilia.Kit
 
         public static OdinMenuBuilder<T, string> GetAssetName<T>(string path, string searchPattern) where T : Object
             => OdinMenuFactory.Asset<T, string>(path, searchPattern).WithSelector(x => x.name);
+
+        public static OdinMenuBuilder<T, string> GetAssetNameWithPath<T>(string path, string searchPattern) where T : Object
+            => OdinMenuFactory.Asset<T, string>(path, searchPattern)
+                .WithSelector(x => x.name)
+                .WithDisplayName((x) => AssetDatabase.GetAssetPath(x).Replace($"{path}/", "").Replace(searchPattern, ""));
 
         public static OdinMenuBuilder<T, string> GetAssetPath<T>(string path, string searchPattern) where T : Object
             => OdinMenuFactory.Asset<T, string>(path, searchPattern).WithSelector(AssetDatabase.GetAssetPath);

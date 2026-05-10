@@ -55,7 +55,7 @@ namespace Emilia.Node.Editor
                 if (string.IsNullOrEmpty(value)) throw new ArgumentException("Id cannot be null or empty.");
 
                 this._id = value;
-                AssetDatabase.SaveAssetIfDirty(this);
+                EditorUtility.SetDirty(this);
             }
         }
 
@@ -107,7 +107,6 @@ namespace Emilia.Node.Editor
         {
             _id = Guid.NewGuid().ToString();
             EditorUtility.SetDirty(this);
-            AssetDatabase.SaveAssetIfDirty(this);
         }
 
         public override string ToString()
