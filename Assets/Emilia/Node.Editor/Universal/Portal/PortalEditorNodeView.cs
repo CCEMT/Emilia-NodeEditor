@@ -192,7 +192,7 @@ namespace Emilia.Node.Universal.Editor
         }
 
         /// <summary>
-        /// 从自身或关联Portal的连接中获取端口信息
+        /// 从关联Portal或自身的连接中获取端口信息
         /// </summary>
         private (Type portType, Color portColor, string displayName) GetConnectionInfo()
         {
@@ -203,25 +203,55 @@ namespace Emilia.Node.Universal.Editor
             if (_portalAsset == null || graphView?.graphAsset == null)
                 return (portType, portColor, displayName);
 
-            // 优先从自身的连接获取信息
+            List<PortalNodeAsset> linkedPortals = GetLinkedPortalAssets();
+            var linkedConnectionInfo = CollectPortInfoFromPortals(linkedPortals);
+            if (string.IsNullOrEmpty(linkedConnectionInfo.displayName) == false)
+                return linkedConnectionInfo;
+
             var selfEdges = graphView.graphAsset.GetEdges(_portalAsset.id, PortalHelper.PortalPortId);
             if (selfEdges.Count > 0)
                 return CollectPortInfoFromEdges(selfEdges, _portalAsset);
 
-            // 如果自身没有连接，尝试从关联Portal的连接获取
-            string linkedPortalId = _portalAsset.linkedPortalId;
-            if (string.IsNullOrEmpty(linkedPortalId))
-                return (portType, portColor, displayName);
+            return (portType, portColor, displayName);
+        }
 
-            var linkedPortal = graphView.graphAsset.nodeMap.GetValueOrDefault(linkedPortalId) as PortalNodeAsset;
-            if (linkedPortal == null)
-                return (portType, portColor, displayName);
+        private List<PortalNodeAsset> GetLinkedPortalAssets()
+        {
+            var result = new List<PortalNodeAsset>();
+            if (_portalAsset == null || string.IsNullOrEmpty(_portalAsset.portalGroupId)) return result;
 
-            var linkedEdges = graphView.graphAsset.GetEdges(linkedPortal.id, PortalHelper.PortalPortId);
-            if (linkedEdges.Count == 0)
-                return (portType, portColor, displayName);
+            PortalDirection targetDirection = _portalAsset.direction == PortalDirection.Entry
+                ? PortalDirection.Exit
+                : PortalDirection.Entry;
 
-            return CollectPortInfoFromEdges(linkedEdges, linkedPortal);
+            int nodeCount = graphView.graphAsset.nodes.Count;
+            for (int i = 0; i < nodeCount; i++)
+            {
+                if (graphView.graphAsset.nodes[i] is not PortalNodeAsset portal) continue;
+                if (portal.portalGroupId != _portalAsset.portalGroupId) continue;
+                if (portal.direction != targetDirection) continue;
+
+                result.Add(portal);
+            }
+
+            return result;
+        }
+
+        private (Type portType, Color portColor, string displayName) CollectPortInfoFromPortals(List<PortalNodeAsset> portals)
+        {
+            var portNames = new List<string>();
+            Type firstPortType = null;
+            Color firstPortColor = Color.white;
+
+            int portalCount = portals.Count;
+            for (int i = 0; i < portalCount; i++)
+            {
+                PortalNodeAsset portal = portals[i];
+                List<EditorEdgeAsset> edges = graphView.graphAsset.GetEdges(portal.id, PortalHelper.PortalPortId);
+                AppendPortInfoFromEdges(edges, portal, portNames, ref firstPortType, ref firstPortColor);
+            }
+
+            return CreateConnectionInfo(portNames, firstPortType, firstPortColor);
         }
 
         /// <summary>
@@ -235,8 +265,22 @@ namespace Emilia.Node.Universal.Editor
             Type firstPortType = null;
             Color firstPortColor = Color.white;
 
-            foreach (EditorEdgeAsset edge in edges)
+            AppendPortInfoFromEdges(edges, linkedPortal, portNames, ref firstPortType, ref firstPortColor);
+
+            return CreateConnectionInfo(portNames, firstPortType, firstPortColor);
+        }
+
+        private void AppendPortInfoFromEdges(
+            List<EditorEdgeAsset> edges,
+            PortalNodeAsset linkedPortal,
+            List<string> portNames,
+            ref Type firstPortType,
+            ref Color firstPortColor)
+        {
+            int edgeCount = edges.Count;
+            for (int i = 0; i < edgeCount; i++)
             {
+                EditorEdgeAsset edge = edges[i];
                 var (nodeId, portId) = GetConnectedPortIds(edge, linkedPortal);
                 var portView = GetConnectedPortView(nodeId, portId);
 
@@ -251,7 +295,13 @@ namespace Emilia.Node.Universal.Editor
                     }
                 }
             }
+        }
 
+        private (Type portType, Color portColor, string displayName) CreateConnectionInfo(
+            List<string> portNames,
+            Type firstPortType,
+            Color firstPortColor)
+        {
             if (portNames.Count == 0)
                 return (typeof(object), Color.white, string.Empty);
 

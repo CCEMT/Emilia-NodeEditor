@@ -96,6 +96,8 @@ namespace Emilia.Node.Editor
         /// </summary>
         public string tips { get; set; }
 
+        public virtual bool isLogicalTransparent => false;
+
         protected virtual void OnEnable() { }
 
         public virtual void SetChildren(List<Object> childAssets) { }
@@ -108,40 +110,80 @@ namespace Emilia.Node.Editor
         }
 
         /// <summary>
-        /// 获取逻辑输出节点
+        /// 获取逻辑输出连接
         /// </summary>
-        public virtual List<EditorNodeAsset> GetLogicalOutputNodes(HashSet<string> visited = null)
+        public virtual List<EditorLogicalConnection> GetLogicalOutputNodes(HashSet<string> visited = null)
         {
-            if (graphAsset == null) return new List<EditorNodeAsset>();
+            if (graphAsset == null) return new List<EditorLogicalConnection>();
 
-            List<EditorNodeAsset> result = new();
+            List<EditorLogicalConnection> result = new();
             List<EditorEdgeAsset> edges = graphAsset.GetOutputEdges(this);
 
             for (var i = 0; i < edges.Count; i++)
             {
                 EditorEdgeAsset edge = edges[i];
                 EditorNodeAsset targetNode = graphAsset.nodeMap.GetValueOrDefault(edge.inputNodeId);
-                if (targetNode != null) result.Add(targetNode);
+                if (targetNode == null) continue;
+
+                if (targetNode.isLogicalTransparent)
+                {
+                    HashSet<string> branchVisited = visited == null ? null : new HashSet<string>(visited);
+                    List<EditorLogicalConnection> logicalConnections = targetNode.GetLogicalOutputNodes(branchVisited);
+                    int count = logicalConnections.Count;
+                    for (int j = 0; j < count; j++)
+                    {
+                        EditorLogicalConnection logicalConnection = logicalConnections[j];
+                        result.Add(new EditorLogicalConnection(
+                            this,
+                            edge.outputPortId,
+                            logicalConnection.inputNode,
+                            logicalConnection.inputPortId));
+                    }
+
+                    continue;
+                }
+
+                result.Add(new EditorLogicalConnection(this, edge.outputPortId, targetNode, edge.inputPortId));
             }
 
             return result;
         }
 
         /// <summary>
-        /// 获取逻辑输入节点
+        /// 获取逻辑输入连接
         /// </summary>
-        public virtual List<EditorNodeAsset> GetLogicalInputNodes(HashSet<string> visited = null)
+        public virtual List<EditorLogicalConnection> GetLogicalInputNodes(HashSet<string> visited = null)
         {
-            if (graphAsset == null) return new List<EditorNodeAsset>();
+            if (graphAsset == null) return new List<EditorLogicalConnection>();
 
-            List<EditorNodeAsset> result = new();
+            List<EditorLogicalConnection> result = new();
             List<EditorEdgeAsset> edges = graphAsset.GetInputEdges(this);
 
             for (var i = 0; i < edges.Count; i++)
             {
                 EditorEdgeAsset edge = edges[i];
                 EditorNodeAsset sourceNode = graphAsset.nodeMap.GetValueOrDefault(edge.outputNodeId);
-                if (sourceNode != null) result.Add(sourceNode);
+                if (sourceNode == null) continue;
+
+                if (sourceNode.isLogicalTransparent)
+                {
+                    HashSet<string> branchVisited = visited == null ? null : new HashSet<string>(visited);
+                    List<EditorLogicalConnection> logicalConnections = sourceNode.GetLogicalInputNodes(branchVisited);
+                    int count = logicalConnections.Count;
+                    for (int j = 0; j < count; j++)
+                    {
+                        EditorLogicalConnection logicalConnection = logicalConnections[j];
+                        result.Add(new EditorLogicalConnection(
+                            logicalConnection.outputNode,
+                            logicalConnection.outputPortId,
+                            this,
+                            edge.inputPortId));
+                    }
+
+                    continue;
+                }
+
+                result.Add(new EditorLogicalConnection(sourceNode, edge.outputPortId, this, edge.inputPortId));
             }
 
             return result;
