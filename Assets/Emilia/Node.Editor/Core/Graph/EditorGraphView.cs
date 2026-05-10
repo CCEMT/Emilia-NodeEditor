@@ -282,13 +282,13 @@ namespace Emilia.Node.Editor
             if (isInitialized == false) return;
 
             if (isFocus == false) OnEnterFocus();
-            
+
             if (focusedGraphView != this)
             {
                 focusedGraphView = this;
                 graphUndo.OnUndoRedoPerformed(true);
             }
-            
+
             this.graphHandle?.OnFocus(this);
         }
 
@@ -868,6 +868,30 @@ namespace Emilia.Node.Editor
             }
         }
 
+        public void SetSelectionAgent(List<ISelectedHandle> selectedHandles)
+        {
+            ClearSelection();
+
+            bool shouldRecordUndo = ShouldRecordUndo_Internals();
+
+            if (shouldRecordUndo) RecordSelectionUndoPre_Internals();
+
+            for (int i = 0; i < selectedHandles.Count; i++)
+            {
+                ISelectedHandle selectedHandle = selectedHandles[i];
+
+                GraphSelectAgent graphSelectAgent = new(selectedHandle);
+                selection.Add(graphSelectAgent);
+
+                if (shouldRecordUndo == false) continue;
+                string dataKey = $"graph-select-agent-{selectedHandle.GetHashCode()}";
+                m_GraphViewUndoRedoSelection_Internals.selectedElements_Internal.Add(dataKey);
+                m_PersistedSelection_Internal.selectedElements_Internal.Add(dataKey);
+            }
+
+            if (shouldRecordUndo) RecordSelectionUndoPost_Internals();
+        }
+
         /// <summary>
         /// 发送事件
         /// </summary>
@@ -1079,14 +1103,14 @@ namespace Emilia.Node.Editor
         {
             if (loadElementCoroutine != null) EditorCoroutineUtility.StopCoroutine(loadElementCoroutine);
             loadElementCoroutine = null;
-            
+
             foreach (CustomGraphViewModule customModule in this.customModules.Values) customModule.Dispose();
             this.customModules.Clear();
 
             foreach (BasicGraphViewModule module in this.modules.Values) module.Dispose();
-            
+
             Undo.undoRedoPerformed -= OnUndoRedoPerformed;
-            
+
             if (focusedGraphView == this) focusedGraphView = null;
             if (this.graphHandle != null)
             {

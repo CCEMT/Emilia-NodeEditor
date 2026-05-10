@@ -141,12 +141,21 @@ namespace Emilia.Kit.Editor
 
         public static void InputDropDown(Action<string> inputCallback, string startInput = "", float width = 300)
         {
+            Vector2 mousePosition = Event.current != null
+                ? Event.current.mousePosition
+                : GUIHelper.GetEditorWindowRect().center;
+            
+            InputDropDown(inputCallback, startInput, mousePosition, width);
+        }
+
+        public static void InputDropDown(Action<string> inputCallback, string startInput, Vector2 position, float width = 300)
+        {
             OdinEditorWindow window = null;
-            inputCallback += (_) => { window.Close(); };
-            InputContainer inputData = new InputContainer();
+            inputCallback += (_) => window?.Close();
+            InputContainer inputData = new();
             inputData.inputCallback = inputCallback;
             inputData.inputString = startInput;
-            Rect rect = new Rect(Event.current.mousePosition.x - width / 2f, Event.current.mousePosition.y, 0, 0);
+            Rect rect = new(position.x - width / 2f, position.y, 0, 0);
             window = OdinEditorWindow.InspectObjectInDropDown(inputData, rect, width);
         }
 
@@ -157,8 +166,8 @@ namespace Emilia.Kit.Editor
             if (focusedWindow != null) position = focusedWindow.position.AlignCenter(width, 100);
 
             OdinEditorWindow window = null;
-            inputCallback += (_) => { window.Close(); };
-            InputContainer inputData = new InputContainer();
+            inputCallback += (_) => window?.Close();
+            InputContainer inputData = new();
             inputData.inputCallback = inputCallback;
             inputData.inputString = startInput;
             window = OdinEditorWindow.InspectObject(inputData);

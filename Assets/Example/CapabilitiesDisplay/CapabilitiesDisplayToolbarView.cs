@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using Emilia.Kit;
 using Emilia.Node.Attributes;
+using Emilia.Node.Editor;
 using Emilia.Node.Universal.Editor;
 using Emilia.Variables.Editor;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 namespace Example
@@ -26,7 +28,8 @@ namespace Example
                 EditorAssetKit.SaveAssetIntoObject(editorParametersManage, displayAsset);
             }
 
-            graphView.graphSelected.UpdateSelected(new List<ISelectedHandle> {editorParametersManage});
+            graphView.SetSelectionAgent(new List<ISelectedHandle> {editorParametersManage});
+            graphView.UpdateSelected();
         }
 
         protected virtual void OnSave()

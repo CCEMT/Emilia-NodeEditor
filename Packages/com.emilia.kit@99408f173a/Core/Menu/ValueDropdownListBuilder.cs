@@ -11,6 +11,7 @@ namespace Emilia.Kit
     /// </summary>
     public class ValueDropdownBuilder<TResource, TOutput> where TResource : Object
     {
+        private Func<TResource, string> _getDisplayName;
         private Func<TResource, string> _getDescription;
         private Func<TResource, TOutput> _selector;
         private IEnumerable<TResource> _resources;
@@ -20,6 +21,12 @@ namespace Emilia.Kit
         public ValueDropdownBuilder<TResource, TOutput> WithResources(IEnumerable<TResource> resources)
         {
             _resources = resources;
+            return this;
+        }
+
+        public ValueDropdownBuilder<TResource, TOutput> WithDisplayName(Func<TResource, string> getDisplayName)
+        {
+            _getDisplayName = getDisplayName;
             return this;
         }
 
@@ -40,11 +47,12 @@ namespace Emilia.Kit
             if (_resources == null) throw new InvalidOperationException("Resources not set. Call WithResources first.");
             if (_selector == null) throw new InvalidOperationException("Selector not set. Call WithSelector first.");
 
-            return BuildList(_resources, _getDescription, _selector);
+            return BuildList(_resources, this._getDisplayName, _getDescription, _selector);
         }
 
         private static ValueDropdownList<TOut> BuildList<TAsset, TOut>(
             IEnumerable<TAsset> assets,
+            Func<TAsset, string> getDisplayName,
             Func<TAsset, string> getDescription,
             Func<TAsset, TOut> selectValue)
             where TAsset : Object
@@ -56,9 +64,15 @@ namespace Emilia.Kit
                 if (asset == null) continue;
                 if (HideUtility.IsHide(asset)) continue;
 
-                string displayName = asset.name;
-                string description = getDescription?.Invoke(asset) ?? string.Empty;
-                if (string.IsNullOrEmpty(description) == false) displayName += $"({description})";
+                string displayName;
+
+                if (getDisplayName != null) displayName = getDisplayName(asset);
+                else
+                {
+                    displayName = asset.name;
+                    string description = getDescription?.Invoke(asset) ?? string.Empty;
+                    if (string.IsNullOrEmpty(description) == false) displayName += $"({description})";
+                }
 
                 list.Add(displayName, selectValue(asset));
             }

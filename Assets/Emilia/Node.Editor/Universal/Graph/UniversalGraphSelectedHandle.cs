@@ -56,19 +56,16 @@ namespace Emilia.Node.Universal.Editor
 
             if (selectedInspectors.Count > 0)
             {
-                if (isUseBuiltIn == false)
+                int selectedCount = selectedInspectors.Count;
+                for (int i = 0; i < selectedCount; i++)
                 {
-                    int selectedCount = selectedInspectors.Count;
-                    for (int i = 0; i < selectedCount; i++)
-                    {
-                        Object selectedObject = selectedInspectors[i];
-                        if (selectedObject == null) continue;
-                        SelectedOwnerUtility.SetSelectedOwner(selectedObject, graphView);
-                        SelectedOwnerUtility.Update();
-                    }
-
-                    Selection.objects = selectedInspectors.ToArray();
+                    Object selectedObject = selectedInspectors[i];
+                    if (selectedObject == null) continue;
+                    SelectedOwnerUtility.SetSelectedOwner(selectedObject, graphView);
+                    SelectedOwnerUtility.Update();
                 }
+
+                if (isUseBuiltIn == false) Selection.objects = selectedInspectors.ToArray();
                 else
                 {
                     InspectorView inspectorView = graphView.graphPanelSystem.GetPanel<InspectorView>();
