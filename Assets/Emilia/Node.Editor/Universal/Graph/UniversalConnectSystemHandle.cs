@@ -58,11 +58,14 @@ namespace Emilia.Node.Universal.Editor
                 // 刷新当前 Portal
                 PortalHelper.RefreshPortalView(nodeView);
 
-                // 刷新关联的 Portal
-                if (!string.IsNullOrEmpty(portalAsset.linkedPortalId))
+                // 刷新同组反方向 Portal
+                PortalDirection targetDirection = portalAsset.direction == PortalDirection.Entry
+                    ? PortalDirection.Exit
+                    : PortalDirection.Entry;
+                List<IEditorNodeView> linkedPortals = PortalHelper.FindLinkedPortals(graphView, portalAsset, targetDirection);
+                foreach (IEditorNodeView linkedPortal in linkedPortals)
                 {
-                    var linkedNodeView = PortalHelper.FindPortalById(graphView, portalAsset.linkedPortalId);
-                    PortalHelper.RefreshPortalView(linkedNodeView);
+                    PortalHelper.RefreshPortalView(linkedPortal);
                 }
             }
         }
