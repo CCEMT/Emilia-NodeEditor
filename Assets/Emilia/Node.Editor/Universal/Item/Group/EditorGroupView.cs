@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Emilia.Kit;
 using Emilia.Node.Attributes;
@@ -14,7 +15,7 @@ namespace Emilia.Node.Editor
     /// 组节点表现元素
     /// </summary>
     [EditorItem(typeof(EditorGroupAsset))]
-    public class EditorGroupView : Group, IEditorItemView, IResizedGraphElement
+    public class EditorGroupView : Group, IEditorItemView, IResizedGraphElement, ICollectibleElement
     {
         protected EditorGroupAsset groupAsset;
 
@@ -65,12 +66,7 @@ namespace Emilia.Node.Editor
                 string nodeId = this.groupAsset.innerNodes[i];
 
                 IEditorNodeView nodeView = this.graphView.graphElementCache.nodeViewById.GetValueOrDefault(nodeId);
-                if (nodeView == null)
-                {
-                    groupAsset.innerNodes.RemoveAt(i);
-                    i--;
-                    continue;
-                }
+                if (nodeView == null) continue;
 
                 AddElement(nodeView.element);
             }
@@ -79,6 +75,38 @@ namespace Emilia.Node.Editor
         protected void GroupMenu(ContextualMenuPopulateEvent evt)
         {
             evt.menu.AppendAction("移除节点", RemoveSelectedNode);
+        }
+
+        public new void CollectElements(HashSet<GraphElement> collectedElementSet, Func<GraphElement, bool> conditionFunc)
+        {
+            collectedElementSet.Add(this);
+
+            HashSet<string> innerNodeIds = new();
+            int amount = this.groupAsset.innerNodes.Count;
+            for (int i = 0; i < amount; i++)
+            {
+                string nodeId = this.groupAsset.innerNodes[i];
+                if (string.IsNullOrEmpty(nodeId)) continue;
+
+                IEditorNodeView nodeView = this.graphView.graphElementCache.nodeViewById.GetValueOrDefault(nodeId);
+                if (nodeView == null) continue;
+
+                innerNodeIds.Add(nodeId);
+                collectedElementSet.Add(nodeView.element);
+            }
+
+            IReadOnlyList<IEditorEdgeView> edgeViews = this.graphView.edgeViews;
+            int edgeCount = edgeViews.Count;
+            for (int i = 0; i < edgeCount; i++)
+            {
+                IEditorEdgeView edgeView = edgeViews[i];
+                EditorEdgeAsset edgeAsset = edgeView?.asset;
+                if (edgeAsset == null) continue;
+                if (innerNodeIds.Contains(edgeAsset.inputNodeId) == false) continue;
+                if (innerNodeIds.Contains(edgeAsset.outputNodeId) == false) continue;
+
+                collectedElementSet.Add(edgeView.edgeElement);
+            }
         }
 
         protected void RemoveSelectedNode(DropdownMenuAction dropdownMenuAction)
