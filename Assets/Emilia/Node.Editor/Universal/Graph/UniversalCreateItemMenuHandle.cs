@@ -30,6 +30,12 @@ namespace Emilia.Node.Universal.Editor
             stickyPro.path = "Sticky Note Pro";
 
             itemTypes.Add(stickyPro);
+
+            CreateItemMenuInfo image = new();
+            image.itemAssetType = typeof(ImageItemAsset);
+            image.path = "Image";
+
+            itemTypes.Add(image);
         }
     }
 }
