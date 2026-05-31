@@ -64,24 +64,21 @@ namespace Emilia.Node.Editor
                 .OrderBy(x => x.Min(y => y.priority))
                 .SelectMany(x => x.OrderBy(z => z.priority));
 
-            int lastPriority = int.MinValue;
-            string lastCategory = string.Empty;
+            bool hasLastValidItem = false;
+            int lastValidPriority = int.MinValue;
+            string lastValidCategory = string.Empty;
 
             foreach (OperateMenuItem item in sortedItems)
             {
                 if (item.state == OperateMenuActionValidity.NotApplicable) continue;
 
                 int priority = item.priority;
-                // 根据优先级插入分隔符（当优先级跨越SeparatorAt的倍数时）
-                if (lastPriority != int.MinValue && priority / SeparatorAt > lastPriority / SeparatorAt)
+                if (item.state == OperateMenuActionValidity.Valid && hasLastValidItem && priority / SeparatorAt > lastValidPriority / SeparatorAt)
                 {
                     string path = string.Empty;
-                    if (lastCategory == item.category) path = item.category;
+                    if (lastValidCategory == item.category) path = item.category;
                     menuContext.evt.menu.AppendSeparator(path);
                 }
-
-                lastPriority = priority;
-                lastCategory = item.category;
 
                 string entryName = item.category + item.menuName;
 
@@ -91,6 +88,13 @@ namespace Emilia.Node.Editor
                 if (item.isOn) status |= DropdownMenuAction.Status.Checked;
 
                 menuContext.evt.menu.AppendAction(entryName, _ => item.onAction?.Invoke(), status);
+
+                if (item.state == OperateMenuActionValidity.Valid)
+                {
+                    hasLastValidItem = true;
+                    lastValidPriority = priority;
+                    lastValidCategory = item.category;
+                }
             }
         }
 
