@@ -67,7 +67,9 @@ namespace Emilia.Kit
             return descriptions;
         }
 
-        public static string GetDescription(object obj, object owner = null, object userData = null)
+        public static string GetDescription(object obj, object owner = null, object userData = null) => GetDescription(obj?.GetType(), obj, owner, userData);
+
+        public static string GetDescription(Type getterType, object obj, object owner = null, object userData = null)
         {
             if (obj == null) return string.Empty;
 
@@ -78,8 +80,7 @@ namespace Emilia.Kit
                 return string.Empty;
             }
 
-            Type objType = obj.GetType();
-            IObjectDescriptionGetter getter = descriptionGetterMap.GetValueOrDefault(objType);
+            IObjectDescriptionGetter getter = descriptionGetterMap.GetValueOrDefault(getterType);
             if (getter != null)
             {
                 string description = string.Empty;
@@ -113,7 +114,7 @@ namespace Emilia.Kit
                 return description;
             }
 
-            TextAttribute textAttribute = objType.GetCustomAttribute<TextAttribute>();
+            TextAttribute textAttribute = obj.GetType().GetCustomAttribute<TextAttribute>();
             if (textAttribute != null) return textAttribute.text;
 
             return string.Empty;

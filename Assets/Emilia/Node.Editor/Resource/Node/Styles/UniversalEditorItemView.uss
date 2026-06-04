@@ -19,3 +19,42 @@
 {
     border-color: rgb(68, 192, 255);
 }
+
+#ImageItemView {
+    overflow: hidden;
+    padding: 0;
+    background-color: rgb(48, 48, 48);
+
+    border-width: 1;
+    border-radius: 0;
+    border-color: black;
+
+    margin: 5;
+}
+
+#ImageItemView.selected {
+    border-color: rgb(68, 192, 255);
+}
+
+#ImageItemView #image-preview {
+    width: 100%;
+    height: 100%;
+}
+
+#ImageItemView #image-placeholder {
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    color: rgb(170, 170, 170);
+    -unity-text-align: middle-center;
+    white-space: normal;
+}
+
+#ImageItemView #selection-border {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}

@@ -1,4 +1,7 @@
-﻿using Emilia.Kit;
+﻿using System;
+using System.Collections.Generic;
+using Emilia.Kit;
+using Sirenix.Serialization;
 
 namespace Emilia.Node.Editor
 {
@@ -7,18 +10,23 @@ namespace Emilia.Node.Editor
     /// </summary>
     public class GroupCopyPastePack : ItemCopyPastePack
     {
-        public GroupCopyPastePack(EditorItemAsset asset) : base(asset) { }
+        [OdinSerialize, NonSerialized] private List<string> copyInnerNodes;
+
+        public GroupCopyPastePack(EditorItemAsset asset) : base(asset)
+        {
+            EditorGroupAsset groupAsset = asset as EditorGroupAsset;
+            copyInnerNodes = groupAsset == null ? new List<string>() : new List<string>(groupAsset.innerNodes);
+        }
 
         public override bool CanDependency(ICopyPastePack pack)
         {
             INodeCopyPastePack nodeCopyPastePack = pack as INodeCopyPastePack;
             if (nodeCopyPastePack == null) return false;
 
-            EditorGroupAsset groupAsset = _copyAsset as EditorGroupAsset;
-            if (groupAsset == null) return false;
+            if (copyInnerNodes == null) return false;
 
             string copyNodeId = nodeCopyPastePack.copyAsset.id;
-            if (groupAsset.innerNodes.Contains(copyNodeId)) return true;
+            if (copyInnerNodes.Contains(copyNodeId)) return true;
 
             return false;
         }

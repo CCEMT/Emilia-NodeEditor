@@ -38,6 +38,8 @@ namespace Emilia.Node.Universal.Editor
         public override void Paste(EditorGraphView graphView, Vector2? mousePosition = null)
         {
             base.Paste(graphView, mousePosition);
+            if (UniversalPasteHandlerUtility.TryPasteSelected(graphView)) return;
+
             if (mousePosition == null) graphView.PasteCallback_Internals();
             else
             {

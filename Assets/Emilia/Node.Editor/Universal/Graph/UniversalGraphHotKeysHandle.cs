@@ -29,6 +29,16 @@ namespace Emilia.Node.Universal.Editor
                 evt.StopPropagation();
             }
 
+            if (evt.keyCode == KeyCode.V && evt.actionKey)
+            {
+                if (UniversalPasteHandlerUtility.TryPasteSelected(graphView))
+                {
+                    evt.StopPropagation();
+                    evt.imguiEvent?.Use();
+                    return;
+                }
+            }
+
             OnKeyDownShortcut_Hook(graphView, evt);
         }
 

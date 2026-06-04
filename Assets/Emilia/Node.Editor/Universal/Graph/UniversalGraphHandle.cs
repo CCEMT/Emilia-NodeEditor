@@ -135,7 +135,7 @@ namespace Emilia.Node.Universal.Editor
             Vector3 scale = graphView.transform.scale;
             if (editorGraphView.graphLocalSettingSystem.HasAssetSetting(TransformScaleSetting))
             {
-                editorGraphView.graphLocalSettingSystem.GetAssetSettingValue<Vector3>(TransformScaleSetting);
+                scale = editorGraphView.graphLocalSettingSystem.GetAssetSettingValue<Vector3>(TransformScaleSetting);
             }
 
             graphView.UpdateViewTransform(position, scale);

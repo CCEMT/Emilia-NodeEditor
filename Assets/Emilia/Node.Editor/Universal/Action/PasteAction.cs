@@ -1,4 +1,4 @@
-﻿using Emilia.Node.Editor;
+using Emilia.Node.Editor;
 
 namespace Emilia.Node.Universal.Editor
 {
@@ -9,7 +9,10 @@ namespace Emilia.Node.Universal.Editor
     public class PasteAction : OperateMenuAction
     {
         public override OperateMenuActionValidity GetValidity(OperateMenuContext context) =>
-            context.graphView.graphCopyPaste.CanPasteSerializedDataCallback(context.graphView.GetSerializedData_Internal()) ? OperateMenuActionValidity.Valid : OperateMenuActionValidity.Invalid;
+            UniversalPasteHandlerUtility.CanPasteSelected(context.graphView) ||
+            context.graphView.graphCopyPaste.CanPasteSerializedDataCallback(context.graphView.GetSerializedData_Internal())
+                ? OperateMenuActionValidity.Valid
+                : OperateMenuActionValidity.Invalid;
 
         public override void Execute(OperateMenuActionContext context)
         {
