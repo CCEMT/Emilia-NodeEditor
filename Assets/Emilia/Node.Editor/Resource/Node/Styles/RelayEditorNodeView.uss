@@ -1,0 +1,100 @@
+.relay-node {
+    margin: 0;
+    padding: 0;
+    width: 50px;
+    height: 20px;
+    min-width: 50px;
+    min-height: 20px;
+    border-radius: 9px;
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 0;
+}
+
+.relay-node #title-container {
+    display: none;
+}
+
+.relay-node #main {
+    margin: 0;
+    padding: 0;
+    min-height: 20px;
+    background-color: rgba(42, 42, 42, 0.92);
+    border-radius: 9px;
+}
+
+.relay-node #node-border {
+    border-radius: 9px;
+    border-width: 1px;
+    border-color: rgba(145, 145, 145, 0.85);
+}
+
+.relay-node #top-layer-container,
+.relay-node #bottom-layer-container,
+.relay-node #node-top-container,
+.relay-node #node-bottom-container {
+    background-color: rgba(0, 0, 0, 0);
+    margin: 0;
+    padding: 0;
+}
+
+.relay-node #focus-border {
+    margin: 0;
+    padding: 0;
+    border-width: 0;
+    border-color: rgba(0, 0, 0, 0);
+}
+
+.relay-node #focus-border.enable {
+    margin: 0;
+    border-width: 0;
+    border-color: rgba(0, 0, 0, 0);
+}
+
+.relay-node #port-node-bottom-container {
+    margin: 0;
+    padding: 0;
+}
+
+.relay-node #port-node-bottom-container > * {
+    margin: 0;
+    padding: 0;
+}
+
+.relay-node #port-node-bottom-container #top {
+    height: 16px;
+    min-height: 16px;
+    margin: 0;
+    padding: 0;
+    align-items: center;
+}
+
+.relay-node #inputContainer,
+.relay-node #outputContainer {
+    margin: 0;
+    padding: 0;
+    height: 16px;
+}
+
+.relay-node #spacer {
+    min-width: 8px;
+}
+
+.relay-node .port {
+    height: 16px;
+    min-height: 16px;
+    margin: 0;
+    padding: 0;
+}
+
+.relay-node .connectorBox {
+    margin: 0;
+    padding: 0;
+    border-width: 1px;
+    border-color: rgba(210, 210, 210, 0.95);
+    background-color: rgba(60, 60, 60, 1);
+}
+
+.relay-node .connectorText,
+.relay-node .unity-label {
+    display: none;
+}

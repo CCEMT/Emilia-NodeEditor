@@ -12,7 +12,7 @@ namespace Emilia.Node.Universal.Editor
     /// Portal节点视图，负责Portal节点的UI显示和交互
     /// </summary>
     [EditorNode(typeof(PortalNodeAsset))]
-    public class PortalEditorNodeView : UniversalEditorNodeView
+    public class PortalEditorNodeView : UniversalEditorNodeView, IUniversalConnectionChangedNodeView
     {
         private static readonly Color HighlightColor = new Color(1f, 0.8f, 0.2f, 1f);
         private static readonly Color EntryDefaultColor = new Color(0.2f, 0.6f, 0.3f);
@@ -395,6 +395,29 @@ namespace Emilia.Node.Universal.Editor
         {
             RebuildPortView();
             UpdateColorFromConnections();
+        }
+
+        public virtual void AfterConnect(UniversalConnectContext context, IEditorEdgeView edgeView)
+        {
+            RefreshRelatedPortalViews();
+        }
+
+        public virtual void AfterDisconnect(EditorGraphView graphView, EditorEdgeAsset edgeAsset)
+        {
+            RefreshRelatedPortalViews();
+        }
+
+        private void RefreshRelatedPortalViews()
+        {
+            RefreshPortFromConnections();
+
+            if (_portalAsset == null) return;
+
+            PortalDirection targetDirection = _portalAsset.direction == PortalDirection.Entry
+                ? PortalDirection.Exit
+                : PortalDirection.Entry;
+            List<IEditorNodeView> linkedPortals = PortalHelper.FindLinkedPortals(graphView, _portalAsset, targetDirection);
+            PortalHelper.RefreshPortalViews(linkedPortals);
         }
 
         private void UpdateColorFromConnections()

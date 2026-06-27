@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Emilia.Kit;
 using Emilia.Node.Editor;
@@ -17,57 +17,100 @@ namespace Emilia.Node.Universal.Editor
 
         public override bool CanConnect(EditorGraphView graphView, IEditorPortView inputPort, IEditorPortView outputPort)
         {
-            if (inputPort.portDirection == EditorPortDirection.Any || outputPort.portDirection == EditorPortDirection.Any) return true;
+            UniversalConnectContext context = new(graphView, inputPort, outputPort);
 
-            bool isDirectionValid = (inputPort.portDirection == EditorPortDirection.Input && outputPort.portDirection == EditorPortDirection.Output) ||
-                                    (inputPort.portDirection == EditorPortDirection.Output && outputPort.portDirection == EditorPortDirection.Input);
+            if (CanConnectByDirectionAndType(context) == false) return false;
+            if (CanConnectByPortCapacity(context) == false) return false;
+            if (CanConnectByNodeConstraints(context) == false) return false;
 
-            if (isDirectionValid == false) return false;
+            return true;
+        }
 
-            Type inputType = inputPort.portElement.portType;
-            Type outputType = outputPort.portElement.portType;
+        protected virtual bool CanConnectByDirectionAndType(UniversalConnectContext context)
+        {
+            return context.CanConnectByDirectionAndType();
+        }
 
-            if (inputType == outputType) return true;
+        protected virtual bool CanConnectByPortCapacity(UniversalConnectContext context)
+        {
+            return HasAvailablePortCapacity(context.inputPort) &&
+                   HasAvailablePortCapacity(context.outputPort);
+        }
 
-            if (inputType == typeof(object) || outputType == typeof(object)) return true;
+        protected virtual bool CanConnectByNodeConstraints(UniversalConnectContext context)
+        {
+            IEditorNodeView inputNodeView = context.inputPort.master;
+            IEditorNodeView outputNodeView = context.outputPort.master;
 
-            if (inputType != null && outputType != null && inputType.IsAssignableFrom(outputType)) return true;
+            if (inputNodeView is IUniversalConnectConstraintNodeView inputConstraint &&
+                inputConstraint.CanConnect(context) == false)
+            {
+                return false;
+            }
 
-            return false;
+            if (outputNodeView != inputNodeView &&
+                outputNodeView is IUniversalConnectConstraintNodeView outputConstraint &&
+                outputConstraint.CanConnect(context) == false)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        protected virtual bool HasAvailablePortCapacity(IEditorPortView portView)
+        {
+            if (portView.info.canMultiConnect) return true;
+            return portView.edges.Count == 0;
         }
 
         public override void AfterConnect(EditorGraphView graphView, IEditorEdgeView edgeView)
         {
-            RefreshPortalIfNeeded(graphView, edgeView.asset?.inputNodeId);
-            RefreshPortalIfNeeded(graphView, edgeView.asset?.outputNodeId);
+            UniversalConnectContext context = new(graphView, edgeView.inputPortView, edgeView.outputPortView);
+            NotifyAfterConnect(context, edgeView);
         }
 
         public override void AfterDisconnect(EditorGraphView graphView, EditorEdgeAsset edgeAsset)
         {
-            RefreshPortalIfNeeded(graphView, edgeAsset?.inputNodeId);
-            RefreshPortalIfNeeded(graphView, edgeAsset?.outputNodeId);
+            NotifyAfterDisconnect(graphView, edgeAsset);
         }
 
-        private void RefreshPortalIfNeeded(EditorGraphView graphView, string nodeId)
+        protected virtual void NotifyAfterConnect(UniversalConnectContext context, IEditorEdgeView edgeView)
         {
-            if (string.IsNullOrEmpty(nodeId)) return;
+            IEditorNodeView inputNodeView = context.inputPort.master;
+            IEditorNodeView outputNodeView = context.outputPort.master;
 
-            var nodeView = graphView.graphElementCache.nodeViewById.GetValueOrDefault(nodeId);
-            if (nodeView?.asset is PortalNodeAsset portalAsset)
+            if (inputNodeView is IUniversalConnectionChangedNodeView inputChanged)
+                inputChanged.AfterConnect(context, edgeView);
+
+            if (outputNodeView != inputNodeView &&
+                outputNodeView is IUniversalConnectionChangedNodeView outputChanged)
             {
-                // 刷新当前 Portal
-                PortalHelper.RefreshPortalView(nodeView);
-
-                // 刷新同组反方向 Portal
-                PortalDirection targetDirection = portalAsset.direction == PortalDirection.Entry
-                    ? PortalDirection.Exit
-                    : PortalDirection.Entry;
-                List<IEditorNodeView> linkedPortals = PortalHelper.FindLinkedPortals(graphView, portalAsset, targetDirection);
-                foreach (IEditorNodeView linkedPortal in linkedPortals)
-                {
-                    PortalHelper.RefreshPortalView(linkedPortal);
-                }
+                outputChanged.AfterConnect(context, edgeView);
             }
+        }
+
+        protected virtual void NotifyAfterDisconnect(EditorGraphView graphView, EditorEdgeAsset edgeAsset)
+        {
+            if (edgeAsset == null) return;
+
+            IEditorNodeView inputNodeView = GetNodeView(graphView, edgeAsset.inputNodeId);
+            IEditorNodeView outputNodeView = GetNodeView(graphView, edgeAsset.outputNodeId);
+
+            if (inputNodeView is IUniversalConnectionChangedNodeView inputChanged)
+                inputChanged.AfterDisconnect(graphView, edgeAsset);
+
+            if (outputNodeView != inputNodeView &&
+                outputNodeView is IUniversalConnectionChangedNodeView outputChanged)
+            {
+                outputChanged.AfterDisconnect(graphView, edgeAsset);
+            }
+        }
+
+        private IEditorNodeView GetNodeView(EditorGraphView graphView, string nodeId)
+        {
+            if (graphView == null || string.IsNullOrEmpty(nodeId)) return null;
+            return graphView.graphElementCache.nodeViewById.GetValueOrDefault(nodeId);
         }
     }
 }
