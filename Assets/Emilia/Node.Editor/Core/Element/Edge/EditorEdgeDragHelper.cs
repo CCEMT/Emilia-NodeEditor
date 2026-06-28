@@ -393,12 +393,6 @@ namespace Emilia.Node.Editor
                 portBonds[compatiblePort] = bounds;
             }
 
-            foreach (var pair in portBonds)
-            {
-                if (pair.Value.Contains(mousePosition))
-                    return pair.Key;
-            }
-
             foreach (var pair in this.nodeByPort)
             {
                 Rect nodeBounds = pair.Key.element.worldBound;

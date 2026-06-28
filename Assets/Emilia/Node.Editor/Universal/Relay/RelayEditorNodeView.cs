@@ -104,53 +104,89 @@ namespace Emilia.Node.Universal.Editor
 
         public override List<EditorPortInfo> CollectStaticPortAssets()
         {
-            var portInfos = new List<EditorPortInfo>();
-            var (_, color) = GetPortDisplayInfo();
+            List<EditorPortInfo> portInfos = new();
+            Color color = GetRelayPortColor();
             EditorOrientation orientation = relayAsset?.portOrientation ?? EditorOrientation.Horizontal;
 
-            portInfos.Add(new EditorPortInfo
-            {
-                id = RelayHelper.InputPortId,
-                displayName = string.Empty,
-                portType = typeof(object),
-                direction = EditorPortDirection.Input,
-                orientation = orientation,
-                nodePortViewType = typeof(RelayEditorPortView),
-                canMultiConnect = true,
-                color = color
-            });
-
-            portInfos.Add(new EditorPortInfo
-            {
-                id = RelayHelper.OutputPortId,
-                displayName = string.Empty,
-                portType = typeof(object),
-                direction = EditorPortDirection.Output,
-                orientation = orientation,
-                nodePortViewType = typeof(RelayEditorPortView),
-                canMultiConnect = true,
-                color = color
-            });
+            portInfos.Add(CreateRelayPortInfo(RelayHelper.InputPortId, EditorPortDirection.Input, orientation, color));
+            portInfos.Add(CreateRelayPortInfo(RelayHelper.OutputPortId, EditorPortDirection.Output, orientation, color));
 
             return portInfos;
+        }
+
+        private static EditorPortInfo CreateRelayPortInfo(
+            string id,
+            EditorPortDirection direction,
+            EditorOrientation orientation,
+            Color color)
+        {
+            return new EditorPortInfo
+            {
+                id = id,
+                displayName = string.Empty,
+                portType = typeof(object),
+                direction = direction,
+                orientation = orientation,
+                nodePortViewType = typeof(RelayEditorPortView),
+                canMultiConnect = true,
+                color = color
+            };
         }
 
         public virtual bool CanConnect(UniversalConnectContext context)
         {
             if (context == null) return false;
 
-            bool isInputRelay = context.inputPort.master == this;
-            bool isOutputRelay = context.outputPort.master == this;
-            if (isInputRelay == false && isOutputRelay == false) return true;
-            if (isInputRelay && isOutputRelay) return false;
+            bool hasRelayInput = TryGetRelayInputCandidate(context, out IEditorPortView sourceCandidate);
+            bool hasRelayOutput = TryGetRelayOutputCandidate(context, out IEditorPortView targetCandidate);
+            if (hasRelayInput == false && hasRelayOutput == false) return true;
+            if (hasRelayInput && hasRelayOutput) return false;
 
-            List<IEditorPortView> sourceOutputs = RelayHelper.ResolveSourceOutputPorts(context.outputPort);
-            List<IEditorPortView> targetInputs = RelayHelper.ResolveTargetInputPorts(context.inputPort);
+            List<IEditorPortView> sourceOutputs = RelayHelper.ResolveSourceOutputPorts(sourceCandidate);
+            List<IEditorPortView> targetInputs = RelayHelper.ResolveTargetInputPorts(targetCandidate);
 
-            if (isInputRelay && CanConnectAsRelayInput(context, sourceOutputs) == false) return false;
-            if (isOutputRelay && CanConnectAsRelayOutput(context, targetInputs) == false) return false;
+            if (hasRelayInput && CanConnectAsRelayInput(context, sourceOutputs) == false) return false;
+            if (hasRelayOutput && CanConnectAsRelayOutput(context, targetInputs) == false) return false;
 
             return true;
+        }
+
+        private bool TryGetRelayInputCandidate(UniversalConnectContext context, out IEditorPortView sourceCandidate)
+        {
+            sourceCandidate = null;
+
+            if (RelayHelper.IsRelayInputPort(context.inputPort) && context.inputPort.master == this)
+            {
+                sourceCandidate = context.outputPort;
+                return true;
+            }
+
+            if (RelayHelper.IsRelayInputPort(context.outputPort) && context.outputPort.master == this)
+            {
+                sourceCandidate = context.inputPort;
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool TryGetRelayOutputCandidate(UniversalConnectContext context, out IEditorPortView targetCandidate)
+        {
+            targetCandidate = null;
+
+            if (RelayHelper.IsRelayOutputPort(context.inputPort) && context.inputPort.master == this)
+            {
+                targetCandidate = context.outputPort;
+                return true;
+            }
+
+            if (RelayHelper.IsRelayOutputPort(context.outputPort) && context.outputPort.master == this)
+            {
+                targetCandidate = context.inputPort;
+                return true;
+            }
+
+            return false;
         }
 
         public virtual bool CanConnectRelayInput(UniversalConnectContext context, IEditorPortView sourceOutput)
@@ -245,25 +281,24 @@ namespace Emilia.Node.Universal.Editor
 
         public void RefreshPortFromConnections()
         {
-            var (_, color) = GetPortDisplayInfo();
-            SetColor(color != Color.white ? color : DefaultColor);
+            SetColor(GetRelayPortColor());
             UpdateRelayPortColors(topicColor);
         }
 
-        private (string displayName, Color color) GetPortDisplayInfo()
+        private Color GetRelayPortColor()
         {
             List<IEditorPortView> connectedPorts = RelayHelper.GetConnectedSourceOutputs(this);
             connectedPorts.AddRange(RelayHelper.GetConnectedTargetInputs(this));
-            if (connectedPorts.Count == 0) return (string.Empty, Color.white);
+            if (connectedPorts.Count == 0) return DefaultColor;
 
             Color color = connectedPorts[0].info.color;
             int portCount = connectedPorts.Count;
             for (int i = 1; i < portCount; i++)
             {
-                if (connectedPorts[i].info.color.Equals(color) == false) return (string.Empty, DefaultColor);
+                if (connectedPorts[i].info.color.Equals(color) == false) return DefaultColor;
             }
 
-            return (string.Empty, color);
+            return color != Color.white ? color : DefaultColor;
         }
 
         private void UpdateRelayPortColors(Color color)

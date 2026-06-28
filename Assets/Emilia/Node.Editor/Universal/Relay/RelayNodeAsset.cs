@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Emilia.Node.Universal.Editor
 {
     /// <summary>
-    /// 逻辑透明的中继节点。业务图通过子类决定是否暴露创建入口和连接约束。
+    /// Logical transparent relay node. Business graphs decide creation entry points and connection constraints in subclasses.
     /// </summary>
     [HideMonoScript]
     public class RelayNodeAsset : UniversalNodeAsset
