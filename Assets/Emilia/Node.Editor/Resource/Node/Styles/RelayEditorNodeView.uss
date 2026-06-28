@@ -1,89 +1,151 @@
 .relay-node {
     margin: 0;
     padding: 0;
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 0;
+    overflow: visible;
+}
+
+.relay-node-horizontal,
+.relay-node-custom {
     width: 50px;
     height: 20px;
     min-width: 50px;
     min-height: 20px;
-    border-radius: 9px;
-    background-color: rgba(0, 0, 0, 0);
-    border-width: 0;
+    max-width: 50px;
+    max-height: 20px;
 }
 
-.relay-node #title-container {
+.relay-node-vertical {
+    width: 20px;
+    height: 50px;
+    min-width: 20px;
+    min-height: 50px;
+    max-width: 20px;
+    max-height: 50px;
+}
+
+.relay-node #main,
+.relay-node #title-container,
+.relay-node #node-border,
+.relay-node #focus-border,
+.relay-node #top-layer-container,
+.relay-node #bottom-layer-container,
+.relay-node #node-top-container,
+.relay-node #node-bottom-container,
+.relay-node #port-node-top-container,
+.relay-node #port-node-bottom-container {
     display: none;
 }
 
-.relay-node #main {
+.relay-node #focus-border.enable {
+    display: none;
     margin: 0;
-    padding: 0;
-    min-height: 20px;
-    background-color: rgba(42, 42, 42, 0.92);
-    border-radius: 9px;
+    border-width: 0;
 }
 
-.relay-node #node-border {
-    border-radius: 9px;
+.relay-node #relay-body {
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin: 0;
+    padding: 0;
+    background-color: rgba(42, 42, 42, 0.92);
     border-width: 1px;
     border-color: rgba(145, 145, 145, 0.85);
 }
 
-.relay-node #top-layer-container,
-.relay-node #bottom-layer-container,
-.relay-node #node-top-container,
-.relay-node #node-bottom-container {
-    background-color: rgba(0, 0, 0, 0);
+.relay-node-horizontal #relay-body,
+.relay-node-custom #relay-body {
+    width: 50px;
+    height: 20px;
+    min-width: 50px;
+    min-height: 20px;
+    max-width: 50px;
+    max-height: 20px;
+    border-radius: 9px;
+}
+
+.relay-node-vertical #relay-body {
+    width: 20px;
+    height: 50px;
+    min-width: 20px;
+    min-height: 50px;
+    max-width: 20px;
+    max-height: 50px;
+    border-radius: 9px;
+}
+
+.relay-node #relay-port-layer,
+.relay-node #relay-input-container,
+.relay-node #relay-output-container {
+    position: absolute;
+    left: 0;
+    top: 0;
     margin: 0;
     padding: 0;
+    overflow: visible;
 }
 
-.relay-node #focus-border {
-    margin: 0;
-    padding: 0;
-    border-width: 0;
-    border-color: rgba(0, 0, 0, 0);
+.relay-node-horizontal #relay-port-layer,
+.relay-node-horizontal #relay-input-container,
+.relay-node-horizontal #relay-output-container,
+.relay-node-custom #relay-port-layer,
+.relay-node-custom #relay-input-container,
+.relay-node-custom #relay-output-container {
+    width: 50px;
+    height: 20px;
+    min-width: 50px;
+    min-height: 20px;
+    max-width: 50px;
+    max-height: 20px;
 }
 
-.relay-node #focus-border.enable {
-    margin: 0;
-    border-width: 0;
-    border-color: rgba(0, 0, 0, 0);
-}
-
-.relay-node #port-node-bottom-container {
-    margin: 0;
-    padding: 0;
-}
-
-.relay-node #port-node-bottom-container > * {
-    margin: 0;
-    padding: 0;
-}
-
-.relay-node #port-node-bottom-container #top {
-    height: 16px;
-    min-height: 16px;
-    margin: 0;
-    padding: 0;
-    align-items: center;
-}
-
-.relay-node #inputContainer,
-.relay-node #outputContainer {
-    margin: 0;
-    padding: 0;
-    height: 16px;
-}
-
-.relay-node #spacer {
-    min-width: 8px;
+.relay-node-vertical #relay-port-layer,
+.relay-node-vertical #relay-input-container,
+.relay-node-vertical #relay-output-container {
+    width: 20px;
+    height: 50px;
+    min-width: 20px;
+    min-height: 50px;
+    max-width: 20px;
+    max-height: 50px;
 }
 
 .relay-node .port {
+    position: absolute;
+    width: 16px;
     height: 16px;
+    min-width: 16px;
     min-height: 16px;
+    max-width: 16px;
+    max-height: 16px;
     margin: 0;
     padding: 0;
+    align-items: center;
+    justify-content: center;
+}
+
+.relay-node-horizontal .relay-port-input,
+.relay-node-custom .relay-port-input {
+    left: -8px;
+    top: 2px;
+}
+
+.relay-node-horizontal .relay-port-output,
+.relay-node-custom .relay-port-output {
+    left: 42px;
+    top: 2px;
+}
+
+.relay-node-vertical .relay-port-input {
+    left: 2px;
+    top: -8px;
+}
+
+.relay-node-vertical .relay-port-output {
+    left: 2px;
+    top: 42px;
 }
 
 .relay-node .connectorBox {

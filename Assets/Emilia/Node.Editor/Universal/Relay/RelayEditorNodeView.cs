@@ -7,6 +7,20 @@ using UnityEngine.UIElements;
 
 namespace Emilia.Node.Universal.Editor
 {
+    public class RelayEditorPortView : EditorPortView
+    {
+        public override bool ContainsPoint(Vector2 localPoint)
+        {
+            float width = layout.width > 0 ? layout.width : resolvedStyle.width;
+            float height = layout.height > 0 ? layout.height : resolvedStyle.height;
+
+            if (width <= 0) width = 16;
+            if (height <= 0) height = 16;
+
+            return new Rect(0, 0, width, height).Contains(localPoint);
+        }
+    }
+
     [EditorNode(typeof(RelayNodeAsset))]
     public class RelayEditorNodeView : UniversalEditorNodeView,
         IUniversalConnectConstraintNodeView,
@@ -15,27 +29,77 @@ namespace Emilia.Node.Universal.Editor
         private static readonly Color DefaultColor = new Color(0.68f, 0.68f, 0.68f);
 
         protected RelayNodeAsset relayAsset;
+        protected VisualElement relayBody;
+        protected VisualElement relayPortLayer;
+        protected VisualElement relayInputContainer;
+        protected VisualElement relayOutputContainer;
 
         public override bool canExpanded => false;
+        protected virtual bool enableRestoreRelayContextMenu => false;
+        protected virtual IRelayRestoreEdgeDataStrategy restoreRelayEdgeDataStrategy => DefaultRelayEdgeDataStrategy.Instance;
 
         public override void Initialize(EditorGraphView graphView, EditorNodeAsset asset)
         {
             relayAsset = asset as RelayNodeAsset;
             base.Initialize(graphView, asset);
 
-            AddToClassList("relay-node");
             StyleSheet relayStyleSheet = ResourceUtility.LoadResource<StyleSheet>("Node/Styles/RelayEditorNodeView.uss");
             if (relayStyleSheet != null) styleSheets.Add(relayStyleSheet);
 
-            titleContainer.style.display = DisplayStyle.None;
+            SetupRestoreRelayContextMenu();
             RefreshPortFromConnections();
+        }
+
+        private void SetupRestoreRelayContextMenu()
+        {
+            if (enableRestoreRelayContextMenu == false) return;
+            this.AddManipulator(new ContextualMenuManipulator(BuildContextualMenu));
+        }
+
+        public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
+        {
+            base.BuildContextualMenu(evt);
+            if (enableRestoreRelayContextMenu == false) return;
+
+            RelayHelper.AppendRestoreRelayContextMenu(evt, this, restoreRelayEdgeDataStrategy);
+        }
+
+        protected override void InitializeNodeView()
+        {
+            base.InitializeNodeView();
+
+            AddToClassList("relay-node");
+            AddToClassList(GetRelayOrientationClass());
+
+            titleContainer.style.display = DisplayStyle.None;
+            mainContainer.style.display = DisplayStyle.None;
+
+            relayBody = new VisualElement {name = "relay-body", pickingMode = PickingMode.Ignore};
+            Insert(0, relayBody);
+
+            relayPortLayer = new VisualElement {name = "relay-port-layer"};
+            relayInputContainer = new VisualElement {name = "relay-input-container"};
+            relayOutputContainer = new VisualElement {name = "relay-output-container"};
+
+            relayPortLayer.Add(relayInputContainer);
+            relayPortLayer.Add(relayOutputContainer);
+            Add(relayPortLayer);
         }
 
         public override IEditorPortView AddPortView(int index, EditorPortInfo info)
         {
             IEditorPortView portView = base.AddPortView(index, info);
             portView.portElement.portName = string.Empty;
+            portView.portElement.AddToClassList("relay-port");
+            portView.portElement.AddToClassList(
+                info.direction == EditorPortDirection.Input ? "relay-port-input" : "relay-port-output");
+            AttachRelayPort(portView);
             return portView;
+        }
+
+        protected override void AddCustomPortView(int index, IEditorPortView portView, EditorPortInfo info)
+        {
+            AttachRelayPort(portView);
         }
 
         public override List<EditorPortInfo> CollectStaticPortAssets()
@@ -51,6 +115,7 @@ namespace Emilia.Node.Universal.Editor
                 portType = typeof(object),
                 direction = EditorPortDirection.Input,
                 orientation = orientation,
+                nodePortViewType = typeof(RelayEditorPortView),
                 canMultiConnect = true,
                 color = color
             });
@@ -62,6 +127,7 @@ namespace Emilia.Node.Universal.Editor
                 portType = typeof(object),
                 direction = EditorPortDirection.Output,
                 orientation = orientation,
+                nodePortViewType = typeof(RelayEditorPortView),
                 canMultiConnect = true,
                 color = color
             });
@@ -210,6 +276,26 @@ namespace Emilia.Node.Universal.Editor
                 portView.portElement.portColor = color;
                 portView.portElement.portName = string.Empty;
             }
+        }
+
+        private void AttachRelayPort(IEditorPortView portView)
+        {
+            if (portView == null || relayInputContainer == null || relayOutputContainer == null) return;
+
+            if (portView.portDirection == EditorPortDirection.Input)
+                relayInputContainer.Add(portView.portElement);
+            else if (portView.portDirection == EditorPortDirection.Output)
+                relayOutputContainer.Add(portView.portElement);
+        }
+
+        private string GetRelayOrientationClass()
+        {
+            return relayAsset?.portOrientation switch
+            {
+                EditorOrientation.Vertical => "relay-node-vertical",
+                EditorOrientation.Custom => "relay-node-custom",
+                _ => "relay-node-horizontal"
+            };
         }
     }
 }
