@@ -20,6 +20,14 @@ namespace Emilia.Node.Universal.Editor
         public List<CreateNodeInfo> Collect(List<MenuNodeInfo> allNodeInfos)
         {
             List<CreateNodeInfo> result = new();
+            if (edgeView == null) return result;
+
+            ConnectValidationOptions options = new()
+            {
+                purpose = ConnectValidationPurpose.InsertNode,
+                ignoredCapacityEdges = new[] {edgeView},
+                source = nameof(InsertNodeCollector)
+            };
 
             int count = allNodeInfos.Count;
             for (int i = 0; i < count; i++)
@@ -29,7 +37,7 @@ namespace Emilia.Node.Universal.Editor
                 NodeCache nodeCache = this.graphView.graphElementCache.GetNodeCache(menuNodeInfo.nodeData, menuNodeInfo.editorNodeAssetType);
                 if (nodeCache == null) continue;
 
-                if (nodeCache.nodeView.GetCanConnectPort(edgeView, out _, out _))
+                if (nodeCache.nodeView.GetCanConnectPort(edgeView, options, out _, out _))
                 {
                     InsertCreateNodePostprocess insertPostprocess = new(edgeView.asset.id);
                     CreateNodeInfo createNodeInfo = new(menuNodeInfo, insertPostprocess);

@@ -28,6 +28,7 @@ namespace Emilia.Node.Editor
         {
             // 从图视图缓存中获取要插入的边视图
             IEditorEdgeView edgeView = graphView.graphElementCache.GetEditorEdgeView(insertEdgeId);
+            if (edgeView == null) return;
 
             IEditorPortView inputPortView = null;
             if (string.IsNullOrEmpty(inputPortId) == false) inputPortView = nodeView.GetPortView(inputPortId);
@@ -38,8 +39,15 @@ namespace Emilia.Node.Editor
             // 如果端口视图为空,尝试自动查找可连接的端口
             if (inputPortView == null || outputPortView == null)
             {
+                ConnectValidationOptions options = new()
+                {
+                    purpose = ConnectValidationPurpose.InsertNode,
+                    ignoredCapacityEdges = new[] {edgeView},
+                    source = nameof(InsertCreateNodePostprocess)
+                };
+
                 // 获取节点上所有能与当前边连接的输入和输出端口
-                if (nodeView.GetCanConnectPort(edgeView, out List<IEditorPortView> canConnectInput, out List<IEditorPortView> canConnectOutput))
+                if (nodeView.GetCanConnectPort(edgeView, options, out List<IEditorPortView> canConnectInput, out List<IEditorPortView> canConnectOutput))
                 {
                     if (inputPortView == null) inputPortView = canConnectInput.FirstOrDefault();
                     if (outputPortView == null) outputPortView = canConnectOutput.FirstOrDefault();

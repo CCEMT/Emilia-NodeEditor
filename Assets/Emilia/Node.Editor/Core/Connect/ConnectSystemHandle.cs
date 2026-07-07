@@ -1,8 +1,30 @@
 ﻿using System;
+using System.Collections.Generic;
 using Emilia.Kit;
 
 namespace Emilia.Node.Editor
 {
+    public enum ConnectValidationPurpose
+    {
+        Normal,
+        Preview,
+        CreateNode,
+        InsertNode,
+        RedirectEdge,
+        RestoreRelay
+    }
+
+    public sealed class ConnectValidationOptions
+    {
+        public static ConnectValidationOptions Default => new ConnectValidationOptions();
+
+        public ConnectValidationPurpose purpose = ConnectValidationPurpose.Normal;
+        public IReadOnlyList<IEditorEdgeView> ignoredCapacityEdges = Array.Empty<IEditorEdgeView>();
+        public IReadOnlyList<EditorEdgeAsset> ignoredCapacityEdgeAssets = Array.Empty<EditorEdgeAsset>();
+        public bool validateCapacity = true;
+        public string source;
+    }
+
     /// <summary>
     /// 连接自定义处理器
     /// </summary>
@@ -23,6 +45,12 @@ namespace Emilia.Node.Editor
         /// 判断两个端口是否可以连接
         /// </summary>
         public virtual bool CanConnect(EditorGraphView graphView, IEditorPortView inputPort, IEditorPortView outputPort) => false;
+
+        /// <summary>
+        /// 判断两个端口是否可以连接
+        /// </summary>
+        public virtual bool CanConnect(EditorGraphView graphView, IEditorPortView inputPort, IEditorPortView outputPort,
+            ConnectValidationOptions options) => CanConnect(graphView, inputPort, outputPort);
 
         /// <summary>
         /// 连接前的回调

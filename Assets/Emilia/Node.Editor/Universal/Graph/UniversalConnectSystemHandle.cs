@@ -17,8 +17,18 @@ namespace Emilia.Node.Universal.Editor
 
         public override bool CanConnect(EditorGraphView graphView, IEditorPortView inputPort, IEditorPortView outputPort)
         {
-            UniversalConnectContext context = new(graphView, inputPort, outputPort);
+            return CanConnect(graphView, inputPort, outputPort, ConnectValidationOptions.Default);
+        }
 
+        public override bool CanConnect(EditorGraphView graphView, IEditorPortView inputPort, IEditorPortView outputPort,
+            ConnectValidationOptions options)
+        {
+            UniversalConnectContext context = new(graphView, inputPort, outputPort, options);
+            return CanConnect(context);
+        }
+
+        protected virtual bool CanConnect(UniversalConnectContext context)
+        {
             if (CanConnectByDirectionAndType(context) == false) return false;
             if (CanConnectByPortCapacity(context) == false) return false;
             if (CanConnectByNodeConstraints(context) == false) return false;
@@ -33,8 +43,10 @@ namespace Emilia.Node.Universal.Editor
 
         protected virtual bool CanConnectByPortCapacity(UniversalConnectContext context)
         {
-            return HasAvailablePortCapacity(context.inputPort) &&
-                   HasAvailablePortCapacity(context.outputPort);
+            if (context.options.validateCapacity == false) return true;
+
+            return HasAvailablePortCapacity(context, context.inputPort) &&
+                   HasAvailablePortCapacity(context, context.outputPort);
         }
 
         protected virtual bool CanConnectByNodeConstraints(UniversalConnectContext context)
@@ -58,10 +70,67 @@ namespace Emilia.Node.Universal.Editor
             return true;
         }
 
-        protected virtual bool HasAvailablePortCapacity(IEditorPortView portView)
+        protected virtual bool HasAvailablePortCapacity(UniversalConnectContext context, IEditorPortView portView)
         {
+            if (portView == null) return false;
             if (portView.info.canMultiConnect) return true;
-            return portView.edges.Count == 0;
+
+            IReadOnlyList<IEditorEdgeView> edges = portView.edges;
+            int edgeCount = edges.Count;
+            for (int i = 0; i < edgeCount; i++)
+            {
+                if (IsIgnoredCapacityEdge(context, edges[i])) continue;
+                return false;
+            }
+
+            return true;
+        }
+
+        protected virtual bool IsIgnoredCapacityEdge(UniversalConnectContext context, IEditorEdgeView edgeView)
+        {
+            if (edgeView == null) return false;
+            ConnectValidationOptions options = context.options;
+            string edgeAssetId = GetEdgeAssetId(edgeView);
+
+            IReadOnlyList<IEditorEdgeView> ignoredEdges = options.ignoredCapacityEdges;
+            int ignoredEdgeCount = ignoredEdges != null ? ignoredEdges.Count : 0;
+            for (int i = 0; i < ignoredEdgeCount; i++)
+            {
+                IEditorEdgeView ignoredEdge = ignoredEdges[i];
+                if (ignoredEdge == edgeView) return true;
+                if (string.IsNullOrEmpty(edgeAssetId) == false &&
+                    GetEdgeAssetId(ignoredEdge) == edgeAssetId)
+                {
+                    return true;
+                }
+            }
+
+            IReadOnlyList<EditorEdgeAsset> ignoredEdgeAssets = options.ignoredCapacityEdgeAssets;
+            int ignoredEdgeAssetCount = ignoredEdgeAssets != null ? ignoredEdgeAssets.Count : 0;
+            for (int i = 0; i < ignoredEdgeAssetCount; i++)
+            {
+                EditorEdgeAsset ignoredAsset = ignoredEdgeAssets[i];
+                if (ignoredAsset == edgeView.asset) return true;
+                if (string.IsNullOrEmpty(edgeAssetId) == false &&
+                    GetEdgeAssetId(ignoredAsset) == edgeAssetId)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static string GetEdgeAssetId(IEditorEdgeView edgeView)
+        {
+            if (edgeView == null || edgeView.asset == null) return null;
+            return edgeView.asset.id;
+        }
+
+        private static string GetEdgeAssetId(EditorEdgeAsset edgeAsset)
+        {
+            if (edgeAsset == null) return null;
+            return edgeAsset.id;
         }
 
         public override void AfterConnect(EditorGraphView graphView, IEditorEdgeView edgeView)

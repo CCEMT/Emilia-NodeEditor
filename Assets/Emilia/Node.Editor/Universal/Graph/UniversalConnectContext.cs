@@ -8,12 +8,15 @@ namespace Emilia.Node.Universal.Editor
         public EditorGraphView graphView { get; }
         public IEditorPortView inputPort { get; }
         public IEditorPortView outputPort { get; }
+        public ConnectValidationOptions options { get; }
 
-        public UniversalConnectContext(EditorGraphView graphView, IEditorPortView inputPort, IEditorPortView outputPort)
+        public UniversalConnectContext(EditorGraphView graphView, IEditorPortView inputPort, IEditorPortView outputPort,
+            ConnectValidationOptions options = null)
         {
             this.graphView = graphView;
             this.inputPort = inputPort;
             this.outputPort = outputPort;
+            this.options = options ?? ConnectValidationOptions.Default;
         }
 
         public bool CanConnectByDirectionAndType()

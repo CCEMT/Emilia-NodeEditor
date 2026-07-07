@@ -124,41 +124,51 @@ namespace Emilia.Node.Universal.Editor
             {
                 IEditorEdgeView edgeView = edgeViews.FirstOrDefault();
 
-                if (nodeView.GetCanConnectPort(edgeView, out List<IEditorPortView> canConnectInput, out List<IEditorPortView> canConnectOutput))
+                if (edgeView != null)
                 {
-                    if (this.ghostEdgeInput == null)
+                    ConnectValidationOptions options = new()
                     {
-                        this.ghostEdgeInput = ReflectUtility.CreateInstance(edgeView.GetType()) as IEditorEdgeView;
-                        this.ghostEdgeInput.edgeElement.isGhostEdge = true;
-                        this.ghostEdgeInput.edgeElement.pickingMode = PickingMode.Ignore;
-                        nodeView.graphView.AddElement(this.ghostEdgeInput.edgeElement);
-                    }
+                        purpose = ConnectValidationPurpose.InsertNode,
+                        ignoredCapacityEdges = new[] {edgeView},
+                        source = nameof(NodeInsertDragger)
+                    };
 
-                    if (this.ghostEdgeOutput == null)
+                    if (nodeView.GetCanConnectPort(edgeView, options, out List<IEditorPortView> canConnectInput, out List<IEditorPortView> canConnectOutput))
                     {
-                        this.ghostEdgeOutput = ReflectUtility.CreateInstance(edgeView.GetType()) as IEditorEdgeView;
-                        this.ghostEdgeOutput.edgeElement.isGhostEdge = true;
-                        this.ghostEdgeOutput.edgeElement.pickingMode = PickingMode.Ignore;
-                        nodeView.graphView.AddElement(this.ghostEdgeOutput.edgeElement);
+                        if (this.ghostEdgeInput == null)
+                        {
+                            this.ghostEdgeInput = ReflectUtility.CreateInstance(edgeView.GetType()) as IEditorEdgeView;
+                            this.ghostEdgeInput.edgeElement.isGhostEdge = true;
+                            this.ghostEdgeInput.edgeElement.pickingMode = PickingMode.Ignore;
+                            nodeView.graphView.AddElement(this.ghostEdgeInput.edgeElement);
+                        }
+
+                        if (this.ghostEdgeOutput == null)
+                        {
+                            this.ghostEdgeOutput = ReflectUtility.CreateInstance(edgeView.GetType()) as IEditorEdgeView;
+                            this.ghostEdgeOutput.edgeElement.isGhostEdge = true;
+                            this.ghostEdgeOutput.edgeElement.pickingMode = PickingMode.Ignore;
+                            nodeView.graphView.AddElement(this.ghostEdgeOutput.edgeElement);
+                        }
+
+                        this.targetEdgeView = edgeView;
+                        this.inputPortView = canConnectInput.FirstOrDefault();
+                        this.outputPortView = canConnectOutput.FirstOrDefault();
+
+                        this.ghostEdgeInput.inputPortView = this.inputPortView;
+                        this.ghostEdgeInput.outputPortView = this.targetEdgeView.outputPortView;
+
+                        this.ghostEdgeOutput.inputPortView = this.targetEdgeView.inputPortView;
+                        this.ghostEdgeOutput.outputPortView = this.outputPortView;
+
+                        this.inputPortView.portElement.portCapLit = true;
+                        this.outputPortView.portElement.portCapLit = true;
+
+                        this.targetEdgeView.outputPortView.portElement.portCapLit = true;
+                        this.targetEdgeView.inputPortView.portElement.portCapLit = true;
+
+                        return;
                     }
-
-                    this.targetEdgeView = edgeView;
-                    this.inputPortView = canConnectInput.FirstOrDefault();
-                    this.outputPortView = canConnectOutput.FirstOrDefault();
-
-                    this.ghostEdgeInput.inputPortView = this.inputPortView;
-                    this.ghostEdgeInput.outputPortView = this.targetEdgeView.outputPortView;
-
-                    this.ghostEdgeOutput.inputPortView = this.targetEdgeView.inputPortView;
-                    this.ghostEdgeOutput.outputPortView = this.outputPortView;
-
-                    this.inputPortView.portElement.portCapLit = true;
-                    this.outputPortView.portElement.portCapLit = true;
-
-                    this.targetEdgeView.outputPortView.portElement.portCapLit = true;
-                    this.targetEdgeView.inputPortView.portElement.portCapLit = true;
-
-                    return;
                 }
             }
 

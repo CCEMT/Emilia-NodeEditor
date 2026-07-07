@@ -163,6 +163,15 @@ namespace Emilia.Node.Editor
         /// </summary>
         public static bool GetCanConnectPort(this IEditorNodeView editorNodeView, IEditorEdgeView edgeView, out List<IEditorPortView> canConnectInput, out List<IEditorPortView> canConnectOutput)
         {
+            return GetCanConnectPort(editorNodeView, edgeView, ConnectValidationOptions.Default, out canConnectInput, out canConnectOutput);
+        }
+
+        /// <summary>
+        /// 获取可连接的IEditorPortView
+        /// </summary>
+        public static bool GetCanConnectPort(this IEditorNodeView editorNodeView, IEditorEdgeView edgeView,
+            ConnectValidationOptions options, out List<IEditorPortView> canConnectInput, out List<IEditorPortView> canConnectOutput)
+        {
             canConnectInput = new List<IEditorPortView>();
             canConnectOutput = new List<IEditorPortView>();
 
@@ -173,13 +182,13 @@ namespace Emilia.Node.Editor
 
                 if (portView.portDirection == EditorPortDirection.Input || portView.portDirection == EditorPortDirection.Any)
                 {
-                    bool canConnect = editorNodeView.graphView.connectSystem.CanConnect(portView, edgeView.outputPortView);
+                    bool canConnect = editorNodeView.graphView.connectSystem.CanConnect(portView, edgeView.outputPortView, options);
                     if (canConnect) canConnectInput.Add(portView);
                 }
 
                 if (portView.portDirection == EditorPortDirection.Output || portView.portDirection == EditorPortDirection.Any)
                 {
-                    bool canConnect = editorNodeView.graphView.connectSystem.CanConnect(edgeView.inputPortView, portView);
+                    bool canConnect = editorNodeView.graphView.connectSystem.CanConnect(edgeView.inputPortView, portView, options);
                     if (canConnect) canConnectOutput.Add(portView);
                 }
             }
@@ -195,6 +204,14 @@ namespace Emilia.Node.Editor
         /// </summary>
         public static List<IEditorPortView> GetCanConnectPort(this IEditorNodeView editorNodeView, IEditorPortView portView)
         {
+            return GetCanConnectPort(editorNodeView, portView, ConnectValidationOptions.Default);
+        }
+
+        /// <summary>
+        /// 获取可连接的IEditorPortView
+        /// </summary>
+        public static List<IEditorPortView> GetCanConnectPort(this IEditorNodeView editorNodeView, IEditorPortView portView, ConnectValidationOptions options)
+        {
             List<IEditorPortView> canConnectList = new();
 
             EditorPortDirection direction = portView.portDirection;
@@ -209,14 +226,14 @@ namespace Emilia.Node.Editor
                 switch (direction)
                 {
                     case EditorPortDirection.Input:
-                        canConnect = editorNodeView.graphView.connectSystem.CanConnect(port, portView);
+                        canConnect = editorNodeView.graphView.connectSystem.CanConnect(port, portView, options);
                         break;
                     case EditorPortDirection.Output:
-                        canConnect = editorNodeView.graphView.connectSystem.CanConnect(portView, port);
+                        canConnect = editorNodeView.graphView.connectSystem.CanConnect(portView, port, options);
                         break;
                     case EditorPortDirection.Any:
-                        canConnect = editorNodeView.graphView.connectSystem.CanConnect(port, portView)
-                                     || editorNodeView.graphView.connectSystem.CanConnect(portView, port);
+                        canConnect = editorNodeView.graphView.connectSystem.CanConnect(port, portView, options)
+                                     || editorNodeView.graphView.connectSystem.CanConnect(portView, port, options);
                         break;
                 }
 
