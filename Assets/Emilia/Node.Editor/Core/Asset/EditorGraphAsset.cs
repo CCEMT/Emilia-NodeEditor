@@ -18,6 +18,9 @@ namespace Emilia.Node.Editor
         [SerializeField, InlineButton(nameof(ResetId))]
         private string _id;
 
+        [SerializeField, HideInInspector]
+        private bool _dirty;
+
         [NonSerialized, OdinSerialize, HideInInspector]
         private List<EditorNodeAsset> _nodes = new();
 
@@ -58,6 +61,11 @@ namespace Emilia.Node.Editor
                 EditorUtility.SetDirty(this);
             }
         }
+
+        /// <summary>
+        /// 是否存在未保存修改
+        /// </summary>
+        public bool dirty => this._dirty;
 
         /// <summary>
         /// 所有Node
@@ -106,6 +114,14 @@ namespace Emilia.Node.Editor
         public virtual void ResetId()
         {
             _id = Guid.NewGuid().ToString();
+            EditorUtility.SetDirty(this);
+        }
+
+        public void SetDirtyState(bool dirty)
+        {
+            if (this._dirty == dirty) return;
+
+            this._dirty = dirty;
             EditorUtility.SetDirty(this);
         }
 

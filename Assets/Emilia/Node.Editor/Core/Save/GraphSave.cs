@@ -15,9 +15,7 @@ namespace Emilia.Node.Editor
 
         private GraphSaveHandle handle;
 
-        private bool _dirty;
-
-        public bool dirty => this._dirty;
+        public bool dirty => (this.graphView?.graphAsset?.dirty ?? false) || (this.sourceGraphAsset?.dirty ?? false);
         public override int order => 500;
 
         public override void Initialize(EditorGraphView graphView)
@@ -47,13 +45,26 @@ namespace Emilia.Node.Editor
                 source = sourceGraphAsset;
             }
 
-            bool isExist = AssetDatabase.LoadAssetAtPath<EditorGraphAsset>(tempPath);
-            if (isExist) AssetDatabase.DeleteAsset(tempPath);
+            EditorGraphAsset copy = AssetDatabase.LoadAssetAtPath<EditorGraphAsset>(tempPath);
+            if (source.dirty)
+            {
+                if (copy != null)
+                {
+                    this.sourceGraphAsset = source;
+                    editorGraphView.graphAsset = copy;
+                    return;
+                }
+
+                source.SetDirtyState(false);
+                SaveAssetIfDirty(source);
+            }
+
+            if (copy != null) AssetDatabase.DeleteAsset(tempPath);
 
             bool result = AssetDatabase.CopyAsset(path, tempPath);
             if (result == false) return;
 
-            EditorGraphAsset copy = AssetDatabase.LoadAssetAtPath<EditorGraphAsset>(tempPath);
+            copy = AssetDatabase.LoadAssetAtPath<EditorGraphAsset>(tempPath);
             if (copy == null) return;
 
             this.sourceGraphAsset = source;
@@ -67,7 +78,18 @@ namespace Emilia.Node.Editor
         {
             if (this.graphView == null) return;
             if (this.graphView.isInitialized == false) return;
-            this._dirty = true;
+
+            if (this.graphView.graphAsset != null)
+            {
+                this.graphView.graphAsset.SetDirtyState(true);
+                this.graphView.graphAsset.OnlySaveAll();
+            }
+
+            if (this.sourceGraphAsset != null)
+            {
+                this.sourceGraphAsset.SetDirtyState(true);
+                SaveAssetIfDirty(this.sourceGraphAsset);
+            }
         }
 
         /// <summary>
@@ -87,6 +109,7 @@ namespace Emilia.Node.Editor
                 else
                 {
                     if (EditorUtility.DisplayDialog("是否保存", "是否保存当前修改", "保存", "不保存")) OnSave();
+                    else DiscardDirtyState();
                 }
             }
         }
@@ -96,6 +119,9 @@ namespace Emilia.Node.Editor
             if (this.graphView == null) return;
 
             handle?.OnSaveBefore(graphView);
+
+            graphView.graphAsset?.SetDirtyState(false);
+            sourceGraphAsset?.SetDirtyState(false);
 
             if (graphView.graphAsset != null) graphView.graphAsset.OnlySaveAll();
 
@@ -113,14 +139,31 @@ namespace Emilia.Node.Editor
                 AssetDatabase.ImportAsset(savePath);
             }
 
-            this._dirty = false;
-
             handle?.OnSaveAfter(graphView);
+        }
+
+        private void DiscardDirtyState()
+        {
+            graphView.graphAsset?.SetDirtyState(false);
+            sourceGraphAsset?.SetDirtyState(false);
+
+            if (graphView.graphAsset != null) SaveAssetIfDirty(graphView.graphAsset);
+            if (sourceGraphAsset != null) SaveAssetIfDirty(sourceGraphAsset);
+        }
+
+        private static void SaveAssetIfDirty(EditorGraphAsset graphAsset)
+        {
+            if (graphAsset == null) return;
+
+            string path = AssetDatabase.GetAssetPath(graphAsset);
+            if (string.IsNullOrEmpty(path)) return;
+
+            GUID guid = AssetDatabase.GUIDFromAssetPath(path);
+            AssetDatabase.SaveAssetIfDirty(guid);
         }
 
         public override void Dispose()
         {
-            this._dirty = false;
             this.sourceGraphAsset = null;
             this.handle = null;
             base.Dispose();
