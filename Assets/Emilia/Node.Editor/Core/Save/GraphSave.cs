@@ -79,17 +79,8 @@ namespace Emilia.Node.Editor
             if (this.graphView == null) return;
             if (this.graphView.isInitialized == false) return;
 
-            if (this.graphView.graphAsset != null)
-            {
-                this.graphView.graphAsset.SetDirtyState(true);
-                this.graphView.graphAsset.OnlySaveAll();
-            }
-
-            if (this.sourceGraphAsset != null)
-            {
-                this.sourceGraphAsset.SetDirtyState(true);
-                SaveAssetIfDirty(this.sourceGraphAsset);
-            }
+            if (this.graphView.graphAsset != null) this.graphView.graphAsset.SetDirtyState(true);
+            if (this.sourceGraphAsset != null) this.sourceGraphAsset.SetDirtyState(true);
         }
 
         /// <summary>

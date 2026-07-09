@@ -120,9 +120,7 @@ namespace Emilia.Node.Editor
         public void SetDirtyState(bool dirty)
         {
             if (this._dirty == dirty) return;
-
             this._dirty = dirty;
-            EditorUtility.SetDirty(this);
         }
 
         public override string ToString()
