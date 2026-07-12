@@ -54,6 +54,7 @@ namespace Emilia.Node.Universal.Editor
             markdownContainer.name = $"{nameof(StickyNoteProView)}-MarkdownContainer";
 
             markdownContainer.transform.scale = Vector3.one * 0.5f;
+            markdownContainer.cullingEnabled = true;
 
             Add(this.markdownContainer);
 
