@@ -390,6 +390,8 @@ namespace Emilia.Node.Editor
 
             InspectorProperty inspectorProperty = asset.propertyTree.GetPropertyAtPath(fieldPath);
             InspectorPropertyField inspectorPropertyField = new(inspectorProperty, forceImGUIDraw, false);
+            IMGUIContainer imGUIContainer = inspectorPropertyField.Q<IMGUIContainer>();
+            if (imGUIContainer != null) imGUIContainer.cullingEnabled = true;
             inspectorPropertyField.AddToClassList("port-input-element");
             editContainer.Add(inspectorPropertyField);
 
@@ -499,7 +501,9 @@ namespace Emilia.Node.Editor
 
             if (display == false) return;
 
-            assetContainer = new IMGUIContainer(() => asset.propertyTree?.Draw());
+            assetContainer = new IMGUIContainer(() => asset.propertyTree?.Draw()) {
+                cullingEnabled = true
+            };
             topLayerContainer.Add(assetContainer);
         }
 
