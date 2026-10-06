@@ -124,8 +124,11 @@ namespace Emilia.Node.Editor
                 output.Connect(this);
             }
 
-            StyleSheet styleSheet = ResourceUtility.LoadResource<StyleSheet>(styleFilePath);
-            styleSheets.Add(styleSheet);
+            if (!string.IsNullOrEmpty(styleFilePath))
+            {
+                StyleSheet styleSheet = ResourceUtility.LoadResource<StyleSheet>(styleFilePath);
+                styleSheets.Add(styleSheet);
+            }
 
             schedule.Execute(() => schedule.Execute(ForceUpdateView).ExecuteLater(1)).ExecuteLater(1);
         }

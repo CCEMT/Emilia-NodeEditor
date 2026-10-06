@@ -71,6 +71,23 @@ namespace Emilia.Node.Editor
         public EditorGraphAsset graphAsset { get; set; }
 
         /// <summary>
+        /// 由宿主统一持久化时关闭；默认保持框架的保存和临时副本行为。
+        /// </summary>
+        public bool assetSaveEnabled { get; set; } = true;
+
+        /// <summary>
+        /// 图编辑置脏通知，供外部宿主接入自身的修改生命周期。
+        /// </summary>
+        public event Action onAssetChanged;
+
+        /// <summary>
+        /// 复合作者资产可接管 Undo/聚焦后的视图同步，避免默认同步反向修改资产。
+        /// </summary>
+        public Action synchronizeFromAsset { get; set; }
+
+        internal void NotifyAssetChanged() => onAssetChanged?.Invoke();
+
+        /// <summary>
         /// Element缓存
         /// </summary>
         public GraphElementCache graphElementCache { get; set; }
@@ -287,7 +304,8 @@ namespace Emilia.Node.Editor
             if (focusedGraphView != this)
             {
                 focusedGraphView = this;
-                graphUndo.OnUndoRedoPerformed(true);
+                if (synchronizeFromAsset != null) synchronizeFromAsset();
+                else graphUndo.OnUndoRedoPerformed(true);
             }
 
             this.graphHandle?.OnFocus(this);

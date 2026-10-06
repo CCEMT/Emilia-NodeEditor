@@ -79,8 +79,11 @@ namespace Emilia.Node.Editor
             this.m_EdgeConnector = connector;
             this.AddManipulator(connector);
 
-            StyleSheet portStyle = ResourceUtility.LoadResource<StyleSheet>(portStyleFilePath);
-            styleSheets.Add(portStyle);
+            if (!string.IsNullOrEmpty(portStyleFilePath))
+            {
+                StyleSheet portStyle = ResourceUtility.LoadResource<StyleSheet>(portStyleFilePath);
+                styleSheets.Add(portStyle);
+            }
 
             m_ConnectorText.pickingMode = PickingMode.Position;
             m_ConnectorText.style.flexGrow = 1;

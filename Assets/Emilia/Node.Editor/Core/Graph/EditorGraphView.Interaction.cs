@@ -107,7 +107,8 @@ namespace Emilia.Node.Editor
         private void OnUndoRedoPerformed()
         {
             if (isInitialized == false) return;
-            graphUndo?.UndoRedoPerformed();
+            if (synchronizeFromAsset != null) synchronizeFromAsset();
+            else graphUndo?.UndoRedoPerformed();
         }
 
         /// <summary>
