@@ -78,6 +78,7 @@ namespace Emilia.Node.Universal.Editor
 
         private void OnDragUpdated(DragUpdatedEvent evt)
         {
+            if (graphView.isReadOnly) return;
             if (ImageItemUtility.CanCreatePayloadFromDrag() == false) return;
 
             DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
@@ -86,6 +87,7 @@ namespace Emilia.Node.Universal.Editor
 
         private void OnDragPerform(DragPerformEvent evt)
         {
+            if (graphView.isReadOnly) return;
             if (ImageItemUtility.TryCreatePayloadFromDrag(out ImageItemPayload payload) == false) return;
 
             DragAndDrop.AcceptDrag();
@@ -95,11 +97,13 @@ namespace Emilia.Node.Universal.Editor
 
         public bool CanPaste()
         {
+            if (graphView.isReadOnly) return false;
             return WindowsClipboardImageUtility.HasImage();
         }
 
         public bool TryPaste()
         {
+            if (graphView.isReadOnly) return false;
             if (WindowsClipboardImageUtility.TryGetImage(out ImageItemPayload payload) == false) return false;
 
             ApplyImage(payload, true);
@@ -108,6 +112,7 @@ namespace Emilia.Node.Universal.Editor
 
         public void ApplyImage(ImageItemPayload payload, bool recordUndo)
         {
+            if (graphView.isReadOnly) return;
             if (payload.isValid == false || imageAsset == null) return;
 
             if (recordUndo) graphView.RegisterCompleteObjectUndo("Graph ImageChange");
@@ -171,6 +176,7 @@ namespace Emilia.Node.Universal.Editor
         public override void SetPosition(Rect rect)
         {
             base.SetPosition(rect);
+            if (graphView != null && graphView.isReadOnly) return;
             if (graphView == null || imageAsset == null) return;
 
             graphView.RegisterCompleteObjectUndo("Graph MoveItem");
@@ -180,6 +186,7 @@ namespace Emilia.Node.Universal.Editor
         public void SetPositionNoUndo(Rect position)
         {
             base.SetPosition(position);
+            if (graphView != null && graphView.isReadOnly) return;
             imageAsset.position = position;
         }
 
@@ -187,7 +194,7 @@ namespace Emilia.Node.Universal.Editor
         {
             SetPositionNoUndo(imageAsset.position);
             RefreshImage();
-            if (isSilent == false) graphView.graphSave.SetDirty();
+            if (!isSilent && !graphView.isReadOnly) graphView.graphSave.SetDirty();
         }
 
         public ICopyPastePack GetPack() => new ItemCopyPastePack(asset);

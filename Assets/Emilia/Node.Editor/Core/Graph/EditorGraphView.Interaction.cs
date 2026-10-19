@@ -15,6 +15,7 @@ namespace Emilia.Node.Editor
     {
         public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
         {
+            if (isReadOnly) return;
             OperateMenuContext menuContext = new();
             menuContext.evt = evt;
             menuContext.graphView = this;
@@ -25,6 +26,7 @@ namespace Emilia.Node.Editor
         public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
         {
             List<Port> compatiblePorts = new();
+            if (isReadOnly) return compatiblePorts;
 
             IEditorPortView startPortView = startPort as IEditorPortView;
             if (startPortView == null) return compatiblePorts;
@@ -47,12 +49,13 @@ namespace Emilia.Node.Editor
             return compatiblePorts;
         }
 
-        private string OnSerializeGraphElements(IEnumerable<GraphElement> elements) => graphCopyPaste.SerializeGraphElementsCallback(elements);
+        private string OnSerializeGraphElements(IEnumerable<GraphElement> elements) => isReadOnly ? string.Empty : graphCopyPaste.SerializeGraphElementsCallback(elements);
 
-        private bool OnCanPasteSerializedData(string data) => graphCopyPaste.CanPasteSerializedDataCallback(data);
+        private bool OnCanPasteSerializedData(string data) => !isReadOnly && graphCopyPaste.CanPasteSerializedDataCallback(data);
 
         private void OnUnserializeAndPaste(string operationName, string data)
         {
+            if (isReadOnly) return;
             GraphElement[] pasteObjects = graphCopyPaste.UnserializeAndPasteCallback(operationName, data).ToArray();
 
             SetSelection(pasteObjects.OfType<ISelectable>().ToList());
@@ -63,6 +66,13 @@ namespace Emilia.Node.Editor
 
         private GraphViewChange OnGraphViewChanged(GraphViewChange graphViewChange)
         {
+            if (isReadOnly)
+            {
+                graphViewChange.elementsToRemove?.Clear();
+                graphViewChange.edgesToCreate?.Clear();
+                graphViewChange.movedElements?.Clear();
+                return graphViewChange;
+            }
             if (graphViewChange.elementsToRemove == null || graphViewChange.elementsToRemove.Count <= 0) return graphViewChange;
 
             Undo.IncrementCurrentGroup();
@@ -90,6 +100,7 @@ namespace Emilia.Node.Editor
 
         private void OnElementResized(VisualElement element)
         {
+            if (isReadOnly) return;
             IResizedGraphElement graphElement = element as IResizedGraphElement;
             if (graphElement != null) graphElement.OnElementResized();
         }
@@ -106,6 +117,7 @@ namespace Emilia.Node.Editor
 
         private void OnUndoRedoPerformed()
         {
+            if (isReadOnly) return;
             if (isInitialized == false) return;
             if (synchronizeFromAsset != null) synchronizeFromAsset();
             else graphUndo?.UndoRedoPerformed();
@@ -180,6 +192,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void RegisterCompleteObjectUndo(string name)
         {
+            if (isReadOnly) return;
             List<Object> objects = graphAsset.CollectAsset();
             Undo.RegisterCompleteObjectUndo(objects.ToArray(), name);
             graphSave.SetDirty();
@@ -190,6 +203,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void RecordObjectUndo(string name)
         {
+            if (isReadOnly) return;
             List<Object> objects = graphAsset.CollectAsset();
             Undo.RecordObjects(objects.ToArray(), name);
             graphSave.SetDirty();

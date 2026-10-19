@@ -12,6 +12,11 @@ namespace Emilia.Node.Editor
     public abstract class GraphHandle
     {
         /// <summary>
+        /// 限制内容写入；视图仍执行完整的加载、更新和释放流程。
+        /// </summary>
+        public virtual bool isReadOnly => false;
+
+        /// <summary>
         /// 初始化时
         /// </summary>
         public virtual void Initialize(EditorGraphView graphView) { }

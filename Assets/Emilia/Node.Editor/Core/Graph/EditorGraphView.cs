@@ -27,6 +27,9 @@ namespace Emilia.Node.Editor
         public static EditorGraphView focusedGraphView { get; set; }
 
         private GraphHandle graphHandle;
+        private IVisualElementScheduledItem pendingReload;
+
+        public bool isReadOnly => graphHandle != null && graphHandle.isReadOnly;
         private List<GraphData> datas = new();
 
         private Dictionary<Type, BasicGraphViewModule> modules = new();
@@ -38,6 +41,7 @@ namespace Emilia.Node.Editor
 
         private GraphContentZoomer graphZoomer;
         private EditorCoroutine loadElementCoroutine;
+        private int loadVersion;
         private EditorCoroutine updateViewTransformCoroutine;
 
         /// <summary>
@@ -347,6 +351,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void Save(bool force = true)
         {
+            if (isReadOnly) return;
             graphSave?.Save(force);
         }
 
@@ -357,12 +362,13 @@ namespace Emilia.Node.Editor
 
         public void Dispose()
         {
+            pendingReload?.Pause();
+            pendingReload = null;
             if (graphAsset != null) graphViews.Remove(graphAsset);
 
             Save(false);
 
-            if (loadElementCoroutine != null) EditorCoroutineUtility.StopCoroutine(loadElementCoroutine);
-            loadElementCoroutine = null;
+            CancelElementLoad();
 
             RemoveAllElement();
 
@@ -389,8 +395,9 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void Destroy()
         {
-            if (loadElementCoroutine != null) EditorCoroutineUtility.StopCoroutine(loadElementCoroutine);
-            loadElementCoroutine = null;
+            pendingReload?.Pause();
+            pendingReload = null;
+            CancelElementLoad();
 
             foreach (CustomGraphViewModule customModule in this.customModules.Values) customModule.Dispose();
             this.customModules.Clear();

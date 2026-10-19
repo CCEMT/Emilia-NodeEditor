@@ -104,6 +104,7 @@ namespace Emilia.Node.Editor
             get => asset?.isExpanded ?? false;
             set
             {
+                if (graphView != null && graphView.isReadOnly) return;
                 if (capabilities.HasFlag(Capabilities.Collapsible) == false) return;
                 if (asset == null) return;
 
@@ -390,6 +391,7 @@ namespace Emilia.Node.Editor
 
             InspectorProperty inspectorProperty = asset.propertyTree.GetPropertyAtPath(fieldPath);
             InspectorPropertyField inspectorPropertyField = new(inspectorProperty, forceImGUIDraw, false);
+            inspectorPropertyField.SetEnabled(!graphView.isReadOnly);
             IMGUIContainer imGUIContainer = inspectorPropertyField.Q<IMGUIContainer>();
             if (imGUIContainer != null) imGUIContainer.cullingEnabled = true;
             inspectorPropertyField.AddToClassList("port-input-element");
@@ -427,11 +429,12 @@ namespace Emilia.Node.Editor
             SetExpandedNoUndo(asset.isExpanded, true);
             foreach (InspectorPropertyField value in inputFields.Values) value.Update();
 
-            if (isSilent == false) graphView.graphSave.SetDirty();
+            if (!isSilent && !graphView.isReadOnly) graphView.graphSave.SetDirty();
         }
 
         public void RegisterCompleteObjectUndo(string name)
         {
+            if (graphView.isReadOnly) return;
             Undo.RegisterCompleteObjectUndo(asset, name);
             graphView.graphSave.SetDirty();
         }
@@ -468,6 +471,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void SetPositionNoUndo(Rect newPos)
         {
+            if (graphView != null && graphView.isReadOnly) { base.SetPosition(newPos); return; }
             if (capabilities.HasFlag(Capabilities.Movable) == false) return;
             base.SetPosition(newPos);
             asset.position = newPos;
@@ -483,7 +487,7 @@ namespace Emilia.Node.Editor
             bool isChanged = expanded != base.expanded;
 
             base.expanded = expanded;
-            asset.isExpanded = expanded;
+            if (!graphView.isReadOnly) asset.isExpanded = expanded;
 
             if (isRebuild && isChanged) RebuildPortView();
         }
@@ -501,7 +505,10 @@ namespace Emilia.Node.Editor
 
             if (display == false) return;
 
-            assetContainer = new IMGUIContainer(() => asset.propertyTree?.Draw()) {
+            assetContainer = new IMGUIContainer(() => {
+                using (new UnityEditor.EditorGUI.DisabledScope(graphView.isReadOnly))
+                    asset.propertyTree?.Draw();
+            }) {
                 cullingEnabled = true
             };
             topLayerContainer.Add(assetContainer);
@@ -524,7 +531,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void SetTooltip(string tooltip)
         {
-            asset.tips = tooltip;
+            if (!graphView.isReadOnly) asset.tips = tooltip;
             titleLabel.tooltip = tooltip;
         }
 

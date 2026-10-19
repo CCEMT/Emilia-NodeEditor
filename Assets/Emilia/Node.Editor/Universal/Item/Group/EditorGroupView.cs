@@ -40,6 +40,7 @@ namespace Emilia.Node.Editor
             UpdateGroupColor(groupColor);
 
             headerContainer.Q<TextField>().RegisterCallback<ChangeEvent<string>>((text) => {
+                if (graphView.isReadOnly) return;
                 this.groupAsset.groupTitle = text.newValue;
                 this.graphView.RegisterCompleteObjectUndo("Graph GroupTitleChange");
             });
@@ -135,6 +136,7 @@ namespace Emilia.Node.Editor
         protected override void OnElementsAdded(IEnumerable<GraphElement> elements)
         {
             base.OnElementsAdded(elements);
+            if (graphView != null && graphView.isReadOnly) return;
 
             foreach (GraphElement graphElement in elements)
             {
@@ -155,6 +157,7 @@ namespace Emilia.Node.Editor
         protected override void OnElementsRemoved(IEnumerable<GraphElement> elements)
         {
             base.OnElementsRemoved(elements);
+            if (graphView != null && graphView.isReadOnly) return;
 
             if (parent == null) return;
 
@@ -181,6 +184,7 @@ namespace Emilia.Node.Editor
         public override void SetPosition(Rect newPos)
         {
             base.SetPosition(newPos);
+            if (graphView != null && graphView.isReadOnly) return;
             Undo.RegisterCompleteObjectUndo(asset, "Graph MoveGroup");
             this.groupAsset.position = newPos;
         }
@@ -188,6 +192,7 @@ namespace Emilia.Node.Editor
         public void SetPositionNoUndo(Rect position)
         {
             base.SetPosition(position);
+            if (graphView != null && graphView.isReadOnly) return;
             asset.position = position;
         }
 
@@ -199,7 +204,7 @@ namespace Emilia.Node.Editor
             RemoveNode();
             AddNode();
 
-            if (isSilent == false) graphView.graphSave.SetDirty();
+            if (!isSilent && !graphView.isReadOnly) graphView.graphSave.SetDirty();
 
             this.isUndo = true;
         }
@@ -234,6 +239,7 @@ namespace Emilia.Node.Editor
 
         public virtual void OnElementResized()
         {
+            if (graphView.isReadOnly) return;
             groupAsset.size = GetPosition().size;
         }
 

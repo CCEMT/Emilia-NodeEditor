@@ -57,6 +57,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public bool CanConnect(IEditorPortView inputPort, IEditorPortView outputPort, ConnectValidationOptions options)
         {
+            if (graphView.isReadOnly) return false;
             if (inputPort == null || outputPort == null || inputPort.master == null || outputPort.master == null) return false;
             if (this.handle == null) return false;
             return this.handle.CanConnect(graphView, inputPort, outputPort, options);
@@ -95,6 +96,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void Disconnect(IEditorEdgeView edge)
         {
+            if (graphView.isReadOnly) return;
             EditorEdgeAsset edgeAsset = edge.asset;
 
             edge.RemoveView();
@@ -123,6 +125,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void DisconnectNoUndo(IEditorEdgeView edge)
         {
+            if (graphView.isReadOnly) return;
             EditorEdgeAsset edgeAsset = edge.asset;
 
             edge.RemoveView();

@@ -12,6 +12,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public IEditorNodeView AddNode(EditorNodeAsset nodeAsset)
         {
+            if (isReadOnly) return null;
             graphAsset.AddNode(nodeAsset);
             IEditorNodeView nodeView = AddNodeView(nodeAsset);
             return nodeView;
@@ -80,6 +81,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public IEditorEdgeView AddEdge(EditorEdgeAsset asset)
         {
+            if (isReadOnly) return null;
             graphAsset.AddEdge(asset);
             IEditorEdgeView edgeView = AddEdgeView(asset);
             return edgeView;
@@ -164,6 +166,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public IEditorItemView AddItem(EditorItemAsset asset)
         {
+            if (isReadOnly) return null;
             graphAsset.AddItem(asset);
             IEditorItemView itemView = AddItemView(asset);
             return itemView;

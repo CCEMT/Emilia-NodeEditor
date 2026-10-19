@@ -20,6 +20,7 @@ namespace Emilia.Node.Editor
 
         public void UndoRedoPerformed()
         {
+            if (graphView == null || graphView.isReadOnly) return;
             GraphSettingStruct? graphSetting = this.graphView.GetGraphData<BasicGraphData>()?.graphSetting;
 
             if (graphSetting != null && graphSetting.Value.fastUndo == false) graphView.Reload(graphView.graphAsset);
@@ -35,6 +36,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void OnUndoRedoPerformed(bool isSilent = false)
         {
+            if (graphView == null || graphView.isReadOnly) return;
             this.handle?.OnUndoBefore(this.graphView, isSilent);
 
             UndoNode(isSilent);

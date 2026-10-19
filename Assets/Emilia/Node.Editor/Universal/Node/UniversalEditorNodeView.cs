@@ -57,6 +57,8 @@ namespace Emilia.Node.Universal.Editor
 
             UpdateTitle();
 
+            if (graphView.isReadOnly) return;
+
             duplicateDragger = new NodeDuplicateDragger();
             this.insertDragger = new NodeInsertDragger();
 

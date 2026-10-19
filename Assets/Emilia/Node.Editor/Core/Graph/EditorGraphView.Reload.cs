@@ -27,18 +27,20 @@ namespace Emilia.Node.Editor
             loadProgress = 0;
             isInitialized = false;
 
-            if (loadElementCoroutine != null) EditorCoroutineUtility.StopCoroutine(loadElementCoroutine);
-            loadElementCoroutine = null;
+            CancelElementLoad();
 
-            bool allReload = graphAsset == null || graphAsset.GetType() != asset.GetType();
+            bool allReload = graphHandle == null || graphAsset == null || graphAsset.GetType() != asset.GetType();
             graphAsset = asset;
 
             ReloadData();
 
-            schedule.Execute(OnReload).ExecuteLater(1);
+            pendingReload?.Pause();
+            pendingReload = schedule.Execute(OnReload);
+            pendingReload.ExecuteLater(1);
 
             void OnReload()
             {
+                pendingReload = null;
                 if (allReload) AllReload();
                 else ElementReload();
             }
@@ -73,7 +75,7 @@ namespace Emilia.Node.Editor
             ReloadModule();
 
             RemoveAllElement();
-            loadElementCoroutine = EditorCoroutineUtility.StartCoroutineOwnerless(LoadElement());
+            loadElementCoroutine = EditorCoroutineUtility.StartCoroutineOwnerless(LoadElement(loadVersion));
         }
 
         private void ReloadHandle()
@@ -129,30 +131,43 @@ namespace Emilia.Node.Editor
         private void ElementReload()
         {
             RemoveAllElement();
-            loadElementCoroutine = EditorCoroutineUtility.StartCoroutineOwnerless(LoadElement());
+            loadElementCoroutine = EditorCoroutineUtility.StartCoroutineOwnerless(LoadElement(loadVersion));
         }
 
-        private IEnumerator LoadElement()
+        private void CancelElementLoad()
         {
+            loadVersion++;
+            if (loadElementCoroutine == null) return;
+            EditorCoroutine cancelled = loadElementCoroutine;
+            loadElementCoroutine = null;
+            EditorApplication.delayCall += () => EditorCoroutineUtility.StopCoroutine(cancelled);
+        }
+
+        private IEnumerator LoadElement(int version)
+        {
+            if (version != loadVersion) yield break;
             graphElementCache.BuildCache(this);
 
             this.graphHandle?.OnLoadBefore(this);
 
-            yield return LoadNodeView();
-            yield return LoadEdge();
-            yield return LoadItem();
+            yield return LoadNodeView(version);
+            if (version != loadVersion) yield break;
+            yield return LoadEdge(version);
+            if (version != loadVersion) yield break;
+            yield return LoadItem(version);
+            if (version != loadVersion) yield break;
 
             LoadSuccess();
         }
 
-        private IEnumerator LoadNodeView()
+        private IEnumerator LoadNodeView(int version)
         {
             if (graphAsset == null) yield break;
 
             int amount = graphAsset.nodes.Count;
             for (int i = 0; i < amount; i++)
             {
-                if (graphAsset == null) yield break;
+                if (version != loadVersion || graphAsset == null) yield break;
 
                 EditorNodeAsset node = graphAsset.nodes[i];
                 AddNodeView(node);
@@ -162,14 +177,14 @@ namespace Emilia.Node.Editor
             }
         }
 
-        private IEnumerator LoadEdge()
+        private IEnumerator LoadEdge(int version)
         {
             if (graphAsset == null) yield break;
 
             int amount = graphAsset.edges.Count;
             for (int i = 0; i < amount; i++)
             {
-                if (graphAsset == null) yield break;
+                if (version != loadVersion || graphAsset == null) yield break;
 
                 EditorEdgeAsset edge = graphAsset.edges[i];
                 AddEdgeView(edge);
@@ -179,14 +194,14 @@ namespace Emilia.Node.Editor
             }
         }
 
-        private IEnumerator LoadItem()
+        private IEnumerator LoadItem(int version)
         {
             if (graphAsset == null) yield break;
 
             int amount = graphAsset.items.Count;
             for (int i = 0; i < amount; i++)
             {
-                if (graphAsset == null) yield break;
+                if (version != loadVersion || graphAsset == null) yield break;
 
                 EditorItemAsset itemAsset = graphAsset.items[i];
                 AddItemView(itemAsset);

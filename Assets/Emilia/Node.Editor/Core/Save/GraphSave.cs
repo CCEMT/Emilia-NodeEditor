@@ -29,6 +29,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void ResetCopy(EditorGraphView editorGraphView, EditorGraphAsset source)
         {
+            if (editorGraphView.isReadOnly) return;
             if (source == null || !editorGraphView.assetSaveEnabled) return;
 
             string path = AssetDatabase.GetAssetPath(source);
@@ -76,6 +77,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void SetDirty()
         {
+            if (this.graphView != null && this.graphView.isReadOnly) return;
             if (this.graphView == null) return;
             if (this.graphView.isInitialized == false) return;
 
@@ -89,6 +91,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void Save(bool force = true)
         {
+            if (this.graphView != null && this.graphView.isReadOnly) return;
             if (this.graphView == null || !this.graphView.assetSaveEnabled) return;
 
             if (force) OnSave();

@@ -27,6 +27,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public IEditorItemView CreateItem(Type type, Vector2 position)
         {
+            if (graphView.isReadOnly) return null;
             if (typeof(EditorItemAsset).IsAssignableFrom(type) == false)
             {
                 Debug.LogError($"CreateItem Error: {type}未继承EditorItemAsset");
@@ -55,6 +56,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void DeleteItem(IEditorItemView itemView)
         {
+            if (graphView.isReadOnly) return;
             itemView.RemoveView();
 
             if (itemView.asset == null) return;
@@ -77,6 +79,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void DeleteItemNoUndo(IEditorItemView itemView)
         {
+            if (graphView.isReadOnly) return;
             itemView.RemoveView();
             graphView.graphAsset.RemoveItem(itemView.asset);
 

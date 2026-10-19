@@ -27,6 +27,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public IEditorNodeView CreateNode(Type nodeType, Vector2 position, object userData)
         {
+            if (graphView.isReadOnly) return null;
             EditorNodeAsset nodeAsset = CreateNode(nodeType, position);
             if (nodeAsset == null)
             {
@@ -49,6 +50,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public EditorNodeAsset CreateNode(Type nodeType, Vector2 position)
         {
+            if (graphView.isReadOnly) return null;
             if (typeof(EditorNodeAsset).IsAssignableFrom(nodeType) == false) return null;
 
             EditorNodeAsset node = ScriptableObject.CreateInstance(nodeType) as EditorNodeAsset;
@@ -63,6 +65,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void DeleteNode(IEditorNodeView nodeView)
         {
+            if (graphView.isReadOnly) return;
             nodeView.RemoveView();
 
             graphView.RegisterCompleteObjectUndo("Graph RemoveNode");
@@ -85,6 +88,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void DeleteNodeNoUndo(IEditorNodeView nodeView)
         {
+            if (graphView.isReadOnly) return;
             nodeView.RemoveView();
 
             graphView.graphAsset.RemoveNode(nodeView.asset);

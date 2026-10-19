@@ -106,6 +106,12 @@ namespace Emilia.Node.Editor
         {
             this.graphView = graphView;
             this.asset = asset;
+            if (graphView.isReadOnly)
+            {
+                this.RemoveManipulator(editorEdgeManipulator);
+                this.RemoveManipulator(contextualMenuManipulator);
+                capabilities = Capabilities.Selectable;
+            }
 
             if (asset != null)
             {
@@ -173,7 +179,7 @@ namespace Emilia.Node.Editor
         public virtual void OnValueChanged(bool isSilent = false)
         {
             schedule.Execute(ForceUpdateView).ExecuteLater(1);
-            if (isSilent == false) graphView.graphSave.SetDirty();
+            if (!isSilent && !graphView.isReadOnly) graphView.graphSave.SetDirty();
         }
 
         protected override EdgeControl CreateEdgeControl()

@@ -33,6 +33,7 @@ namespace Emilia.Node.Universal.Editor
             SetPositionNoUndo(stickyAsset.position);
 
             RegisterCallback<StickyNoteChangeEvent>((_) => {
+                if (graphView.isReadOnly) return;
                 stickyAsset.stickyTitle = title;
                 stickyAsset.content = contents;
                 stickyAsset.fontSize = fontSize;
@@ -61,13 +62,14 @@ namespace Emilia.Node.Universal.Editor
 
             SetPositionNoUndo(stickyAsset.position);
 
-            if (isSilent == false) graphView.graphSave.SetDirty();
+            if (!isSilent && !graphView.isReadOnly) graphView.graphSave.SetDirty();
         }
 
         public override void SetPosition(Rect rect)
         {
             base.SetPosition(rect);
             if (this.graphView == null) return;
+            if (this.graphView.isReadOnly) return;
             this.graphView.RegisterCompleteObjectUndo("Graph MoveNode");
             stickyAsset.position = rect;
         }
@@ -75,7 +77,7 @@ namespace Emilia.Node.Universal.Editor
         public void SetPositionNoUndo(Rect newPos)
         {
             base.SetPosition(newPos);
-            asset.position = newPos;
+            if (!graphView.isReadOnly) asset.position = newPos;
         }
 
         public ICopyPastePack GetPack() => new ItemCopyPastePack(asset);

@@ -68,16 +68,19 @@ namespace Emilia.Node.Editor
 
             if (portType != null) visualClass = "Port_" + portType.Name;
 
-            Type edgeAssetType = graphView.connectSystem.GetEdgeAssetTypeByPort(this);
-            Type edgeViewType = GraphTypeCache.GetEdgeViewType(edgeAssetType);
+            if (!graphView.isReadOnly)
+            {
+                Type edgeAssetType = graphView.connectSystem.GetEdgeAssetTypeByPort(this);
+                Type edgeViewType = GraphTypeCache.GetEdgeViewType(edgeAssetType);
 
-            GraphEdgeConnectorListener connectorListener = graphView.connectSystem.connectorListener;
+                GraphEdgeConnectorListener connectorListener = graphView.connectSystem.connectorListener;
 
-            EditorEdgeConnector connector = ReflectUtility.CreateInstance(info.edgeConnectorType) as EditorEdgeConnector;
-            connector.Initialize(edgeViewType, connectorListener);
+                EditorEdgeConnector connector = ReflectUtility.CreateInstance(info.edgeConnectorType) as EditorEdgeConnector;
+                connector.Initialize(edgeViewType, connectorListener);
 
-            this.m_EdgeConnector = connector;
-            this.AddManipulator(connector);
+                this.m_EdgeConnector = connector;
+                this.AddManipulator(connector);
+            }
 
             if (!string.IsNullOrEmpty(portStyleFilePath))
             {
@@ -96,9 +99,9 @@ namespace Emilia.Node.Editor
             capabilities |= Capabilities.Copiable;
 
             ContextualMenuManipulator contextualMenuManipulator = new(OnContextualMenuManipulator);
-            this.AddManipulator(contextualMenuManipulator);
+            if (!graphView.isReadOnly) this.AddManipulator(contextualMenuManipulator);
 
-            if (graphView.isInitialized) schedule.Execute(RefreshEdge).ExecuteLater(1);
+            if (!graphView.isReadOnly && graphView.isInitialized) schedule.Execute(RefreshEdge).ExecuteLater(1);
         }
 
         public virtual void RefreshEdge()
@@ -200,7 +203,7 @@ namespace Emilia.Node.Editor
             }
 
             _edges.Remove(editorEdge);
-            OnDisconnected?.Invoke(this, editorEdge);
+            if (!graphView.isReadOnly) OnDisconnected?.Invoke(this, editorEdge);
         }
 
         public virtual void CollectElements(HashSet<GraphElement> collectedElementSet, Func<GraphElement, bool> conditionFunc)
