@@ -30,6 +30,8 @@ namespace Emilia.Node.Universal.Editor
 
         protected TextField titleTextField;
 
+        private VisualElement titleIconElement;
+
         protected NodeMessageButtonElement messageButtonElement;
         protected NodeMessageContainer messageContainer;
         protected List<NodeMessageElement> messageElements = new();
@@ -104,12 +106,28 @@ namespace Emilia.Node.Universal.Editor
 
         protected void InitializeIcon()
         {
-            if (icon == null) return;
-            VisualElement iconElement = new();
-            iconElement.name = "title-icon";
+            RefreshIcon();
+        }
 
-            iconElement.style.backgroundImage = icon;
-            titleContainer.Insert(0, iconElement);
+        protected void RefreshIcon()
+        {
+            Texture2D texture = icon;
+            if (titleIconElement != null && texture != null && titleIconElement.style.backgroundImage.value.texture == texture) return;
+            if (titleIconElement == null)
+            {
+                if (texture == null) return;
+
+                titleIconElement = new VisualElement {name = "title-icon", pickingMode = PickingMode.Ignore};
+                titleIconElement.style.width = titleIconElement.style.height = 20;
+                titleIconElement.style.marginRight = 4;
+                titleIconElement.style.flexShrink = 0;
+                titleIconElement.style.alignSelf = Align.Center;
+                titleIconElement.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
+                titleContainer.Insert(0, titleIconElement);
+            }
+
+            titleIconElement.style.backgroundImage = texture;
+            titleIconElement.style.display = texture != null ? DisplayStyle.Flex : DisplayStyle.None;
         }
 
         protected void InitializeFocusBorder()

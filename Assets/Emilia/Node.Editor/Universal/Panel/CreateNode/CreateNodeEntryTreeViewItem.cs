@@ -1,4 +1,5 @@
 ﻿using Emilia.Node.Editor;
+using UnityEngine;
 
 namespace Emilia.Node.Universal.Editor
 {
@@ -17,10 +18,11 @@ namespace Emilia.Node.Universal.Editor
         /// </summary>
         public bool isCollection { get; private set; }
 
+        public override Texture2D icon => createNodeHandle?.icon;
+
         public CreateNodeEntryTreeViewItem(ICreateNodeHandle createNodeHandle, bool isCollection = false)
         {
             this.createNodeHandle = createNodeHandle;
-            icon = createNodeHandle.icon;
             this.isCollection = isCollection;
         }
     }
