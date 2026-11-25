@@ -1,0 +1,11 @@
+{
+  "name": "Emilia.RemoteDebug.Editor",
+  "rootNamespace": "Emilia.RemoteDebug.Editor",
+  "references": [
+    "Emilia.RemoteDebug"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "autoReferenced": true
+}

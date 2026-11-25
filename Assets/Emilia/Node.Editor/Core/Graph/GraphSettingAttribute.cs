@@ -48,6 +48,33 @@ namespace Emilia.Node.Attributes
         }
 
         /// <summary>
+        /// 低于此缩放倍率时开始加速
+        /// </summary>
+        public float zoomAccelerationStartScale
+        {
+            get => settingStruct.zoomAccelerationStartScale;
+            set => settingStruct.zoomAccelerationStartScale = value;
+        }
+
+        /// <summary>
+        /// 最小缩放倍率处的最大速度倍率，设为1关闭加速
+        /// </summary>
+        public float zoomAccelerationMaxMultiplier
+        {
+            get => settingStruct.zoomAccelerationMaxMultiplier;
+            set => settingStruct.zoomAccelerationMaxMultiplier = value;
+        }
+
+        /// <summary>
+        /// 加速曲线指数，值越大，加速越集中在远端
+        /// </summary>
+        public float zoomAccelerationExponent
+        {
+            get => settingStruct.zoomAccelerationExponent;
+            set => settingStruct.zoomAccelerationExponent = value;
+        }
+
+        /// <summary>
         /// 禁用边绘制优化
         /// </summary>
         public bool disabledEdgeDrawOptimization
@@ -67,6 +94,22 @@ namespace Emilia.Node.Attributes
         public bool fastUndo;
         public bool immediatelySave;
         public Vector2 zoomSize;
+
+        /// <summary>
+        /// 低于此缩放倍率时开始加速
+        /// </summary>
+        public float zoomAccelerationStartScale;
+
+        /// <summary>
+        /// 最小缩放倍率处的最大速度倍率，设为1关闭加速
+        /// </summary>
+        public float zoomAccelerationMaxMultiplier;
+
+        /// <summary>
+        /// 加速曲线指数，值越大，加速越集中在远端
+        /// </summary>
+        public float zoomAccelerationExponent;
+
         public bool disabledEdgeDrawOptimization;
 
         public static readonly GraphSettingStruct Default = new() {
@@ -74,6 +117,9 @@ namespace Emilia.Node.Attributes
             fastUndo = true,
             immediatelySave = true,
             zoomSize = new Vector2(0.15f, 3f),
+            zoomAccelerationStartScale = 0.5f,
+            zoomAccelerationMaxMultiplier = 2.5f,
+            zoomAccelerationExponent = 2f,
             disabledEdgeDrawOptimization = false
         };
     }

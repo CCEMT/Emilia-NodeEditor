@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using Emilia.Node.Attributes;
 
 namespace Emilia.Node.Editor
@@ -23,5 +24,11 @@ namespace Emilia.Node.Editor
     public class BasicGraphData : GraphData
     {
         public GraphSettingStruct graphSetting = GraphSettingStruct.Default;
+
+        public override void OnCreate(EditorGraphView graphView)
+        {
+            base.OnCreate(graphView);
+            graphSetting = graphView.graphAsset?.GetType().GetCustomAttribute<GraphSettingAttribute>(true)?.settingStruct ?? GraphSettingStruct.Default;
+        }
     }
 }

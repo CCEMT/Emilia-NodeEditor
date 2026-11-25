@@ -1,4 +1,5 @@
 ﻿using System;
+using Emilia.Node.Attributes;
 using Emilia.Reflection.Editor;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
@@ -43,7 +44,7 @@ namespace Emilia.Node.Editor
             target.UnregisterCallback<WheelEvent>(OnWheel);
         }
 
-        private static float CalculateNewZoom(float currentZoom, float wheelDelta, float zoomStep, float referenceZoom, float minZoom, float maxZoom)
+        private static float CalculateNewZoom(float currentZoom, float wheelDelta, float zoomStep, float referenceZoom, float minZoom, float maxZoom, GraphSettingStruct graphSetting)
         {
             if (minZoom <= 0)
             {
@@ -68,9 +69,17 @@ namespace Emilia.Node.Editor
 
             currentZoom = Mathf.Clamp(currentZoom, minZoom, maxZoom);
 
-            if (Mathf.Approximately(wheelDelta, 0))
+            if (Mathf.Approximately(wheelDelta, 0) || zoomStep == 0)
             {
                 return currentZoom;
+            }
+
+            float multiplier = CalculateZoomAcceleration(currentZoom, minZoom, graphSetting);
+            if (multiplier > 1)
+            {
+                // 加速区保留小数步长，避免整数档位取整抵消加速。
+                float zoom = (float) (currentZoom * Math.Pow(1 + zoomStep, Math.Sign(wheelDelta) * multiplier));
+                return Mathf.Clamp(zoom, minZoom, maxZoom);
             }
 
             double a = Math.Log(referenceZoom, 1 + zoomStep);
@@ -96,6 +105,32 @@ namespace Emilia.Node.Editor
             return (float) (Math.Pow(1 + zoomStep, currentWheel + a) + b);
         }
 
+        private static float CalculateZoomAcceleration(float currentZoom, float minZoom, GraphSettingStruct graphSetting)
+        {
+            GraphSettingStruct defaultSetting = GraphSettingStruct.Default;
+            float startScale = graphSetting.zoomAccelerationStartScale;
+            float maxMultiplier = graphSetting.zoomAccelerationMaxMultiplier;
+            float exponent = graphSetting.zoomAccelerationExponent;
+
+            if (startScale <= 0 || float.IsNaN(startScale) || float.IsInfinity(startScale))
+            {
+                startScale = defaultSetting.zoomAccelerationStartScale;
+            }
+            if (maxMultiplier < 1 || float.IsNaN(maxMultiplier) || float.IsInfinity(maxMultiplier))
+            {
+                maxMultiplier = defaultSetting.zoomAccelerationMaxMultiplier;
+            }
+            if (exponent <= 0 || float.IsNaN(exponent) || float.IsInfinity(exponent))
+            {
+                exponent = defaultSetting.zoomAccelerationExponent;
+            }
+
+            if (currentZoom >= startScale || startScale <= minZoom || maxMultiplier == 1) return 1;
+
+            float t = Mathf.Clamp01((startScale - currentZoom) / (startScale - minZoom));
+            return 1 + (maxMultiplier - 1) * Mathf.Pow(t, exponent);
+        }
+
         void OnWheel(WheelEvent evt)
         {
             EditorGraphView graphView = target as EditorGraphView;
@@ -119,7 +154,8 @@ namespace Emilia.Node.Editor
 
             position += Vector3.Scale(new Vector3(x, y, 0), scale);
 
-            float zoom = CalculateNewZoom(scale.y, -evt.delta.y, scaleStep, referenceScale, minScale, maxScale);
+            GraphSettingStruct graphSetting = graphView.GetGraphData<BasicGraphData>()?.graphSetting ?? GraphSettingStruct.Default;
+            float zoom = CalculateNewZoom(scale.y, -evt.delta.y, scaleStep, referenceScale, minScale, maxScale, graphSetting);
             scale.x = zoom;
             scale.y = zoom;
             scale.z = 1;

@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Linq;
 using Emilia.Reflection.Editor;
 using Unity.EditorCoroutines.Editor;
 using UnityEditor;
@@ -24,6 +25,49 @@ namespace Emilia.Node.Editor
         private void OnViewTransformChanged(GraphView graphview)
         {
             UpdateLogicTransform(graphview.viewTransform.position, graphview.viewTransform.scale);
+        }
+
+        protected override EventPropagation OverrideFrame(FrameType frameType)
+        {
+            if (graphPanelSystem == null) return base.OverrideFrame(frameType);
+
+            Rect clientRect = this.WorldToLocal(graphPanelSystem.graphRect);
+            float validateFloat = clientRect.x + clientRect.y + clientRect.width + clientRect.height;
+            if (clientRect.width <= 0 || clientRect.height <= 0 || float.IsNaN(validateFloat) || float.IsInfinity(validateFloat)) return base.OverrideFrame(frameType);
+
+            if (frameType == FrameType.Selection && !selection.OfType<GraphElement>().Any(element => element.IsSelectable() && element is not Edge))
+                frameType = FrameType.All;
+
+            Vector3 frameTranslation = clientRect.position;
+            Vector3 frameScaling = Vector3.one;
+            if (frameType == FrameType.All || frameType == FrameType.Selection)
+            {
+                Rect rectToFit;
+                if (frameType == FrameType.All)
+                {
+                    rectToFit = CalculateRectToFitAll(contentViewContainer);
+                }
+                else
+                {
+                    rectToFit = Rect.zero;
+                    bool hasElement = false;
+                    foreach (GraphElement element in selection.OfType<GraphElement>())
+                    {
+                        VisualElement visualElement = element is Edge edge ? edge.edgeControl : element;
+                        Rect elementRect = visualElement.ChangeCoordinatesTo(contentViewContainer, visualElement.GetRect_Internal());
+                        rectToFit = hasElement ? RectUtils.Encompass(rectToFit, elementRect) : elementRect;
+                        hasElement = true;
+                    }
+                }
+
+                CalculateFrameTransform(rectToFit, clientRect, frameBorder_Internal, out frameTranslation, out frameScaling);
+                // CalculateFrameTransform只使用尺寸，需要单独补上可用区域的本地偏移。
+                frameTranslation += (Vector3) clientRect.position;
+            }
+
+            SetViewTransform(frameTranslation, frameScaling, frameAnimate_Internal ? 0.2f : 0);
+            contentViewContainer.MarkDirtyRepaint();
+            return EventPropagation.Stop;
         }
 
         protected override bool OverrideUpdateContentZoomer()
@@ -70,11 +114,16 @@ namespace Emilia.Node.Editor
 
                 UpdateLogicTransform(newPosition, newScale);
 
+                // 防止未完成的缩放动画覆盖新的定位。
+                if (updateViewTransformCoroutine != null)
+                {
+                    EditorCoroutineUtility.StopCoroutine(updateViewTransformCoroutine);
+                    updateViewTransformCoroutine = null;
+                }
+
                 // 根据time参数决定使用动画过渡还是立即应用
                 if (animationTime > 0)
                 {
-                    // 停止之前的Transform动画协程（如果存在）
-                    if (updateViewTransformCoroutine != null) EditorCoroutineUtility.StopCoroutine(updateViewTransformCoroutine);
                     updateViewTransformCoroutine = EditorCoroutineUtility.StartCoroutineOwnerless(SetTransformAnimation());
                 }
                 else

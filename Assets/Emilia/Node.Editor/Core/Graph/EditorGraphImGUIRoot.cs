@@ -1,7 +1,6 @@
 ﻿using System;
 using Emilia.Node.Attributes;
 using Sirenix.Serialization;
-using Sirenix.Utilities;
 using UnityEditor;
 using UnityEngine;
 
@@ -74,11 +73,8 @@ namespace Emilia.Node.Editor
                 graphView.window = window;
                 graphView.Initialize();
 
-                GraphSettingStruct? loadSetting = settingStruct;
-                if (settingStruct == null) loadSetting = asset.GetType().GetCustomAttribute<GraphSettingAttribute>()?.settingStruct;
-
                 graphView.Reload(asset);
-                if (loadSetting != null) graphView.GetGraphData<BasicGraphData>().graphSetting = loadSetting.Value;
+                if (settingStruct != null) graphView.GetGraphData<BasicGraphData>().graphSetting = settingStruct.Value;
 
                 this._drawer = new EditorGraphViewDrawer();
                 this._drawer.Initialize(graphView);
