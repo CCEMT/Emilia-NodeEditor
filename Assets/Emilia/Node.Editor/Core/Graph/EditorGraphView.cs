@@ -29,6 +29,8 @@ namespace Emilia.Node.Editor
         private GraphHandle graphHandle;
         private IVisualElementScheduledItem pendingReload;
 
+        internal ReverseEdgeRouter reverseEdgeRouter { get; private set; }
+
         public bool isReadOnly => graphHandle != null && graphHandle.isReadOnly;
         private List<GraphData> datas = new();
 
@@ -237,6 +239,8 @@ namespace Emilia.Node.Editor
             dragAndDrop = GetModule<GraphDragAndDrop>();
 
             graphElementCache = new GraphElementCache();
+            reverseEdgeRouter?.Dispose();
+            reverseEdgeRouter = new ReverseEdgeRouter(this);
 
             serializeGraphElements = OnSerializeGraphElements;
             canPasteSerializedData = OnCanPasteSerializedData;
@@ -362,6 +366,7 @@ namespace Emilia.Node.Editor
 
         public void Dispose()
         {
+            reverseEdgeRouter?.Dispose();
             pendingReload?.Pause();
             pendingReload = null;
             if (graphAsset != null) graphViews.Remove(graphAsset);
@@ -395,6 +400,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public void Destroy()
         {
+            reverseEdgeRouter?.Dispose();
             pendingReload?.Pause();
             pendingReload = null;
             CancelElementLoad();

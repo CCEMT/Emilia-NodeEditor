@@ -47,6 +47,7 @@ namespace Emilia.Node.Editor
 
             this._nodeViews.Add(nodeView);
             graphElementCache.SetNodeViewCache(nodeAsset.id, nodeView);
+            reverseEdgeRouter?.TrackNode(nodeView);
             return nodeView;
         }
 
@@ -62,6 +63,7 @@ namespace Emilia.Node.Editor
             }
 
             if (nodeView.asset != null) graphElementCache.RemoveNodeViewCache(nodeView.asset.id);
+            reverseEdgeRouter?.UntrackNode(nodeView);
 
             try
             {
@@ -126,6 +128,7 @@ namespace Emilia.Node.Editor
 
             this._edgeViews.Add(edgeView);
             graphElementCache.SetEdgeViewCache(asset.id, edgeView);
+            reverseEdgeRouter?.TrackEdge(edgeView);
             return edgeView;
         }
 
@@ -141,6 +144,7 @@ namespace Emilia.Node.Editor
             }
 
             if (edge.asset != null) graphElementCache.RemoveEdgeViewCache(edge.asset.id);
+            reverseEdgeRouter?.UntrackEdge(edge);
 
             try
             {

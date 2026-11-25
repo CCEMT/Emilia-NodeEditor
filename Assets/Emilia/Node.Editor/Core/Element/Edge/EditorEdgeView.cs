@@ -19,6 +19,7 @@ namespace Emilia.Node.Editor
 
         protected EditorEdgeManipulator editorEdgeManipulator;
         protected ContextualMenuManipulator contextualMenuManipulator;
+        private bool _isDrag;
 
         public EditorEdgeAsset asset { get; private set; }
         public EditorGraphView graphView { get; private set; }
@@ -26,7 +27,17 @@ namespace Emilia.Node.Editor
         /// <summary>
         /// 拖拽状态
         /// </summary>
-        public bool isDrag { get; set; }
+        public bool isDrag
+        {
+            get => _isDrag;
+            set
+            {
+                if (_isDrag == value) return;
+                _isDrag = value;
+                graphView?.reverseEdgeRouter?.Invalidate();
+                editorEdgeControl.InvalidateRoute();
+            }
+        }
 
         public Vector2[] PointsAndTangents_Internals => PointsAndTangents;
 
@@ -43,6 +54,7 @@ namespace Emilia.Node.Editor
 
                 if (this._inputPortView != null) editorEdgeControl.inputEditorOrientation = _inputPortView.editorOrientation;
                 else if (this._outputPortView != null) editorEdgeControl.inputEditorOrientation = _outputPortView.editorOrientation;
+                graphView?.reverseEdgeRouter?.Invalidate();
             }
         }
 
@@ -59,6 +71,7 @@ namespace Emilia.Node.Editor
 
                 if (this._outputPortView != null) editorEdgeControl.outputEditorOrientation = _outputPortView.editorOrientation;
                 else if (this._inputPortView != null) editorEdgeControl.outputEditorOrientation = _inputPortView.editorOrientation;
+                graphView?.reverseEdgeRouter?.Invalidate();
             }
         }
 
@@ -144,6 +157,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         public Vector2 GetPointByRate(float rate)
         {
+            if (editorEdgeControl.TryGetPointByRate(rate, out Vector2 routePoint)) return routePoint;
             float length = 0;
             Vector2[] points = PointsAndTangents_Internals;
 
@@ -184,8 +198,15 @@ namespace Emilia.Node.Editor
 
         protected override EdgeControl CreateEdgeControl()
         {
-            _editorEdgeControl = new EditorEdgeControl();
+            _editorEdgeControl = new EditorEdgeControl { owner = this };
             return _editorEdgeControl;
+        }
+
+        public override bool UpdateEdgeControl()
+        {
+            BasicGraphData data = graphView?.GetGraphData<BasicGraphData>();
+            if (data != null) editorEdgeControl.disabledEdgeDrawOptimization = data.graphSetting.disabledEdgeDrawOptimization;
+            return base.UpdateEdgeControl();
         }
 
         /// <summary>
@@ -196,7 +217,6 @@ namespace Emilia.Node.Editor
             if (inputPortView != null) editorEdgeControl.to = this.WorldToLocal(inputPortView.portElement.GetGlobalCenter());
             if (outputPortView != null) editorEdgeControl.from = this.WorldToLocal(outputPortView.portElement.GetGlobalCenter());
             
-            _editorEdgeControl.disabledEdgeDrawOptimization = graphView.GetGraphData<BasicGraphData>().graphSetting.disabledEdgeDrawOptimization;
             UpdateEdgeControl();
         }
 

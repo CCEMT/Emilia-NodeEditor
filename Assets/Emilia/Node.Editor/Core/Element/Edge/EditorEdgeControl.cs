@@ -10,7 +10,7 @@ namespace Emilia.Node.Editor
     /// <summary>
     /// 重写EdgeControl
     /// </summary>
-    public class EditorEdgeControl : EdgeControl_Internals
+    public partial class EditorEdgeControl : EdgeControl_Internals
     {
         protected struct EdgeCornerSweepValues
         {
@@ -38,7 +38,12 @@ namespace Emilia.Node.Editor
         public bool disabledEdgeDrawOptimization
         {
             get => _disabledEdgeDrawOptimization;
-            set => _disabledEdgeDrawOptimization = value;
+            set
+            {
+                if (_disabledEdgeDrawOptimization == value) return;
+                _disabledEdgeDrawOptimization = value;
+                InvalidateRoutingContext();
+            }
         }
 
         /// <summary>
@@ -51,7 +56,7 @@ namespace Emilia.Node.Editor
             {
                 if (this._inputEditorOrientation == value) return;
                 this._inputEditorOrientation = value;
-                MarkDirtyRepaint();
+                InvalidateRoutingContext();
             }
         }
 
@@ -65,7 +70,7 @@ namespace Emilia.Node.Editor
             {
                 if (this._outputEditorOrientation == value) return;
                 this._outputEditorOrientation = value;
-                MarkDirtyRepaint();
+                InvalidateRoutingContext();
             }
         }
 
@@ -75,7 +80,10 @@ namespace Emilia.Node.Editor
         {
             ComputeControlPoints();
 
-            if (renderPointsDirty_Internals == false && controlPoints != null) return;
+            if (parent == null || controlPoints == null) return;
+            if (UpdateRouteRenderPoints()) return;
+
+            if (renderPointsDirty_Internals == false) return;
 
             Vector2 p1 = parent.ChangeCoordinatesTo(this, controlPoints[0]);
             Vector2 p2 = parent.ChangeCoordinatesTo(this, controlPoints[1]);
@@ -101,20 +109,13 @@ namespace Emilia.Node.Editor
             lastLocalControlPoints.Add(p4);
 
             renderPoints_Internals.Clear();
+            renderPointsDirty_Internals = false;
 
             //当Orientation为Custom的处理
             if (inputEditorOrientation == EditorOrientation.Custom || outputEditorOrientation == EditorOrientation.Custom)
             {
                 renderPoints_Internals.Add(p1);
                 renderPoints_Internals.Add(p4);
-                return;
-            }
-
-            // 非自然连接优化（电路图样式）
-            if (disabledEdgeDrawOptimization == false && IsUnnaturalConnection(p1, p4, p2, p3))
-            {
-                RenderCircuitStyleConnection(p1, p4, p2, p3);
-                renderPointsDirty_Internals = false;
                 return;
             }
 
@@ -331,30 +332,7 @@ namespace Emilia.Node.Editor
         /// </summary>
         protected bool IsUnnaturalConnection(Vector2 from, Vector2 to, Vector2 outputControlPoint, Vector2 inputControlPoint)
         {
-            if (outputEditorOrientation == EditorOrientation.Horizontal)
-            {
-                // 使用控制点判断输出端口实际朝向
-                float outputDir = Mathf.Sign(outputControlPoint.x - from.x);
-                float targetDir = Mathf.Sign(to.x - from.x);
-
-                // 如果输出方向与目标方向相反，则为非自然连接
-                if (outputDir != targetDir && Mathf.Abs(to.x - from.x) > EdgeLengthFromPort)
-                {
-                    return true;
-                }
-            }
-            else if (outputEditorOrientation == EditorOrientation.Vertical)
-            {
-                float outputDir = Mathf.Sign(outputControlPoint.y - from.y);
-                float targetDir = Mathf.Sign(to.y - from.y);
-
-                if (outputDir != targetDir && Mathf.Abs(to.y - from.y) > EdgeLengthFromPort)
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            return ReverseEdgePathBuilder.IsReverse(from, to, (outputControlPoint - from).normalized, (inputControlPoint - to).normalized);
         }
 
         /// <summary>
